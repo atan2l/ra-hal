@@ -1,0 +1,22 @@
+[package]
+name = "ra4-hal"
+version = "0.1.0"
+edition = "2024"
+description = "Hardware Abstraction Layer (HAL) for the Renesas RA4 family of MCUs."
+
+[dependencies]
+defmt = { workspace = true, optional = true }
+cortex-m = { workspace = true }
+cortex-m-rt = { workspace = true }
+critical-section = { workspace = true }
+
+embedded-hal-1 = { package = "embedded-hal", version = "1.0" }
+
+embassy-hal-internal = { version = "0.3.0", features = ["cortex-m", "prio-bits-4"] }
+embassy-time = { workspace = true, optional = true }
+embassy-time-driver = { version = "0.2.1", optional = true }
+embassy-time-queue-utils = { version = "0.3.0", optional = true }
+embassy-usb-driver = { version = "0.2.0", optional = true }
+embassy-sync = { workspace = true }
+
+ra4m1-ctpac = { path = "../ra4m1-ctpac" }

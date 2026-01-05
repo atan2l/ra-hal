@@ -1,0 +1,6 @@
+.DS_Store
+/target
+legacy
+svd-playground
+.idea
+codebook.toml
