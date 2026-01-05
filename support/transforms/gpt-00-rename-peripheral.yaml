@@ -1,0 +1,7 @@
+# 0..=1 are 32-bit, 2..=7 are 16-bit
+# Both have the same registers but the 16-bit timers will ignore the upper 16-bits of the numeric registers.
+# Differences in the SVD beteween GPT320 and GPT162 are down to the descriptions.
+transforms:
+  - !RenamePeripherals
+    from: GPT(16|32)(\d)
+    to: GPT${1}_${2}

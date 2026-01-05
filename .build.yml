@@ -1,0 +1,33 @@
+image: debian/trixie
+secrets:
+  - f317af3f-6c5f-49d4-8602-78651225c9d2
+sources:
+  - git@git.sr.ht:~az1/ra4m1-rs
+environment:
+  THE_PROJECT: ra4m1-rs
+  SPELLCODE_ARTIFACT: https://s3.sr.ht/builds.sr.ht/artifacts/~az1/1664298/b5e6ccb939fcb2b4/spellcode-cli
+packages:
+  - curl
+tasks:
+  - env-setup: |
+      echo 'if [ -f "${HOME}/.cargo/env" ]; then source "${HOME}/.cargo/env" && cd "${HOME}/${THE_PROJECT}"; fi' >> ~/.buildenv
+  - install-spellcheck: |
+      curl -LO "${SPELLCODE_ARTIFACT}"
+      chmod +x "${HOME}/spellcode-cli"
+  - install-rustup: |
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none
+  - install-rust: |
+      rustup show active-toolchain
+      rustup component add clippy
+  - build: |
+      cargo build --quiet --workspace
+  - build-no-defmt: |
+      cargo build --quiet --package ra4-hal --no-default-features --features time-driver,rt,diag,uno_r4,chrono,strict-assert
+  - build-no-invariant: |
+      cargo build --quiet --package ra4-hal --no-default-features --features time-driver,rt,diag,uno_r4,chrono
+  - doc: |
+      cargo haldoc
+  - clippy: |
+      cargo clip
+  - spell-check: |
+      "${HOME}/spellcode-cli" --exclude ra4m1-ctpac --exclude ignore --exclude tools --exclude support --exclude tools $(pwd)

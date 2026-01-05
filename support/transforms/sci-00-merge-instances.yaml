@@ -1,0 +1,13 @@
+# Note that SCI0 and SCI1 have 16-byte FIFOs, SCI2 and SCI9 do not.
+# FIFO registers: SSR_FIFO, FTDRH, FTDRHL, FTDRL, FDRH, FRDRH, FRDRL, FCR, FDR, LSR
+transforms:
+  - !MergeBlocks
+    from: sci[0129]::Sci[0129]
+    to: sci::Sci
+  - !Rename
+    from: sci0::(.+)
+    to: sci::${1}
+    type: All
+  - !Delete
+    from: sci[129]::(.+)
+    type: All

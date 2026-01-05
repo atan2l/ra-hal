@@ -1,0 +1,39 @@
+transforms:
+  - !MapEnumVariants
+    enum: system::vals::Hcstp
+    variants:
+      _0: Start
+      _1: Stop
+  - !MapEnumVariants
+    enum: system::vals::Prc[013]
+    variants:
+      _0: Protected
+      _1: NotProtected
+  - !MapEnumVariants
+    enum: system::vals::Opcm
+    variants:
+      _00: HighSpeed
+      _01: MidSpeed
+      _10: LowVoltage
+      _11: LowSpeed
+  - !DeleteEnums
+    from: system::vals::(Memwait|Opcmtsf)
+  - !MapEnumVariants
+    enum: system::vals::Cksel
+    variants:
+      _000: Hoco
+      _001: Moco
+      _010: Loco
+      _011: Mosc
+      _100: Sosc
+      _101: Pll
+  - !MapEnumVariants
+    enum: system::vals::(Ick|Fck|Pck[abcd])
+    variants:
+      _000: DIV_1
+      _001: DIV_2
+      _010: DIV_4
+      _011: DIV_8
+      _100: DIV_16
+      _101: DIV_32
+      _110: DIV_64

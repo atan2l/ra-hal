@@ -1,0 +1,17 @@
+transforms:
+  - !ModifyRegisters
+    blocks: adc14::Adc14
+    registers: adsstrl
+    description: A/D Sampling State Register L (AN016..=AN025)
+  - !ModifyRegisters
+    blocks: adc14::Adc14
+    registers: adsstrt
+    description: A/D Sampling State Register T (temperature sensor)
+  - !ModifyRegisters
+    blocks: adc14::Adc14
+    registers: adsstro
+    description: A/D Sampling State Register O (Vref)
+  - !ModifyRegisters
+    blocks: adc14::Adc14
+    registers: adsstr
+    description: A/D Sampling State Register (AN000..=AN0014)

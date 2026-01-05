@@ -1,0 +1,36 @@
+transforms:
+  - !MapEnumVariants
+    enum: adc14::vals::Adcs
+    variants:
+      _00: Single
+      _01: Group
+      _10: Continuous
+      _11: Prohibited
+  - !Rename
+    from: adc14::vals::Adc
+    to: adc14::vals::AdcCountSelect
+  - !MapEnumVariants
+    enum: adc14::vals::AdcCountSelect
+    variants:
+      _000: Convert1
+      _001: Convert2
+      _010: Convert3
+      _011: Convert4
+      _101: Convert16
+  - !MapEnumVariants
+    enum: adc14::vals::Hvsel
+    variants:
+      _00: Avcc0
+      _01: VrefH0
+      _10: InternalRef
+      _11: Discharge
+  - !MapEnumVariants
+    enum: adc14::vals::Lvsel
+    variants:
+      _0: Avss0
+      _1: VrefL0
+  - !MapEnumVariants
+    enum: adc14::vals::Adprc
+    variants:
+      _00: _12bit
+      _11: _14bit

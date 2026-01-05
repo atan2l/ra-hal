@@ -1,0 +1,75 @@
+//! `gpio_poll` GPIO input example (polling)
+//!
+//! Connect a button between D12 and ground on an Uno R4 and this will toggle the builtin LED
+//! when the button is pressed.
+//!
+//! This version will poll the PORT peripheral for the current input status.
+//! To see an interrupt driven version see `gpio_interrupt`.
+
+#![no_std]
+#![no_main]
+#![warn(missing_docs)]
+
+#[cfg(feature = "defmt")]
+use defmt_rtt as _;
+use embassy_executor::Spawner;
+use panic_probe as _;
+#[allow(unused)]
+use ra4_hal::{debug, error, info, trace, warn};
+use ra4_hal::{
+    gpio::Flex,
+    osm::{ofs0::Ofs0, ofs1::Ofs1, sec_mpu::SecurityMpu},
+};
+
+// Option Function Select Register 0 (required)
+#[unsafe(no_mangle)]
+#[unsafe(link_section = ".ofs0")]
+static OFS0: Ofs0 = Ofs0::arduino_core();
+
+// Option Function Select Register 1 (required)
+#[unsafe(no_mangle)]
+#[unsafe(link_section = ".ofs1")]
+static OFS1: Ofs1 = Ofs1::arduino_core();
+
+// Security MPU (required)
+#[unsafe(no_mangle)]
+#[unsafe(link_section = ".sec_mpu")]
+static SEC_MPU: SecurityMpu = SecurityMpu::disabled();
+
+// Define the pins we want on the R4 Minima
+#[cfg(feature = "uno-r4-minima")]
+macro_rules! pins {
+    ($p:ident) => {
+        ($p.P110, $p.P111)
+    };
+}
+
+// Define the pins we want on the R4 WiFi
+#[cfg(feature = "uno-r4-wifi")]
+macro_rules! pins {
+    ($p:ident) => {
+        ($p.P410, $p.P102)
+    };
+}
+
+#[embassy_executor::main]
+async fn main(_spawner: Spawner) {
+    let p = ra4_hal::init();
+
+    // Grab D12 and the LED pins
+    let (button, led) = pins!(p);
+
+    let mut button = Flex::new(button);
+    button.set_as_input(true);
+
+    let mut led = Flex::new(led);
+    led.set_as_output();
+    led.set_low();
+
+    loop {
+        // The button pulls the line to ground so is_high() == false when the button is pressed.
+        // set_level() takes level which implements From<bool>
+        // So press the button and the LED lights up.
+        led.set_level(button.is_low().into());
+    }
+}

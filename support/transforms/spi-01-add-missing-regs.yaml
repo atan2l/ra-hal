@@ -1,0 +1,45 @@
+# TN-RA*-A0033A/E
+transforms:
+  - !AddFields
+    fieldset: spi::regs::Spdcr
+    fields:
+      - !Field
+        name: spbyt
+        description: SPI Byte Access Specification
+        bit_offset: 6
+        bit_size: 1
+  - !AddRegisters
+    block: spi::Spi
+    registers:
+      - !BlockItem
+        name: spdcr2
+        description: SPI Data Control Register 2
+        byte_offset: 0x20
+        bit_size: 8
+        fieldset: spi::regs::Spdcr2
+  - !Add
+    ir: !IR
+      fieldset/spi::regs::Spdcr2: !Fieldset
+        bit_size: 8
+        fields:
+          - !Field
+            name: bysw
+            description: Byte Swap Operating Mode Select
+            bit_offset: 0
+            bit_size: 1
+            enum: spi::vals::Bysw
+          - !Field
+            name: sinv
+            description: Serial data invert bit
+            bit_offset: 1
+            bit_size: 1
+      enum/spi::vals::Bysw: !Enum
+        bit_size: 1
+        # TODO: Check that these are the correct labels
+        variants:
+          - !EnumVariant
+            name: LittleEndian
+            value: 0x00
+          - !EnumVariant
+            name: BigEndian
+            value: 0x01

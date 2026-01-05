@@ -1,0 +1,15 @@
+transforms:
+  - !MapEnumVariants
+    enum: icu::vals::Irqmd
+    variants:
+      _00: FallingEdge
+      _01: RisingEdge
+      _10: AnyEdge
+      _11: LowLevel
+  - !MapEnumVariants
+    enum: icu::vals::(Nfclksel|Fclksel)
+    variants:
+      _00: PCLKB_1
+      _01: PCLKB_8
+      _10: PCLKB_32
+      _11: PCLKB_64

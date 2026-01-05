@@ -1,0 +1,7 @@
+.DS_Store
+/target
+/ignore
+legacy
+svd-playground
+.idea
+*.pack

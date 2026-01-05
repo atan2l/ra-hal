@@ -1,0 +1,66 @@
+transforms:
+  - !AddPeripherals
+    devices: .*
+    peripherals:
+      # This is left in to be used as an additional sanity check in the HAL.
+      - name: FMIFRT_BASE
+        base_address: 0x407FB19C
+        block: fmifrt_base::FmifrtBase
+        description: Pointer to the actual registers
+      - name: FMIFRT
+        base_address: 0x01003C00
+        block: fmifrt::Fmifrt
+        description: Factory MCU Information Flash Root Table (FMIFRT)
+  - !Add
+    ir:
+      # > § 44.4.4 Factory MCU Information Flash Root Table (FMIFRT)
+      # > The base address of the RA4M1 MCU is 0x0100_3C00.
+      # Why this couldn't just go into the freaking SVD is entirely beyond me.
+      enum/fmifrt_base::vals::ExpectedBase: !Enum
+        bit_size: 24
+        variants:
+          - !EnumVariant
+            name: RA4M1
+            value: 0x01003C00
+      block/fmifrt_base::FmifrtBase:
+        items:
+          - name: base
+            byte_offset: 0
+            bit_size: 32
+            fieldset: fmifrt_base::regs::Base
+      fieldset/fmifrt_base::regs::Base:
+        fields:
+          - name: base
+            bit_offset: 0
+            bit_size: 32
+      block/fmifrt::Fmifrt:
+        items:
+          - name: uidr
+            byte_offset: 0x14
+            bit_size: 32
+            array: { len: 4, stride: 4 }
+            fieldset: fmifrt::regs::Uid
+          - name: pnr
+            byte_offset: 0x24
+            bit_size: 32
+            array: { len: 4, stride: 4 }
+            fieldset: fmifrt::regs::PartNumber
+          - name: mcuver
+            byte_offset: 0x44
+            bit_size: 8
+            fieldset: fmifrt::regs::McuVersion
+      fieldset/fmifrt::regs::Uid:
+        fields:
+          - name: uid
+            bit_offset: 0
+            bit_size: 32
+      fieldset/fmifrt::regs::PartNumber:
+        fields:
+          - name: pn
+            bit_offset: 0
+            bit_size: 32
+      fieldset/fmifrt::regs::McuVersion:
+        fields:
+          - name: mcuver
+            bit_offset: 0
+            bit_size: 8

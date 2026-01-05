@@ -1,0 +1,17 @@
+transforms:
+  - !Rename
+    from: ctsu::vals::Ctsuprmode
+    to: ctsu::vals::CtsuPrMode
+  - !MapEnumVariants
+    enum: ctsu::vals::CtsuPrMode
+    variants:
+      _00: _510Pulses
+      _01: _126Pulses
+      _10: _62Pulses
+  - !MapEnumVariants
+    enum: ctsu::vals::Ctsuicog
+    variants:
+      _00: _100_PCT
+      _01: _66_PCT
+      _10: _50_PCT
+      _11: _40_PCT

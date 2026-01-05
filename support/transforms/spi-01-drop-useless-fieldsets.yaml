@@ -1,0 +1,13 @@
+transforms:
+  # Mask is 0xFF
+  # SPBR: any value is valid.
+  - !DeleteFieldsets
+    from: spi::regs::Spbr
+  # Mask is 0xFFFFFFFF
+  # SPDR: any value is valid.
+  - !DeleteFieldsets
+    from: spi::regs::Spdr
+  # Mask is 0xFFFFF
+  # SPDR_HA: any value is valid.
+  - !DeleteFieldsets
+    from: spi::regs::SpdrHa

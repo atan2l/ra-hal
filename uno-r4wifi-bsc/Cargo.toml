@@ -1,0 +1,28 @@
+[package]
+name = "uno-r4wifi-bsc"
+version = "0.1.5"
+description = "Board specific features for the Arduino Uno R4 WiFi."
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+homepage.workspace = true
+license.workspace = true
+
+[dependencies]
+## Core dependencies
+cortex-m = { workspace = true }
+cortex-m-rt = { workspace = true }
+defmt = { workspace = true, optional = true }
+critical-section = { workspace = true }
+
+embassy-time = { workspace = true }
+embassy-hal-internal = { workspace = true }
+
+## Board stuff
+ra4-hal = { path = "../ra4-hal", features = [ "unstable-pac" ] }
+
+[features]
+
+default = [ ]
+
+defmt = [ "dep:defmt", "embassy-time/defmt", "embassy-time/defmt-timestamp-uptime", "ra4-hal/defmt" ]

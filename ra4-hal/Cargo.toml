@@ -1,0 +1,112 @@
+[package]
+name = "ra4-hal"
+version = "0.2.0"
+description = "Hardware Abstraction Layer (HAL) for the Renesas RA4 family of MCUs."
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+homepage.workspace = true
+license.workspace = true
+
+[lib]
+test = false
+doctest = false
+bench = false
+
+[dependencies]
+defmt = { workspace = true, optional = true }
+cortex-m = { workspace = true }
+cortex-m-rt = { workspace = true }
+critical-section = { workspace = true }
+
+embedded-hal-1 = { workspace = true }
+embedded-hal-async = { workspace = true }
+
+embassy-hal-internal = { workspace = true }
+embedded-io = { workspace = true }
+embedded-io-async = { workspace = true }
+embedded-serial = { workspace = true }
+embassy-sync = { workspace = true }
+embassy-time = { workspace = true, optional = true }
+embassy-time-driver = { version = "0.2.1", optional = true }
+embassy-time-queue-utils = { version = "0.3.0", optional = true }
+embassy-usb-driver = { version = "0.2.0", optional = true }
+
+ra4m1-ctpac = { path = "../ra4m1-ctpac" }
+
+cfg-if = "1"
+chrono = { version = "^0.4", default-features = false, optional = true }
+document-features = { workspace = true }
+paste = "1"
+
+[build-dependencies]
+prettyplease = "0.2.37"
+proc-macro2 = "1.0.106"
+quote = "1.0.44"
+regex = "1.12.3"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_derive = "1.0.228"
+serde_yaml = "0.9.34"
+syn = "2.0.114"
+
+[features]
+default = [ "time-driver", "rt", "diag", "uno_r4", "chrono", "strict-assert" ]
+
+## Enable the `rt` feature of the PAC.
+## With `rt` enabled the PAC provides interrupt vectors instead of letting [`cortex-m-rt`](https://docs.rs/cortex-m-rt) do that.
+## See <https://docs.rs/cortex-m-rt/latest/cortex_m_rt/#device> for more info.
+rt = [ "ra4m1-ctpac/rt" ]
+
+## Enable dependency on [`chrono`](https://docs.rs/chronno) and expose methods that work with chrono structures.
+chrono = [ "dep:chrono" ]
+
+## Use [`defmt`](https://docs.rs/defmt/latest/defmt/) for logging.
+defmt = [ "dep:defmt", "ra4m1-ctpac/defmt", "embassy-time/defmt", "embassy-time/defmt-timestamp-uptime" ]
+
+## Log the reset reason during initialization. Only useful in conjunction with `defmt` feature.
+diag = [ ]
+
+## Re-export the PAC at `ra4_hal::pac`.
+## This is unstable because minor HAL updates may depend on major PAC updates.
+unstable-pac = [ ]
+
+## Extra runtime assertions.
+strict-assert = [ "ra4m1-ctpac/strict-assert" ]
+
+#! ### Time features
+
+## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver.
+time-driver = [ "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "_hoco_48mhz" ]
+
+## Sets the high speed on-chip oscillator to (`HOCO`) to 32 MHz.
+_hoco_32mhz = [ "embassy-time-driver/tick-hz-32_000_000" ]
+
+## Sets the high speed on-chip oscillator to (`HOCO`) to 48 MHz.
+_hoco_48mhz = [ "embassy-time-driver/tick-hz-48_000_000" ]
+
+## Sets the high speed on-chip oscillator to (`HOCO`) to 64 MHz.
+## This allows some peripheral clocks to run faster but slows the CPU to 32 MHz.
+## This necessitates non-default settings for [`Ofs1`](osm::ofs1::Ofs1).
+_hoco_64mhz = [ "embassy-time-driver/tick-hz-32_000_000" ]
+
+#! ### Board features
+
+## Enable Arduino Uno R4 specific configuration knobs.
+uno_r4 = [ "_64pin" ]
+
+#! ### Chip configuration
+#! Don't enable these manually.
+#! Instead add or enable a board specific feature that depends on the correct pin count.
+#! If no pin feature is selected the crate defaults to a 40-pin configuration.
+
+## Enables pins and peripherals only available on 48-pin chips.
+_48pin = [ ]
+
+## Enables pins and peripherals only available on 64-pin chips.
+_64pin = [ ]
+
+## Enables pins and peripherals only available on 100-pin chips.
+_100pin = [ ]
+
+[package.metadata.docs.rs]
+default-target = "thumbv7em-none-eabihf"

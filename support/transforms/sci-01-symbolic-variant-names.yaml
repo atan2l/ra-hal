@@ -1,0 +1,18 @@
+transforms:
+  - !MapEnumVariants
+    enum: sci::vals::Stop
+    variants:
+      _0: Stop1
+      _1: Stop2
+  - !MapEnumVariants
+    enum: sci::vals::(.+)Pm
+    variants:
+      _0: Even
+      _1: Odd
+  - !MapEnumVariants
+    enum: sci::vals::SmrCks
+    variants:
+      _00: DIV_1
+      _01: DIV_4
+      _10: DIV_16
+      _11: DIV_64

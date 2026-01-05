@@ -1,0 +1,5 @@
+transforms:
+  - !MakeFieldArray
+    fieldsets: usbfs::regs::(Brdy|Nrdy|Bemp)sts
+    from: pipe\d+(brdy|nrdy|bemp)
+    to: ${1}

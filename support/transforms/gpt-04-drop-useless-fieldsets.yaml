@@ -1,0 +1,5 @@
+transforms:
+ # Mask is 0xFFFFFFFF
+  # GTDVU|GTPBR: any value is valid.
+  - !DeleteFieldsets
+    from: gpt::regs::(Gtdvu|Gtpbr)

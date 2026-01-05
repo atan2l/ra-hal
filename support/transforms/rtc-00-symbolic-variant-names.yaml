@@ -1,0 +1,16 @@
+transforms:
+  - !MapEnumVariants
+    enum: rtc::vals::Rcksel
+    variants:
+      _0: SubClock
+      _1: Loco
+  - !MapEnumVariants
+    enum: rtc::vals::RwkcntDayw
+    variants:
+      _000: Sunday
+      _001: Monday
+      _010: Tuesday
+      _011: Wednesday
+      _100: Thursday
+      _101: Friday
+      _110: Saturday

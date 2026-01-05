@@ -1,0 +1,14 @@
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+# replace R7FA4M1AB with your chip as listed in `probe-rs chip list`
+runner = "probe-rs run --chip R7FA4M1AB"
+
+[alias]
+dup = [ "tree", "-f", "{p} {f}", "-d" ]
+clip = [ "clippy", "--quiet", "--no-deps", "--workspace", "--exclude", "ra4m1-ctpac" ]
+haldoc = [ "doc", "--no-deps", "-p", "ra4-hal" ]
+
+[build]
+target = "thumbv7em-none-eabihf" # R7FA4M1AB is Cortex-M4F based
+
+[env]
+DEFMT_LOG = "debug"
