@@ -12,30 +12,27 @@ use embassy_executor::Spawner;
 use panic_probe as _;
 use ra4_hal::{ofs0, ofs1};
 
-#[embassy_executor::main]
-async fn main(_spawner: Spawner) {}
-
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".ofs0")]
 /// Option Function Select Register 0
-pub static OFS0: u32 = ofs0!(
-    IwdtAutoStartOff,
-    IwdtTimeout2048,
-    IwdtClockRatio1_128,
-    IwdtWindowEndNone,
-    IwdtWindowStartNone,
-    IwdtReset,
-    IwdtSleepStop,
-    WdtAutoStartOff,
-    WdtTimeout16384,
-    WdtClockRatio128,
-    WdtWindowEndNone,
-    WdtWindowStartNone,
-    WdtReset,
-    WdtSleepStop
-);
+/// Accepts either:
+/// - a series of configuration values
+/// - the literal `ArduinoCore` which emulates the Arduino defaults
+pub static OFS0: u32 = ofs0!(ArduinoCore);
 
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".ofs1")]
 /// Option Function Select Register 1
-pub static OFS1: u32 = ofs1!(LvdasOff, Vdsel384, HocoOn, Hoco48Mhz);
+/// Accepts either:
+/// - a series of configuration values
+/// - the literal `ArduinoCore` which emulates the Arduino defaults
+pub static OFS1: u32 = ofs1!(ArduinoCore);
+
+#[embassy_executor::main]
+async fn main(_spawner: Spawner) {
+    // #define BSP_CLOCK_CFG_MAIN_OSC_WAIT (9)
+    // #define BSP_LOCO_HZ                 (32768)
+    // #define BSP_MOCO_HZ                 (8000000)
+    // #define BSP_SUB_CLOCK_HZ            (32768)
+    // #define BSP_MCU_VBATT_SUPPORT       (1)
+}

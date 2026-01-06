@@ -5,13 +5,13 @@ trait IwdtAutoStartMode {
     const OFS0: u32;
 }
 
-/// `IWDTSTRT` Automatically activate after reset (auto-start mode).
+/// `IWDTSTRT` Automatically activate `IWDT` after reset (auto-start mode).
 pub enum IwdtAutoStartOn {}
 impl IwdtAutoStartMode for IwdtAutoStartOn {
     const OFS0: u32 = 0 << 1;
 }
 
-/// `IWDTSTRT` Do not automatically activate after reset.
+/// `IWDTSTRT` Do not automatically activate `IWDT` after reset.
 pub enum IwdtAutoStartOff {}
 impl IwdtAutoStartMode for IwdtAutoStartOff {
     const OFS0: u32 = 1 << 1;
@@ -56,32 +56,32 @@ impl IwdtClockRatio for IwdtClockRatio1 {
 }
 
 /// `IWDTCKS` Clock ratio = 1/16
-pub enum IwdtClockRatio1_16 {}
-impl IwdtClockRatio for IwdtClockRatio1_16 {
+pub enum IwdtClockRatio16 {}
+impl IwdtClockRatio for IwdtClockRatio16 {
     const OFS0: u32 = 0b0010 << 4;
 }
 
 /// `IWDTCKS` Clock ratio = 1/32
-pub enum IwdtClockRatio1_32 {}
-impl IwdtClockRatio for IwdtClockRatio1_32 {
+pub enum IwdtClockRatio32 {}
+impl IwdtClockRatio for IwdtClockRatio32 {
     const OFS0: u32 = 0b0011 << 4;
 }
 
 /// `IWDTCKS` Clock ratio = 1/64
-pub enum IwdtClockRatio1_64 {}
-impl IwdtClockRatio for IwdtClockRatio1_64 {
+pub enum IwdtClockRatio64 {}
+impl IwdtClockRatio for IwdtClockRatio64 {
     const OFS0: u32 = 0b0100 << 4;
 }
 
 /// `IWDTCKS` Clock ratio = 1/128
-pub enum IwdtClockRatio1_128 {}
-impl IwdtClockRatio for IwdtClockRatio1_128 {
+pub enum IwdtClockRatio128 {}
+impl IwdtClockRatio for IwdtClockRatio128 {
     const OFS0: u32 = 0b1111 << 4;
 }
 
 /// `IWDTCKS` Clock ratio = 1/256
-pub enum IwdtClockRatio1_256 {}
-impl IwdtClockRatio for IwdtClockRatio1_256 {
+pub enum IwdtClockRatio256 {}
+impl IwdtClockRatio for IwdtClockRatio256 {
     const OFS0: u32 = 0b0101 << 4;
 }
 
@@ -177,13 +177,13 @@ trait WdtAutoStartMode {
     const OFS0: u32;
 }
 
-/// `WDTSTRT` Automatically activate after reset (auto-start mode).
+/// `WDTSTRT` Automatically activate `WDT` after reset (auto-start mode).
 pub enum WdtAutoStartOn {}
 impl WdtAutoStartMode for WdtAutoStartOn {
     const OFS0: u32 = 0 << 17;
 }
 
-/// `WDTSTRT` Do not automatically activate after reset.
+/// `WDTSTRT` Do not automatically activate `WDT` after reset.
 pub enum WdtAutoStartOff {}
 impl WdtAutoStartMode for WdtAutoStartOff {
     const OFS0: u32 = 1 << 17;
@@ -362,7 +362,7 @@ pub const fn ofs0<
     WDTRSTIRQS: WdtResetOrInterrupt,
     WDTSTPCTL: WdtStopControl,
 >() -> u32 {
-    (OFS0_H
+    OFS0_H
         | OFS0_L
         | IWDTSTRT::OFS0
         | IWDTTOPS::OFS0
@@ -377,11 +377,29 @@ pub const fn ofs0<
         | WDTRPES::OFS0
         | WDTRPSS::OFS0
         | WDTRSTIRQS::OFS0
-        | WDTSTPCTL::OFS0)
+        | WDTSTPCTL::OFS0
 }
 
 #[macro_export]
 macro_rules! ofs0 {
+    (ArduinoCore) => {
+        ofs0!(
+            IwdtAutoStartOff,
+            IwdtTimeout2048,
+            IwdtClockRatio128,
+            IwdtWindowEndNone,
+            IwdtWindowStartNone,
+            IwdtReset,
+            IwdtSleepStop,
+            WdtAutoStartOff,
+            WdtTimeout16384,
+            WdtClockRatio128,
+            WdtWindowEndNone,
+            WdtWindowStartNone,
+            WdtReset,
+            WdtSleepStop
+        )
+    };
     (
         $arg0:ident, $arg1:ident, $arg2:ident, $arg3:ident, $arg4:ident, $arg5:ident, $arg6:ident,
         $arg7:ident,$arg8:ident,$arg9:ident,$arg10:ident,$arg11:ident,$arg12:ident,$arg13:ident
