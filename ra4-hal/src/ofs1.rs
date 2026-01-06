@@ -93,7 +93,7 @@ impl HocoFrequency for Hoco64Mhz {
 
 #[allow(private_bounds)]
 pub const fn ofs1<LVDAS: Lvdas, VDSEL: Vdsel, HOCOEN: HocoEnable, HOCOFR: HocoFrequency>() -> u32 {
-    (OFS1_H | OFS1_L | LVDAS::OFS1 | VDSEL::OFS1 | HOCOEN::OFS1 | HOCOFR::OFS1).to_be()
+    (OFS1_H | OFS1_L | LVDAS::OFS1 | VDSEL::OFS1 | HOCOEN::OFS1 | HOCOFR::OFS1)
 }
 
 #[macro_export]
