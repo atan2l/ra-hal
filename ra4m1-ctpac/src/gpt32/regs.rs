@@ -539,13 +539,13 @@ impl Gtcr {
     #[doc = "Mode Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn md(&self) -> super::vals::Md {
+    pub const fn md(&self) -> super::vals::Mode {
         let val = (self.0 >> 16usize) & 0x07;
-        super::vals::Md::from_bits(val as u8)
+        super::vals::Mode::from_bits(val as u8)
     }
     #[doc = "Mode Select"]
     #[inline(always)]
-    pub const fn set_md(&mut self, val: super::vals::Md) {
+    pub const fn set_md(&mut self, val: super::vals::Mode) {
         self.0 = (self.0 & !(0x07 << 16usize)) | (((val.to_bits() as u32) & 0x07) << 16usize);
     }
     #[doc = "These bits are read as 00000. The write value should be 00000."]

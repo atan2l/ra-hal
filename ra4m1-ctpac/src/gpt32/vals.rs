@@ -3760,27 +3760,27 @@ impl From<Gtiob> for u8 {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Md {
+pub enum Mode {
     #[doc = "Saw-wave PWM mode (single buffer or double buffer possible)"]
-    _000 = 0x0,
+    SawWavePwm = 0x0,
     #[doc = "Saw-wave one-shot pulse mode (fixed buffer operation)"]
-    _001 = 0x01,
+    SawWaveOneShot = 0x01,
     #[doc = "Setting prohibited"]
     _010 = 0x02,
     #[doc = "Setting prohibited"]
     _011 = 0x03,
     #[doc = "Triangle-wave PWM mode 1 (16-bit transfer at crest) (single buffer or double buffer possible)"]
-    _100 = 0x04,
+    TrianglePwm1 = 0x04,
     #[doc = "Triangle-wave PWM mode 2 (16-bit transfer at crest and trough) (single buffer or double buffer possible)"]
-    _101 = 0x05,
+    TrianglePwm2 = 0x05,
     #[doc = "Triangle-wave PWM mode 3 (32-bit transfer at trough) fixed buffer operation)"]
-    _110 = 0x06,
+    TrianglePwm3 = 0x06,
     #[doc = "Setting prohibited"]
     _111 = 0x07,
 }
-impl Md {
+impl Mode {
     #[inline(always)]
-    pub const fn from_bits(val: u8) -> Md {
+    pub const fn from_bits(val: u8) -> Mode {
         unsafe { core::mem::transmute(val & 0x07) }
     }
     #[inline(always)]
@@ -3788,16 +3788,16 @@ impl Md {
         unsafe { core::mem::transmute(self) }
     }
 }
-impl From<u8> for Md {
+impl From<u8> for Mode {
     #[inline(always)]
-    fn from(val: u8) -> Md {
-        Md::from_bits(val)
+    fn from(val: u8) -> Mode {
+        Mode::from_bits(val)
     }
 }
-impl From<Md> for u8 {
+impl From<Mode> for u8 {
     #[inline(always)]
-    fn from(val: Md) -> u8 {
-        Md::to_bits(val)
+    fn from(val: Mode) -> u8 {
+        Mode::to_bits(val)
     }
 }
 #[repr(u8)]
@@ -6148,9 +6148,9 @@ impl From<Tucf> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Ud {
     #[doc = "GTCNT counts down."]
-    _0 = 0x0,
+    Down = 0x0,
     #[doc = "GTCNT counts up."]
-    _1 = 0x01,
+    Up = 0x01,
 }
 impl Ud {
     #[inline(always)]

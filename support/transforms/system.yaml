@@ -1,0 +1,47 @@
+transforms:
+  - !RenameEnumVariants
+      enum: system::vals::Hcstp
+      from: _0
+      to: Start
+  - !RenameEnumVariants
+      enum: system::vals::Hcstp
+      from: _1
+      to: Stop
+  - !RenameEnumVariants
+      enum: system::vals::Prc[013]
+      from: _0
+      to: Protected
+  - !RenameEnumVariants
+      enum: system::vals::Prc[013]
+      from: _1
+      to: NotProtected
+  - !RenameEnumVariants
+      enum: system::vals::Opcm
+      from: _00
+      to: HighSpeed
+  - !RenameEnumVariants
+      enum: system::vals::Opcm
+      from: _01
+      to: MidSpeed
+  - !RenameEnumVariants
+      enum: system::vals::Opcm
+      from: _10
+      to: LowVoltage
+  - !RenameEnumVariants
+      enum: system::vals::Opcm
+      from: _11
+      to: LowSpeed
+  - !DeleteEnumVariants
+      enum: system::vals::Prkey
+      from: _0X5A
+  - !Add
+      ir:
+        !IR
+            enum/system::vals::Prkey:
+                !Enum
+                    bit_size: 8
+                    variants:
+                      - !EnumVariant
+                          name: PROTECT_KEY
+                          value: 0xA5
+

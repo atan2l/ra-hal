@@ -6,3 +6,39 @@ transforms:
   - !Rename
       from: gpt320::(regs|vals)::(.+)
       to: gpt32::${1}::${2}
+  - !RenameEnumVariants
+      enum: gpt32::vals::Ud
+      from: _0
+      to: Down
+  - !RenameEnumVariants
+      enum: gpt32::vals::Ud
+      from: _1
+      to: Up
+  - !Rename
+      from: gpt32::vals::Md
+      to: gpt32::vals::Mode
+  - !RenameEnumVariants
+      enum: gpt32::vals::Mode
+      from: _000
+      to: SawWavePwm
+  - !RenameEnumVariants
+      enum: gpt32::vals::Mode
+      from: _001
+      to: SawWaveOneShot
+  - !RenameEnumVariants
+      enum: gpt32::vals::Mode
+      from: _001
+      to: SawWaveOneShot
+  - !RenameEnumVariants
+      enum: gpt32::vals::Mode
+      from: _100
+      to: TrianglePwm1
+  - !RenameEnumVariants
+      enum: gpt32::vals::Mode
+      from: _101
+      to: TrianglePwm2
+  - !RenameEnumVariants
+      enum: gpt32::vals::Mode
+      from: _110
+      to: TrianglePwm3
+      

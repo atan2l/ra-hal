@@ -1043,9 +1043,9 @@ impl From<Flstpf> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Hcstp {
     #[doc = "HOCO is operating."]
-    _0 = 0x0,
+    Start = 0x0,
     #[doc = "HOCO is stopped."]
-    _1 = 0x01,
+    Stop = 0x01,
 }
 impl Hcstp {
     #[inline(always)]
@@ -2014,13 +2014,13 @@ impl From<Msts> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Opcm {
     #[doc = "High-speed mode"]
-    _00 = 0x0,
+    HighSpeed = 0x0,
     #[doc = "Middle-speed mode"]
-    _01 = 0x01,
+    MidSpeed = 0x01,
     #[doc = "Low-voltage mode"]
-    _10 = 0x02,
+    LowVoltage = 0x02,
     #[doc = "Low-speed mode"]
-    _11 = 0x03,
+    LowSpeed = 0x03,
 }
 impl Opcm {
     #[inline(always)]
@@ -2529,9 +2529,9 @@ impl From<Porf> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Prc0 {
     #[doc = "Writes protected."]
-    _0 = 0x0,
+    Protected = 0x0,
     #[doc = "Writes not protected."]
-    _1 = 0x01,
+    NotProtected = 0x01,
 }
 impl Prc0 {
     #[inline(always)]
@@ -2560,9 +2560,9 @@ impl From<Prc0> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Prc1 {
     #[doc = "Writes protected."]
-    _0 = 0x0,
+    Protected = 0x0,
     #[doc = "Writes not protected."]
-    _1 = 0x01,
+    NotProtected = 0x01,
 }
 impl Prc1 {
     #[inline(always)]
@@ -2591,9 +2591,9 @@ impl From<Prc1> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Prc3 {
     #[doc = "Writes protected."]
-    _0 = 0x0,
+    Protected = 0x0,
     #[doc = "Writes not protected."]
-    _1 = 0x01,
+    NotProtected = 0x01,
 }
 impl Prc3 {
     #[inline(always)]
@@ -2621,8 +2621,7 @@ impl From<Prc3> for u8 {
 #[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Prkey(u8);
 impl Prkey {
-    #[doc = "Enables writing to the PRCR register."]
-    pub const _0X5A: Self = Self(0x5a);
+    pub const PROTECT_KEY: Self = Self(0xa5);
 }
 impl Prkey {
     pub const fn from_bits(val: u8) -> Prkey {
@@ -2635,7 +2634,7 @@ impl Prkey {
 impl core::fmt::Debug for Prkey {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         match self.0 {
-            0x5a => f.write_str("_0X5A"),
+            0xa5 => f.write_str("PROTECT_KEY"),
             other => core::write!(f, "0x{:02X}", other),
         }
     }
@@ -2644,7 +2643,7 @@ impl core::fmt::Debug for Prkey {
 impl defmt::Format for Prkey {
     fn format(&self, f: defmt::Formatter) {
         match self.0 {
-            0x5a => defmt::write!(f, "_0X5A"),
+            0xa5 => defmt::write!(f, "PROTECT_KEY"),
             other => defmt::write!(f, "0x{:02X}", other),
         }
     }
