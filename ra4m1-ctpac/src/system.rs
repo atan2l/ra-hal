@@ -59,6 +59,11 @@ impl System {
     pub const fn hococr(self) -> crate::common::Reg<regs::Hococr, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x36usize) as _) }
     }
+    #[doc = "High-Speed On-Chip Oscillator Control Register2 Note1: Writing to the HOCOCR2 is prohibited when the HOCOCR.HCSTP bit is 0. Note2: Set the PRCR.PRC0 bit to 1 (write enabled) before rewriting this register. Note3: Value after reset of the HCFRQ1\\[2:0\\] bits depend on OFS1.HOCOFRQ1\\[2:0\\] bits."]
+    #[inline(always)]
+    pub const fn hococr2(self) -> crate::common::Reg<regs::Hococr2, crate::common::RW> {
+        unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x37usize) as _) }
+    }
     #[doc = "Middle-Speed On-Chip Oscillator Control Register"]
     #[inline(always)]
     pub const fn mococr(self) -> crate::common::Reg<regs::Mococr, crate::common::RW> {

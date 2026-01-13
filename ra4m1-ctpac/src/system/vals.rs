@@ -201,6 +201,46 @@ impl From<Fck> for u8 {
         Fck::to_bits(val)
     }
 }
+#[doc = "Reserved values are prohibited"]
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum Hcfrq1 {
+    #[doc = "24 MHz"]
+    _24mhz = 0x0,
+    _RESERVED_1 = 0x01,
+    #[doc = "32 MHz"]
+    _32mhz = 0x02,
+    _RESERVED_3 = 0x03,
+    #[doc = "48 MHz"]
+    _48mhz = 0x04,
+    #[doc = "64 MHz"]
+    _64mhz = 0x05,
+    _RESERVED_6 = 0x06,
+    _RESERVED_7 = 0x07,
+}
+impl Hcfrq1 {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> Hcfrq1 {
+        unsafe { core::mem::transmute(val & 0x07) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for Hcfrq1 {
+    #[inline(always)]
+    fn from(val: u8) -> Hcfrq1 {
+        Hcfrq1::from_bits(val)
+    }
+}
+impl From<Hcfrq1> for u8 {
+    #[inline(always)]
+    fn from(val: Hcfrq1) -> u8 {
+        Hcfrq1::to_bits(val)
+    }
+}
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]

@@ -60,10 +60,52 @@ transforms:
       enum: system::vals::Cksel
       from: _101
       to: Pll
-# Opcmtsf cxd
+  - !AddRegisters
+      block: system::System
+      registers:
+          - !BlockItem
+              name: hococr2
+              description: |
+                  High-Speed On-Chip Oscillator Control Register2
+                  Note1: Writing to the HOCOCR2 is prohibited when the HOCOCR.HCSTP bit is 0.
+                  Note2: Set the PRCR.PRC0 bit to 1 (write enabled) before rewriting this register.
+                  Note3: Value after reset of the HCFRQ1[2:0] bits depend on OFS1.HOCOFRQ1[2:0] bits.
+              byte_offset: 0x37
+              bit_size: 8
+              fieldset: system::regs::Hococr2
   - !Add
       ir:
         !IR
+            fieldset/system::regs::Hococr2:
+                !Fieldset
+                    bit_size: 8
+                    fields:
+                      - !Field
+                          name: hcfrqw
+                          bit_offset: 3
+                          bit_size: 3
+                          enum: system::vals::Hcfrq1
+            enum/system::vals::Hcfrq1:
+                !Enum
+                    bit_size: 3
+                    description: Reserved values are prohibited
+                    variants:
+                      - !EnumVariant
+                          name: _24mhz
+                          description: 24 MHz
+                          value: 0x00
+                      - !EnumVariant
+                          name: _32mhz
+                          description: 32 MHz
+                          value: 0x02
+                      - !EnumVariant
+                          name: _48mhz
+                          description: 48 MHz
+                          value: 0x04
+                      - !EnumVariant
+                          name: _64mhz
+                          description: 64 MHz
+                          value: 0x05
             enum/system::vals::Prkey:
                 !Enum
                     bit_size: 8
