@@ -1,23 +1,28 @@
 #!/usr/bin/env ruby
 
-ofs0=  0xffffffff
-ofs1=  0xffffcedf
+ofs0=%x(probe-rs read --chip R7FA4M1AB b32 0x400 1).strip.to_i(16)
+ofs1=%x(probe-rs read --chip R7FA4M1AB b32 0x404 1).strip.to_i(16)
+secmpu=%x(probe-rs read --chip R7FA4M1AB b32 0x408 13).strip.split(" ").map{|n| n.to_i(16)}
 # 00fffffc 00ffffff 00fffffc 00ffffff 00fffffc 00ffffff 200ffffc 200fffff 407ffffc 407fffff 400dfffc 400dffff ffffffff
-secmpu=[
-  0x00fffffc,
-  0x00ffffff,
-  0x00fffffc,
-  0x00ffffff,
-  0x00fffffc,
-  0x00ffffff,
-  0x200ffffc,
-  0x200fffff,
-  0x407ffffc,
-  0x407fffff,
-  0x400dfffc,
-  0x400dffff,
-  0xffffffff
-]
+# secmpu=[
+#   0x00fffffc,
+#   0x00ffffff,
+#   0x00fffffc,
+#   0x00ffffff,
+#   0x00fffffc,
+#   0x00ffffff,
+#   0x200ffffc,
+#   0x200fffff,
+#   0x407ffffc,
+#   0x407fffff,
+#   0x400dfffc,
+#   0x400dffff,
+#   0xffffffff
+# ]
+
+
+puts "OFS0: %s" % ofs0.to_s(16)
+puts "OFS1: %s" % ofs1.to_s(16)
 
 opts = []
 
@@ -28,7 +33,8 @@ when 0
 when 1
   :lvdas_disable
 else
-  panic
+  error = "Invalid LVDAS: 0b%03b" % lvdas
+  throw Exception.new(error)
 end
 opts.push(lvdas)
 
@@ -45,7 +51,8 @@ when 0b011
 when 0b100
   :vdsel_170
 else
-  panic
+  error = "Invalid VDSEL: 0b%03b" % vdsel1
+  throw Exception.new(error)
 end
 opts.push(vdsel1)
 
