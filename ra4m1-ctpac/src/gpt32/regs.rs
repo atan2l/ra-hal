@@ -325,98 +325,18 @@ impl Gtclr {
     #[doc = "Channel 0 GTCNT Count Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn cclr0(&self) -> bool {
-        let val = (self.0 >> 0usize) & 0x01;
+    pub const fn cclr(&self, n: usize) -> bool {
+        assert!(n < 8usize);
+        let offs = 0usize + n * 1usize;
+        let val = (self.0 >> offs) & 0x01;
         val != 0
     }
     #[doc = "Channel 0 GTCNT Count Clear"]
     #[inline(always)]
-    pub const fn set_cclr0(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
-    }
-    #[doc = "Channel 1 GTCNT Count Clear"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cclr1(&self) -> bool {
-        let val = (self.0 >> 1usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 1 GTCNT Count Clear"]
-    #[inline(always)]
-    pub const fn set_cclr1(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
-    }
-    #[doc = "Channel 2 GTCNT Count Clear"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cclr2(&self) -> bool {
-        let val = (self.0 >> 2usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 2 GTCNT Count Clear"]
-    #[inline(always)]
-    pub const fn set_cclr2(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
-    }
-    #[doc = "Channel 3 GTCNT Count Clear"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cclr3(&self) -> bool {
-        let val = (self.0 >> 3usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 3 GTCNT Count Clear"]
-    #[inline(always)]
-    pub const fn set_cclr3(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
-    }
-    #[doc = "Channel 4 GTCNT Count Clear"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cclr4(&self) -> bool {
-        let val = (self.0 >> 4usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 4 GTCNT Count Clear"]
-    #[inline(always)]
-    pub const fn set_cclr4(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
-    }
-    #[doc = "Channel 5 GTCNT Count Clear"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cclr5(&self) -> bool {
-        let val = (self.0 >> 5usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 5 GTCNT Count Clear"]
-    #[inline(always)]
-    pub const fn set_cclr5(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u32) & 0x01) << 5usize);
-    }
-    #[doc = "Channel 6 GTCNT Count Clear"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cclr6(&self) -> bool {
-        let val = (self.0 >> 6usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 6 GTCNT Count Clear"]
-    #[inline(always)]
-    pub const fn set_cclr6(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
-    }
-    #[doc = "Channel 7 GTCNT Count Clear"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cclr7(&self) -> bool {
-        let val = (self.0 >> 7usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 7 GTCNT Count Clear"]
-    #[inline(always)]
-    pub const fn set_cclr7(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u32) & 0x01) << 7usize);
+    pub const fn set_cclr(&mut self, n: usize, val: bool) {
+        assert!(n < 8usize);
+        let offs = 0usize + n * 1usize;
+        self.0 = (self.0 & !(0x01 << offs)) | (((val as u32) & 0x01) << offs);
     }
     #[doc = "The write value should be 000000000000000000000000."]
     #[must_use]
@@ -440,14 +360,14 @@ impl Default for Gtclr {
 impl core::fmt::Debug for Gtclr {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("Gtclr")
-            .field("cclr0", &self.cclr0())
-            .field("cclr1", &self.cclr1())
-            .field("cclr2", &self.cclr2())
-            .field("cclr3", &self.cclr3())
-            .field("cclr4", &self.cclr4())
-            .field("cclr5", &self.cclr5())
-            .field("cclr6", &self.cclr6())
-            .field("cclr7", &self.cclr7())
+            .field("cclr[0]", &self.cclr(0usize))
+            .field("cclr[1]", &self.cclr(1usize))
+            .field("cclr[2]", &self.cclr(2usize))
+            .field("cclr[3]", &self.cclr(3usize))
+            .field("cclr[4]", &self.cclr(4usize))
+            .field("cclr[5]", &self.cclr(5usize))
+            .field("cclr[6]", &self.cclr(6usize))
+            .field("cclr[7]", &self.cclr(7usize))
             .field("reserved", &self.reserved())
             .finish()
     }
@@ -457,15 +377,15 @@ impl defmt::Format for Gtclr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtclr {{ cclr0: {=bool:?}, cclr1: {=bool:?}, cclr2: {=bool:?}, cclr3: {=bool:?}, cclr4: {=bool:?}, cclr5: {=bool:?}, cclr6: {=bool:?}, cclr7: {=bool:?}, reserved: {=u32:?} }}",
-            self.cclr0(),
-            self.cclr1(),
-            self.cclr2(),
-            self.cclr3(),
-            self.cclr4(),
-            self.cclr5(),
-            self.cclr6(),
-            self.cclr7(),
+            "Gtclr {{ cclr[0]: {=bool:?}, cclr[1]: {=bool:?}, cclr[2]: {=bool:?}, cclr[3]: {=bool:?}, cclr[4]: {=bool:?}, cclr[5]: {=bool:?}, cclr[6]: {=bool:?}, cclr[7]: {=bool:?}, reserved: {=u32:?} }}",
+            self.cclr(0usize),
+            self.cclr(1usize),
+            self.cclr(2usize),
+            self.cclr(3usize),
+            self.cclr(4usize),
+            self.cclr(5usize),
+            self.cclr(6usize),
+            self.cclr(7usize),
             self.reserved()
         )
     }
@@ -3427,98 +3347,18 @@ impl Gtstp {
     #[doc = "Channel 0 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstop0(&self) -> bool {
-        let val = (self.0 >> 0usize) & 0x01;
+    pub const fn cstop(&self, n: usize) -> bool {
+        assert!(n < 8usize);
+        let offs = 0usize + n * 1usize;
+        let val = (self.0 >> offs) & 0x01;
         val != 0
     }
     #[doc = "Channel 0 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[inline(always)]
-    pub const fn set_cstop0(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
-    }
-    #[doc = "Channel 1 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstop1(&self) -> bool {
-        let val = (self.0 >> 1usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 1 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[inline(always)]
-    pub const fn set_cstop1(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
-    }
-    #[doc = "Channel 2 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstop2(&self) -> bool {
-        let val = (self.0 >> 2usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 2 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[inline(always)]
-    pub const fn set_cstop2(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
-    }
-    #[doc = "Channel 3 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstop3(&self) -> bool {
-        let val = (self.0 >> 3usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 3 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[inline(always)]
-    pub const fn set_cstop3(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
-    }
-    #[doc = "Channel 4 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstop4(&self) -> bool {
-        let val = (self.0 >> 4usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 4 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[inline(always)]
-    pub const fn set_cstop4(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
-    }
-    #[doc = "Channel 5 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstop5(&self) -> bool {
-        let val = (self.0 >> 5usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 5 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[inline(always)]
-    pub const fn set_cstop5(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u32) & 0x01) << 5usize);
-    }
-    #[doc = "Channel 6 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstop6(&self) -> bool {
-        let val = (self.0 >> 6usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 6 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[inline(always)]
-    pub const fn set_cstop6(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
-    }
-    #[doc = "Channel 7 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstop7(&self) -> bool {
-        let val = (self.0 >> 7usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 7 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
-    #[inline(always)]
-    pub const fn set_cstop7(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u32) & 0x01) << 7usize);
+    pub const fn set_cstop(&mut self, n: usize, val: bool) {
+        assert!(n < 8usize);
+        let offs = 0usize + n * 1usize;
+        self.0 = (self.0 & !(0x01 << offs)) | (((val as u32) & 0x01) << offs);
     }
     #[doc = "These bits are read as 111111111111111111111111. The write value should be 111111111111111111111111."]
     #[must_use]
@@ -3542,14 +3382,14 @@ impl Default for Gtstp {
 impl core::fmt::Debug for Gtstp {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("Gtstp")
-            .field("cstop0", &self.cstop0())
-            .field("cstop1", &self.cstop1())
-            .field("cstop2", &self.cstop2())
-            .field("cstop3", &self.cstop3())
-            .field("cstop4", &self.cstop4())
-            .field("cstop5", &self.cstop5())
-            .field("cstop6", &self.cstop6())
-            .field("cstop7", &self.cstop7())
+            .field("cstop[0]", &self.cstop(0usize))
+            .field("cstop[1]", &self.cstop(1usize))
+            .field("cstop[2]", &self.cstop(2usize))
+            .field("cstop[3]", &self.cstop(3usize))
+            .field("cstop[4]", &self.cstop(4usize))
+            .field("cstop[5]", &self.cstop(5usize))
+            .field("cstop[6]", &self.cstop(6usize))
+            .field("cstop[7]", &self.cstop(7usize))
             .field("reserved", &self.reserved())
             .finish()
     }
@@ -3559,15 +3399,15 @@ impl defmt::Format for Gtstp {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtstp {{ cstop0: {=bool:?}, cstop1: {=bool:?}, cstop2: {=bool:?}, cstop3: {=bool:?}, cstop4: {=bool:?}, cstop5: {=bool:?}, cstop6: {=bool:?}, cstop7: {=bool:?}, reserved: {=u32:?} }}",
-            self.cstop0(),
-            self.cstop1(),
-            self.cstop2(),
-            self.cstop3(),
-            self.cstop4(),
-            self.cstop5(),
-            self.cstop6(),
-            self.cstop7(),
+            "Gtstp {{ cstop[0]: {=bool:?}, cstop[1]: {=bool:?}, cstop[2]: {=bool:?}, cstop[3]: {=bool:?}, cstop[4]: {=bool:?}, cstop[5]: {=bool:?}, cstop[6]: {=bool:?}, cstop[7]: {=bool:?}, reserved: {=u32:?} }}",
+            self.cstop(0usize),
+            self.cstop(1usize),
+            self.cstop(2usize),
+            self.cstop(3usize),
+            self.cstop(4usize),
+            self.cstop(5usize),
+            self.cstop(6usize),
+            self.cstop(7usize),
             self.reserved()
         )
     }
@@ -3580,98 +3420,18 @@ impl Gtstr {
     #[doc = "Channel 0 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstrt0(&self) -> bool {
-        let val = (self.0 >> 0usize) & 0x01;
+    pub const fn cstrt(&self, n: usize) -> bool {
+        assert!(n < 8usize);
+        let offs = 0usize + n * 1usize;
+        let val = (self.0 >> offs) & 0x01;
         val != 0
     }
     #[doc = "Channel 0 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[inline(always)]
-    pub const fn set_cstrt0(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
-    }
-    #[doc = "Channel 1 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstrt1(&self) -> bool {
-        let val = (self.0 >> 1usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 1 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[inline(always)]
-    pub const fn set_cstrt1(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
-    }
-    #[doc = "Channel 2 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstrt2(&self) -> bool {
-        let val = (self.0 >> 2usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 2 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[inline(always)]
-    pub const fn set_cstrt2(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
-    }
-    #[doc = "Channel 3 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstrt3(&self) -> bool {
-        let val = (self.0 >> 3usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 3 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[inline(always)]
-    pub const fn set_cstrt3(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
-    }
-    #[doc = "Channel 4 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstrt4(&self) -> bool {
-        let val = (self.0 >> 4usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 4 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[inline(always)]
-    pub const fn set_cstrt4(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
-    }
-    #[doc = "Channel 5 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstrt5(&self) -> bool {
-        let val = (self.0 >> 5usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 5 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[inline(always)]
-    pub const fn set_cstrt5(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u32) & 0x01) << 5usize);
-    }
-    #[doc = "Channel 6 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstrt6(&self) -> bool {
-        let val = (self.0 >> 6usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 6 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[inline(always)]
-    pub const fn set_cstrt6(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
-    }
-    #[doc = "Channel 7 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn cstrt7(&self) -> bool {
-        let val = (self.0 >> 7usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Channel 7 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
-    #[inline(always)]
-    pub const fn set_cstrt7(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u32) & 0x01) << 7usize);
+    pub const fn set_cstrt(&mut self, n: usize, val: bool) {
+        assert!(n < 8usize);
+        let offs = 0usize + n * 1usize;
+        self.0 = (self.0 & !(0x01 << offs)) | (((val as u32) & 0x01) << offs);
     }
     #[doc = "These bits are read as 000000000000000000000000. The write value should be 000000000000000000000000."]
     #[must_use]
@@ -3695,14 +3455,14 @@ impl Default for Gtstr {
 impl core::fmt::Debug for Gtstr {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("Gtstr")
-            .field("cstrt0", &self.cstrt0())
-            .field("cstrt1", &self.cstrt1())
-            .field("cstrt2", &self.cstrt2())
-            .field("cstrt3", &self.cstrt3())
-            .field("cstrt4", &self.cstrt4())
-            .field("cstrt5", &self.cstrt5())
-            .field("cstrt6", &self.cstrt6())
-            .field("cstrt7", &self.cstrt7())
+            .field("cstrt[0]", &self.cstrt(0usize))
+            .field("cstrt[1]", &self.cstrt(1usize))
+            .field("cstrt[2]", &self.cstrt(2usize))
+            .field("cstrt[3]", &self.cstrt(3usize))
+            .field("cstrt[4]", &self.cstrt(4usize))
+            .field("cstrt[5]", &self.cstrt(5usize))
+            .field("cstrt[6]", &self.cstrt(6usize))
+            .field("cstrt[7]", &self.cstrt(7usize))
             .field("reserved", &self.reserved())
             .finish()
     }
@@ -3712,15 +3472,15 @@ impl defmt::Format for Gtstr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtstr {{ cstrt0: {=bool:?}, cstrt1: {=bool:?}, cstrt2: {=bool:?}, cstrt3: {=bool:?}, cstrt4: {=bool:?}, cstrt5: {=bool:?}, cstrt6: {=bool:?}, cstrt7: {=bool:?}, reserved: {=u32:?} }}",
-            self.cstrt0(),
-            self.cstrt1(),
-            self.cstrt2(),
-            self.cstrt3(),
-            self.cstrt4(),
-            self.cstrt5(),
-            self.cstrt6(),
-            self.cstrt7(),
+            "Gtstr {{ cstrt[0]: {=bool:?}, cstrt[1]: {=bool:?}, cstrt[2]: {=bool:?}, cstrt[3]: {=bool:?}, cstrt[4]: {=bool:?}, cstrt[5]: {=bool:?}, cstrt[6]: {=bool:?}, cstrt[7]: {=bool:?}, reserved: {=u32:?} }}",
+            self.cstrt(0usize),
+            self.cstrt(1usize),
+            self.cstrt(2usize),
+            self.cstrt(3usize),
+            self.cstrt(4usize),
+            self.cstrt(5usize),
+            self.cstrt(6usize),
+            self.cstrt(7usize),
             self.reserved()
         )
     }

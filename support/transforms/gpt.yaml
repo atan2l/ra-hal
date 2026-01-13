@@ -43,3 +43,7 @@ transforms:
       to: TrianglePwm3
   - !DeleteEnums
       from: gpt32::vals::(Cst)
+  - !MakeFieldArray
+      fieldsets: gpt32::regs::(Gtstr|Gtstp|Gtclr)
+      from: (cstrt|cstop|cclr)\d+
+      to: ${1}
