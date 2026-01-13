@@ -164,19 +164,19 @@ impl From<Cksel> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Fck {
     #[doc = "/1"]
-    _000 = 0x0,
+    DIV_1 = 0x0,
     #[doc = "/2"]
-    _001 = 0x01,
+    DIV_2 = 0x01,
     #[doc = "/4"]
-    _010 = 0x02,
+    DIV_4 = 0x02,
     #[doc = "/8"]
-    _011 = 0x03,
+    DIV_8 = 0x03,
     #[doc = "/16"]
-    _100 = 0x04,
+    DIV_16 = 0x04,
     #[doc = "/32"]
-    _101 = 0x05,
+    DIV_32 = 0x05,
     #[doc = "/64"]
-    _110 = 0x06,
+    DIV_64 = 0x06,
     _RESERVED_7 = 0x07,
 }
 impl Fck {
@@ -314,19 +314,19 @@ impl From<Hsts> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Ick {
     #[doc = "/1"]
-    _000 = 0x0,
+    DIV_1 = 0x0,
     #[doc = "/2"]
-    _001 = 0x01,
+    DIV_2 = 0x01,
     #[doc = "/4"]
-    _010 = 0x02,
+    DIV_4 = 0x02,
     #[doc = "/8"]
-    _011 = 0x03,
+    DIV_8 = 0x03,
     #[doc = "/16"]
-    _100 = 0x04,
+    DIV_16 = 0x04,
     #[doc = "/32"]
-    _101 = 0x05,
+    DIV_32 = 0x05,
     #[doc = "/64"]
-    _110 = 0x06,
+    DIV_64 = 0x06,
     _RESERVED_7 = 0x07,
 }
 impl Ick {
@@ -632,19 +632,19 @@ impl From<Opcm> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Pcka {
     #[doc = "/1"]
-    _000 = 0x0,
+    DIV_1 = 0x0,
     #[doc = "/2"]
-    _001 = 0x01,
+    DIV_2 = 0x01,
     #[doc = "/4"]
-    _010 = 0x02,
+    DIV_4 = 0x02,
     #[doc = "/8"]
-    _011 = 0x03,
+    DIV_8 = 0x03,
     #[doc = "/16"]
-    _100 = 0x04,
+    DIV_16 = 0x04,
     #[doc = "/32"]
-    _101 = 0x05,
+    DIV_32 = 0x05,
     #[doc = "/64"]
-    _110 = 0x06,
+    DIV_64 = 0x06,
     _RESERVED_7 = 0x07,
 }
 impl Pcka {
@@ -674,19 +674,19 @@ impl From<Pcka> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Pckb {
     #[doc = "/1"]
-    _000 = 0x0,
+    DIV_1 = 0x0,
     #[doc = "/2"]
-    _001 = 0x01,
+    DIV_2 = 0x01,
     #[doc = "/4"]
-    _010 = 0x02,
+    DIV_4 = 0x02,
     #[doc = "/8"]
-    _011 = 0x03,
+    DIV_8 = 0x03,
     #[doc = "/16"]
-    _100 = 0x04,
+    DIV_16 = 0x04,
     #[doc = "/32"]
-    _101 = 0x05,
+    DIV_32 = 0x05,
     #[doc = "/64"]
-    _110 = 0x06,
+    DIV_64 = 0x06,
     _RESERVED_7 = 0x07,
 }
 impl Pckb {
@@ -716,19 +716,19 @@ impl From<Pckb> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Pckc {
     #[doc = "/1"]
-    _000 = 0x0,
+    DIV_1 = 0x0,
     #[doc = "/2"]
-    _001 = 0x01,
+    DIV_2 = 0x01,
     #[doc = "/4"]
-    _010 = 0x02,
+    DIV_4 = 0x02,
     #[doc = "/8"]
-    _011 = 0x03,
+    DIV_8 = 0x03,
     #[doc = "/16"]
-    _100 = 0x04,
+    DIV_16 = 0x04,
     #[doc = "/32"]
-    _101 = 0x05,
+    DIV_32 = 0x05,
     #[doc = "/64"]
-    _110 = 0x06,
+    DIV_64 = 0x06,
     _RESERVED_7 = 0x07,
 }
 impl Pckc {
@@ -758,19 +758,19 @@ impl From<Pckc> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Pckd {
     #[doc = "/1"]
-    _000 = 0x0,
+    DIV_1 = 0x0,
     #[doc = "/2"]
-    _001 = 0x01,
+    DIV_2 = 0x01,
     #[doc = "/4"]
-    _010 = 0x02,
+    DIV_4 = 0x02,
     #[doc = "/8"]
-    _011 = 0x03,
+    DIV_8 = 0x03,
     #[doc = "/16"]
-    _100 = 0x04,
+    DIV_16 = 0x04,
     #[doc = "/32"]
-    _101 = 0x05,
+    DIV_32 = 0x05,
     #[doc = "/64"]
-    _110 = 0x06,
+    DIV_64 = 0x06,
     _RESERVED_7 = 0x07,
 }
 impl Pckd {

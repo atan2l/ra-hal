@@ -60,6 +60,34 @@ transforms:
       enum: system::vals::Cksel
       from: _101
       to: Pll
+  - !RenameEnumVariants
+      enum: system::vals::(Ick|Fck|Pck[abcd])
+      from: _000
+      to: DIV_1
+  - !RenameEnumVariants
+      enum: system::vals::(Ick|Fck|Pck[abcd])
+      from: _001
+      to: DIV_2
+  - !RenameEnumVariants
+      enum: system::vals::(Ick|Fck|Pck[abcd])
+      from: _010
+      to: DIV_4
+  - !RenameEnumVariants
+      enum: system::vals::(Ick|Fck|Pck[abcd])
+      from: _011
+      to: DIV_8
+  - !RenameEnumVariants
+      enum: system::vals::(Ick|Fck|Pck[abcd])
+      from: _100
+      to: DIV_16
+  - !RenameEnumVariants
+      enum: system::vals::(Ick|Fck|Pck[abcd])
+      from: _101
+      to: DIV_32
+  - !RenameEnumVariants
+      enum: system::vals::(Ick|Fck|Pck[abcd])
+      from: _110
+      to: DIV_64
   - !AddRegisters
       block: system::System
       registers:
