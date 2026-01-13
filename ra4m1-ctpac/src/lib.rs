@@ -1,7 +1,7 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 #![no_std]
-#![doc = "Peripheral access API (generated using chiptool v0.1.0 (0b476f2 2026-01-01))"]
+#![doc = "Peripheral access API (generated using chiptool v0.1.0 (887077d 2026-01-05))"]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Interrupt {
@@ -175,9 +175,9 @@ pub const SPI1: spi1::Spi1 = unsafe { spi1::Spi1::from_ptr(0x4007_2100usize as _
 #[doc = "CRC Calculator"]
 pub const CRC: crc::Crc = unsafe { crc::Crc::from_ptr(0x4007_4000usize as _) };
 #[doc = "General PWM Timer 0 (32-bit)"]
-pub const GPT320: gpt320::Gpt320 = unsafe { gpt320::Gpt320::from_ptr(0x4007_8000usize as _) };
+pub const GPT320: gpt32::Gpt32 = unsafe { gpt32::Gpt32::from_ptr(0x4007_8000usize as _) };
 #[doc = "General PWM Timer 1 (32-bit)"]
-pub const GPT321: gpt320::Gpt320 = unsafe { gpt320::Gpt320::from_ptr(0x4007_8100usize as _) };
+pub const GPT321: gpt32::Gpt32 = unsafe { gpt32::Gpt32::from_ptr(0x4007_8100usize as _) };
 #[doc = "General PWM Timer 2 (16-bit)"]
 pub const GPT162: gpt162::Gpt162 = unsafe { gpt162::Gpt162::from_ptr(0x4007_8200usize as _) };
 #[doc = "General PWM Timer 3 (16-bit)"]
@@ -238,7 +238,7 @@ pub mod dtc;
 pub mod elc;
 pub mod fcache;
 pub mod gpt162;
-pub mod gpt320;
+pub mod gpt32;
 pub mod gpt_ops;
 pub mod icu;
 pub mod iic0;

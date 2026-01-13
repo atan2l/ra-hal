@@ -3,3 +3,6 @@ transforms:
       from: gpt320::Gpt320
       to: gpt32::Gpt32
       type: Block
+  - !Rename
+      from: gpt320::(regs|vals)::(.+)
+      to: gpt32::${1}::${2}
