@@ -1,5 +1,3 @@
-use std::env;
-
 fn main() {
     if let Err(e) = inner_main() {
         eprintln!("{e}");

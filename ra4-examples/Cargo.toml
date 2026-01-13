@@ -7,6 +7,7 @@ description = "HAL examples for the Renesas RA4 family of MCUs."
 
 [dependencies]
 ## Core dependencies
+cortex-m = { workspace = true }
 cortex-m-rt = { workspace = true }
 defmt = { workspace = true }
 defmt-rtt = "1.0.0"
@@ -15,7 +16,7 @@ panic-probe = { version = "1.0.0" }
 ## Embassy dependencies
 # embassy-embedded-hal = { version = "0.5.0", default-features = false }
 embassy-executor = { version = "0.9.0", features = [ "arch-cortex-m", "executor-thread", "executor-interrupt" ] }
-# embassy-time = { workspace = true }
+embassy-time = { workspace = true }
 # embassy-futures = { version = "0.1.2" }
 
 ## Board stuff
@@ -34,5 +35,5 @@ heapless = { version = "0.9.2" }
 vergen-gitcl = { version = "1.0.8" }
 
 [features]
-default = []
-defmt = ["panic-probe/print-defmt", "embassy-executor/defmt"]
+default = [ "defmt" ]
+defmt = [ "panic-probe/print-defmt", "embassy-executor/defmt", "embassy-time/defmt", "embassy-time/defmt-timestamp-uptime" ]
