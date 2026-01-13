@@ -1,37 +1,6 @@
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Blon {
-    #[doc = "Displaying an A-pattern area data (lower four bits of LCD display data register)(LCDSEL=0)/Displaying a B-pattern area data (higher four bits of LCD display data register)(LCDSEL=1)"]
-    _0 = 0x0,
-    #[doc = "Alternately displaying A-pattern and B-pattern area data (blinking display corresponding to the constant-period interrupt (INTRTC) timing of the real-time clock (RTC))"]
-    _1 = 0x01,
-}
-impl Blon {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Blon {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Blon {
-    #[inline(always)]
-    fn from(val: u8) -> Blon {
-        Blon::from_bits(val)
-    }
-}
-impl From<Blon> for u8 {
-    #[inline(always)]
-    fn from(val: Blon) -> u8 {
-        Blon::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Lbas {
     #[doc = "1/2 bias method"]
     _00 = 0x0,
@@ -179,99 +148,6 @@ impl From<Lcdc> for u8 {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Lcdon {
-    #[doc = "Output ground level to segment/common pin(SCOC=0)/Display off (all segment outputs are deselected)(SCOC=1)"]
-    _0 = 0x0,
-    #[doc = "Output ground level to segment/common pin(SCOC=0)/Display on(SCOC=1)"]
-    _1 = 0x01,
-}
-impl Lcdon {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Lcdon {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Lcdon {
-    #[inline(always)]
-    fn from(val: u8) -> Lcdon {
-        Lcdon::from_bits(val)
-    }
-}
-impl From<Lcdon> for u8 {
-    #[inline(always)]
-    fn from(val: Lcdon) -> u8 {
-        Lcdon::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Lcdsel {
-    #[doc = "Displaying an A-pattern area data (lower four bits of LCD display data register)(BLON=0)/Alternately displaying A-pattern and B-pattern area data (blinking display corresponding to the constant-period interrupt (INTRTC) timing of the real-time clock (RTC))(BLON=1)"]
-    _0 = 0x0,
-    #[doc = "Displaying a B-pattern area data (higher four bits of LCD display data register)(BLON=0)/Alternately displaying A-pattern and B-pattern area data (blinking display corresponding to the constant-period interrupt (INTRTC) timing of the real-time clock (RTC))(BLON=1)"]
-    _1 = 0x01,
-}
-impl Lcdsel {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Lcdsel {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Lcdsel {
-    #[inline(always)]
-    fn from(val: u8) -> Lcdsel {
-        Lcdsel::from_bits(val)
-    }
-}
-impl From<Lcdsel> for u8 {
-    #[inline(always)]
-    fn from(val: Lcdsel) -> u8 {
-        Lcdsel::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Lcdvlm {
-    #[doc = "Set when VDD >= 2.7 V"]
-    _0 = 0x0,
-    #[doc = "Set when VDD <= 4.2 V"]
-    _1 = 0x01,
-}
-impl Lcdvlm {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Lcdvlm {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Lcdvlm {
-    #[inline(always)]
-    fn from(val: u8) -> Lcdvlm {
-        Lcdvlm::from_bits(val)
-    }
-}
-impl From<Lcdvlm> for u8 {
-    #[inline(always)]
-    fn from(val: Lcdvlm) -> u8 {
-        Lcdvlm::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Ldty {
     #[doc = "Static"]
     _000 = 0x0,
@@ -312,37 +188,6 @@ impl From<Ldty> for u8 {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Lwave {
-    #[doc = "Waveform A"]
-    _0 = 0x0,
-    #[doc = "Waveform B"]
-    _1 = 0x01,
-}
-impl Lwave {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Lwave {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Lwave {
-    #[inline(always)]
-    fn from(val: u8) -> Lwave {
-        Lwave::from_bits(val)
-    }
-}
-impl From<Lwave> for u8 {
-    #[inline(always)]
-    fn from(val: Lwave) -> u8 {
-        Lwave::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Mdset {
     #[doc = "External resistance division method"]
     _00 = 0x0,
@@ -373,37 +218,6 @@ impl From<Mdset> for u8 {
     #[inline(always)]
     fn from(val: Mdset) -> u8 {
         Mdset::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Scoc {
-    #[doc = "Output ground level to segment/common pin(LCDON=0)/Output ground level to segment/common pin(LCDON=1)"]
-    _0 = 0x0,
-    #[doc = "Display off (all segment outputs are deselected)(LCDON=0)/Display on(LCDON=1)"]
-    _1 = 0x01,
-}
-impl Scoc {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Scoc {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Scoc {
-    #[inline(always)]
-    fn from(val: u8) -> Scoc {
-        Scoc::from_bits(val)
-    }
-}
-impl From<Scoc> for u8 {
-    #[inline(always)]
-    fn from(val: Scoc) -> u8 {
-        Scoc::to_bits(val)
     }
 }
 #[repr(u8)]
@@ -479,36 +293,5 @@ impl From<Vlcd> for u8 {
     #[inline(always)]
     fn from(val: Vlcd) -> u8 {
         Vlcd::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Vlcon {
-    #[doc = "Stops voltage boost circuit or capacitor split circuit operation"]
-    _0 = 0x0,
-    #[doc = "Enables voltage boost circuit or capacitor split circuit operation"]
-    _1 = 0x01,
-}
-impl Vlcon {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Vlcon {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Vlcon {
-    #[inline(always)]
-    fn from(val: u8) -> Vlcon {
-        Vlcon::from_bits(val)
-    }
-}
-impl From<Vlcon> for u8 {
-    #[inline(always)]
-    fn from(val: Vlcon) -> u8 {
-        Vlcon::to_bits(val)
     }
 }

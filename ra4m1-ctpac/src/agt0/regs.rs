@@ -115,38 +115,38 @@ impl Agtcmsr {
     #[doc = "Compare match A register enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcmea(&self) -> super::vals::Tcmea {
+    pub const fn tcmea(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Tcmea::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare match A register enable"]
     #[inline(always)]
-    pub const fn set_tcmea(&mut self, val: super::vals::Tcmea) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_tcmea(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "AGTOA output enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn toea(&self) -> super::vals::Toea {
+    pub const fn toea(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Toea::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AGTOA output enable"]
     #[inline(always)]
-    pub const fn set_toea(&mut self, val: super::vals::Toea) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_toea(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "AGTOA polarity select"]
     #[must_use]
     #[inline(always)]
-    pub const fn topola(&self) -> super::vals::Topola {
+    pub const fn topola(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Topola::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AGTOA polarity select"]
     #[inline(always)]
-    pub const fn set_topola(&mut self, val: super::vals::Topola) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_topola(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -163,38 +163,38 @@ impl Agtcmsr {
     #[doc = "Compare match B register enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcmeb(&self) -> super::vals::Tcmeb {
+    pub const fn tcmeb(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Tcmeb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare match B register enable"]
     #[inline(always)]
-    pub const fn set_tcmeb(&mut self, val: super::vals::Tcmeb) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_tcmeb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "AGTOB output enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn toeb(&self) -> super::vals::Toeb {
+    pub const fn toeb(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Toeb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AGTOB output enable"]
     #[inline(always)]
-    pub const fn set_toeb(&mut self, val: super::vals::Toeb) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_toeb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "AGTOB polarity select"]
     #[must_use]
     #[inline(always)]
-    pub const fn topolb(&self) -> super::vals::Topolb {
+    pub const fn topolb(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Topolb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AGTOB polarity select"]
     #[inline(always)]
-    pub const fn set_topolb(&mut self, val: super::vals::Topolb) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_topolb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -234,7 +234,7 @@ impl defmt::Format for Agtcmsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Agtcmsr {{ tcmea: {:?}, toea: {:?}, topola: {:?}, reserved: {=bool:?}, tcmeb: {:?}, toeb: {:?}, topolb: {:?}, reserved_2: {=bool:?} }}",
+            "Agtcmsr {{ tcmea: {=bool:?}, toea: {=bool:?}, topola: {=bool:?}, reserved: {=bool:?}, tcmeb: {=bool:?}, toeb: {=bool:?}, topolb: {=bool:?}, reserved_2: {=bool:?} }}",
             self.tcmea(),
             self.toea(),
             self.topola(),
@@ -254,38 +254,38 @@ impl Agtcr {
     #[doc = "AGT count start"]
     #[must_use]
     #[inline(always)]
-    pub const fn tstart(&self) -> super::vals::Tstart {
+    pub const fn tstart(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Tstart::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AGT count start"]
     #[inline(always)]
-    pub const fn set_tstart(&mut self, val: super::vals::Tstart) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_tstart(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "AGT count status flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcstf(&self) -> super::vals::Tcstf {
+    pub const fn tcstf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Tcstf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AGT count status flag"]
     #[inline(always)]
-    pub const fn set_tcstf(&mut self, val: super::vals::Tcstf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_tcstf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "AGT count forced stop"]
     #[must_use]
     #[inline(always)]
-    pub const fn tstop(&self) -> super::vals::Tstop {
+    pub const fn tstop(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Tstop::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AGT count forced stop"]
     #[inline(always)]
-    pub const fn set_tstop(&mut self, val: super::vals::Tstop) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_tstop(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -302,50 +302,50 @@ impl Agtcr {
     #[doc = "Active edge judgment flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn tedgf(&self) -> super::vals::Tedgf {
+    pub const fn tedgf(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Tedgf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Active edge judgment flag"]
     #[inline(always)]
-    pub const fn set_tedgf(&mut self, val: super::vals::Tedgf) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_tedgf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "Underflow flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn tundf(&self) -> super::vals::Tundf {
+    pub const fn tundf(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Tundf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Underflow flag"]
     #[inline(always)]
-    pub const fn set_tundf(&mut self, val: super::vals::Tundf) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_tundf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "Compare match A flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcmaf(&self) -> super::vals::Tcmaf {
+    pub const fn tcmaf(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Tcmaf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare match A flag"]
     #[inline(always)]
-    pub const fn set_tcmaf(&mut self, val: super::vals::Tcmaf) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_tcmaf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "Compare match B flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcmbf(&self) -> super::vals::Tcmbf {
+    pub const fn tcmbf(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Tcmbf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare match B flag"]
     #[inline(always)]
-    pub const fn set_tcmbf(&mut self, val: super::vals::Tcmbf) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_tcmbf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Agtcr {
@@ -373,7 +373,7 @@ impl defmt::Format for Agtcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Agtcr {{ tstart: {:?}, tcstf: {:?}, tstop: {:?}, reserved: {=bool:?}, tedgf: {:?}, tundf: {:?}, tcmaf: {:?}, tcmbf: {:?} }}",
+            "Agtcr {{ tstart: {=bool:?}, tcstf: {=bool:?}, tstop: {=bool:?}, reserved: {=bool:?}, tedgf: {=bool:?}, tundf: {=bool:?}, tcmaf: {=bool:?}, tcmbf: {=bool:?} }}",
             self.tstart(),
             self.tcstf(),
             self.tstop(),
@@ -417,14 +417,14 @@ impl Agtioc {
     #[doc = "AGTOn output enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn toe(&self) -> super::vals::Toe {
+    pub const fn toe(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Toe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AGTOn output enable"]
     #[inline(always)]
-    pub const fn set_toe(&mut self, val: super::vals::Toe) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_toe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -486,7 +486,7 @@ impl defmt::Format for Agtioc {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Agtioc {{ tedgsel: {=bool:?}, reserved: {=bool:?}, toe: {:?}, reserved_2: {=bool:?}, tipf: {:?}, tiogt: {:?} }}",
+            "Agtioc {{ tedgsel: {=bool:?}, reserved: {=bool:?}, toe: {=bool:?}, reserved_2: {=bool:?}, tipf: {:?}, tiogt: {:?} }}",
             self.tedgsel(),
             self.reserved(),
             self.toe(),
@@ -528,14 +528,14 @@ impl Agtiosel {
     #[doc = "AGTIO input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ties(&self) -> super::vals::Ties {
+    pub const fn ties(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ties::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AGTIO input enable"]
     #[inline(always)]
-    pub const fn set_ties(&mut self, val: super::vals::Ties) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_ties(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -571,7 +571,7 @@ impl defmt::Format for Agtiosel {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Agtiosel {{ sel: {:?}, reserved: {=u8:?}, ties: {:?}, reserved_2: {=u8:?} }}",
+            "Agtiosel {{ sel: {:?}, reserved: {=u8:?}, ties: {=bool:?}, reserved_2: {=u8:?} }}",
             self.sel(),
             self.reserved(),
             self.ties(),
@@ -599,14 +599,14 @@ impl Agtisr {
     #[doc = "AGTEE polarty selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn eeps(&self) -> super::vals::Eeps {
+    pub const fn eeps(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Eeps::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AGTEE polarty selection"]
     #[inline(always)]
-    pub const fn set_eeps(&mut self, val: super::vals::Eeps) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_eeps(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "These bits are read as 00000. The write value should be 00000."]
     #[must_use]
@@ -641,7 +641,7 @@ impl defmt::Format for Agtisr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Agtisr {{ reserved: {=u8:?}, eeps: {:?}, reserved_2: {=u8:?} }}",
+            "Agtisr {{ reserved: {=u8:?}, eeps: {=bool:?}, reserved_2: {=u8:?} }}",
             self.reserved(),
             self.eeps(),
             self.reserved_2()
@@ -668,14 +668,14 @@ impl Agtmr1 {
     #[doc = "Edge polarity"]
     #[must_use]
     #[inline(always)]
-    pub const fn tedgpl(&self) -> super::vals::Tedgpl {
+    pub const fn tedgpl(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Tedgpl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Edge polarity"]
     #[inline(always)]
-    pub const fn set_tedgpl(&mut self, val: super::vals::Tedgpl) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_tedgpl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "Count source"]
     #[must_use]
@@ -723,7 +723,7 @@ impl defmt::Format for Agtmr1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Agtmr1 {{ tmod: {:?}, tedgpl: {:?}, tck: {:?}, reserved: {=bool:?} }}",
+            "Agtmr1 {{ tmod: {:?}, tedgpl: {=bool:?}, tck: {:?}, reserved: {=bool:?} }}",
             self.tmod(),
             self.tedgpl(),
             self.tck(),
@@ -763,14 +763,14 @@ impl Agtmr2 {
     #[doc = "Low Power Mode"]
     #[must_use]
     #[inline(always)]
-    pub const fn lpm(&self) -> super::vals::Lpm {
+    pub const fn lpm(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Lpm::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Low Power Mode"]
     #[inline(always)]
-    pub const fn set_lpm(&mut self, val: super::vals::Lpm) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_lpm(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Agtmr2 {
@@ -793,7 +793,7 @@ impl defmt::Format for Agtmr2 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Agtmr2 {{ cks: {:?}, reserved: {=u8:?}, lpm: {:?} }}",
+            "Agtmr2 {{ cks: {:?}, reserved: {=u8:?}, lpm: {=bool:?} }}",
             self.cks(),
             self.reserved(),
             self.lpm()

@@ -21,4 +21,3 @@ impl Pmisc {
     }
 }
 pub mod regs;
-pub mod vals;

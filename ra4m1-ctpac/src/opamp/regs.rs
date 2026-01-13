@@ -6,50 +6,50 @@ impl Ampc {
     #[doc = "Operation control of operational amplifier(UNIT0)"]
     #[must_use]
     #[inline(always)]
-    pub const fn ampe0(&self) -> super::vals::Ampe0 {
+    pub const fn ampe0(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ampe0::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operation control of operational amplifier(UNIT0)"]
     #[inline(always)]
-    pub const fn set_ampe0(&mut self, val: super::vals::Ampe0) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ampe0(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Operation control of operational amplifier(UNIT1)"]
     #[must_use]
     #[inline(always)]
-    pub const fn ampe1(&self) -> super::vals::Ampe1 {
+    pub const fn ampe1(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ampe1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operation control of operational amplifier(UNIT1)"]
     #[inline(always)]
-    pub const fn set_ampe1(&mut self, val: super::vals::Ampe1) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_ampe1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Operation control of operational amplifier(UNIT2)"]
     #[must_use]
     #[inline(always)]
-    pub const fn ampe2(&self) -> super::vals::Ampe2 {
+    pub const fn ampe2(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ampe2::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operation control of operational amplifier(UNIT2)"]
     #[inline(always)]
-    pub const fn set_ampe2(&mut self, val: super::vals::Ampe2) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_ampe2(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "Operation control of operational amplifier(UNIT3)"]
     #[must_use]
     #[inline(always)]
-    pub const fn ampe3(&self) -> super::vals::Ampe3 {
+    pub const fn ampe3(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ampe3::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operation control of operational amplifier(UNIT3)"]
     #[inline(always)]
-    pub const fn set_ampe3(&mut self, val: super::vals::Ampe3) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_ampe3(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -66,14 +66,14 @@ impl Ampc {
     #[doc = "Operation control of operational amplifier reference current circuit"]
     #[must_use]
     #[inline(always)]
-    pub const fn irefe(&self) -> super::vals::Irefe {
+    pub const fn irefe(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Irefe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operation control of operational amplifier reference current circuit"]
     #[inline(always)]
-    pub const fn set_irefe(&mut self, val: super::vals::Irefe) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_irefe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Ampc {
@@ -99,7 +99,7 @@ impl defmt::Format for Ampc {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ampc {{ ampe0: {:?}, ampe1: {:?}, ampe2: {:?}, ampe3: {:?}, reserved: {=u8:?}, irefe: {:?} }}",
+            "Ampc {{ ampe0: {=bool:?}, ampe1: {=bool:?}, ampe2: {=bool:?}, ampe3: {=bool:?}, reserved: {=u8:?}, irefe: {=bool:?} }}",
             self.ampe0(),
             self.ampe1(),
             self.ampe2(),
@@ -117,50 +117,50 @@ impl Ampmc {
     #[doc = "Operational amplifier precharge control status"]
     #[must_use]
     #[inline(always)]
-    pub const fn amppc0(&self) -> super::vals::Amppc0 {
+    pub const fn amppc0(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Amppc0::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier precharge control status"]
     #[inline(always)]
-    pub const fn set_amppc0(&mut self, val: super::vals::Amppc0) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_amppc0(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Operational amplifier precharge control status"]
     #[must_use]
     #[inline(always)]
-    pub const fn amppc1(&self) -> super::vals::Amppc1 {
+    pub const fn amppc1(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Amppc1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier precharge control status"]
     #[inline(always)]
-    pub const fn set_amppc1(&mut self, val: super::vals::Amppc1) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_amppc1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Operational amplifier precharge control status"]
     #[must_use]
     #[inline(always)]
-    pub const fn amppc2(&self) -> super::vals::Amppc2 {
+    pub const fn amppc2(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Amppc2::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier precharge control status"]
     #[inline(always)]
-    pub const fn set_amppc2(&mut self, val: super::vals::Amppc2) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_amppc2(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "Operational amplifier precharge control status"]
     #[must_use]
     #[inline(always)]
-    pub const fn amppc3(&self) -> super::vals::Amppc3 {
+    pub const fn amppc3(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Amppc3::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier precharge control status"]
     #[inline(always)]
-    pub const fn set_amppc3(&mut self, val: super::vals::Amppc3) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_amppc3(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -177,14 +177,14 @@ impl Ampmc {
     #[doc = "Operation mode selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn ampsp(&self) -> super::vals::Ampsp {
+    pub const fn ampsp(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Ampsp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operation mode selection"]
     #[inline(always)]
-    pub const fn set_ampsp(&mut self, val: super::vals::Ampsp) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_ampsp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Ampmc {
@@ -210,7 +210,7 @@ impl defmt::Format for Ampmc {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ampmc {{ amppc0: {:?}, amppc1: {:?}, amppc2: {:?}, amppc3: {:?}, reserved: {=u8:?}, ampsp: {:?} }}",
+            "Ampmc {{ amppc0: {=bool:?}, amppc1: {=bool:?}, amppc2: {=bool:?}, amppc3: {=bool:?}, reserved: {=u8:?}, ampsp: {=bool:?} }}",
             self.amppc0(),
             self.amppc1(),
             self.amppc2(),
@@ -228,50 +228,50 @@ impl Ampmon {
     #[doc = "Operational amplifier status(UNIT0)"]
     #[must_use]
     #[inline(always)]
-    pub const fn ampmon0(&self) -> super::vals::Ampmon0 {
+    pub const fn ampmon0(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ampmon0::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier status(UNIT0)"]
     #[inline(always)]
-    pub const fn set_ampmon0(&mut self, val: super::vals::Ampmon0) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ampmon0(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Operational amplifier status(UNIT1)"]
     #[must_use]
     #[inline(always)]
-    pub const fn ampmon1(&self) -> super::vals::Ampmon1 {
+    pub const fn ampmon1(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ampmon1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier status(UNIT1)"]
     #[inline(always)]
-    pub const fn set_ampmon1(&mut self, val: super::vals::Ampmon1) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_ampmon1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Operational amplifier status(UNIT2)"]
     #[must_use]
     #[inline(always)]
-    pub const fn ampmon2(&self) -> super::vals::Ampmon2 {
+    pub const fn ampmon2(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ampmon2::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier status(UNIT2)"]
     #[inline(always)]
-    pub const fn set_ampmon2(&mut self, val: super::vals::Ampmon2) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_ampmon2(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "Operational amplifier status(UNIT3)"]
     #[must_use]
     #[inline(always)]
-    pub const fn ampmon3(&self) -> super::vals::Ampmon3 {
+    pub const fn ampmon3(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ampmon3::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier status(UNIT3)"]
     #[inline(always)]
-    pub const fn set_ampmon3(&mut self, val: super::vals::Ampmon3) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_ampmon3(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 0000."]
     #[must_use]
@@ -308,7 +308,7 @@ impl defmt::Format for Ampmon {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ampmon {{ ampmon0: {:?}, ampmon1: {:?}, ampmon2: {:?}, ampmon3: {:?}, reserved: {=u8:?} }}",
+            "Ampmon {{ ampmon0: {=bool:?}, ampmon1: {=bool:?}, ampmon2: {=bool:?}, ampmon3: {=bool:?}, reserved: {=u8:?} }}",
             self.ampmon0(),
             self.ampmon1(),
             self.ampmon2(),
@@ -325,98 +325,98 @@ impl Amptrm {
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[must_use]
     #[inline(always)]
-    pub const fn amptrm00(&self) -> super::vals::Amptrm00 {
+    pub const fn amptrm00(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Amptrm00::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[inline(always)]
-    pub const fn set_amptrm00(&mut self, val: super::vals::Amptrm00) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_amptrm00(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[must_use]
     #[inline(always)]
-    pub const fn amptrm01(&self) -> super::vals::Amptrm01 {
+    pub const fn amptrm01(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Amptrm01::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[inline(always)]
-    pub const fn set_amptrm01(&mut self, val: super::vals::Amptrm01) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_amptrm01(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[must_use]
     #[inline(always)]
-    pub const fn amptrm10(&self) -> super::vals::Amptrm10 {
+    pub const fn amptrm10(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Amptrm10::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[inline(always)]
-    pub const fn set_amptrm10(&mut self, val: super::vals::Amptrm10) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_amptrm10(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[must_use]
     #[inline(always)]
-    pub const fn amptrm11(&self) -> super::vals::Amptrm11 {
+    pub const fn amptrm11(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Amptrm11::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[inline(always)]
-    pub const fn set_amptrm11(&mut self, val: super::vals::Amptrm11) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_amptrm11(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[must_use]
     #[inline(always)]
-    pub const fn amptrm20(&self) -> super::vals::Amptrm20 {
+    pub const fn amptrm20(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Amptrm20::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[inline(always)]
-    pub const fn set_amptrm20(&mut self, val: super::vals::Amptrm20) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_amptrm20(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[must_use]
     #[inline(always)]
-    pub const fn amptrm21(&self) -> super::vals::Amptrm21 {
+    pub const fn amptrm21(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Amptrm21::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[inline(always)]
-    pub const fn set_amptrm21(&mut self, val: super::vals::Amptrm21) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_amptrm21(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[must_use]
     #[inline(always)]
-    pub const fn amptrm30(&self) -> super::vals::Amptrm30 {
+    pub const fn amptrm30(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Amptrm30::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[inline(always)]
-    pub const fn set_amptrm30(&mut self, val: super::vals::Amptrm30) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_amptrm30(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[must_use]
     #[inline(always)]
-    pub const fn amptrm31(&self) -> super::vals::Amptrm31 {
+    pub const fn amptrm31(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Amptrm31::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operational amplifier function activation/stop trigger control"]
     #[inline(always)]
-    pub const fn set_amptrm31(&mut self, val: super::vals::Amptrm31) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_amptrm31(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Amptrm {
@@ -444,7 +444,7 @@ impl defmt::Format for Amptrm {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Amptrm {{ amptrm00: {:?}, amptrm01: {:?}, amptrm10: {:?}, amptrm11: {:?}, amptrm20: {:?}, amptrm21: {:?}, amptrm30: {:?}, amptrm31: {:?} }}",
+            "Amptrm {{ amptrm00: {=bool:?}, amptrm01: {=bool:?}, amptrm10: {=bool:?}, amptrm11: {=bool:?}, amptrm20: {=bool:?}, amptrm21: {=bool:?}, amptrm30: {=bool:?}, amptrm31: {=bool:?} }}",
             self.amptrm00(),
             self.amptrm01(),
             self.amptrm10(),

@@ -6,26 +6,26 @@ impl Smpuctl {
     #[doc = "Master Group enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn oad(&self) -> super::vals::Oad {
+    pub const fn oad(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Oad::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Master Group enable"]
     #[inline(always)]
-    pub const fn set_oad(&mut self, val: super::vals::Oad) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_oad(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Protection of register"]
     #[must_use]
     #[inline(always)]
-    pub const fn protect(&self) -> super::vals::Protect {
+    pub const fn protect(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Protect::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Protection of register"]
     #[inline(always)]
-    pub const fn set_protect(&mut self, val: super::vals::Protect) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_protect(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -73,7 +73,7 @@ impl defmt::Format for Smpuctl {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Smpuctl {{ oad: {:?}, protect: {:?}, reserved: {=u8:?}, key: {:?} }}",
+            "Smpuctl {{ oad: {=bool:?}, protect: {=bool:?}, reserved: {=u8:?}, key: {:?} }}",
             self.oad(),
             self.protect(),
             self.reserved(),
@@ -89,50 +89,50 @@ impl Smpufbiu {
     #[doc = "CPU Read protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn rpcpu(&self) -> super::vals::SmpufbiuRpcpu {
+    pub const fn rpcpu(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::SmpufbiuRpcpu::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CPU Read protection"]
     #[inline(always)]
-    pub const fn set_rpcpu(&mut self, val: super::vals::SmpufbiuRpcpu) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_rpcpu(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "CPU Write protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn wpcpu(&self) -> super::vals::SmpufbiuWpcpu {
+    pub const fn wpcpu(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::SmpufbiuWpcpu::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CPU Write protection"]
     #[inline(always)]
-    pub const fn set_wpcpu(&mut self, val: super::vals::SmpufbiuWpcpu) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_wpcpu(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Master Group A Read protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn rpgrpa(&self) -> super::vals::SmpufbiuRpgrpa {
+    pub const fn rpgrpa(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::SmpufbiuRpgrpa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Master Group A Read protection"]
     #[inline(always)]
-    pub const fn set_rpgrpa(&mut self, val: super::vals::SmpufbiuRpgrpa) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_rpgrpa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "Master Group A Write protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn wpgrpa(&self) -> super::vals::SmpufbiuWpgrpa {
+    pub const fn wpgrpa(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::SmpufbiuWpgrpa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Master Group A Write protection"]
     #[inline(always)]
-    pub const fn set_wpgrpa(&mut self, val: super::vals::SmpufbiuWpgrpa) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_wpgrpa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 000000000000. The write value should be 000000000000."]
     #[must_use]
@@ -169,7 +169,7 @@ impl defmt::Format for Smpufbiu {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Smpufbiu {{ rpcpu: {:?}, wpcpu: {:?}, rpgrpa: {:?}, wpgrpa: {:?}, reserved: {=u16:?} }}",
+            "Smpufbiu {{ rpcpu: {=bool:?}, wpcpu: {=bool:?}, rpgrpa: {=bool:?}, wpgrpa: {=bool:?}, reserved: {=u16:?} }}",
             self.rpcpu(),
             self.wpcpu(),
             self.rpgrpa(),
@@ -198,26 +198,26 @@ impl Smpumbiu {
     #[doc = "Master Group A Read protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn rpgrpa(&self) -> super::vals::SmpumbiuRpgrpa {
+    pub const fn rpgrpa(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::SmpumbiuRpgrpa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Master Group A Read protection"]
     #[inline(always)]
-    pub const fn set_rpgrpa(&mut self, val: super::vals::SmpumbiuRpgrpa) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_rpgrpa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "Master Group A Write protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn wpgrpa(&self) -> super::vals::SmpumbiuWpgrpa {
+    pub const fn wpgrpa(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::SmpumbiuWpgrpa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Master Group A Write protection"]
     #[inline(always)]
-    pub const fn set_wpgrpa(&mut self, val: super::vals::SmpumbiuWpgrpa) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_wpgrpa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 000000000000. The write value should be 000000000000."]
     #[must_use]
@@ -253,7 +253,7 @@ impl defmt::Format for Smpumbiu {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Smpumbiu {{ reserved: {=u8:?}, rpgrpa: {:?}, wpgrpa: {:?}, reserved_2: {=u16:?} }}",
+            "Smpumbiu {{ reserved: {=u8:?}, rpgrpa: {=bool:?}, wpgrpa: {=bool:?}, reserved_2: {=u16:?} }}",
             self.reserved(),
             self.rpgrpa(),
             self.wpgrpa(),
@@ -269,50 +269,50 @@ impl Smpupbiu {
     #[doc = "CPU Read protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn rpcpu(&self) -> super::vals::SmpupbiuRpcpu {
+    pub const fn rpcpu(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::SmpupbiuRpcpu::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CPU Read protection"]
     #[inline(always)]
-    pub const fn set_rpcpu(&mut self, val: super::vals::SmpupbiuRpcpu) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_rpcpu(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "CPU Write protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn wpcpu(&self) -> super::vals::SmpupbiuWpcpu {
+    pub const fn wpcpu(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::SmpupbiuWpcpu::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CPU Write protection"]
     #[inline(always)]
-    pub const fn set_wpcpu(&mut self, val: super::vals::SmpupbiuWpcpu) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_wpcpu(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Master Group A Read protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn rpgrpa(&self) -> super::vals::SmpupbiuRpgrpa {
+    pub const fn rpgrpa(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::SmpupbiuRpgrpa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Master Group A Read protection"]
     #[inline(always)]
-    pub const fn set_rpgrpa(&mut self, val: super::vals::SmpupbiuRpgrpa) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_rpgrpa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "Master Group A Write protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn wpgrpa(&self) -> super::vals::SmpupbiuWpgrpa {
+    pub const fn wpgrpa(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::SmpupbiuWpgrpa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Master Group A Write protection"]
     #[inline(always)]
-    pub const fn set_wpgrpa(&mut self, val: super::vals::SmpupbiuWpgrpa) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_wpgrpa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 000000000000. The write value should be 000000000000."]
     #[must_use]
@@ -349,7 +349,7 @@ impl defmt::Format for Smpupbiu {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Smpupbiu {{ rpcpu: {:?}, wpcpu: {:?}, rpgrpa: {:?}, wpgrpa: {:?}, reserved: {=u16:?} }}",
+            "Smpupbiu {{ rpcpu: {=bool:?}, wpcpu: {=bool:?}, rpgrpa: {=bool:?}, wpgrpa: {=bool:?}, reserved: {=u16:?} }}",
             self.rpcpu(),
             self.wpcpu(),
             self.rpgrpa(),
@@ -366,50 +366,50 @@ impl Smpusram0 {
     #[doc = "CPU Read protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn rpcpu(&self) -> super::vals::Smpusram0Rpcpu {
+    pub const fn rpcpu(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Smpusram0Rpcpu::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CPU Read protection"]
     #[inline(always)]
-    pub const fn set_rpcpu(&mut self, val: super::vals::Smpusram0Rpcpu) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_rpcpu(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "CPU Write protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn wpcpu(&self) -> super::vals::Smpusram0Wpcpu {
+    pub const fn wpcpu(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Smpusram0Wpcpu::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CPU Write protection"]
     #[inline(always)]
-    pub const fn set_wpcpu(&mut self, val: super::vals::Smpusram0Wpcpu) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_wpcpu(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Master Group A Read protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn rpgrpa(&self) -> super::vals::Smpusram0Rpgrpa {
+    pub const fn rpgrpa(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Smpusram0Rpgrpa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Master Group A Read protection"]
     #[inline(always)]
-    pub const fn set_rpgrpa(&mut self, val: super::vals::Smpusram0Rpgrpa) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_rpgrpa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "Master Group A Write protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn wpgrpa(&self) -> super::vals::Smpusram0Wpgrpa {
+    pub const fn wpgrpa(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Smpusram0Wpgrpa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Master Group A Write protection"]
     #[inline(always)]
-    pub const fn set_wpgrpa(&mut self, val: super::vals::Smpusram0Wpgrpa) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_wpgrpa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 000000000000. The write value should be 000000000000."]
     #[must_use]
@@ -446,7 +446,7 @@ impl defmt::Format for Smpusram0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Smpusram0 {{ rpcpu: {:?}, wpcpu: {:?}, rpgrpa: {:?}, wpgrpa: {:?}, reserved: {=u16:?} }}",
+            "Smpusram0 {{ rpcpu: {=bool:?}, wpcpu: {=bool:?}, rpgrpa: {=bool:?}, wpgrpa: {=bool:?}, reserved: {=u16:?} }}",
             self.rpcpu(),
             self.wpcpu(),
             self.rpgrpa(),

@@ -6,26 +6,26 @@ impl Dbgstopcr {
     #[doc = "Mask bit for IWDT reset/interrupt"]
     #[must_use]
     #[inline(always)]
-    pub const fn dbgstop_iwdt(&self) -> super::vals::DbgstopIwdt {
+    pub const fn dbgstop_iwdt(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::DbgstopIwdt::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Mask bit for IWDT reset/interrupt"]
     #[inline(always)]
-    pub const fn set_dbgstop_iwdt(&mut self, val: super::vals::DbgstopIwdt) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_dbgstop_iwdt(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Mask bit for WDT reset/interrupt"]
     #[must_use]
     #[inline(always)]
-    pub const fn dbgstop_wdt(&self) -> super::vals::DbgstopWdt {
+    pub const fn dbgstop_wdt(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::DbgstopWdt::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Mask bit for WDT reset/interrupt"]
     #[inline(always)]
-    pub const fn set_dbgstop_wdt(&mut self, val: super::vals::DbgstopWdt) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_dbgstop_wdt(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "These bits are read as 00000000000000. The write value should be 00000000000000."]
     #[must_use]
@@ -66,26 +66,26 @@ impl Dbgstopcr {
     #[doc = "Mask bit for RAM parity error reset/interrupt"]
     #[must_use]
     #[inline(always)]
-    pub const fn dbgstop_rper(&self) -> super::vals::DbgstopRper {
+    pub const fn dbgstop_rper(&self) -> bool {
         let val = (self.0 >> 24usize) & 0x01;
-        super::vals::DbgstopRper::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Mask bit for RAM parity error reset/interrupt"]
     #[inline(always)]
-    pub const fn set_dbgstop_rper(&mut self, val: super::vals::DbgstopRper) {
-        self.0 = (self.0 & !(0x01 << 24usize)) | (((val.to_bits() as u32) & 0x01) << 24usize);
+    pub const fn set_dbgstop_rper(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 24usize)) | (((val as u32) & 0x01) << 24usize);
     }
     #[doc = "Mask bit for RAM ECC error reset/interrupt"]
     #[must_use]
     #[inline(always)]
-    pub const fn dbgstop_reccr(&self) -> super::vals::DbgstopReccr {
+    pub const fn dbgstop_reccr(&self) -> bool {
         let val = (self.0 >> 25usize) & 0x01;
-        super::vals::DbgstopReccr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Mask bit for RAM ECC error reset/interrupt"]
     #[inline(always)]
-    pub const fn set_dbgstop_reccr(&mut self, val: super::vals::DbgstopReccr) {
-        self.0 = (self.0 & !(0x01 << 25usize)) | (((val.to_bits() as u32) & 0x01) << 25usize);
+    pub const fn set_dbgstop_reccr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 25usize)) | (((val as u32) & 0x01) << 25usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -125,7 +125,7 @@ impl defmt::Format for Dbgstopcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Dbgstopcr {{ dbgstop_iwdt: {:?}, dbgstop_wdt: {:?}, reserved: {=u16:?}, dbgstop_lvd: {=u8:?}, reserved_2: {=u8:?}, dbgstop_rper: {:?}, dbgstop_reccr: {:?}, reserved_3: {=u8:?} }}",
+            "Dbgstopcr {{ dbgstop_iwdt: {=bool:?}, dbgstop_wdt: {=bool:?}, reserved: {=u16:?}, dbgstop_lvd: {=u8:?}, reserved_2: {=u8:?}, dbgstop_rper: {=bool:?}, dbgstop_reccr: {=bool:?}, reserved_3: {=u8:?} }}",
             self.dbgstop_iwdt(),
             self.dbgstop_wdt(),
             self.reserved(),
@@ -157,26 +157,26 @@ impl Dbgstr {
     #[doc = "Debug power-up request"]
     #[must_use]
     #[inline(always)]
-    pub const fn cdbgpwrupreq(&self) -> super::vals::Cdbgpwrupreq {
+    pub const fn cdbgpwrupreq(&self) -> bool {
         let val = (self.0 >> 28usize) & 0x01;
-        super::vals::Cdbgpwrupreq::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Debug power-up request"]
     #[inline(always)]
-    pub const fn set_cdbgpwrupreq(&mut self, val: super::vals::Cdbgpwrupreq) {
-        self.0 = (self.0 & !(0x01 << 28usize)) | (((val.to_bits() as u32) & 0x01) << 28usize);
+    pub const fn set_cdbgpwrupreq(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 28usize)) | (((val as u32) & 0x01) << 28usize);
     }
     #[doc = "Debug power-up acknowledge"]
     #[must_use]
     #[inline(always)]
-    pub const fn cdbgpwrupack(&self) -> super::vals::Cdbgpwrupack {
+    pub const fn cdbgpwrupack(&self) -> bool {
         let val = (self.0 >> 29usize) & 0x01;
-        super::vals::Cdbgpwrupack::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Debug power-up acknowledge"]
     #[inline(always)]
-    pub const fn set_cdbgpwrupack(&mut self, val: super::vals::Cdbgpwrupack) {
-        self.0 = (self.0 & !(0x01 << 29usize)) | (((val.to_bits() as u32) & 0x01) << 29usize);
+    pub const fn set_cdbgpwrupack(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 29usize)) | (((val as u32) & 0x01) << 29usize);
     }
     #[doc = "These bits are read as 00."]
     #[must_use]
@@ -212,7 +212,7 @@ impl defmt::Format for Dbgstr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Dbgstr {{ reserved: {=u32:?}, cdbgpwrupreq: {:?}, cdbgpwrupack: {:?}, reserved_2: {=u8:?} }}",
+            "Dbgstr {{ reserved: {=u32:?}, cdbgpwrupreq: {=bool:?}, cdbgpwrupack: {=bool:?}, reserved_2: {=u8:?} }}",
             self.reserved(),
             self.cdbgpwrupreq(),
             self.cdbgpwrupack(),
@@ -240,14 +240,14 @@ impl Tracectr {
     #[doc = "Enable bit for halt request by ETB full"]
     #[must_use]
     #[inline(always)]
-    pub const fn enetbfull(&self) -> super::vals::Enetbfull {
+    pub const fn enetbfull(&self) -> bool {
         let val = (self.0 >> 31usize) & 0x01;
-        super::vals::Enetbfull::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Enable bit for halt request by ETB full"]
     #[inline(always)]
-    pub const fn set_enetbfull(&mut self, val: super::vals::Enetbfull) {
-        self.0 = (self.0 & !(0x01 << 31usize)) | (((val.to_bits() as u32) & 0x01) << 31usize);
+    pub const fn set_enetbfull(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 31usize)) | (((val as u32) & 0x01) << 31usize);
     }
 }
 impl Default for Tracectr {
@@ -269,7 +269,7 @@ impl defmt::Format for Tracectr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Tracectr {{ reserved: {=u32:?}, enetbfull: {:?} }}",
+            "Tracectr {{ reserved: {=u32:?}, enetbfull: {=bool:?} }}",
             self.reserved(),
             self.enetbfull()
         )

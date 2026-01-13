@@ -18,26 +18,26 @@ impl Compfir {
     #[doc = "ACMPLP0 Edge Polarity Switching"]
     #[must_use]
     #[inline(always)]
-    pub const fn c0epo(&self) -> super::vals::C0epo {
+    pub const fn c0epo(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::C0epo::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP0 Edge Polarity Switching"]
     #[inline(always)]
-    pub const fn set_c0epo(&mut self, val: super::vals::C0epo) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_c0epo(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "ACMPLP0 Edge Detection Selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn c0edg(&self) -> super::vals::C0edg {
+    pub const fn c0edg(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::C0edg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP0 Edge Detection Selection"]
     #[inline(always)]
-    pub const fn set_c0edg(&mut self, val: super::vals::C0edg) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_c0edg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "ACMPLP1 Filter Select"]
     #[must_use]
@@ -54,26 +54,26 @@ impl Compfir {
     #[doc = "ACMPLP1 Edge Polarity Switching"]
     #[must_use]
     #[inline(always)]
-    pub const fn c1epo(&self) -> super::vals::C1epo {
+    pub const fn c1epo(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::C1epo::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP1 Edge Polarity Switching"]
     #[inline(always)]
-    pub const fn set_c1epo(&mut self, val: super::vals::C1epo) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_c1epo(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "ACMPLP1 Edge Detection Selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn c1edg(&self) -> super::vals::C1edg {
+    pub const fn c1edg(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::C1edg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP1 Edge Detection Selection"]
     #[inline(always)]
-    pub const fn set_c1edg(&mut self, val: super::vals::C1edg) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_c1edg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Compfir {
@@ -99,7 +99,7 @@ impl defmt::Format for Compfir {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Compfir {{ c0fck: {:?}, c0epo: {:?}, c0edg: {:?}, c1fck: {:?}, c1epo: {:?}, c1edg: {:?} }}",
+            "Compfir {{ c0fck: {:?}, c0epo: {=bool:?}, c0edg: {=bool:?}, c1fck: {:?}, c1epo: {=bool:?}, c1edg: {=bool:?} }}",
             self.c0fck(),
             self.c0epo(),
             self.c0edg(),
@@ -117,98 +117,98 @@ impl Compmdr {
     #[doc = "ACMPLP0 Operation Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn c0enb(&self) -> super::vals::C0enb {
+    pub const fn c0enb(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::C0enb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP0 Operation Enable"]
     #[inline(always)]
-    pub const fn set_c0enb(&mut self, val: super::vals::C0enb) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_c0enb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "ACMPLP0 Window Function Mode Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn c0wde(&self) -> super::vals::C0wde {
+    pub const fn c0wde(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::C0wde::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP0 Window Function Mode Enable"]
     #[inline(always)]
-    pub const fn set_c0wde(&mut self, val: super::vals::C0wde) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_c0wde(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "ACMPLP0 Reference Voltage Selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn c0vrf(&self) -> super::vals::C0vrf {
+    pub const fn c0vrf(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::C0vrf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP0 Reference Voltage Selection"]
     #[inline(always)]
-    pub const fn set_c0vrf(&mut self, val: super::vals::C0vrf) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_c0vrf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "ACMPLP0 Monitor Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn c0mon(&self) -> super::vals::C0mon {
+    pub const fn c0mon(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::C0mon::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP0 Monitor Flag"]
     #[inline(always)]
-    pub const fn set_c0mon(&mut self, val: super::vals::C0mon) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_c0mon(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "ACMPLP1 Operation Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn c1enb(&self) -> super::vals::C1enb {
+    pub const fn c1enb(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::C1enb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP1 Operation Enable"]
     #[inline(always)]
-    pub const fn set_c1enb(&mut self, val: super::vals::C1enb) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_c1enb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "ACMPLP1 Window Function Mode Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn c1wde(&self) -> super::vals::C1wde {
+    pub const fn c1wde(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::C1wde::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP1 Window Function Mode Enable"]
     #[inline(always)]
-    pub const fn set_c1wde(&mut self, val: super::vals::C1wde) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_c1wde(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "ACMPLP1 Reference Voltage Selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn c1vrf(&self) -> super::vals::C1vrf {
+    pub const fn c1vrf(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::C1vrf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP1 Reference Voltage Selection"]
     #[inline(always)]
-    pub const fn set_c1vrf(&mut self, val: super::vals::C1vrf) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_c1vrf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "ACMPLP1 Monitor Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn c1mon(&self) -> super::vals::C1mon {
+    pub const fn c1mon(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::C1mon::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP1 Monitor Flag"]
     #[inline(always)]
-    pub const fn set_c1mon(&mut self, val: super::vals::C1mon) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_c1mon(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Compmdr {
@@ -236,7 +236,7 @@ impl defmt::Format for Compmdr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Compmdr {{ c0enb: {:?}, c0wde: {:?}, c0vrf: {:?}, c0mon: {:?}, c1enb: {:?}, c1wde: {:?}, c1vrf: {:?}, c1mon: {:?} }}",
+            "Compmdr {{ c0enb: {=bool:?}, c0wde: {=bool:?}, c0vrf: {=bool:?}, c0mon: {=bool:?}, c1enb: {=bool:?}, c1wde: {=bool:?}, c1vrf: {=bool:?}, c1mon: {=bool:?} }}",
             self.c0enb(),
             self.c0wde(),
             self.c0vrf(),
@@ -268,26 +268,26 @@ impl Compocr {
     #[doc = "ACMPLP0 VCOUT Pin Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn c0oe(&self) -> super::vals::C0oe {
+    pub const fn c0oe(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::C0oe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP0 VCOUT Pin Output Enable"]
     #[inline(always)]
-    pub const fn set_c0oe(&mut self, val: super::vals::C0oe) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_c0oe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "ACMPLP0 VCOUT Output Polarity Selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn c0op(&self) -> super::vals::C0op {
+    pub const fn c0op(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::C0op::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP0 VCOUT Output Polarity Selection"]
     #[inline(always)]
-    pub const fn set_c0op(&mut self, val: super::vals::C0op) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_c0op(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -304,38 +304,38 @@ impl Compocr {
     #[doc = "ACMPLP1 VCOUT Pin Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn c1oe(&self) -> super::vals::C1oe {
+    pub const fn c1oe(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::C1oe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP1 VCOUT Pin Output Enable"]
     #[inline(always)]
-    pub const fn set_c1oe(&mut self, val: super::vals::C1oe) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_c1oe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "ACMPLP1 VCOUT Output Polarity Selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn c1op(&self) -> super::vals::C1op {
+    pub const fn c1op(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::C1op::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP1 VCOUT Output Polarity Selection"]
     #[inline(always)]
-    pub const fn set_c1op(&mut self, val: super::vals::C1op) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_c1op(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "ACMPLP0/ACMPLP1 Speed Selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn spdmd(&self) -> super::vals::Spdmd {
+    pub const fn spdmd(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Spdmd::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP0/ACMPLP1 Speed Selection"]
     #[inline(always)]
-    pub const fn set_spdmd(&mut self, val: super::vals::Spdmd) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_spdmd(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Compocr {
@@ -362,7 +362,7 @@ impl defmt::Format for Compocr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Compocr {{ reserved: {=bool:?}, c0oe: {:?}, c0op: {:?}, reserved_2: {=u8:?}, c1oe: {:?}, c1op: {:?}, spdmd: {:?} }}",
+            "Compocr {{ reserved: {=bool:?}, c0oe: {=bool:?}, c0op: {=bool:?}, reserved_2: {=u8:?}, c1oe: {=bool:?}, c1op: {=bool:?}, spdmd: {=bool:?} }}",
             self.reserved(),
             self.c0oe(),
             self.c0op(),
@@ -500,14 +500,14 @@ impl Compsel1 {
     #[doc = "ACMPLP1 Reference Voltage Selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn c1vrf2(&self) -> super::vals::C1vrf2 {
+    pub const fn c1vrf2(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::C1vrf2::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ACMPLP1 Reference Voltage Selection"]
     #[inline(always)]
-    pub const fn set_c1vrf2(&mut self, val: super::vals::C1vrf2) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_c1vrf2(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Compsel1 {
@@ -531,7 +531,7 @@ impl defmt::Format for Compsel1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Compsel1 {{ crvs20: {:?}, reserved: {=bool:?}, crvs64: {:?}, c1vrf2: {:?} }}",
+            "Compsel1 {{ crvs20: {:?}, reserved: {=bool:?}, crvs64: {:?}, c1vrf2: {=bool:?} }}",
             self.crvs20(),
             self.reserved(),
             self.crvs64(),

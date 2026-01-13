@@ -6,14 +6,14 @@ impl Krctl {
     #[doc = "Detection Edge Selection (KRF0 to KRF7)"]
     #[must_use]
     #[inline(always)]
-    pub const fn kreg(&self) -> super::vals::Kreg {
+    pub const fn kreg(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Kreg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Detection Edge Selection (KRF0 to KRF7)"]
     #[inline(always)]
-    pub const fn set_kreg(&mut self, val: super::vals::Kreg) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_kreg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -30,14 +30,14 @@ impl Krctl {
     #[doc = "Usage of Key Interrupt Flags(KR0 to KR7)"]
     #[must_use]
     #[inline(always)]
-    pub const fn krmd(&self) -> super::vals::Krmd {
+    pub const fn krmd(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Krmd::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Usage of Key Interrupt Flags(KR0 to KR7)"]
     #[inline(always)]
-    pub const fn set_krmd(&mut self, val: super::vals::Krmd) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_krmd(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Krctl {
@@ -60,7 +60,7 @@ impl defmt::Format for Krctl {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Krctl {{ kreg: {:?}, reserved: {=u8:?}, krmd: {:?} }}",
+            "Krctl {{ kreg: {=bool:?}, reserved: {=u8:?}, krmd: {=bool:?} }}",
             self.kreg(),
             self.reserved(),
             self.krmd()
@@ -75,98 +75,98 @@ impl Krf {
     #[doc = "Key interrupt flag 0"]
     #[must_use]
     #[inline(always)]
-    pub const fn krf0(&self) -> super::vals::Krf0 {
+    pub const fn krf0(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Krf0::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt flag 0"]
     #[inline(always)]
-    pub const fn set_krf0(&mut self, val: super::vals::Krf0) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_krf0(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Key interrupt flag 1"]
     #[must_use]
     #[inline(always)]
-    pub const fn krf1(&self) -> super::vals::Krf1 {
+    pub const fn krf1(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Krf1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt flag 1"]
     #[inline(always)]
-    pub const fn set_krf1(&mut self, val: super::vals::Krf1) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_krf1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Key interrupt flag 2"]
     #[must_use]
     #[inline(always)]
-    pub const fn krf2(&self) -> super::vals::Krf2 {
+    pub const fn krf2(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Krf2::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt flag 2"]
     #[inline(always)]
-    pub const fn set_krf2(&mut self, val: super::vals::Krf2) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_krf2(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "Key interrupt flag 3"]
     #[must_use]
     #[inline(always)]
-    pub const fn krf3(&self) -> super::vals::Krf3 {
+    pub const fn krf3(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Krf3::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt flag 3"]
     #[inline(always)]
-    pub const fn set_krf3(&mut self, val: super::vals::Krf3) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_krf3(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "Key interrupt flag 4"]
     #[must_use]
     #[inline(always)]
-    pub const fn krf4(&self) -> super::vals::Krf4 {
+    pub const fn krf4(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Krf4::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt flag 4"]
     #[inline(always)]
-    pub const fn set_krf4(&mut self, val: super::vals::Krf4) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_krf4(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "Key interrupt flag 5"]
     #[must_use]
     #[inline(always)]
-    pub const fn krf5(&self) -> super::vals::Krf5 {
+    pub const fn krf5(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Krf5::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt flag 5"]
     #[inline(always)]
-    pub const fn set_krf5(&mut self, val: super::vals::Krf5) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_krf5(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "Key interrupt flag 6"]
     #[must_use]
     #[inline(always)]
-    pub const fn krf6(&self) -> super::vals::Krf6 {
+    pub const fn krf6(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Krf6::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt flag 6"]
     #[inline(always)]
-    pub const fn set_krf6(&mut self, val: super::vals::Krf6) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_krf6(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "Key interrupt flag 7"]
     #[must_use]
     #[inline(always)]
-    pub const fn krf7(&self) -> super::vals::Krf7 {
+    pub const fn krf7(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Krf7::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt flag 7"]
     #[inline(always)]
-    pub const fn set_krf7(&mut self, val: super::vals::Krf7) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_krf7(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Krf {
@@ -194,7 +194,7 @@ impl defmt::Format for Krf {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Krf {{ krf0: {:?}, krf1: {:?}, krf2: {:?}, krf3: {:?}, krf4: {:?}, krf5: {:?}, krf6: {:?}, krf7: {:?} }}",
+            "Krf {{ krf0: {=bool:?}, krf1: {=bool:?}, krf2: {=bool:?}, krf3: {=bool:?}, krf4: {=bool:?}, krf5: {=bool:?}, krf6: {=bool:?}, krf7: {=bool:?} }}",
             self.krf0(),
             self.krf1(),
             self.krf2(),
@@ -214,98 +214,98 @@ impl Krm {
     #[doc = "Key interrupt mode control 0"]
     #[must_use]
     #[inline(always)]
-    pub const fn krm0(&self) -> super::vals::Krm0 {
+    pub const fn krm0(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Krm0::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt mode control 0"]
     #[inline(always)]
-    pub const fn set_krm0(&mut self, val: super::vals::Krm0) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_krm0(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Key interrupt mode control 1"]
     #[must_use]
     #[inline(always)]
-    pub const fn krm1(&self) -> super::vals::Krm1 {
+    pub const fn krm1(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Krm1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt mode control 1"]
     #[inline(always)]
-    pub const fn set_krm1(&mut self, val: super::vals::Krm1) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_krm1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Key interrupt mode control 2"]
     #[must_use]
     #[inline(always)]
-    pub const fn krm2(&self) -> super::vals::Krm2 {
+    pub const fn krm2(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Krm2::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt mode control 2"]
     #[inline(always)]
-    pub const fn set_krm2(&mut self, val: super::vals::Krm2) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_krm2(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "Key interrupt mode control 3"]
     #[must_use]
     #[inline(always)]
-    pub const fn krm3(&self) -> super::vals::Krm3 {
+    pub const fn krm3(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Krm3::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt mode control 3"]
     #[inline(always)]
-    pub const fn set_krm3(&mut self, val: super::vals::Krm3) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_krm3(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "Key interrupt mode control 4"]
     #[must_use]
     #[inline(always)]
-    pub const fn krm4(&self) -> super::vals::Krm4 {
+    pub const fn krm4(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Krm4::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt mode control 4"]
     #[inline(always)]
-    pub const fn set_krm4(&mut self, val: super::vals::Krm4) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_krm4(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "Key interrupt mode control 5"]
     #[must_use]
     #[inline(always)]
-    pub const fn krm5(&self) -> super::vals::Krm5 {
+    pub const fn krm5(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Krm5::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt mode control 5"]
     #[inline(always)]
-    pub const fn set_krm5(&mut self, val: super::vals::Krm5) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_krm5(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "Key interrupt mode control 6"]
     #[must_use]
     #[inline(always)]
-    pub const fn krm6(&self) -> super::vals::Krm6 {
+    pub const fn krm6(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Krm6::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt mode control 6"]
     #[inline(always)]
-    pub const fn set_krm6(&mut self, val: super::vals::Krm6) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_krm6(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "Key interrupt mode control 7"]
     #[must_use]
     #[inline(always)]
-    pub const fn krm7(&self) -> super::vals::Krm7 {
+    pub const fn krm7(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Krm7::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Key interrupt mode control 7"]
     #[inline(always)]
-    pub const fn set_krm7(&mut self, val: super::vals::Krm7) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_krm7(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Krm {
@@ -333,7 +333,7 @@ impl defmt::Format for Krm {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Krm {{ krm0: {:?}, krm1: {:?}, krm2: {:?}, krm3: {:?}, krm4: {:?}, krm5: {:?}, krm6: {:?}, krm7: {:?} }}",
+            "Krm {{ krm0: {=bool:?}, krm1: {=bool:?}, krm2: {=bool:?}, krm3: {=bool:?}, krm4: {=bool:?}, krm5: {=bool:?}, krm6: {=bool:?}, krm7: {=bool:?} }}",
             self.krm0(),
             self.krm1(),
             self.krm2(),

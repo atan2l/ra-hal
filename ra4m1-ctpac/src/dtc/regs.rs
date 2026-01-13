@@ -30,14 +30,14 @@ impl Dtccr {
     #[doc = "DTC Transfer Information Read Skip Enable."]
     #[must_use]
     #[inline(always)]
-    pub const fn rrs(&self) -> super::vals::Rrs {
+    pub const fn rrs(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Rrs::from_bits(val as u8)
+        val != 0
     }
     #[doc = "DTC Transfer Information Read Skip Enable."]
     #[inline(always)]
-    pub const fn set_rrs(&mut self, val: super::vals::Rrs) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_rrs(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -73,7 +73,7 @@ impl defmt::Format for Dtccr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Dtccr {{ reserved: {=u8:?}, reserved_2: {=bool:?}, rrs: {:?}, reserved_3: {=u8:?} }}",
+            "Dtccr {{ reserved: {=u8:?}, reserved_2: {=bool:?}, rrs: {=bool:?}, reserved_3: {=u8:?} }}",
             self.reserved(),
             self.reserved_2(),
             self.rrs(),
@@ -89,14 +89,14 @@ impl Dtcst {
     #[doc = "DTC Module Start"]
     #[must_use]
     #[inline(always)]
-    pub const fn dtcst(&self) -> super::vals::Dtcst {
+    pub const fn dtcst(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Dtcst::from_bits(val as u8)
+        val != 0
     }
     #[doc = "DTC Module Start"]
     #[inline(always)]
-    pub const fn set_dtcst(&mut self, val: super::vals::Dtcst) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_dtcst(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -130,7 +130,7 @@ impl defmt::Format for Dtcst {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Dtcst {{ dtcst: {:?}, reserved: {=u8:?} }}",
+            "Dtcst {{ dtcst: {=bool:?}, reserved: {=u8:?} }}",
             self.dtcst(),
             self.reserved()
         )
@@ -168,14 +168,14 @@ impl Dtcsts {
     #[doc = "DTC Active Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn act(&self) -> super::vals::Act {
+    pub const fn act(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Act::from_bits(val as u8)
+        val != 0
     }
     #[doc = "DTC Active Flag"]
     #[inline(always)]
-    pub const fn set_act(&mut self, val: super::vals::Act) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_act(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for Dtcsts {
@@ -198,7 +198,7 @@ impl defmt::Format for Dtcsts {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Dtcsts {{ vecn: {=u8:?}, reserved: {=u8:?}, act: {:?} }}",
+            "Dtcsts {{ vecn: {=u8:?}, reserved: {=u8:?}, act: {=bool:?} }}",
             self.vecn(),
             self.reserved(),
             self.act()

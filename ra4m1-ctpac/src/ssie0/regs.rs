@@ -6,26 +6,26 @@ impl Ssicr {
     #[doc = "Receive Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ren(&self) -> super::vals::Ren {
+    pub const fn ren(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ren::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Receive Enable"]
     #[inline(always)]
-    pub const fn set_ren(&mut self, val: super::vals::Ren) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_ren(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Transmit Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ten(&self) -> super::vals::Ten {
+    pub const fn ten(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ten::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Transmit Enable"]
     #[inline(always)]
-    pub const fn set_ten(&mut self, val: super::vals::Ten) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_ten(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -42,14 +42,14 @@ impl Ssicr {
     #[doc = "Mute Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn muen(&self) -> super::vals::Muen {
+    pub const fn muen(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Muen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Mute Enable"]
     #[inline(always)]
-    pub const fn set_muen(&mut self, val: super::vals::Muen) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_muen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "Selects Bit Clock Division Ratio"]
     #[must_use]
@@ -66,86 +66,86 @@ impl Ssicr {
     #[doc = "Selects Serial Data Delay"]
     #[must_use]
     #[inline(always)]
-    pub const fn del(&self) -> super::vals::Del {
+    pub const fn del(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Del::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Selects Serial Data Delay"]
     #[inline(always)]
-    pub const fn set_del(&mut self, val: super::vals::Del) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u32) & 0x01) << 8usize);
+    pub const fn set_del(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u32) & 0x01) << 8usize);
     }
     #[doc = "Selects Placement Data Alignment"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdta(&self) -> super::vals::Pdta {
+    pub const fn pdta(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Pdta::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Selects Placement Data Alignment"]
     #[inline(always)]
-    pub const fn set_pdta(&mut self, val: super::vals::Pdta) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u32) & 0x01) << 9usize);
+    pub const fn set_pdta(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u32) & 0x01) << 9usize);
     }
     #[doc = "Selects Serial Data Alignment"]
     #[must_use]
     #[inline(always)]
-    pub const fn sdta(&self) -> super::vals::Sdta {
+    pub const fn sdta(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Sdta::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Selects Serial Data Alignment"]
     #[inline(always)]
-    pub const fn set_sdta(&mut self, val: super::vals::Sdta) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_sdta(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "Selects Serial Padding Polarity"]
     #[must_use]
     #[inline(always)]
-    pub const fn spdp(&self) -> super::vals::Spdp {
+    pub const fn spdp(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Spdp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Selects Serial Padding Polarity"]
     #[inline(always)]
-    pub const fn set_spdp(&mut self, val: super::vals::Spdp) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u32) & 0x01) << 11usize);
+    pub const fn set_spdp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u32) & 0x01) << 11usize);
     }
     #[doc = "Selects the Initial Value and Polarity of LR Clock/Frame Synchronization Signal"]
     #[must_use]
     #[inline(always)]
-    pub const fn lrckp(&self) -> super::vals::Lrckp {
+    pub const fn lrckp(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Lrckp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Selects the Initial Value and Polarity of LR Clock/Frame Synchronization Signal"]
     #[inline(always)]
-    pub const fn set_lrckp(&mut self, val: super::vals::Lrckp) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u32) & 0x01) << 12usize);
+    pub const fn set_lrckp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u32) & 0x01) << 12usize);
     }
     #[doc = "Selects Bit Clock Polarity"]
     #[must_use]
     #[inline(always)]
-    pub const fn bckp(&self) -> super::vals::Bckp {
+    pub const fn bckp(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Bckp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Selects Bit Clock Polarity"]
     #[inline(always)]
-    pub const fn set_bckp(&mut self, val: super::vals::Bckp) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u32) & 0x01) << 13usize);
+    pub const fn set_bckp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
     }
     #[doc = "Master Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn mst(&self) -> super::vals::Mst {
+    pub const fn mst(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Mst::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Master Enable"]
     #[inline(always)]
-    pub const fn set_mst(&mut self, val: super::vals::Mst) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_mst(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -198,74 +198,74 @@ impl Ssicr {
     #[doc = "Idle Mode Interrupt Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn iien(&self) -> super::vals::Iien {
+    pub const fn iien(&self) -> bool {
         let val = (self.0 >> 25usize) & 0x01;
-        super::vals::Iien::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Idle Mode Interrupt Output Enable"]
     #[inline(always)]
-    pub const fn set_iien(&mut self, val: super::vals::Iien) {
-        self.0 = (self.0 & !(0x01 << 25usize)) | (((val.to_bits() as u32) & 0x01) << 25usize);
+    pub const fn set_iien(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 25usize)) | (((val as u32) & 0x01) << 25usize);
     }
     #[doc = "Receive Overflow Interrupt Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn roien(&self) -> super::vals::Roien {
+    pub const fn roien(&self) -> bool {
         let val = (self.0 >> 26usize) & 0x01;
-        super::vals::Roien::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Receive Overflow Interrupt Output Enable"]
     #[inline(always)]
-    pub const fn set_roien(&mut self, val: super::vals::Roien) {
-        self.0 = (self.0 & !(0x01 << 26usize)) | (((val.to_bits() as u32) & 0x01) << 26usize);
+    pub const fn set_roien(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 26usize)) | (((val as u32) & 0x01) << 26usize);
     }
     #[doc = "Receive Underflow Interrupt Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ruien(&self) -> super::vals::Ruien {
+    pub const fn ruien(&self) -> bool {
         let val = (self.0 >> 27usize) & 0x01;
-        super::vals::Ruien::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Receive Underflow Interrupt Output Enable"]
     #[inline(always)]
-    pub const fn set_ruien(&mut self, val: super::vals::Ruien) {
-        self.0 = (self.0 & !(0x01 << 27usize)) | (((val.to_bits() as u32) & 0x01) << 27usize);
+    pub const fn set_ruien(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 27usize)) | (((val as u32) & 0x01) << 27usize);
     }
     #[doc = "Transmit Overflow Interrupt Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn toien(&self) -> super::vals::Toien {
+    pub const fn toien(&self) -> bool {
         let val = (self.0 >> 28usize) & 0x01;
-        super::vals::Toien::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Transmit Overflow Interrupt Output Enable"]
     #[inline(always)]
-    pub const fn set_toien(&mut self, val: super::vals::Toien) {
-        self.0 = (self.0 & !(0x01 << 28usize)) | (((val.to_bits() as u32) & 0x01) << 28usize);
+    pub const fn set_toien(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 28usize)) | (((val as u32) & 0x01) << 28usize);
     }
     #[doc = "Transmit Underflow Interrupt Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn tuien(&self) -> super::vals::Tuien {
+    pub const fn tuien(&self) -> bool {
         let val = (self.0 >> 29usize) & 0x01;
-        super::vals::Tuien::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Transmit Underflow Interrupt Output Enable"]
     #[inline(always)]
-    pub const fn set_tuien(&mut self, val: super::vals::Tuien) {
-        self.0 = (self.0 & !(0x01 << 29usize)) | (((val.to_bits() as u32) & 0x01) << 29usize);
+    pub const fn set_tuien(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 29usize)) | (((val as u32) & 0x01) << 29usize);
     }
     #[doc = "Selects an Audio Clock for Master-mode Communication"]
     #[must_use]
     #[inline(always)]
-    pub const fn cks(&self) -> super::vals::Cks {
+    pub const fn cks(&self) -> bool {
         let val = (self.0 >> 30usize) & 0x01;
-        super::vals::Cks::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Selects an Audio Clock for Master-mode Communication"]
     #[inline(always)]
-    pub const fn set_cks(&mut self, val: super::vals::Cks) {
-        self.0 = (self.0 & !(0x01 << 30usize)) | (((val.to_bits() as u32) & 0x01) << 30usize);
+    pub const fn set_cks(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 30usize)) | (((val as u32) & 0x01) << 30usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -320,7 +320,7 @@ impl defmt::Format for Ssicr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ssicr {{ ren: {:?}, ten: {:?}, reserved: {=bool:?}, muen: {:?}, ckdv: {:?}, del: {:?}, pdta: {:?}, sdta: {:?}, spdp: {:?}, lrckp: {:?}, bckp: {:?}, mst: {:?}, reserved_2: {=bool:?}, swl: {:?}, dwl: {:?}, reserved_3: {=u8:?}, iien: {:?}, roien: {:?}, ruien: {:?}, toien: {:?}, tuien: {:?}, cks: {:?}, reserved_4: {=bool:?} }}",
+            "Ssicr {{ ren: {=bool:?}, ten: {=bool:?}, reserved: {=bool:?}, muen: {=bool:?}, ckdv: {:?}, del: {=bool:?}, pdta: {=bool:?}, sdta: {=bool:?}, spdp: {=bool:?}, lrckp: {=bool:?}, bckp: {=bool:?}, mst: {=bool:?}, reserved_2: {=bool:?}, swl: {:?}, dwl: {:?}, reserved_3: {=u8:?}, iien: {=bool:?}, roien: {=bool:?}, ruien: {=bool:?}, toien: {=bool:?}, tuien: {=bool:?}, cks: {=bool:?}, reserved_4: {=bool:?} }}",
             self.ren(),
             self.ten(),
             self.reserved(),
@@ -355,50 +355,50 @@ impl Ssifcr {
     #[doc = "Receive FIFO Data Register Reset"]
     #[must_use]
     #[inline(always)]
-    pub const fn rfrst(&self) -> super::vals::Rfrst {
+    pub const fn rfrst(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Rfrst::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Receive FIFO Data Register Reset"]
     #[inline(always)]
-    pub const fn set_rfrst(&mut self, val: super::vals::Rfrst) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_rfrst(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Transmit FIFO Data Register Reset"]
     #[must_use]
     #[inline(always)]
-    pub const fn tfrst(&self) -> super::vals::Tfrst {
+    pub const fn tfrst(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Tfrst::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Transmit FIFO Data Register Reset"]
     #[inline(always)]
-    pub const fn set_tfrst(&mut self, val: super::vals::Tfrst) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_tfrst(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "Receive Data Full Interrupt Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn rie(&self) -> super::vals::Rie {
+    pub const fn rie(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Rie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Receive Data Full Interrupt Output Enable"]
     #[inline(always)]
-    pub const fn set_rie(&mut self, val: super::vals::Rie) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_rie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "Transmit Data Empty Interrupt Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn tie(&self) -> super::vals::Tie {
+    pub const fn tie(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Tie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Transmit Data Empty Interrupt Output Enable"]
     #[inline(always)]
-    pub const fn set_tie(&mut self, val: super::vals::Tie) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_tie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -415,14 +415,14 @@ impl Ssifcr {
     #[doc = "Byte Swap Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bsw(&self) -> super::vals::Bsw {
+    pub const fn bsw(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Bsw::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Byte Swap Enable"]
     #[inline(always)]
-    pub const fn set_bsw(&mut self, val: super::vals::Bsw) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u32) & 0x01) << 11usize);
+    pub const fn set_bsw(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u32) & 0x01) << 11usize);
     }
     #[doc = "These bits are read as 0000. The write value should be 0000."]
     #[must_use]
@@ -439,14 +439,14 @@ impl Ssifcr {
     #[doc = "Software Reset"]
     #[must_use]
     #[inline(always)]
-    pub const fn ssirst(&self) -> super::vals::Ssirst {
+    pub const fn ssirst(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::Ssirst::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Software Reset"]
     #[inline(always)]
-    pub const fn set_ssirst(&mut self, val: super::vals::Ssirst) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_ssirst(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "These bits are read as 00000000000000. The write value should be 00000000000000."]
     #[must_use]
@@ -463,14 +463,14 @@ impl Ssifcr {
     #[doc = "AUDIO_MCK Enable in Mastermode Communication"]
     #[must_use]
     #[inline(always)]
-    pub const fn aucke(&self) -> super::vals::Aucke {
+    pub const fn aucke(&self) -> bool {
         let val = (self.0 >> 31usize) & 0x01;
-        super::vals::Aucke::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AUDIO_MCK Enable in Mastermode Communication"]
     #[inline(always)]
-    pub const fn set_aucke(&mut self, val: super::vals::Aucke) {
-        self.0 = (self.0 & !(0x01 << 31usize)) | (((val.to_bits() as u32) & 0x01) << 31usize);
+    pub const fn set_aucke(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 31usize)) | (((val as u32) & 0x01) << 31usize);
     }
 }
 impl Default for Ssifcr {
@@ -500,7 +500,7 @@ impl defmt::Format for Ssifcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ssifcr {{ rfrst: {:?}, tfrst: {:?}, rie: {:?}, tie: {:?}, reserved: {=u8:?}, bsw: {:?}, reserved_2: {=u8:?}, ssirst: {:?}, reserved_3: {=u16:?}, aucke: {:?} }}",
+            "Ssifcr {{ rfrst: {=bool:?}, tfrst: {=bool:?}, rie: {=bool:?}, tie: {=bool:?}, reserved: {=u8:?}, bsw: {=bool:?}, reserved_2: {=u8:?}, ssirst: {=bool:?}, reserved_3: {=u16:?}, aucke: {=bool:?} }}",
             self.rfrst(),
             self.tfrst(),
             self.rie(),
@@ -559,14 +559,14 @@ impl Ssifsr {
     #[doc = "Receive Data Full Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn rdf(&self) -> super::vals::Rdf {
+    pub const fn rdf(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Rdf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Receive Data Full Flag"]
     #[inline(always)]
-    pub const fn set_rdf(&mut self, val: super::vals::Rdf) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_rdf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -595,14 +595,14 @@ impl Ssifsr {
     #[doc = "Transmit Data Empty Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn tde(&self) -> super::vals::Tde {
+    pub const fn tde(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::Tde::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Transmit Data Empty Flag"]
     #[inline(always)]
-    pub const fn set_tde(&mut self, val: super::vals::Tde) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_tde(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -665,7 +665,7 @@ impl defmt::Format for Ssifsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ssifsr {{ rdf: {:?}, reserved: {=u8:?}, rdc: {=u8:?}, tde: {:?}, reserved_2: {=u8:?}, tdc: {=u8:?}, reserved_3: {=u8:?} }}",
+            "Ssifsr {{ rdf: {=bool:?}, reserved: {=u8:?}, rdc: {=u8:?}, tde: {=bool:?}, reserved_2: {=u8:?}, tdc: {=u8:?}, reserved_3: {=u8:?} }}",
             self.rdf(),
             self.reserved(),
             self.rdc(),
@@ -830,62 +830,62 @@ impl Ssisr {
     #[doc = "Idle Mode Status Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn iirq(&self) -> super::vals::Iirq {
+    pub const fn iirq(&self) -> bool {
         let val = (self.0 >> 25usize) & 0x01;
-        super::vals::Iirq::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Idle Mode Status Flag"]
     #[inline(always)]
-    pub const fn set_iirq(&mut self, val: super::vals::Iirq) {
-        self.0 = (self.0 & !(0x01 << 25usize)) | (((val.to_bits() as u32) & 0x01) << 25usize);
+    pub const fn set_iirq(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 25usize)) | (((val as u32) & 0x01) << 25usize);
     }
     #[doc = "Receive Overflow Error Status Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn roirq(&self) -> super::vals::Roirq {
+    pub const fn roirq(&self) -> bool {
         let val = (self.0 >> 26usize) & 0x01;
-        super::vals::Roirq::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Receive Overflow Error Status Flag"]
     #[inline(always)]
-    pub const fn set_roirq(&mut self, val: super::vals::Roirq) {
-        self.0 = (self.0 & !(0x01 << 26usize)) | (((val.to_bits() as u32) & 0x01) << 26usize);
+    pub const fn set_roirq(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 26usize)) | (((val as u32) & 0x01) << 26usize);
     }
     #[doc = "Receive Underflow Error Status Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn ruirq(&self) -> super::vals::Ruirq {
+    pub const fn ruirq(&self) -> bool {
         let val = (self.0 >> 27usize) & 0x01;
-        super::vals::Ruirq::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Receive Underflow Error Status Flag"]
     #[inline(always)]
-    pub const fn set_ruirq(&mut self, val: super::vals::Ruirq) {
-        self.0 = (self.0 & !(0x01 << 27usize)) | (((val.to_bits() as u32) & 0x01) << 27usize);
+    pub const fn set_ruirq(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 27usize)) | (((val as u32) & 0x01) << 27usize);
     }
     #[doc = "Transmit Overflow Error Status Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn toirq(&self) -> super::vals::Toirq {
+    pub const fn toirq(&self) -> bool {
         let val = (self.0 >> 28usize) & 0x01;
-        super::vals::Toirq::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Transmit Overflow Error Status Flag"]
     #[inline(always)]
-    pub const fn set_toirq(&mut self, val: super::vals::Toirq) {
-        self.0 = (self.0 & !(0x01 << 28usize)) | (((val.to_bits() as u32) & 0x01) << 28usize);
+    pub const fn set_toirq(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 28usize)) | (((val as u32) & 0x01) << 28usize);
     }
     #[doc = "Transmit Underflow Error Status flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn tuirq(&self) -> super::vals::Tuirq {
+    pub const fn tuirq(&self) -> bool {
         let val = (self.0 >> 29usize) & 0x01;
-        super::vals::Tuirq::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Transmit Underflow Error Status flag"]
     #[inline(always)]
-    pub const fn set_tuirq(&mut self, val: super::vals::Tuirq) {
-        self.0 = (self.0 & !(0x01 << 29usize)) | (((val.to_bits() as u32) & 0x01) << 29usize);
+    pub const fn set_tuirq(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 29usize)) | (((val as u32) & 0x01) << 29usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -924,7 +924,7 @@ impl defmt::Format for Ssisr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ssisr {{ reserved: {=u32:?}, iirq: {:?}, roirq: {:?}, ruirq: {:?}, toirq: {:?}, tuirq: {:?}, reserved_2: {=u8:?} }}",
+            "Ssisr {{ reserved: {=u32:?}, iirq: {=bool:?}, roirq: {=bool:?}, ruirq: {=bool:?}, toirq: {=bool:?}, tuirq: {=bool:?}, reserved_2: {=u8:?} }}",
             self.reserved(),
             self.iirq(),
             self.roirq(),
@@ -967,26 +967,26 @@ impl Ssitdmr {
     #[doc = "Whether to Enable LRCK/FS Continuation"]
     #[must_use]
     #[inline(always)]
-    pub const fn lrcont(&self) -> super::vals::Lrcont {
+    pub const fn lrcont(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Lrcont::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Whether to Enable LRCK/FS Continuation"]
     #[inline(always)]
-    pub const fn set_lrcont(&mut self, val: super::vals::Lrcont) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u32) & 0x01) << 8usize);
+    pub const fn set_lrcont(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u32) & 0x01) << 8usize);
     }
     #[doc = "Whether to Enable Stopping BCK Output When SSIE is in Idle Status"]
     #[must_use]
     #[inline(always)]
-    pub const fn bckastp(&self) -> super::vals::Bckastp {
+    pub const fn bckastp(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Bckastp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Whether to Enable Stopping BCK Output When SSIE is in Idle Status"]
     #[inline(always)]
-    pub const fn set_bckastp(&mut self, val: super::vals::Bckastp) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u32) & 0x01) << 9usize);
+    pub const fn set_bckastp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u32) & 0x01) << 9usize);
     }
     #[doc = "These bits are read as 0000000000000000000000. The write value should be 0000000000000000000000."]
     #[must_use]
@@ -1023,7 +1023,7 @@ impl defmt::Format for Ssitdmr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ssitdmr {{ omod: {:?}, reserved: {=u8:?}, lrcont: {:?}, bckastp: {:?}, reserved_2: {=u32:?} }}",
+            "Ssitdmr {{ omod: {:?}, reserved: {=u8:?}, lrcont: {=bool:?}, bckastp: {=bool:?}, reserved_2: {=u32:?} }}",
             self.omod(),
             self.reserved(),
             self.lrcont(),

@@ -43,14 +43,14 @@ impl Buserrstat {
     #[doc = "Error Access Status The status at the time of the error"]
     #[must_use]
     #[inline(always)]
-    pub const fn accstat(&self) -> super::vals::Accstat {
+    pub const fn accstat(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Accstat::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Error Access Status The status at the time of the error"]
     #[inline(always)]
-    pub const fn set_accstat(&mut self, val: super::vals::Accstat) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_accstat(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 000000."]
     #[must_use]
@@ -67,14 +67,14 @@ impl Buserrstat {
     #[doc = "Bus Error Status When bus error assert, error flag occurs."]
     #[must_use]
     #[inline(always)]
-    pub const fn errstat(&self) -> super::vals::Errstat {
+    pub const fn errstat(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Errstat::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Bus Error Status When bus error assert, error flag occurs."]
     #[inline(always)]
-    pub const fn set_errstat(&mut self, val: super::vals::Errstat) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_errstat(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Buserrstat {
@@ -97,7 +97,7 @@ impl defmt::Format for Buserrstat {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Buserrstat {{ accstat: {:?}, reserved: {=u8:?}, errstat: {:?} }}",
+            "Buserrstat {{ accstat: {=bool:?}, reserved: {=u8:?}, errstat: {=bool:?} }}",
             self.accstat(),
             self.reserved(),
             self.errstat()
@@ -124,14 +124,14 @@ impl Busmcnt {
     #[doc = "Ignore Error Responses"]
     #[must_use]
     #[inline(always)]
-    pub const fn ieres(&self) -> super::vals::Ieres {
+    pub const fn ieres(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Ieres::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Ignore Error Responses"]
     #[inline(always)]
-    pub const fn set_ieres(&mut self, val: super::vals::Ieres) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_ieres(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for Busmcnt {
@@ -153,7 +153,7 @@ impl defmt::Format for Busmcnt {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Busmcnt {{ reserved: {=u16:?}, ieres: {:?} }}",
+            "Busmcnt {{ reserved: {=u16:?}, ieres: {=bool:?} }}",
             self.reserved(),
             self.ieres()
         )

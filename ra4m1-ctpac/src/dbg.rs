@@ -31,4 +31,3 @@ impl Dbg {
     }
 }
 pub mod regs;
-pub mod vals;

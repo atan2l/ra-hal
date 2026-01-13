@@ -6,14 +6,14 @@ impl Ecc1sts {
     #[doc = "ECC 1-Bit Error Status"]
     #[must_use]
     #[inline(always)]
-    pub const fn ecc1err(&self) -> super::vals::Ecc1err {
+    pub const fn ecc1err(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ecc1err::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ECC 1-Bit Error Status"]
     #[inline(always)]
-    pub const fn set_ecc1err(&mut self, val: super::vals::Ecc1err) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ecc1err(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -47,7 +47,7 @@ impl defmt::Format for Ecc1sts {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ecc1sts {{ ecc1err: {:?}, reserved: {=u8:?} }}",
+            "Ecc1sts {{ ecc1err: {=bool:?}, reserved: {=u8:?} }}",
             self.ecc1err(),
             self.reserved()
         )
@@ -61,14 +61,14 @@ impl Ecc1stsen {
     #[doc = "ECC 1-Bit Error Information Update Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn e1stsen(&self) -> super::vals::E1stsen {
+    pub const fn e1stsen(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::E1stsen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ECC 1-Bit Error Information Update Enable"]
     #[inline(always)]
-    pub const fn set_e1stsen(&mut self, val: super::vals::E1stsen) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_e1stsen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -102,7 +102,7 @@ impl defmt::Format for Ecc1stsen {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ecc1stsen {{ e1stsen: {:?}, reserved: {=u8:?} }}",
+            "Ecc1stsen {{ e1stsen: {=bool:?}, reserved: {=u8:?} }}",
             self.e1stsen(),
             self.reserved()
         )
@@ -116,14 +116,14 @@ impl Ecc2sts {
     #[doc = "ECC 2-Bit Error Status"]
     #[must_use]
     #[inline(always)]
-    pub const fn ecc2err(&self) -> super::vals::Ecc2err {
+    pub const fn ecc2err(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ecc2err::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ECC 2-Bit Error Status"]
     #[inline(always)]
-    pub const fn set_ecc2err(&mut self, val: super::vals::Ecc2err) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ecc2err(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -157,7 +157,7 @@ impl defmt::Format for Ecc2sts {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ecc2sts {{ ecc2err: {:?}, reserved: {=u8:?} }}",
+            "Ecc2sts {{ ecc2err: {=bool:?}, reserved: {=u8:?} }}",
             self.ecc2err(),
             self.reserved()
         )
@@ -171,14 +171,14 @@ impl Eccetst {
     #[doc = "ECC Bypass Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn tstbyp(&self) -> super::vals::Tstbyp {
+    pub const fn tstbyp(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Tstbyp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ECC Bypass Select"]
     #[inline(always)]
-    pub const fn set_tstbyp(&mut self, val: super::vals::Tstbyp) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_tstbyp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -212,7 +212,7 @@ impl defmt::Format for Eccetst {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Eccetst {{ tstbyp: {:?}, reserved: {=u8:?} }}",
+            "Eccetst {{ tstbyp: {=bool:?}, reserved: {=u8:?} }}",
             self.tstbyp(),
             self.reserved()
         )
@@ -281,14 +281,14 @@ impl Eccoad {
     #[doc = "Operation after Detection"]
     #[must_use]
     #[inline(always)]
-    pub const fn oad(&self) -> super::vals::EccoadOad {
+    pub const fn oad(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::EccoadOad::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operation after Detection"]
     #[inline(always)]
-    pub const fn set_oad(&mut self, val: super::vals::EccoadOad) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_oad(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -322,7 +322,7 @@ impl defmt::Format for Eccoad {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Eccoad {{ oad: {:?}, reserved: {=u8:?} }}",
+            "Eccoad {{ oad: {=bool:?}, reserved: {=u8:?} }}",
             self.oad(),
             self.reserved()
         )
@@ -336,14 +336,14 @@ impl Eccprcr {
     #[doc = "Register Write Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn eccprcr(&self) -> super::vals::Eccprcr {
+    pub const fn eccprcr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Eccprcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Register Write Control"]
     #[inline(always)]
-    pub const fn set_eccprcr(&mut self, val: super::vals::Eccprcr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_eccprcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Write Key Code"]
     #[must_use]
@@ -377,7 +377,7 @@ impl defmt::Format for Eccprcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Eccprcr {{ eccprcr: {:?}, kw: {:?} }}",
+            "Eccprcr {{ eccprcr: {=bool:?}, kw: {:?} }}",
             self.eccprcr(),
             self.kw()
         )
@@ -391,14 +391,14 @@ impl Eccprcr2 {
     #[doc = "Register Write Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn eccprcr2(&self) -> super::vals::Eccprcr2 {
+    pub const fn eccprcr2(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Eccprcr2::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Register Write Control"]
     #[inline(always)]
-    pub const fn set_eccprcr2(&mut self, val: super::vals::Eccprcr2) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_eccprcr2(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Write Key Code"]
     #[must_use]
@@ -432,7 +432,7 @@ impl defmt::Format for Eccprcr2 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Eccprcr2 {{ eccprcr2: {:?}, kw2: {:?} }}",
+            "Eccprcr2 {{ eccprcr2: {=bool:?}, kw2: {:?} }}",
             self.eccprcr2(),
             self.kw2()
         )
@@ -446,14 +446,14 @@ impl Parioad {
     #[doc = "Operation after Detection"]
     #[must_use]
     #[inline(always)]
-    pub const fn oad(&self) -> super::vals::ParioadOad {
+    pub const fn oad(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::ParioadOad::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operation after Detection"]
     #[inline(always)]
-    pub const fn set_oad(&mut self, val: super::vals::ParioadOad) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_oad(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -487,7 +487,7 @@ impl defmt::Format for Parioad {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Parioad {{ oad: {:?}, reserved: {=u8:?} }}",
+            "Parioad {{ oad: {=bool:?}, reserved: {=u8:?} }}",
             self.oad(),
             self.reserved()
         )
@@ -501,14 +501,14 @@ impl Sramprcr {
     #[doc = "Register Write Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn sramprcr(&self) -> super::vals::Sramprcr {
+    pub const fn sramprcr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Sramprcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Register Write Control"]
     #[inline(always)]
-    pub const fn set_sramprcr(&mut self, val: super::vals::Sramprcr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_sramprcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Write Key Code"]
     #[must_use]
@@ -542,7 +542,7 @@ impl defmt::Format for Sramprcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Sramprcr {{ sramprcr: {:?}, kw: {:?} }}",
+            "Sramprcr {{ sramprcr: {=bool:?}, kw: {:?} }}",
             self.sramprcr(),
             self.kw()
         )

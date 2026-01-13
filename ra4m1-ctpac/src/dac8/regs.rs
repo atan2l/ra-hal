@@ -53,26 +53,26 @@ impl Dam {
     #[doc = "D/A Operation Enable 0"]
     #[must_use]
     #[inline(always)]
-    pub const fn dace0(&self) -> super::vals::Dace0 {
+    pub const fn dace0(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Dace0::from_bits(val as u8)
+        val != 0
     }
     #[doc = "D/A Operation Enable 0"]
     #[inline(always)]
-    pub const fn set_dace0(&mut self, val: super::vals::Dace0) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_dace0(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "D/A Operation Enable 1"]
     #[must_use]
     #[inline(always)]
-    pub const fn dace1(&self) -> super::vals::Dace1 {
+    pub const fn dace1(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Dace1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "D/A Operation Enable 1"]
     #[inline(always)]
-    pub const fn set_dace1(&mut self, val: super::vals::Dace1) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_dace1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -108,7 +108,7 @@ impl defmt::Format for Dam {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Dam {{ reserved: {=u8:?}, dace0: {:?}, dace1: {:?}, reserved_2: {=u8:?} }}",
+            "Dam {{ reserved: {=u8:?}, dace0: {=bool:?}, dace1: {=bool:?}, reserved_2: {=u8:?} }}",
             self.reserved(),
             self.dace0(),
             self.dace1(),

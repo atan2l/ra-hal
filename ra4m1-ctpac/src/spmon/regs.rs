@@ -6,14 +6,14 @@ impl Mspmpuctl {
     #[doc = "Stack Pointer Monitor Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn enable(&self) -> super::vals::MspmpuctlEnable {
+    pub const fn enable(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::MspmpuctlEnable::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Stack Pointer Monitor Enable"]
     #[inline(always)]
-    pub const fn set_enable(&mut self, val: super::vals::MspmpuctlEnable) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_enable(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -30,14 +30,14 @@ impl Mspmpuctl {
     #[doc = "Stack Pointer Monitor Error Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn error(&self) -> super::vals::MspmpuctlError {
+    pub const fn error(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::MspmpuctlError::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Stack Pointer Monitor Error Flag"]
     #[inline(always)]
-    pub const fn set_error(&mut self, val: super::vals::MspmpuctlError) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_error(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -73,7 +73,7 @@ impl defmt::Format for Mspmpuctl {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Mspmpuctl {{ enable: {:?}, reserved: {=u8:?}, error: {:?}, reserved_2: {=u8:?} }}",
+            "Mspmpuctl {{ enable: {=bool:?}, reserved: {=u8:?}, error: {=bool:?}, reserved_2: {=u8:?} }}",
             self.enable(),
             self.reserved(),
             self.error(),
@@ -126,14 +126,14 @@ impl Mspmpuoad {
     #[doc = "Operation after detection"]
     #[must_use]
     #[inline(always)]
-    pub const fn oad(&self) -> super::vals::MspmpuoadOad {
+    pub const fn oad(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::MspmpuoadOad::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operation after detection"]
     #[inline(always)]
-    pub const fn set_oad(&mut self, val: super::vals::MspmpuoadOad) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_oad(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -180,7 +180,7 @@ impl defmt::Format for Mspmpuoad {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Mspmpuoad {{ oad: {:?}, reserved: {=u8:?}, key: {:?} }}",
+            "Mspmpuoad {{ oad: {=bool:?}, reserved: {=u8:?}, key: {:?} }}",
             self.oad(),
             self.reserved(),
             self.key()
@@ -195,14 +195,14 @@ impl Mspmpupt {
     #[doc = "Protection of register (MSPMPUAC, MSPMPUSA and MSPMPUSE)"]
     #[must_use]
     #[inline(always)]
-    pub const fn protect(&self) -> super::vals::MspmpuptProtect {
+    pub const fn protect(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::MspmpuptProtect::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Protection of register (MSPMPUAC, MSPMPUSA and MSPMPUSE)"]
     #[inline(always)]
-    pub const fn set_protect(&mut self, val: super::vals::MspmpuptProtect) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_protect(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -249,7 +249,7 @@ impl defmt::Format for Mspmpupt {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Mspmpupt {{ protect: {:?}, reserved: {=u8:?}, key: {:?} }}",
+            "Mspmpupt {{ protect: {=bool:?}, reserved: {=u8:?}, key: {:?} }}",
             self.protect(),
             self.reserved(),
             self.key()
@@ -301,14 +301,14 @@ impl Pspmpuctl {
     #[doc = "Stack Pointer Monitor Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn enable(&self) -> super::vals::PspmpuctlEnable {
+    pub const fn enable(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::PspmpuctlEnable::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Stack Pointer Monitor Enable"]
     #[inline(always)]
-    pub const fn set_enable(&mut self, val: super::vals::PspmpuctlEnable) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_enable(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -325,14 +325,14 @@ impl Pspmpuctl {
     #[doc = "Stack Pointer Monitor Error Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn error(&self) -> super::vals::PspmpuctlError {
+    pub const fn error(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::PspmpuctlError::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Stack Pointer Monitor Error Flag"]
     #[inline(always)]
-    pub const fn set_error(&mut self, val: super::vals::PspmpuctlError) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_error(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -368,7 +368,7 @@ impl defmt::Format for Pspmpuctl {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Pspmpuctl {{ enable: {:?}, reserved: {=u8:?}, error: {:?}, reserved_2: {=u8:?} }}",
+            "Pspmpuctl {{ enable: {=bool:?}, reserved: {=u8:?}, error: {=bool:?}, reserved_2: {=u8:?} }}",
             self.enable(),
             self.reserved(),
             self.error(),
@@ -421,14 +421,14 @@ impl Pspmpuoad {
     #[doc = "Operation after detection"]
     #[must_use]
     #[inline(always)]
-    pub const fn oad(&self) -> super::vals::PspmpuoadOad {
+    pub const fn oad(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::PspmpuoadOad::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operation after detection"]
     #[inline(always)]
-    pub const fn set_oad(&mut self, val: super::vals::PspmpuoadOad) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_oad(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -475,7 +475,7 @@ impl defmt::Format for Pspmpuoad {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Pspmpuoad {{ oad: {:?}, reserved: {=u8:?}, key: {:?} }}",
+            "Pspmpuoad {{ oad: {=bool:?}, reserved: {=u8:?}, key: {:?} }}",
             self.oad(),
             self.reserved(),
             self.key()
@@ -490,14 +490,14 @@ impl Pspmpupt {
     #[doc = "Protection register (PSPMPUAC, PSPMPUSA and PSPMPUSE)"]
     #[must_use]
     #[inline(always)]
-    pub const fn protect(&self) -> super::vals::PspmpuptProtect {
+    pub const fn protect(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::PspmpuptProtect::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Protection register (PSPMPUAC, PSPMPUSA and PSPMPUSE)"]
     #[inline(always)]
-    pub const fn set_protect(&mut self, val: super::vals::PspmpuptProtect) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_protect(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -544,7 +544,7 @@ impl defmt::Format for Pspmpupt {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Pspmpupt {{ protect: {:?}, reserved: {=u8:?}, key: {:?} }}",
+            "Pspmpupt {{ protect: {=bool:?}, reserved: {=u8:?}, key: {:?} }}",
             self.protect(),
             self.reserved(),
             self.key()

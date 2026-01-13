@@ -18,14 +18,14 @@ impl Elcr {
     #[doc = "All Event Link Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn elcon(&self) -> super::vals::Elcon {
+    pub const fn elcon(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Elcon::from_bits(val as u8)
+        val != 0
     }
     #[doc = "All Event Link Enable"]
     #[inline(always)]
-    pub const fn set_elcon(&mut self, val: super::vals::Elcon) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_elcon(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Elcr {
@@ -47,7 +47,7 @@ impl defmt::Format for Elcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Elcr {{ reserved: {=u8:?}, elcon: {:?} }}",
+            "Elcr {{ reserved: {=u8:?}, elcon: {=bool:?} }}",
             self.reserved(),
             self.elcon()
         )
@@ -61,14 +61,14 @@ impl Elsegr {
     #[doc = "Software Event Generation"]
     #[must_use]
     #[inline(always)]
-    pub const fn seg(&self) -> super::vals::Seg {
+    pub const fn seg(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Seg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Software Event Generation"]
     #[inline(always)]
-    pub const fn set_seg(&mut self, val: super::vals::Seg) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_seg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 00000. The write value should be 00000."]
     #[must_use]
@@ -85,26 +85,26 @@ impl Elsegr {
     #[doc = "SEG Bit Write Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn we(&self) -> super::vals::We {
+    pub const fn we(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::We::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SEG Bit Write Enable"]
     #[inline(always)]
-    pub const fn set_we(&mut self, val: super::vals::We) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_we(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "ELSEGR Register Write Disable"]
     #[must_use]
     #[inline(always)]
-    pub const fn wi(&self) -> super::vals::Wi {
+    pub const fn wi(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Wi::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELSEGR Register Write Disable"]
     #[inline(always)]
-    pub const fn set_wi(&mut self, val: super::vals::Wi) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_wi(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Elsegr {
@@ -128,7 +128,7 @@ impl defmt::Format for Elsegr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Elsegr {{ seg: {:?}, reserved: {=u8:?}, we: {:?}, wi: {:?} }}",
+            "Elsegr {{ seg: {=bool:?}, reserved: {=u8:?}, we: {=bool:?}, wi: {=bool:?} }}",
             self.seg(),
             self.reserved(),
             self.we(),

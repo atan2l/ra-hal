@@ -55,26 +55,26 @@ impl Iwdtsr {
     #[doc = "Underflow Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn undff(&self) -> super::vals::Undff {
+    pub const fn undff(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Undff::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Underflow Flag"]
     #[inline(always)]
-    pub const fn set_undff(&mut self, val: super::vals::Undff) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_undff(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "Refresh Error Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn refef(&self) -> super::vals::Refef {
+    pub const fn refef(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Refef::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Refresh Error Flag"]
     #[inline(always)]
-    pub const fn set_refef(&mut self, val: super::vals::Refef) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_refef(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for Iwdtsr {
@@ -97,7 +97,7 @@ impl defmt::Format for Iwdtsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Iwdtsr {{ cntval: {=u16:?}, undff: {:?}, refef: {:?} }}",
+            "Iwdtsr {{ cntval: {=u16:?}, undff: {=bool:?}, refef: {=bool:?} }}",
             self.cntval(),
             self.undff(),
             self.refef()

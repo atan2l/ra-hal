@@ -1,68 +1,6 @@
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Fcacheen {
-    #[doc = "FCACHE is disabled"]
-    _0 = 0x0,
-    #[doc = "FCACHE is enabled"]
-    _1 = 0x01,
-}
-impl Fcacheen {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Fcacheen {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Fcacheen {
-    #[inline(always)]
-    fn from(val: u8) -> Fcacheen {
-        Fcacheen::from_bits(val)
-    }
-}
-impl From<Fcacheen> for u8 {
-    #[inline(always)]
-    fn from(val: Fcacheen) -> u8 {
-        Fcacheen::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Fcacheiv {
-    #[doc = "(Read)not in progress / (Write) no effect."]
-    _0 = 0x0,
-    #[doc = "(Read)in progress /(Write) Starting Cache Invalidation"]
-    _1 = 0x01,
-}
-impl Fcacheiv {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Fcacheiv {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Fcacheiv {
-    #[inline(always)]
-    fn from(val: u8) -> Fcacheiv {
-        Fcacheiv::from_bits(val)
-    }
-}
-impl From<Fcacheiv> for u8 {
-    #[inline(always)]
-    fn from(val: Fcacheiv) -> u8 {
-        Fcacheiv::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Flwt {
     #[doc = "zero wait"]
     _000 = 0x0,

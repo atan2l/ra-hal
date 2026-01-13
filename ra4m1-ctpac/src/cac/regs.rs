@@ -43,14 +43,14 @@ impl Cacr0 {
     #[doc = "Clock Frequency Measurement Enable."]
     #[must_use]
     #[inline(always)]
-    pub const fn cfme(&self) -> super::vals::Cfme {
+    pub const fn cfme(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cfme::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Clock Frequency Measurement Enable."]
     #[inline(always)]
-    pub const fn set_cfme(&mut self, val: super::vals::Cfme) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_cfme(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -84,7 +84,7 @@ impl defmt::Format for Cacr0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Cacr0 {{ cfme: {:?}, reserved: {=u8:?} }}",
+            "Cacr0 {{ cfme: {=bool:?}, reserved: {=u8:?} }}",
             self.cfme(),
             self.reserved()
         )
@@ -98,14 +98,14 @@ impl Cacr1 {
     #[doc = "CACREF Pin Input Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cacrefe(&self) -> super::vals::Cacrefe {
+    pub const fn cacrefe(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cacrefe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CACREF Pin Input Enable"]
     #[inline(always)]
-    pub const fn set_cacrefe(&mut self, val: super::vals::Cacrefe) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_cacrefe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Measurement Target Clock Select"]
     #[must_use]
@@ -165,7 +165,7 @@ impl defmt::Format for Cacr1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Cacr1 {{ cacrefe: {:?}, fmcs: {:?}, tcss: {:?}, edges: {:?} }}",
+            "Cacr1 {{ cacrefe: {=bool:?}, fmcs: {:?}, tcss: {:?}, edges: {:?} }}",
             self.cacrefe(),
             self.fmcs(),
             self.tcss(),
@@ -181,14 +181,14 @@ impl Cacr2 {
     #[doc = "Reference Signal Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn rps(&self) -> super::vals::Rps {
+    pub const fn rps(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Rps::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Reference Signal Select"]
     #[inline(always)]
-    pub const fn set_rps(&mut self, val: super::vals::Rps) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_rps(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Measurement Reference Clock Select"]
     #[must_use]
@@ -248,7 +248,7 @@ impl defmt::Format for Cacr2 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Cacr2 {{ rps: {:?}, rscs: {:?}, rcds: {:?}, dfs: {:?} }}",
+            "Cacr2 {{ rps: {=bool:?}, rscs: {:?}, rcds: {:?}, dfs: {:?} }}",
             self.rps(),
             self.rscs(),
             self.rcds(),
@@ -264,38 +264,38 @@ impl Caicr {
     #[doc = "Frequency Error Interrupt Request Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ferrie(&self) -> super::vals::Ferrie {
+    pub const fn ferrie(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ferrie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Frequency Error Interrupt Request Enable"]
     #[inline(always)]
-    pub const fn set_ferrie(&mut self, val: super::vals::Ferrie) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ferrie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Measurement End Interrupt Request Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn mendie(&self) -> super::vals::Mendie {
+    pub const fn mendie(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Mendie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Measurement End Interrupt Request Enable"]
     #[inline(always)]
-    pub const fn set_mendie(&mut self, val: super::vals::Mendie) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_mendie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Overflow Interrupt Request Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ovfie(&self) -> super::vals::Ovfie {
+    pub const fn ovfie(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ovfie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Overflow Interrupt Request Enable"]
     #[inline(always)]
-    pub const fn set_ovfie(&mut self, val: super::vals::Ovfie) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_ovfie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -312,38 +312,38 @@ impl Caicr {
     #[doc = "FERRF Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn ferrfcl(&self) -> super::vals::Ferrfcl {
+    pub const fn ferrfcl(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ferrfcl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "FERRF Clear"]
     #[inline(always)]
-    pub const fn set_ferrfcl(&mut self, val: super::vals::Ferrfcl) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_ferrfcl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "MENDF Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn mendfcl(&self) -> super::vals::Mendfcl {
+    pub const fn mendfcl(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Mendfcl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "MENDF Clear"]
     #[inline(always)]
-    pub const fn set_mendfcl(&mut self, val: super::vals::Mendfcl) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_mendfcl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "OVFF Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn ovffcl(&self) -> super::vals::Ovffcl {
+    pub const fn ovffcl(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Ovffcl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "OVFF Clear"]
     #[inline(always)]
-    pub const fn set_ovffcl(&mut self, val: super::vals::Ovffcl) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_ovffcl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -383,7 +383,7 @@ impl defmt::Format for Caicr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Caicr {{ ferrie: {:?}, mendie: {:?}, ovfie: {:?}, reserved: {=bool:?}, ferrfcl: {:?}, mendfcl: {:?}, ovffcl: {:?}, reserved_2: {=bool:?} }}",
+            "Caicr {{ ferrie: {=bool:?}, mendie: {=bool:?}, ovfie: {=bool:?}, reserved: {=bool:?}, ferrfcl: {=bool:?}, mendfcl: {=bool:?}, ovffcl: {=bool:?}, reserved_2: {=bool:?} }}",
             self.ferrie(),
             self.mendie(),
             self.ovfie(),
@@ -440,38 +440,38 @@ impl Castr {
     #[doc = "Frequency Error Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn ferrf(&self) -> super::vals::Ferrf {
+    pub const fn ferrf(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ferrf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Frequency Error Flag"]
     #[inline(always)]
-    pub const fn set_ferrf(&mut self, val: super::vals::Ferrf) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ferrf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Measurement End Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn mendf(&self) -> super::vals::Mendf {
+    pub const fn mendf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Mendf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Measurement End Flag"]
     #[inline(always)]
-    pub const fn set_mendf(&mut self, val: super::vals::Mendf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_mendf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Counter Overflow Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn ovff(&self) -> super::vals::Ovff {
+    pub const fn ovff(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ovff::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Counter Overflow Flag"]
     #[inline(always)]
-    pub const fn set_ovff(&mut self, val: super::vals::Ovff) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_ovff(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
 }
 impl Default for Castr {
@@ -494,7 +494,7 @@ impl defmt::Format for Castr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Castr {{ ferrf: {:?}, mendf: {:?}, ovff: {:?} }}",
+            "Castr {{ ferrf: {=bool:?}, mendf: {=bool:?}, ovff: {=bool:?} }}",
             self.ferrf(),
             self.mendf(),
             self.ovff()

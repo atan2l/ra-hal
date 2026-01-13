@@ -6,38 +6,38 @@ impl P000pfs {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P000pfsPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P000pfsPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P000pfsPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P000pfsPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P000pfsPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P000pfsPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P000pfsPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P000pfsPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P000pfsPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -54,14 +54,14 @@ impl P000pfs {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P000pfsPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P000pfsPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P000pfsPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u32) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -78,14 +78,14 @@ impl P000pfs {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P000pfsNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P000pfsNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P000pfsNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u32) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -102,14 +102,14 @@ impl P000pfs {
     #[doc = "Port Drive Capability"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscr(&self) -> super::vals::P000pfsDscr {
+    pub const fn dscr(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::P000pfsDscr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Drive Capability"]
     #[inline(always)]
-    pub const fn set_dscr(&mut self, val: super::vals::P000pfsDscr) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_dscr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -126,38 +126,38 @@ impl P000pfs {
     #[doc = "IRQ input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn isel(&self) -> super::vals::P000pfsIsel {
+    pub const fn isel(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::P000pfsIsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "IRQ input enable"]
     #[inline(always)]
-    pub const fn set_isel(&mut self, val: super::vals::P000pfsIsel) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_isel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "Analog Input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asel(&self) -> super::vals::P000pfsAsel {
+    pub const fn asel(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::P000pfsAsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Analog Input enable"]
     #[inline(always)]
-    pub const fn set_asel(&mut self, val: super::vals::P000pfsAsel) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_asel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "Port Mode Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pmr(&self) -> super::vals::P000pfsPmr {
+    pub const fn pmr(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::P000pfsPmr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Mode Control"]
     #[inline(always)]
-    pub const fn set_pmr(&mut self, val: super::vals::P000pfsPmr) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_pmr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -229,7 +229,7 @@ impl defmt::Format for P000pfs {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P000pfs {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=u8:?}, dscr: {:?}, reserved_4: {=u8:?}, isel: {:?}, asel: {:?}, pmr: {:?}, reserved_5: {=u8:?}, psel: {=u8:?}, reserved_6: {=u8:?} }}",
+            "P000pfs {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=u8:?}, dscr: {=bool:?}, reserved_4: {=u8:?}, isel: {=bool:?}, asel: {=bool:?}, pmr: {=bool:?}, reserved_5: {=u8:?}, psel: {=u8:?}, reserved_6: {=u8:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -257,38 +257,38 @@ impl P000pfsBy {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P000pfsByPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P000pfsByPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P000pfsByPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P000pfsByPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P000pfsByPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P000pfsByPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P000pfsByPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P000pfsByPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P000pfsByPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -305,14 +305,14 @@ impl P000pfsBy {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P000pfsByPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P000pfsByPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P000pfsByPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -329,14 +329,14 @@ impl P000pfsBy {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P000pfsByNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P000pfsByNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P000pfsByNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -376,7 +376,7 @@ impl defmt::Format for P000pfsBy {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P000pfsBy {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=bool:?} }}",
+            "P000pfsBy {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=bool:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -396,38 +396,38 @@ impl P000pfsHa {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P000pfsHaPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P000pfsHaPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P000pfsHaPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P000pfsHaPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P000pfsHaPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P000pfsHaPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P000pfsHaPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P000pfsHaPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P000pfsHaPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -444,14 +444,14 @@ impl P000pfsHa {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P000pfsHaPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P000pfsHaPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P000pfsHaPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -468,14 +468,14 @@ impl P000pfsHa {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P000pfsHaNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P000pfsHaNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P000pfsHaNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -492,14 +492,14 @@ impl P000pfsHa {
     #[doc = "Port Drive Capability"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscr(&self) -> super::vals::P000pfsHaDscr {
+    pub const fn dscr(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::P000pfsHaDscr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Drive Capability"]
     #[inline(always)]
-    pub const fn set_dscr(&mut self, val: super::vals::P000pfsHaDscr) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_dscr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -516,26 +516,26 @@ impl P000pfsHa {
     #[doc = "IRQ input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn isel(&self) -> super::vals::P000pfsHaIsel {
+    pub const fn isel(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::P000pfsHaIsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "IRQ input enable"]
     #[inline(always)]
-    pub const fn set_isel(&mut self, val: super::vals::P000pfsHaIsel) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_isel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "Analog Input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asel(&self) -> super::vals::P000pfsHaAsel {
+    pub const fn asel(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::P000pfsHaAsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Analog Input enable"]
     #[inline(always)]
-    pub const fn set_asel(&mut self, val: super::vals::P000pfsHaAsel) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_asel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for P000pfsHa {
@@ -567,7 +567,7 @@ impl defmt::Format for P000pfsHa {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P000pfsHa {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=u8:?}, dscr: {:?}, reserved_4: {=u8:?}, isel: {:?}, asel: {:?} }}",
+            "P000pfsHa {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=u8:?}, dscr: {=bool:?}, reserved_4: {=u8:?}, isel: {=bool:?}, asel: {=bool:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -591,38 +591,38 @@ impl P108pfs {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P108pfsPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P108pfsPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P108pfsPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P108pfsPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P108pfsPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P108pfsPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P108pfsPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P108pfsPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P108pfsPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -639,14 +639,14 @@ impl P108pfs {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P108pfsPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P108pfsPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P108pfsPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u32) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -663,14 +663,14 @@ impl P108pfs {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P108pfsNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P108pfsNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P108pfsNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u32) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -687,14 +687,14 @@ impl P108pfs {
     #[doc = "Port Drive Capability"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscr(&self) -> super::vals::P108pfsDscr {
+    pub const fn dscr(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::P108pfsDscr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Drive Capability"]
     #[inline(always)]
-    pub const fn set_dscr(&mut self, val: super::vals::P108pfsDscr) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_dscr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -711,62 +711,62 @@ impl P108pfs {
     #[doc = "Event on Rising"]
     #[must_use]
     #[inline(always)]
-    pub const fn eor(&self) -> super::vals::P108pfsEor {
+    pub const fn eor(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::P108pfsEor::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Rising"]
     #[inline(always)]
-    pub const fn set_eor(&mut self, val: super::vals::P108pfsEor) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u32) & 0x01) << 12usize);
+    pub const fn set_eor(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u32) & 0x01) << 12usize);
     }
     #[doc = "Event on Failing"]
     #[must_use]
     #[inline(always)]
-    pub const fn eof(&self) -> super::vals::P108pfsEof {
+    pub const fn eof(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::P108pfsEof::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Failing"]
     #[inline(always)]
-    pub const fn set_eof(&mut self, val: super::vals::P108pfsEof) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u32) & 0x01) << 13usize);
+    pub const fn set_eof(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
     }
     #[doc = "IRQ input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn isel(&self) -> super::vals::P108pfsIsel {
+    pub const fn isel(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::P108pfsIsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "IRQ input enable"]
     #[inline(always)]
-    pub const fn set_isel(&mut self, val: super::vals::P108pfsIsel) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_isel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "Analog Input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asel(&self) -> super::vals::P108pfsAsel {
+    pub const fn asel(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::P108pfsAsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Analog Input enable"]
     #[inline(always)]
-    pub const fn set_asel(&mut self, val: super::vals::P108pfsAsel) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_asel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "Port Mode Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pmr(&self) -> super::vals::P108pfsPmr {
+    pub const fn pmr(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::P108pfsPmr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Mode Control"]
     #[inline(always)]
-    pub const fn set_pmr(&mut self, val: super::vals::P108pfsPmr) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_pmr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -840,7 +840,7 @@ impl defmt::Format for P108pfs {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P108pfs {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=u8:?}, dscr: {:?}, reserved_4: {=bool:?}, eor: {:?}, eof: {:?}, isel: {:?}, asel: {:?}, pmr: {:?}, reserved_5: {=u8:?}, psel: {=u8:?}, reserved_6: {=u8:?} }}",
+            "P108pfs {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=u8:?}, dscr: {=bool:?}, reserved_4: {=bool:?}, eor: {=bool:?}, eof: {=bool:?}, isel: {=bool:?}, asel: {=bool:?}, pmr: {=bool:?}, reserved_5: {=u8:?}, psel: {=u8:?}, reserved_6: {=u8:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -870,38 +870,38 @@ impl P108pfsBy {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P108pfsByPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P108pfsByPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P108pfsByPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P108pfsByPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P108pfsByPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P108pfsByPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P108pfsByPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P108pfsByPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P108pfsByPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -918,14 +918,14 @@ impl P108pfsBy {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P108pfsByPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P108pfsByPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P108pfsByPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -942,14 +942,14 @@ impl P108pfsBy {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P108pfsByNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P108pfsByNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P108pfsByNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -989,7 +989,7 @@ impl defmt::Format for P108pfsBy {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P108pfsBy {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=bool:?} }}",
+            "P108pfsBy {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=bool:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -1009,38 +1009,38 @@ impl P108pfsHa {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P108pfsHaPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P108pfsHaPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P108pfsHaPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P108pfsHaPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P108pfsHaPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P108pfsHaPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P108pfsHaPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P108pfsHaPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P108pfsHaPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1057,14 +1057,14 @@ impl P108pfsHa {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P108pfsHaPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P108pfsHaPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P108pfsHaPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1081,14 +1081,14 @@ impl P108pfsHa {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P108pfsHaNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P108pfsHaNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P108pfsHaNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -1105,14 +1105,14 @@ impl P108pfsHa {
     #[doc = "Port Drive Capability"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscr(&self) -> super::vals::P108pfsHaDscr {
+    pub const fn dscr(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::P108pfsHaDscr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Drive Capability"]
     #[inline(always)]
-    pub const fn set_dscr(&mut self, val: super::vals::P108pfsHaDscr) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_dscr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1129,50 +1129,50 @@ impl P108pfsHa {
     #[doc = "Event on Rising"]
     #[must_use]
     #[inline(always)]
-    pub const fn eor(&self) -> super::vals::P108pfsHaEor {
+    pub const fn eor(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::P108pfsHaEor::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Rising"]
     #[inline(always)]
-    pub const fn set_eor(&mut self, val: super::vals::P108pfsHaEor) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u16) & 0x01) << 12usize);
+    pub const fn set_eor(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u16) & 0x01) << 12usize);
     }
     #[doc = "Event on Failing"]
     #[must_use]
     #[inline(always)]
-    pub const fn eof(&self) -> super::vals::P108pfsHaEof {
+    pub const fn eof(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::P108pfsHaEof::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Failing"]
     #[inline(always)]
-    pub const fn set_eof(&mut self, val: super::vals::P108pfsHaEof) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u16) & 0x01) << 13usize);
+    pub const fn set_eof(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u16) & 0x01) << 13usize);
     }
     #[doc = "IRQ input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn isel(&self) -> super::vals::P108pfsHaIsel {
+    pub const fn isel(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::P108pfsHaIsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "IRQ input enable"]
     #[inline(always)]
-    pub const fn set_isel(&mut self, val: super::vals::P108pfsHaIsel) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_isel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "Analog Input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asel(&self) -> super::vals::P108pfsHaAsel {
+    pub const fn asel(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::P108pfsHaAsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Analog Input enable"]
     #[inline(always)]
-    pub const fn set_asel(&mut self, val: super::vals::P108pfsHaAsel) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_asel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for P108pfsHa {
@@ -1206,7 +1206,7 @@ impl defmt::Format for P108pfsHa {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P108pfsHa {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=u8:?}, dscr: {:?}, reserved_4: {=bool:?}, eor: {:?}, eof: {:?}, isel: {:?}, asel: {:?} }}",
+            "P108pfsHa {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=u8:?}, dscr: {=bool:?}, reserved_4: {=bool:?}, eor: {=bool:?}, eof: {=bool:?}, isel: {=bool:?}, asel: {=bool:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -1232,38 +1232,38 @@ impl P109pfs {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P109pfsPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P109pfsPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P109pfsPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P109pfsPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P109pfsPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P109pfsPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P109pfsPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P109pfsPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P109pfsPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1280,14 +1280,14 @@ impl P109pfs {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P109pfsPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P109pfsPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P109pfsPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u32) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1304,14 +1304,14 @@ impl P109pfs {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P109pfsNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P109pfsNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P109pfsNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u32) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -1328,14 +1328,14 @@ impl P109pfs {
     #[doc = "Port Drive Capability"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscr(&self) -> super::vals::P109pfsDscr {
+    pub const fn dscr(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::P109pfsDscr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Drive Capability"]
     #[inline(always)]
-    pub const fn set_dscr(&mut self, val: super::vals::P109pfsDscr) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_dscr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1352,62 +1352,62 @@ impl P109pfs {
     #[doc = "Event on Rising"]
     #[must_use]
     #[inline(always)]
-    pub const fn eor(&self) -> super::vals::P109pfsEor {
+    pub const fn eor(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::P109pfsEor::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Rising"]
     #[inline(always)]
-    pub const fn set_eor(&mut self, val: super::vals::P109pfsEor) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u32) & 0x01) << 12usize);
+    pub const fn set_eor(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u32) & 0x01) << 12usize);
     }
     #[doc = "Event on Failing"]
     #[must_use]
     #[inline(always)]
-    pub const fn eof(&self) -> super::vals::P109pfsEof {
+    pub const fn eof(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::P109pfsEof::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Failing"]
     #[inline(always)]
-    pub const fn set_eof(&mut self, val: super::vals::P109pfsEof) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u32) & 0x01) << 13usize);
+    pub const fn set_eof(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
     }
     #[doc = "IRQ input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn isel(&self) -> super::vals::P109pfsIsel {
+    pub const fn isel(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::P109pfsIsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "IRQ input enable"]
     #[inline(always)]
-    pub const fn set_isel(&mut self, val: super::vals::P109pfsIsel) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_isel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "Analog Input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asel(&self) -> super::vals::P109pfsAsel {
+    pub const fn asel(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::P109pfsAsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Analog Input enable"]
     #[inline(always)]
-    pub const fn set_asel(&mut self, val: super::vals::P109pfsAsel) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_asel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "Port Mode Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pmr(&self) -> super::vals::P109pfsPmr {
+    pub const fn pmr(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::P109pfsPmr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Mode Control"]
     #[inline(always)]
-    pub const fn set_pmr(&mut self, val: super::vals::P109pfsPmr) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_pmr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -1481,7 +1481,7 @@ impl defmt::Format for P109pfs {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P109pfs {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=u8:?}, dscr: {:?}, reserved_4: {=bool:?}, eor: {:?}, eof: {:?}, isel: {:?}, asel: {:?}, pmr: {:?}, reserved_5: {=u8:?}, psel: {=u8:?}, reserved_6: {=u8:?} }}",
+            "P109pfs {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=u8:?}, dscr: {=bool:?}, reserved_4: {=bool:?}, eor: {=bool:?}, eof: {=bool:?}, isel: {=bool:?}, asel: {=bool:?}, pmr: {=bool:?}, reserved_5: {=u8:?}, psel: {=u8:?}, reserved_6: {=u8:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -1511,38 +1511,38 @@ impl P109pfsBy {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P109pfsByPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P109pfsByPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P109pfsByPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P109pfsByPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P109pfsByPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P109pfsByPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P109pfsByPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P109pfsByPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P109pfsByPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1559,14 +1559,14 @@ impl P109pfsBy {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P109pfsByPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P109pfsByPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P109pfsByPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1583,14 +1583,14 @@ impl P109pfsBy {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P109pfsByNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P109pfsByNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P109pfsByNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1630,7 +1630,7 @@ impl defmt::Format for P109pfsBy {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P109pfsBy {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=bool:?} }}",
+            "P109pfsBy {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=bool:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -1650,38 +1650,38 @@ impl P109pfsHa {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P109pfsHaPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P109pfsHaPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P109pfsHaPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P109pfsHaPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P109pfsHaPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P109pfsHaPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P109pfsHaPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P109pfsHaPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P109pfsHaPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1698,14 +1698,14 @@ impl P109pfsHa {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P109pfsHaPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P109pfsHaPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P109pfsHaPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1722,14 +1722,14 @@ impl P109pfsHa {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P109pfsHaNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P109pfsHaNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P109pfsHaNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -1746,14 +1746,14 @@ impl P109pfsHa {
     #[doc = "Port Drive Capability"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscr(&self) -> super::vals::P109pfsHaDscr {
+    pub const fn dscr(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::P109pfsHaDscr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Drive Capability"]
     #[inline(always)]
-    pub const fn set_dscr(&mut self, val: super::vals::P109pfsHaDscr) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_dscr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1770,50 +1770,50 @@ impl P109pfsHa {
     #[doc = "Event on Rising"]
     #[must_use]
     #[inline(always)]
-    pub const fn eor(&self) -> super::vals::P109pfsHaEor {
+    pub const fn eor(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::P109pfsHaEor::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Rising"]
     #[inline(always)]
-    pub const fn set_eor(&mut self, val: super::vals::P109pfsHaEor) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u16) & 0x01) << 12usize);
+    pub const fn set_eor(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u16) & 0x01) << 12usize);
     }
     #[doc = "Event on Failing"]
     #[must_use]
     #[inline(always)]
-    pub const fn eof(&self) -> super::vals::P109pfsHaEof {
+    pub const fn eof(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::P109pfsHaEof::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Failing"]
     #[inline(always)]
-    pub const fn set_eof(&mut self, val: super::vals::P109pfsHaEof) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u16) & 0x01) << 13usize);
+    pub const fn set_eof(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u16) & 0x01) << 13usize);
     }
     #[doc = "IRQ input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn isel(&self) -> super::vals::P109pfsHaIsel {
+    pub const fn isel(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::P109pfsHaIsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "IRQ input enable"]
     #[inline(always)]
-    pub const fn set_isel(&mut self, val: super::vals::P109pfsHaIsel) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_isel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "Analog Input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asel(&self) -> super::vals::P109pfsHaAsel {
+    pub const fn asel(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::P109pfsHaAsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Analog Input enable"]
     #[inline(always)]
-    pub const fn set_asel(&mut self, val: super::vals::P109pfsHaAsel) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_asel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for P109pfsHa {
@@ -1847,7 +1847,7 @@ impl defmt::Format for P109pfsHa {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P109pfsHa {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=u8:?}, dscr: {:?}, reserved_4: {=bool:?}, eor: {:?}, eof: {:?}, isel: {:?}, asel: {:?} }}",
+            "P109pfsHa {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=u8:?}, dscr: {=bool:?}, reserved_4: {=bool:?}, eor: {=bool:?}, eof: {=bool:?}, isel: {=bool:?}, asel: {=bool:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -1873,38 +1873,38 @@ impl P201pfs {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P201pfsPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P201pfsPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P201pfsPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P201pfsPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P201pfsPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P201pfsPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P201pfsPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P201pfsPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P201pfsPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1921,14 +1921,14 @@ impl P201pfs {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P201pfsPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P201pfsPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P201pfsPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u32) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1945,14 +1945,14 @@ impl P201pfs {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P201pfsNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P201pfsNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P201pfsNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u32) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -1969,14 +1969,14 @@ impl P201pfs {
     #[doc = "Drive Strength Control Register"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscr(&self) -> super::vals::P201pfsDscr {
+    pub const fn dscr(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::P201pfsDscr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Drive Strength Control Register"]
     #[inline(always)]
-    pub const fn set_dscr(&mut self, val: super::vals::P201pfsDscr) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_dscr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1993,62 +1993,62 @@ impl P201pfs {
     #[doc = "Event on Rising"]
     #[must_use]
     #[inline(always)]
-    pub const fn eor(&self) -> super::vals::P201pfsEor {
+    pub const fn eor(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::P201pfsEor::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Rising"]
     #[inline(always)]
-    pub const fn set_eor(&mut self, val: super::vals::P201pfsEor) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u32) & 0x01) << 12usize);
+    pub const fn set_eor(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u32) & 0x01) << 12usize);
     }
     #[doc = "Event on Falling"]
     #[must_use]
     #[inline(always)]
-    pub const fn eof(&self) -> super::vals::P201pfsEof {
+    pub const fn eof(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::P201pfsEof::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Falling"]
     #[inline(always)]
-    pub const fn set_eof(&mut self, val: super::vals::P201pfsEof) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u32) & 0x01) << 13usize);
+    pub const fn set_eof(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
     }
     #[doc = "IRQ input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn isel(&self) -> super::vals::P201pfsIsel {
+    pub const fn isel(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::P201pfsIsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "IRQ input enable"]
     #[inline(always)]
-    pub const fn set_isel(&mut self, val: super::vals::P201pfsIsel) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_isel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "Analog Input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asel(&self) -> super::vals::P201pfsAsel {
+    pub const fn asel(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::P201pfsAsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Analog Input enable"]
     #[inline(always)]
-    pub const fn set_asel(&mut self, val: super::vals::P201pfsAsel) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_asel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "Port Mode Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pmr(&self) -> super::vals::P201pfsPmr {
+    pub const fn pmr(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::P201pfsPmr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Mode Control"]
     #[inline(always)]
-    pub const fn set_pmr(&mut self, val: super::vals::P201pfsPmr) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_pmr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -2122,7 +2122,7 @@ impl defmt::Format for P201pfs {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P201pfs {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=u8:?}, dscr: {:?}, reserved_4: {=bool:?}, eor: {:?}, eof: {:?}, isel: {:?}, asel: {:?}, pmr: {:?}, reserved_5: {=u8:?}, psel: {=u8:?}, reserved_6: {=u8:?} }}",
+            "P201pfs {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=u8:?}, dscr: {=bool:?}, reserved_4: {=bool:?}, eor: {=bool:?}, eof: {=bool:?}, isel: {=bool:?}, asel: {=bool:?}, pmr: {=bool:?}, reserved_5: {=u8:?}, psel: {=u8:?}, reserved_6: {=u8:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -2152,38 +2152,38 @@ impl P201pfsBy {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P201pfsByPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P201pfsByPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P201pfsByPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P201pfsByPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P201pfsByPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P201pfsByPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P201pfsByPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P201pfsByPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P201pfsByPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2200,14 +2200,14 @@ impl P201pfsBy {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P201pfsByPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P201pfsByPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P201pfsByPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2224,14 +2224,14 @@ impl P201pfsBy {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P201pfsByNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P201pfsByNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P201pfsByNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2271,7 +2271,7 @@ impl defmt::Format for P201pfsBy {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P201pfsBy {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=bool:?} }}",
+            "P201pfsBy {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=bool:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -2291,38 +2291,38 @@ impl P201pfsHa {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P201pfsHaPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P201pfsHaPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P201pfsHaPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P201pfsHaPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P201pfsHaPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P201pfsHaPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P201pfsHaPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P201pfsHaPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P201pfsHaPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2339,14 +2339,14 @@ impl P201pfsHa {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P201pfsHaPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P201pfsHaPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P201pfsHaPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2363,14 +2363,14 @@ impl P201pfsHa {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P201pfsHaNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P201pfsHaNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P201pfsHaNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -2387,14 +2387,14 @@ impl P201pfsHa {
     #[doc = "Drive Strength Control Register"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscr(&self) -> super::vals::P201pfsHaDscr {
+    pub const fn dscr(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::P201pfsHaDscr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Drive Strength Control Register"]
     #[inline(always)]
-    pub const fn set_dscr(&mut self, val: super::vals::P201pfsHaDscr) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_dscr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2411,50 +2411,50 @@ impl P201pfsHa {
     #[doc = "Event on Rising"]
     #[must_use]
     #[inline(always)]
-    pub const fn eor(&self) -> super::vals::P201pfsHaEor {
+    pub const fn eor(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::P201pfsHaEor::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Rising"]
     #[inline(always)]
-    pub const fn set_eor(&mut self, val: super::vals::P201pfsHaEor) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u16) & 0x01) << 12usize);
+    pub const fn set_eor(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u16) & 0x01) << 12usize);
     }
     #[doc = "Event on Falling"]
     #[must_use]
     #[inline(always)]
-    pub const fn eof(&self) -> super::vals::P201pfsHaEof {
+    pub const fn eof(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::P201pfsHaEof::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Falling"]
     #[inline(always)]
-    pub const fn set_eof(&mut self, val: super::vals::P201pfsHaEof) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u16) & 0x01) << 13usize);
+    pub const fn set_eof(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u16) & 0x01) << 13usize);
     }
     #[doc = "IRQ input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn isel(&self) -> super::vals::P201pfsHaIsel {
+    pub const fn isel(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::P201pfsHaIsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "IRQ input enable"]
     #[inline(always)]
-    pub const fn set_isel(&mut self, val: super::vals::P201pfsHaIsel) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_isel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "Analog Input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asel(&self) -> super::vals::P201pfsHaAsel {
+    pub const fn asel(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::P201pfsHaAsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Analog Input enable"]
     #[inline(always)]
-    pub const fn set_asel(&mut self, val: super::vals::P201pfsHaAsel) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_asel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for P201pfsHa {
@@ -2488,7 +2488,7 @@ impl defmt::Format for P201pfsHa {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P201pfsHa {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=u8:?}, dscr: {:?}, reserved_4: {=bool:?}, eor: {:?}, eof: {:?}, isel: {:?}, asel: {:?} }}",
+            "P201pfsHa {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=u8:?}, dscr: {=bool:?}, reserved_4: {=bool:?}, eor: {=bool:?}, eof: {=bool:?}, isel: {=bool:?}, asel: {=bool:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -2514,38 +2514,38 @@ impl P408pfs {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P408pfsPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P408pfsPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P408pfsPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P408pfsPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P408pfsPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P408pfsPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P408pfsPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P408pfsPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P408pfsPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2562,14 +2562,14 @@ impl P408pfs {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P408pfsPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P408pfsPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P408pfsPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u32) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2586,14 +2586,14 @@ impl P408pfs {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P408pfsNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P408pfsNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P408pfsNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u32) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -2610,86 +2610,86 @@ impl P408pfs {
     #[doc = "Drive Strength Control Register"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscr(&self) -> super::vals::P408pfsDscr {
+    pub const fn dscr(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::P408pfsDscr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Drive Strength Control Register"]
     #[inline(always)]
-    pub const fn set_dscr(&mut self, val: super::vals::P408pfsDscr) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_dscr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "Drive Strength Control Register"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscr1(&self) -> super::vals::P408pfsDscr1 {
+    pub const fn dscr1(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::P408pfsDscr1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Drive Strength Control Register"]
     #[inline(always)]
-    pub const fn set_dscr1(&mut self, val: super::vals::P408pfsDscr1) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u32) & 0x01) << 11usize);
+    pub const fn set_dscr1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u32) & 0x01) << 11usize);
     }
     #[doc = "Event on Rising"]
     #[must_use]
     #[inline(always)]
-    pub const fn eor(&self) -> super::vals::P408pfsEor {
+    pub const fn eor(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::P408pfsEor::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Rising"]
     #[inline(always)]
-    pub const fn set_eor(&mut self, val: super::vals::P408pfsEor) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u32) & 0x01) << 12usize);
+    pub const fn set_eor(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u32) & 0x01) << 12usize);
     }
     #[doc = "Event on Falling"]
     #[must_use]
     #[inline(always)]
-    pub const fn eof(&self) -> super::vals::P408pfsEof {
+    pub const fn eof(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::P408pfsEof::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Falling"]
     #[inline(always)]
-    pub const fn set_eof(&mut self, val: super::vals::P408pfsEof) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u32) & 0x01) << 13usize);
+    pub const fn set_eof(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
     }
     #[doc = "IRQ input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn isel(&self) -> super::vals::P408pfsIsel {
+    pub const fn isel(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::P408pfsIsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "IRQ input enable"]
     #[inline(always)]
-    pub const fn set_isel(&mut self, val: super::vals::P408pfsIsel) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_isel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "Analog Input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asel(&self) -> super::vals::P408pfsAsel {
+    pub const fn asel(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::P408pfsAsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Analog Input enable"]
     #[inline(always)]
-    pub const fn set_asel(&mut self, val: super::vals::P408pfsAsel) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_asel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "Port Mode Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pmr(&self) -> super::vals::P408pfsPmr {
+    pub const fn pmr(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::P408pfsPmr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Mode Control"]
     #[inline(always)]
-    pub const fn set_pmr(&mut self, val: super::vals::P408pfsPmr) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_pmr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -2763,7 +2763,7 @@ impl defmt::Format for P408pfs {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P408pfs {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=u8:?}, dscr: {:?}, dscr1: {:?}, eor: {:?}, eof: {:?}, isel: {:?}, asel: {:?}, pmr: {:?}, reserved_4: {=u8:?}, psel: {=u8:?}, reserved_5: {=u8:?} }}",
+            "P408pfs {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=u8:?}, dscr: {=bool:?}, dscr1: {=bool:?}, eor: {=bool:?}, eof: {=bool:?}, isel: {=bool:?}, asel: {=bool:?}, pmr: {=bool:?}, reserved_4: {=u8:?}, psel: {=u8:?}, reserved_5: {=u8:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -2793,38 +2793,38 @@ impl P408pfsBy {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P408pfsByPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P408pfsByPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P408pfsByPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P408pfsByPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P408pfsByPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P408pfsByPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P408pfsByPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P408pfsByPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P408pfsByPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2841,14 +2841,14 @@ impl P408pfsBy {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P408pfsByPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P408pfsByPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P408pfsByPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2865,14 +2865,14 @@ impl P408pfsBy {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P408pfsByNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P408pfsByNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P408pfsByNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2912,7 +2912,7 @@ impl defmt::Format for P408pfsBy {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P408pfsBy {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=bool:?} }}",
+            "P408pfsBy {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=bool:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
@@ -2932,38 +2932,38 @@ impl P408pfsHa {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::P408pfsHaPodr {
+    pub const fn podr(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::P408pfsHaPodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::P408pfsHaPodr) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_podr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Port Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::P408pfsHaPidr {
+    pub const fn pidr(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::P408pfsHaPidr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::P408pfsHaPidr) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_pidr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Port Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::P408pfsHaPdr {
+    pub const fn pdr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::P408pfsHaPdr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Port Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::P408pfsHaPdr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_pdr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2980,14 +2980,14 @@ impl P408pfsHa {
     #[doc = "Pull-up Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pcr(&self) -> super::vals::P408pfsHaPcr {
+    pub const fn pcr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::P408pfsHaPcr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pull-up Control"]
     #[inline(always)]
-    pub const fn set_pcr(&mut self, val: super::vals::P408pfsHaPcr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_pcr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -3004,14 +3004,14 @@ impl P408pfsHa {
     #[doc = "N-Channel Open Drain Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ncodr(&self) -> super::vals::P408pfsHaNcodr {
+    pub const fn ncodr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::P408pfsHaNcodr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "N-Channel Open Drain Control"]
     #[inline(always)]
-    pub const fn set_ncodr(&mut self, val: super::vals::P408pfsHaNcodr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_ncodr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -3028,74 +3028,74 @@ impl P408pfsHa {
     #[doc = "Drive Strength Control Register"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscr(&self) -> super::vals::P408pfsHaDscr {
+    pub const fn dscr(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::P408pfsHaDscr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Drive Strength Control Register"]
     #[inline(always)]
-    pub const fn set_dscr(&mut self, val: super::vals::P408pfsHaDscr) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_dscr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "Drive Strength Control Register"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscr1(&self) -> super::vals::P408pfsHaDscr1 {
+    pub const fn dscr1(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::P408pfsHaDscr1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Drive Strength Control Register"]
     #[inline(always)]
-    pub const fn set_dscr1(&mut self, val: super::vals::P408pfsHaDscr1) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u16) & 0x01) << 11usize);
+    pub const fn set_dscr1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u16) & 0x01) << 11usize);
     }
     #[doc = "Event on Rising"]
     #[must_use]
     #[inline(always)]
-    pub const fn eor(&self) -> super::vals::P408pfsHaEor {
+    pub const fn eor(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::P408pfsHaEor::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Rising"]
     #[inline(always)]
-    pub const fn set_eor(&mut self, val: super::vals::P408pfsHaEor) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u16) & 0x01) << 12usize);
+    pub const fn set_eor(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u16) & 0x01) << 12usize);
     }
     #[doc = "Event on Falling"]
     #[must_use]
     #[inline(always)]
-    pub const fn eof(&self) -> super::vals::P408pfsHaEof {
+    pub const fn eof(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::P408pfsHaEof::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Event on Falling"]
     #[inline(always)]
-    pub const fn set_eof(&mut self, val: super::vals::P408pfsHaEof) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u16) & 0x01) << 13usize);
+    pub const fn set_eof(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u16) & 0x01) << 13usize);
     }
     #[doc = "IRQ input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn isel(&self) -> super::vals::P408pfsHaIsel {
+    pub const fn isel(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::P408pfsHaIsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "IRQ input enable"]
     #[inline(always)]
-    pub const fn set_isel(&mut self, val: super::vals::P408pfsHaIsel) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_isel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "Analog Input enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asel(&self) -> super::vals::P408pfsHaAsel {
+    pub const fn asel(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::P408pfsHaAsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Analog Input enable"]
     #[inline(always)]
-    pub const fn set_asel(&mut self, val: super::vals::P408pfsHaAsel) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_asel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for P408pfsHa {
@@ -3129,7 +3129,7 @@ impl defmt::Format for P408pfsHa {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "P408pfsHa {{ podr: {:?}, pidr: {:?}, pdr: {:?}, reserved: {=bool:?}, pcr: {:?}, reserved_2: {=bool:?}, ncodr: {:?}, reserved_3: {=u8:?}, dscr: {:?}, dscr1: {:?}, eor: {:?}, eof: {:?}, isel: {:?}, asel: {:?} }}",
+            "P408pfsHa {{ podr: {=bool:?}, pidr: {=bool:?}, pdr: {=bool:?}, reserved: {=bool:?}, pcr: {=bool:?}, reserved_2: {=bool:?}, ncodr: {=bool:?}, reserved_3: {=u8:?}, dscr: {=bool:?}, dscr1: {=bool:?}, eor: {=bool:?}, eof: {=bool:?}, isel: {=bool:?}, asel: {=bool:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),

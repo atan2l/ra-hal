@@ -54,14 +54,14 @@ impl Gtber {
     #[doc = "GTCCRA and GTCCRB Forcible Buffer Operation This bit is read as 0."]
     #[must_use]
     #[inline(always)]
-    pub const fn ccrswt(&self) -> super::vals::Ccrswt {
+    pub const fn ccrswt(&self) -> bool {
         let val = (self.0 >> 22usize) & 0x01;
-        super::vals::Ccrswt::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTCCRA and GTCCRB Forcible Buffer Operation This bit is read as 0."]
     #[inline(always)]
-    pub const fn set_ccrswt(&mut self, val: super::vals::Ccrswt) {
-        self.0 = (self.0 & !(0x01 << 22usize)) | (((val.to_bits() as u32) & 0x01) << 22usize);
+    pub const fn set_ccrswt(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 22usize)) | (((val as u32) & 0x01) << 22usize);
     }
 }
 impl Default for Gtber {
@@ -86,7 +86,7 @@ impl defmt::Format for Gtber {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtber {{ bd: {:?}, ccra: {:?}, ccrb: {:?}, pr: {:?}, ccrswt: {:?} }}",
+            "Gtber {{ bd: {:?}, ccra: {:?}, ccrb: {:?}, pr: {:?}, ccrswt: {=bool:?} }}",
             self.bd(),
             self.ccra(),
             self.ccrb(),
@@ -325,98 +325,98 @@ impl Gtclr {
     #[doc = "Channel 0 GTCNT Count Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn cclr0(&self) -> super::vals::Cclr0 {
+    pub const fn cclr0(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cclr0::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 0 GTCNT Count Clear"]
     #[inline(always)]
-    pub const fn set_cclr0(&mut self, val: super::vals::Cclr0) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_cclr0(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Channel 1 GTCNT Count Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn cclr1(&self) -> super::vals::Cclr1 {
+    pub const fn cclr1(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cclr1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 1 GTCNT Count Clear"]
     #[inline(always)]
-    pub const fn set_cclr1(&mut self, val: super::vals::Cclr1) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_cclr1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "Channel 2 GTCNT Count Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn cclr2(&self) -> super::vals::Cclr2 {
+    pub const fn cclr2(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Cclr2::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 2 GTCNT Count Clear"]
     #[inline(always)]
-    pub const fn set_cclr2(&mut self, val: super::vals::Cclr2) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_cclr2(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "Channel 3 GTCNT Count Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn cclr3(&self) -> super::vals::Cclr3 {
+    pub const fn cclr3(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Cclr3::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 3 GTCNT Count Clear"]
     #[inline(always)]
-    pub const fn set_cclr3(&mut self, val: super::vals::Cclr3) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_cclr3(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "Channel 4 GTCNT Count Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn cclr4(&self) -> super::vals::Cclr4 {
+    pub const fn cclr4(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Cclr4::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 4 GTCNT Count Clear"]
     #[inline(always)]
-    pub const fn set_cclr4(&mut self, val: super::vals::Cclr4) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u32) & 0x01) << 4usize);
+    pub const fn set_cclr4(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
     }
     #[doc = "Channel 5 GTCNT Count Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn cclr5(&self) -> super::vals::Cclr5 {
+    pub const fn cclr5(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Cclr5::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 5 GTCNT Count Clear"]
     #[inline(always)]
-    pub const fn set_cclr5(&mut self, val: super::vals::Cclr5) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u32) & 0x01) << 5usize);
+    pub const fn set_cclr5(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u32) & 0x01) << 5usize);
     }
     #[doc = "Channel 6 GTCNT Count Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn cclr6(&self) -> super::vals::Cclr6 {
+    pub const fn cclr6(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Cclr6::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 6 GTCNT Count Clear"]
     #[inline(always)]
-    pub const fn set_cclr6(&mut self, val: super::vals::Cclr6) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u32) & 0x01) << 6usize);
+    pub const fn set_cclr6(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
     }
     #[doc = "Channel 7 GTCNT Count Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn cclr7(&self) -> super::vals::Cclr7 {
+    pub const fn cclr7(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Cclr7::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 7 GTCNT Count Clear"]
     #[inline(always)]
-    pub const fn set_cclr7(&mut self, val: super::vals::Cclr7) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u32) & 0x01) << 7usize);
+    pub const fn set_cclr7(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u32) & 0x01) << 7usize);
     }
     #[doc = "The write value should be 000000000000000000000000."]
     #[must_use]
@@ -457,7 +457,7 @@ impl defmt::Format for Gtclr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtclr {{ cclr0: {:?}, cclr1: {:?}, cclr2: {:?}, cclr3: {:?}, cclr4: {:?}, cclr5: {:?}, cclr6: {:?}, cclr7: {:?}, reserved: {=u32:?} }}",
+            "Gtclr {{ cclr0: {=bool:?}, cclr1: {=bool:?}, cclr2: {=bool:?}, cclr3: {=bool:?}, cclr4: {=bool:?}, cclr5: {=bool:?}, cclr6: {=bool:?}, cclr7: {=bool:?}, reserved: {=u32:?} }}",
             self.cclr0(),
             self.cclr1(),
             self.cclr2(),
@@ -515,14 +515,14 @@ impl Gtcr {
     #[doc = "Count Start"]
     #[must_use]
     #[inline(always)]
-    pub const fn cst(&self) -> super::vals::Cst {
+    pub const fn cst(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cst::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Count Start"]
     #[inline(always)]
-    pub const fn set_cst(&mut self, val: super::vals::Cst) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_cst(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 000000000000000. The write value should be 000000000000000."]
     #[must_use]
@@ -595,7 +595,7 @@ impl defmt::Format for Gtcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtcr {{ cst: {:?}, reserved: {=u16:?}, md: {:?}, reserved_2: {=u8:?}, tpcs: {:?} }}",
+            "Gtcr {{ cst: {=bool:?}, reserved: {=u16:?}, md: {:?}, reserved_2: {=u8:?}, tpcs: {:?} }}",
             self.cst(),
             self.reserved(),
             self.md(),
@@ -612,50 +612,50 @@ impl Gtcsr {
     #[doc = "GTETRGA Pin Rising Input Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn csgtrgar(&self) -> super::vals::Csgtrgar {
+    pub const fn csgtrgar(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Csgtrgar::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Rising Input Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_csgtrgar(&mut self, val: super::vals::Csgtrgar) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_csgtrgar(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "GTETRGA Pin Falling Input Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn csgtrgaf(&self) -> super::vals::Csgtrgaf {
+    pub const fn csgtrgaf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Csgtrgaf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Falling Input Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_csgtrgaf(&mut self, val: super::vals::Csgtrgaf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_csgtrgaf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "GTETRGB Pin Rising Input Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn csgtrgbr(&self) -> super::vals::Csgtrgbr {
+    pub const fn csgtrgbr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Csgtrgbr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Rising Input Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_csgtrgbr(&mut self, val: super::vals::Csgtrgbr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_csgtrgbr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "GTETRGB Pin Falling Input Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn csgtrgbf(&self) -> super::vals::Csgtrgbf {
+    pub const fn csgtrgbf(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Csgtrgbf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Falling Input Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_csgtrgbf(&mut self, val: super::vals::Csgtrgbf) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_csgtrgbf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 0000. The write value should be 0000."]
     #[must_use]
@@ -672,194 +672,194 @@ impl Gtcsr {
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cscarbl(&self) -> super::vals::Cscarbl {
+    pub const fn cscarbl(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Cscarbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cscarbl(&mut self, val: super::vals::Cscarbl) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u32) & 0x01) << 8usize);
+    pub const fn set_cscarbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u32) & 0x01) << 8usize);
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cscarbh(&self) -> super::vals::Cscarbh {
+    pub const fn cscarbh(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Cscarbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cscarbh(&mut self, val: super::vals::Cscarbh) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u32) & 0x01) << 9usize);
+    pub const fn set_cscarbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u32) & 0x01) << 9usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cscafbl(&self) -> super::vals::Cscafbl {
+    pub const fn cscafbl(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Cscafbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cscafbl(&mut self, val: super::vals::Cscafbl) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_cscafbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cscafbh(&self) -> super::vals::Cscafbh {
+    pub const fn cscafbh(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Cscafbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cscafbh(&mut self, val: super::vals::Cscafbh) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u32) & 0x01) << 11usize);
+    pub const fn set_cscafbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u32) & 0x01) << 11usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cscbral(&self) -> super::vals::Cscbral {
+    pub const fn cscbral(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Cscbral::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cscbral(&mut self, val: super::vals::Cscbral) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u32) & 0x01) << 12usize);
+    pub const fn set_cscbral(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u32) & 0x01) << 12usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cscbrah(&self) -> super::vals::Cscbrah {
+    pub const fn cscbrah(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Cscbrah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cscbrah(&mut self, val: super::vals::Cscbrah) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u32) & 0x01) << 13usize);
+    pub const fn set_cscbrah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cscbfal(&self) -> super::vals::Cscbfal {
+    pub const fn cscbfal(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Cscbfal::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cscbfal(&mut self, val: super::vals::Cscbfal) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_cscbfal(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cscbfah(&self) -> super::vals::Cscbfah {
+    pub const fn cscbfah(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Cscbfah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cscbfah(&mut self, val: super::vals::Cscbfah) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_cscbfah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "ELC_GPTA Event Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cselca(&self) -> super::vals::Cselca {
+    pub const fn cselca(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::Cselca::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTA Event Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cselca(&mut self, val: super::vals::Cselca) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_cselca(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "ELC_GPTB Event Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cselcb(&self) -> super::vals::Cselcb {
+    pub const fn cselcb(&self) -> bool {
         let val = (self.0 >> 17usize) & 0x01;
-        super::vals::Cselcb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTB Event Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cselcb(&mut self, val: super::vals::Cselcb) {
-        self.0 = (self.0 & !(0x01 << 17usize)) | (((val.to_bits() as u32) & 0x01) << 17usize);
+    pub const fn set_cselcb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 17usize)) | (((val as u32) & 0x01) << 17usize);
     }
     #[doc = "ELC_GPTC Event Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cselcc(&self) -> super::vals::Cselcc {
+    pub const fn cselcc(&self) -> bool {
         let val = (self.0 >> 18usize) & 0x01;
-        super::vals::Cselcc::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTC Event Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cselcc(&mut self, val: super::vals::Cselcc) {
-        self.0 = (self.0 & !(0x01 << 18usize)) | (((val.to_bits() as u32) & 0x01) << 18usize);
+    pub const fn set_cselcc(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 18usize)) | (((val as u32) & 0x01) << 18usize);
     }
     #[doc = "ELC_GPTD Event Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cselcd(&self) -> super::vals::Cselcd {
+    pub const fn cselcd(&self) -> bool {
         let val = (self.0 >> 19usize) & 0x01;
-        super::vals::Cselcd::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTD Event Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cselcd(&mut self, val: super::vals::Cselcd) {
-        self.0 = (self.0 & !(0x01 << 19usize)) | (((val.to_bits() as u32) & 0x01) << 19usize);
+    pub const fn set_cselcd(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 19usize)) | (((val as u32) & 0x01) << 19usize);
     }
     #[doc = "ELC_GPTE Event Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cselce(&self) -> super::vals::Cselce {
+    pub const fn cselce(&self) -> bool {
         let val = (self.0 >> 20usize) & 0x01;
-        super::vals::Cselce::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTE Event Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cselce(&mut self, val: super::vals::Cselce) {
-        self.0 = (self.0 & !(0x01 << 20usize)) | (((val.to_bits() as u32) & 0x01) << 20usize);
+    pub const fn set_cselce(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 20usize)) | (((val as u32) & 0x01) << 20usize);
     }
     #[doc = "ELC_GPTF Event Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cselcf(&self) -> super::vals::Cselcf {
+    pub const fn cselcf(&self) -> bool {
         let val = (self.0 >> 21usize) & 0x01;
-        super::vals::Cselcf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTF Event Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cselcf(&mut self, val: super::vals::Cselcf) {
-        self.0 = (self.0 & !(0x01 << 21usize)) | (((val.to_bits() as u32) & 0x01) << 21usize);
+    pub const fn set_cselcf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 21usize)) | (((val as u32) & 0x01) << 21usize);
     }
     #[doc = "ELC_GPTG Event Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cselcg(&self) -> super::vals::Cselcg {
+    pub const fn cselcg(&self) -> bool {
         let val = (self.0 >> 22usize) & 0x01;
-        super::vals::Cselcg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTG Event Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cselcg(&mut self, val: super::vals::Cselcg) {
-        self.0 = (self.0 & !(0x01 << 22usize)) | (((val.to_bits() as u32) & 0x01) << 22usize);
+    pub const fn set_cselcg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 22usize)) | (((val as u32) & 0x01) << 22usize);
     }
     #[doc = "ELC_GPTH Event Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cselch(&self) -> super::vals::Cselch {
+    pub const fn cselch(&self) -> bool {
         let val = (self.0 >> 23usize) & 0x01;
-        super::vals::Cselch::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTH Event Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cselch(&mut self, val: super::vals::Cselch) {
-        self.0 = (self.0 & !(0x01 << 23usize)) | (((val.to_bits() as u32) & 0x01) << 23usize);
+    pub const fn set_cselch(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 23usize)) | (((val as u32) & 0x01) << 23usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -876,14 +876,14 @@ impl Gtcsr {
     #[doc = "Software Source Counter Clear Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cclr(&self) -> super::vals::Cclr {
+    pub const fn cclr(&self) -> bool {
         let val = (self.0 >> 31usize) & 0x01;
-        super::vals::Cclr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Software Source Counter Clear Enable"]
     #[inline(always)]
-    pub const fn set_cclr(&mut self, val: super::vals::Cclr) {
-        self.0 = (self.0 & !(0x01 << 31usize)) | (((val.to_bits() as u32) & 0x01) << 31usize);
+    pub const fn set_cclr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 31usize)) | (((val as u32) & 0x01) << 31usize);
     }
 }
 impl Default for Gtcsr {
@@ -926,7 +926,7 @@ impl defmt::Format for Gtcsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtcsr {{ csgtrgar: {:?}, csgtrgaf: {:?}, csgtrgbr: {:?}, csgtrgbf: {:?}, reserved: {=u8:?}, cscarbl: {:?}, cscarbh: {:?}, cscafbl: {:?}, cscafbh: {:?}, cscbral: {:?}, cscbrah: {:?}, cscbfal: {:?}, cscbfah: {:?}, cselca: {:?}, cselcb: {:?}, cselcc: {:?}, cselcd: {:?}, cselce: {:?}, cselcf: {:?}, cselcg: {:?}, cselch: {:?}, reserved_2: {=u8:?}, cclr: {:?} }}",
+            "Gtcsr {{ csgtrgar: {=bool:?}, csgtrgaf: {=bool:?}, csgtrgbr: {=bool:?}, csgtrgbf: {=bool:?}, reserved: {=u8:?}, cscarbl: {=bool:?}, cscarbh: {=bool:?}, cscafbl: {=bool:?}, cscafbh: {=bool:?}, cscbral: {=bool:?}, cscbrah: {=bool:?}, cscbfal: {=bool:?}, cscbfah: {=bool:?}, cselca: {=bool:?}, cselcb: {=bool:?}, cselcc: {=bool:?}, cselcd: {=bool:?}, cselce: {=bool:?}, cselcf: {=bool:?}, cselcg: {=bool:?}, cselch: {=bool:?}, reserved_2: {=u8:?}, cclr: {=bool:?} }}",
             self.csgtrgar(),
             self.csgtrgaf(),
             self.csgtrgbr(),
@@ -961,242 +961,242 @@ impl Gtdnsr {
     #[doc = "GTETRGA Pin Rising Input Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dsgtrgar(&self) -> super::vals::Dsgtrgar {
+    pub const fn dsgtrgar(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Dsgtrgar::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Rising Input Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dsgtrgar(&mut self, val: super::vals::Dsgtrgar) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_dsgtrgar(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "GTETRGA Pin Falling Input Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dsgtrgaf(&self) -> super::vals::Dsgtrgaf {
+    pub const fn dsgtrgaf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Dsgtrgaf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Falling Input Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dsgtrgaf(&mut self, val: super::vals::Dsgtrgaf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_dsgtrgaf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "GTETRGB Pin Rising Input Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dsgtrgbr(&self) -> super::vals::Dsgtrgbr {
+    pub const fn dsgtrgbr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Dsgtrgbr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Rising Input Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dsgtrgbr(&mut self, val: super::vals::Dsgtrgbr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_dsgtrgbr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "GTETRGB Pin Falling Input Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dsgtrgbf(&self) -> super::vals::Dsgtrgbf {
+    pub const fn dsgtrgbf(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Dsgtrgbf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Falling Input Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dsgtrgbf(&mut self, val: super::vals::Dsgtrgbf) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_dsgtrgbf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscarbl(&self) -> super::vals::Dscarbl {
+    pub const fn dscarbl(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Dscarbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dscarbl(&mut self, val: super::vals::Dscarbl) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u32) & 0x01) << 8usize);
+    pub const fn set_dscarbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u32) & 0x01) << 8usize);
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscarbh(&self) -> super::vals::Dscarbh {
+    pub const fn dscarbh(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Dscarbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dscarbh(&mut self, val: super::vals::Dscarbh) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u32) & 0x01) << 9usize);
+    pub const fn set_dscarbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u32) & 0x01) << 9usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscafbl(&self) -> super::vals::Dscafbl {
+    pub const fn dscafbl(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Dscafbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dscafbl(&mut self, val: super::vals::Dscafbl) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_dscafbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscafbh(&self) -> super::vals::Dscafbh {
+    pub const fn dscafbh(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Dscafbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dscafbh(&mut self, val: super::vals::Dscafbh) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u32) & 0x01) << 11usize);
+    pub const fn set_dscafbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u32) & 0x01) << 11usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscbral(&self) -> super::vals::Dscbral {
+    pub const fn dscbral(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Dscbral::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dscbral(&mut self, val: super::vals::Dscbral) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u32) & 0x01) << 12usize);
+    pub const fn set_dscbral(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u32) & 0x01) << 12usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscbrah(&self) -> super::vals::Dscbrah {
+    pub const fn dscbrah(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Dscbrah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dscbrah(&mut self, val: super::vals::Dscbrah) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u32) & 0x01) << 13usize);
+    pub const fn set_dscbrah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscbfal(&self) -> super::vals::Dscbfal {
+    pub const fn dscbfal(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Dscbfal::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dscbfal(&mut self, val: super::vals::Dscbfal) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_dscbfal(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dscbfah(&self) -> super::vals::Dscbfah {
+    pub const fn dscbfah(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Dscbfah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dscbfah(&mut self, val: super::vals::Dscbfah) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_dscbfah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "ELC_GPTA Event Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dselca(&self) -> super::vals::Dselca {
+    pub const fn dselca(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::Dselca::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTA Event Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dselca(&mut self, val: super::vals::Dselca) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_dselca(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "ELC_GPTB Event Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dselcb(&self) -> super::vals::Dselcb {
+    pub const fn dselcb(&self) -> bool {
         let val = (self.0 >> 17usize) & 0x01;
-        super::vals::Dselcb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTB Event Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dselcb(&mut self, val: super::vals::Dselcb) {
-        self.0 = (self.0 & !(0x01 << 17usize)) | (((val.to_bits() as u32) & 0x01) << 17usize);
+    pub const fn set_dselcb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 17usize)) | (((val as u32) & 0x01) << 17usize);
     }
     #[doc = "ELC_GPTC Event Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dselcc(&self) -> super::vals::Dselcc {
+    pub const fn dselcc(&self) -> bool {
         let val = (self.0 >> 18usize) & 0x01;
-        super::vals::Dselcc::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTC Event Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dselcc(&mut self, val: super::vals::Dselcc) {
-        self.0 = (self.0 & !(0x01 << 18usize)) | (((val.to_bits() as u32) & 0x01) << 18usize);
+    pub const fn set_dselcc(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 18usize)) | (((val as u32) & 0x01) << 18usize);
     }
     #[doc = "ELC_GPTD Event Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dselcd(&self) -> super::vals::Dselcd {
+    pub const fn dselcd(&self) -> bool {
         let val = (self.0 >> 19usize) & 0x01;
-        super::vals::Dselcd::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTD Event Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dselcd(&mut self, val: super::vals::Dselcd) {
-        self.0 = (self.0 & !(0x01 << 19usize)) | (((val.to_bits() as u32) & 0x01) << 19usize);
+    pub const fn set_dselcd(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 19usize)) | (((val as u32) & 0x01) << 19usize);
     }
     #[doc = "ELC_GPTE Event Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dselce(&self) -> super::vals::Dselce {
+    pub const fn dselce(&self) -> bool {
         let val = (self.0 >> 20usize) & 0x01;
-        super::vals::Dselce::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTE Event Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dselce(&mut self, val: super::vals::Dselce) {
-        self.0 = (self.0 & !(0x01 << 20usize)) | (((val.to_bits() as u32) & 0x01) << 20usize);
+    pub const fn set_dselce(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 20usize)) | (((val as u32) & 0x01) << 20usize);
     }
     #[doc = "ELC_GPTF Event Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dselcf(&self) -> super::vals::Dselcf {
+    pub const fn dselcf(&self) -> bool {
         let val = (self.0 >> 21usize) & 0x01;
-        super::vals::Dselcf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTF Event Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dselcf(&mut self, val: super::vals::Dselcf) {
-        self.0 = (self.0 & !(0x01 << 21usize)) | (((val.to_bits() as u32) & 0x01) << 21usize);
+    pub const fn set_dselcf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 21usize)) | (((val as u32) & 0x01) << 21usize);
     }
     #[doc = "ELC_GPTG Event Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dselcg(&self) -> super::vals::Dselcg {
+    pub const fn dselcg(&self) -> bool {
         let val = (self.0 >> 22usize) & 0x01;
-        super::vals::Dselcg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTG Event Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dselcg(&mut self, val: super::vals::Dselcg) {
-        self.0 = (self.0 & !(0x01 << 22usize)) | (((val.to_bits() as u32) & 0x01) << 22usize);
+    pub const fn set_dselcg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 22usize)) | (((val as u32) & 0x01) << 22usize);
     }
     #[doc = "ELC_GPTH Event Source Counter Count Down Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dselch(&self) -> super::vals::Dselch {
+    pub const fn dselch(&self) -> bool {
         let val = (self.0 >> 23usize) & 0x01;
-        super::vals::Dselch::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTH Event Source Counter Count Down Enable"]
     #[inline(always)]
-    pub const fn set_dselch(&mut self, val: super::vals::Dselch) {
-        self.0 = (self.0 & !(0x01 << 23usize)) | (((val.to_bits() as u32) & 0x01) << 23usize);
+    pub const fn set_dselch(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 23usize)) | (((val as u32) & 0x01) << 23usize);
     }
 }
 impl Default for Gtdnsr {
@@ -1236,7 +1236,7 @@ impl defmt::Format for Gtdnsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtdnsr {{ dsgtrgar: {:?}, dsgtrgaf: {:?}, dsgtrgbr: {:?}, dsgtrgbf: {:?}, dscarbl: {:?}, dscarbh: {:?}, dscafbl: {:?}, dscafbh: {:?}, dscbral: {:?}, dscbrah: {:?}, dscbfal: {:?}, dscbfah: {:?}, dselca: {:?}, dselcb: {:?}, dselcc: {:?}, dselcd: {:?}, dselce: {:?}, dselcf: {:?}, dselcg: {:?}, dselch: {:?} }}",
+            "Gtdnsr {{ dsgtrgar: {=bool:?}, dsgtrgaf: {=bool:?}, dsgtrgbr: {=bool:?}, dsgtrgbf: {=bool:?}, dscarbl: {=bool:?}, dscarbh: {=bool:?}, dscafbl: {=bool:?}, dscafbh: {=bool:?}, dscbral: {=bool:?}, dscbrah: {=bool:?}, dscbfal: {=bool:?}, dscbfah: {=bool:?}, dselca: {=bool:?}, dselcb: {=bool:?}, dselcc: {=bool:?}, dselcd: {=bool:?}, dselce: {=bool:?}, dselcf: {=bool:?}, dselcg: {=bool:?}, dselch: {=bool:?} }}",
             self.dsgtrgar(),
             self.dsgtrgaf(),
             self.dsgtrgbr(),
@@ -1268,14 +1268,14 @@ impl Gtdtcr {
     #[doc = "Negative-Phase Waveform Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn tde(&self) -> super::vals::Tde {
+    pub const fn tde(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Tde::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Negative-Phase Waveform Setting"]
     #[inline(always)]
-    pub const fn set_tde(&mut self, val: super::vals::Tde) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_tde(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -1374,7 +1374,7 @@ impl defmt::Format for Gtdtcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtdtcr {{ tde: {:?}, reserved: {=u8:?}, reserved_2: {=bool:?}, reserved_3: {=bool:?}, reserved_4: {=u8:?}, reserved_5: {=bool:?}, reserved_6: {=u32:?} }}",
+            "Gtdtcr {{ tde: {=bool:?}, reserved: {=u8:?}, reserved_2: {=bool:?}, reserved_3: {=bool:?}, reserved_4: {=u8:?}, reserved_5: {=bool:?}, reserved_6: {=u32:?} }}",
             self.tde(),
             self.reserved(),
             self.reserved_2(),
@@ -1430,242 +1430,242 @@ impl Gticasr {
     #[doc = "GTETRGA Pin Rising Input Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asgtrgar(&self) -> super::vals::Asgtrgar {
+    pub const fn asgtrgar(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Asgtrgar::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Rising Input Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_asgtrgar(&mut self, val: super::vals::Asgtrgar) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_asgtrgar(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "GTETRGA Pin Falling Input Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asgtrgaf(&self) -> super::vals::Asgtrgaf {
+    pub const fn asgtrgaf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Asgtrgaf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Falling Input Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_asgtrgaf(&mut self, val: super::vals::Asgtrgaf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_asgtrgaf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "GTETRGB Pin Rising Input Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asgtrgbr(&self) -> super::vals::Asgtrgbr {
+    pub const fn asgtrgbr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Asgtrgbr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Rising Input Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_asgtrgbr(&mut self, val: super::vals::Asgtrgbr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_asgtrgbr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "GTETRGB Pin Falling Input Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn asgtrgbf(&self) -> super::vals::Asgtrgbf {
+    pub const fn asgtrgbf(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Asgtrgbf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Falling Input Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_asgtrgbf(&mut self, val: super::vals::Asgtrgbf) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_asgtrgbf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ascarbl(&self) -> super::vals::Ascarbl {
+    pub const fn ascarbl(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Ascarbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_ascarbl(&mut self, val: super::vals::Ascarbl) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u32) & 0x01) << 8usize);
+    pub const fn set_ascarbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u32) & 0x01) << 8usize);
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ascarbh(&self) -> super::vals::Ascarbh {
+    pub const fn ascarbh(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Ascarbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_ascarbh(&mut self, val: super::vals::Ascarbh) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u32) & 0x01) << 9usize);
+    pub const fn set_ascarbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u32) & 0x01) << 9usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ascafbl(&self) -> super::vals::Ascafbl {
+    pub const fn ascafbl(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Ascafbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_ascafbl(&mut self, val: super::vals::Ascafbl) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_ascafbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ascafbh(&self) -> super::vals::Ascafbh {
+    pub const fn ascafbh(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Ascafbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_ascafbh(&mut self, val: super::vals::Ascafbh) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u32) & 0x01) << 11usize);
+    pub const fn set_ascafbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u32) & 0x01) << 11usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ascbral(&self) -> super::vals::Ascbral {
+    pub const fn ascbral(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Ascbral::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_ascbral(&mut self, val: super::vals::Ascbral) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u32) & 0x01) << 12usize);
+    pub const fn set_ascbral(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u32) & 0x01) << 12usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ascbrah(&self) -> super::vals::Ascbrah {
+    pub const fn ascbrah(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Ascbrah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_ascbrah(&mut self, val: super::vals::Ascbrah) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u32) & 0x01) << 13usize);
+    pub const fn set_ascbrah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ascbfal(&self) -> super::vals::Ascbfal {
+    pub const fn ascbfal(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Ascbfal::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_ascbfal(&mut self, val: super::vals::Ascbfal) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_ascbfal(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ascbfah(&self) -> super::vals::Ascbfah {
+    pub const fn ascbfah(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Ascbfah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_ascbfah(&mut self, val: super::vals::Ascbfah) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_ascbfah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "ELC_GPTA Event Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn aselca(&self) -> super::vals::Aselca {
+    pub const fn aselca(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::Aselca::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTA Event Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_aselca(&mut self, val: super::vals::Aselca) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_aselca(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "ELC_GPTB Event Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn aselcb(&self) -> super::vals::Aselcb {
+    pub const fn aselcb(&self) -> bool {
         let val = (self.0 >> 17usize) & 0x01;
-        super::vals::Aselcb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTB Event Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_aselcb(&mut self, val: super::vals::Aselcb) {
-        self.0 = (self.0 & !(0x01 << 17usize)) | (((val.to_bits() as u32) & 0x01) << 17usize);
+    pub const fn set_aselcb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 17usize)) | (((val as u32) & 0x01) << 17usize);
     }
     #[doc = "ELC_GPTC Event Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn aselcc(&self) -> super::vals::Aselcc {
+    pub const fn aselcc(&self) -> bool {
         let val = (self.0 >> 18usize) & 0x01;
-        super::vals::Aselcc::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTC Event Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_aselcc(&mut self, val: super::vals::Aselcc) {
-        self.0 = (self.0 & !(0x01 << 18usize)) | (((val.to_bits() as u32) & 0x01) << 18usize);
+    pub const fn set_aselcc(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 18usize)) | (((val as u32) & 0x01) << 18usize);
     }
     #[doc = "ELC_GPTD Event Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn aselcd(&self) -> super::vals::Aselcd {
+    pub const fn aselcd(&self) -> bool {
         let val = (self.0 >> 19usize) & 0x01;
-        super::vals::Aselcd::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTD Event Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_aselcd(&mut self, val: super::vals::Aselcd) {
-        self.0 = (self.0 & !(0x01 << 19usize)) | (((val.to_bits() as u32) & 0x01) << 19usize);
+    pub const fn set_aselcd(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 19usize)) | (((val as u32) & 0x01) << 19usize);
     }
     #[doc = "ELC_GPTE Event Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn aselce(&self) -> super::vals::Aselce {
+    pub const fn aselce(&self) -> bool {
         let val = (self.0 >> 20usize) & 0x01;
-        super::vals::Aselce::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTE Event Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_aselce(&mut self, val: super::vals::Aselce) {
-        self.0 = (self.0 & !(0x01 << 20usize)) | (((val.to_bits() as u32) & 0x01) << 20usize);
+    pub const fn set_aselce(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 20usize)) | (((val as u32) & 0x01) << 20usize);
     }
     #[doc = "ELC_GPTF Event Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn aselcf(&self) -> super::vals::Aselcf {
+    pub const fn aselcf(&self) -> bool {
         let val = (self.0 >> 21usize) & 0x01;
-        super::vals::Aselcf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTF Event Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_aselcf(&mut self, val: super::vals::Aselcf) {
-        self.0 = (self.0 & !(0x01 << 21usize)) | (((val.to_bits() as u32) & 0x01) << 21usize);
+    pub const fn set_aselcf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 21usize)) | (((val as u32) & 0x01) << 21usize);
     }
     #[doc = "ELC_GPTG Event Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn aselcg(&self) -> super::vals::Aselcg {
+    pub const fn aselcg(&self) -> bool {
         let val = (self.0 >> 22usize) & 0x01;
-        super::vals::Aselcg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTG Event Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_aselcg(&mut self, val: super::vals::Aselcg) {
-        self.0 = (self.0 & !(0x01 << 22usize)) | (((val.to_bits() as u32) & 0x01) << 22usize);
+    pub const fn set_aselcg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 22usize)) | (((val as u32) & 0x01) << 22usize);
     }
     #[doc = "ELC_GPTH Event Source GTCCRA Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn aselch(&self) -> super::vals::Aselch {
+    pub const fn aselch(&self) -> bool {
         let val = (self.0 >> 23usize) & 0x01;
-        super::vals::Aselch::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTH Event Source GTCCRA Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_aselch(&mut self, val: super::vals::Aselch) {
-        self.0 = (self.0 & !(0x01 << 23usize)) | (((val.to_bits() as u32) & 0x01) << 23usize);
+    pub const fn set_aselch(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 23usize)) | (((val as u32) & 0x01) << 23usize);
     }
 }
 impl Default for Gticasr {
@@ -1705,7 +1705,7 @@ impl defmt::Format for Gticasr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gticasr {{ asgtrgar: {:?}, asgtrgaf: {:?}, asgtrgbr: {:?}, asgtrgbf: {:?}, ascarbl: {:?}, ascarbh: {:?}, ascafbl: {:?}, ascafbh: {:?}, ascbral: {:?}, ascbrah: {:?}, ascbfal: {:?}, ascbfah: {:?}, aselca: {:?}, aselcb: {:?}, aselcc: {:?}, aselcd: {:?}, aselce: {:?}, aselcf: {:?}, aselcg: {:?}, aselch: {:?} }}",
+            "Gticasr {{ asgtrgar: {=bool:?}, asgtrgaf: {=bool:?}, asgtrgbr: {=bool:?}, asgtrgbf: {=bool:?}, ascarbl: {=bool:?}, ascarbh: {=bool:?}, ascafbl: {=bool:?}, ascafbh: {=bool:?}, ascbral: {=bool:?}, ascbrah: {=bool:?}, ascbfal: {=bool:?}, ascbfah: {=bool:?}, aselca: {=bool:?}, aselcb: {=bool:?}, aselcc: {=bool:?}, aselcd: {=bool:?}, aselce: {=bool:?}, aselcf: {=bool:?}, aselcg: {=bool:?}, aselch: {=bool:?} }}",
             self.asgtrgar(),
             self.asgtrgaf(),
             self.asgtrgbr(),
@@ -1737,242 +1737,242 @@ impl Gticbsr {
     #[doc = "GTETRGA Pin Rising Input Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bsgtrgar(&self) -> super::vals::Bsgtrgar {
+    pub const fn bsgtrgar(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Bsgtrgar::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Rising Input Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bsgtrgar(&mut self, val: super::vals::Bsgtrgar) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_bsgtrgar(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "GTETRGA Pin Falling Input Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bsgtrgaf(&self) -> super::vals::Bsgtrgaf {
+    pub const fn bsgtrgaf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Bsgtrgaf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Falling Input Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bsgtrgaf(&mut self, val: super::vals::Bsgtrgaf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_bsgtrgaf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "GTETRGB Pin Rising Input Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bsgtrgbr(&self) -> super::vals::Bsgtrgbr {
+    pub const fn bsgtrgbr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Bsgtrgbr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Rising Input Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bsgtrgbr(&mut self, val: super::vals::Bsgtrgbr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_bsgtrgbr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "GTETRGB Pin Falling Input Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bsgtrgbf(&self) -> super::vals::Bsgtrgbf {
+    pub const fn bsgtrgbf(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Bsgtrgbf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Falling Input Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bsgtrgbf(&mut self, val: super::vals::Bsgtrgbf) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_bsgtrgbf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bscarbl(&self) -> super::vals::Bscarbl {
+    pub const fn bscarbl(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Bscarbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bscarbl(&mut self, val: super::vals::Bscarbl) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u32) & 0x01) << 8usize);
+    pub const fn set_bscarbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u32) & 0x01) << 8usize);
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bscarbh(&self) -> super::vals::Bscarbh {
+    pub const fn bscarbh(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Bscarbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bscarbh(&mut self, val: super::vals::Bscarbh) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u32) & 0x01) << 9usize);
+    pub const fn set_bscarbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u32) & 0x01) << 9usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bscafbl(&self) -> super::vals::Bscafbl {
+    pub const fn bscafbl(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Bscafbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bscafbl(&mut self, val: super::vals::Bscafbl) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_bscafbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bscafbh(&self) -> super::vals::Bscafbh {
+    pub const fn bscafbh(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Bscafbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bscafbh(&mut self, val: super::vals::Bscafbh) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u32) & 0x01) << 11usize);
+    pub const fn set_bscafbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u32) & 0x01) << 11usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bscbral(&self) -> super::vals::Bscbral {
+    pub const fn bscbral(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Bscbral::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bscbral(&mut self, val: super::vals::Bscbral) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u32) & 0x01) << 12usize);
+    pub const fn set_bscbral(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u32) & 0x01) << 12usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bscbrah(&self) -> super::vals::Bscbrah {
+    pub const fn bscbrah(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Bscbrah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bscbrah(&mut self, val: super::vals::Bscbrah) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u32) & 0x01) << 13usize);
+    pub const fn set_bscbrah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bscbfal(&self) -> super::vals::Bscbfal {
+    pub const fn bscbfal(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Bscbfal::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bscbfal(&mut self, val: super::vals::Bscbfal) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_bscbfal(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bscbfah(&self) -> super::vals::Bscbfah {
+    pub const fn bscbfah(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Bscbfah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bscbfah(&mut self, val: super::vals::Bscbfah) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_bscbfah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "ELC_GPTA Event Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bselca(&self) -> super::vals::Bselca {
+    pub const fn bselca(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::Bselca::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTA Event Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bselca(&mut self, val: super::vals::Bselca) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_bselca(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "ELC_GPTB Event Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bselcb(&self) -> super::vals::Bselcb {
+    pub const fn bselcb(&self) -> bool {
         let val = (self.0 >> 17usize) & 0x01;
-        super::vals::Bselcb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTB Event Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bselcb(&mut self, val: super::vals::Bselcb) {
-        self.0 = (self.0 & !(0x01 << 17usize)) | (((val.to_bits() as u32) & 0x01) << 17usize);
+    pub const fn set_bselcb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 17usize)) | (((val as u32) & 0x01) << 17usize);
     }
     #[doc = "ELC_GPTC Event Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bselcc(&self) -> super::vals::Bselcc {
+    pub const fn bselcc(&self) -> bool {
         let val = (self.0 >> 18usize) & 0x01;
-        super::vals::Bselcc::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTC Event Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bselcc(&mut self, val: super::vals::Bselcc) {
-        self.0 = (self.0 & !(0x01 << 18usize)) | (((val.to_bits() as u32) & 0x01) << 18usize);
+    pub const fn set_bselcc(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 18usize)) | (((val as u32) & 0x01) << 18usize);
     }
     #[doc = "ELC_GPTD Event Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bselcd(&self) -> super::vals::Bselcd {
+    pub const fn bselcd(&self) -> bool {
         let val = (self.0 >> 19usize) & 0x01;
-        super::vals::Bselcd::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTD Event Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bselcd(&mut self, val: super::vals::Bselcd) {
-        self.0 = (self.0 & !(0x01 << 19usize)) | (((val.to_bits() as u32) & 0x01) << 19usize);
+    pub const fn set_bselcd(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 19usize)) | (((val as u32) & 0x01) << 19usize);
     }
     #[doc = "ELC_GPTE Event Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bselce(&self) -> super::vals::Bselce {
+    pub const fn bselce(&self) -> bool {
         let val = (self.0 >> 20usize) & 0x01;
-        super::vals::Bselce::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTE Event Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bselce(&mut self, val: super::vals::Bselce) {
-        self.0 = (self.0 & !(0x01 << 20usize)) | (((val.to_bits() as u32) & 0x01) << 20usize);
+    pub const fn set_bselce(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 20usize)) | (((val as u32) & 0x01) << 20usize);
     }
     #[doc = "ELC_GPTF Event Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bselcf(&self) -> super::vals::Bselcf {
+    pub const fn bselcf(&self) -> bool {
         let val = (self.0 >> 21usize) & 0x01;
-        super::vals::Bselcf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTF Event Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bselcf(&mut self, val: super::vals::Bselcf) {
-        self.0 = (self.0 & !(0x01 << 21usize)) | (((val.to_bits() as u32) & 0x01) << 21usize);
+    pub const fn set_bselcf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 21usize)) | (((val as u32) & 0x01) << 21usize);
     }
     #[doc = "ELC_GPTG Event Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bselcg(&self) -> super::vals::Bselcg {
+    pub const fn bselcg(&self) -> bool {
         let val = (self.0 >> 22usize) & 0x01;
-        super::vals::Bselcg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTG Event Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bselcg(&mut self, val: super::vals::Bselcg) {
-        self.0 = (self.0 & !(0x01 << 22usize)) | (((val.to_bits() as u32) & 0x01) << 22usize);
+    pub const fn set_bselcg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 22usize)) | (((val as u32) & 0x01) << 22usize);
     }
     #[doc = "ELC_GPTH Event Source GTCCRB Input Capture Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn bselch(&self) -> super::vals::Bselch {
+    pub const fn bselch(&self) -> bool {
         let val = (self.0 >> 23usize) & 0x01;
-        super::vals::Bselch::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTH Event Source GTCCRB Input Capture Enable"]
     #[inline(always)]
-    pub const fn set_bselch(&mut self, val: super::vals::Bselch) {
-        self.0 = (self.0 & !(0x01 << 23usize)) | (((val.to_bits() as u32) & 0x01) << 23usize);
+    pub const fn set_bselch(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 23usize)) | (((val as u32) & 0x01) << 23usize);
     }
 }
 impl Default for Gticbsr {
@@ -2012,7 +2012,7 @@ impl defmt::Format for Gticbsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gticbsr {{ bsgtrgar: {:?}, bsgtrgaf: {:?}, bsgtrgbr: {:?}, bsgtrgbf: {:?}, bscarbl: {:?}, bscarbh: {:?}, bscafbl: {:?}, bscafbh: {:?}, bscbral: {:?}, bscbrah: {:?}, bscbfal: {:?}, bscbfah: {:?}, bselca: {:?}, bselcb: {:?}, bselcc: {:?}, bselcd: {:?}, bselce: {:?}, bselcf: {:?}, bselcg: {:?}, bselch: {:?} }}",
+            "Gticbsr {{ bsgtrgar: {=bool:?}, bsgtrgaf: {=bool:?}, bsgtrgbr: {=bool:?}, bsgtrgbf: {=bool:?}, bscarbl: {=bool:?}, bscarbh: {=bool:?}, bscafbl: {=bool:?}, bscafbh: {=bool:?}, bscbral: {=bool:?}, bscbrah: {=bool:?}, bscbfal: {=bool:?}, bscbfah: {=bool:?}, bselca: {=bool:?}, bselcb: {=bool:?}, bselcc: {=bool:?}, bselcd: {=bool:?}, bselce: {=bool:?}, bselcf: {=bool:?}, bselcg: {=bool:?}, bselch: {=bool:?} }}",
             self.bsgtrgar(),
             self.bsgtrgaf(),
             self.bsgtrgbr(),
@@ -2080,26 +2080,26 @@ impl Gtintad {
     #[doc = "Same Time Output Level High Disable Request Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn grpabh(&self) -> super::vals::Grpabh {
+    pub const fn grpabh(&self) -> bool {
         let val = (self.0 >> 29usize) & 0x01;
-        super::vals::Grpabh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Same Time Output Level High Disable Request Enable"]
     #[inline(always)]
-    pub const fn set_grpabh(&mut self, val: super::vals::Grpabh) {
-        self.0 = (self.0 & !(0x01 << 29usize)) | (((val.to_bits() as u32) & 0x01) << 29usize);
+    pub const fn set_grpabh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 29usize)) | (((val as u32) & 0x01) << 29usize);
     }
     #[doc = "Same Time Output Level Low Disable Request Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn grpabl(&self) -> super::vals::Grpabl {
+    pub const fn grpabl(&self) -> bool {
         let val = (self.0 >> 30usize) & 0x01;
-        super::vals::Grpabl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Same Time Output Level Low Disable Request Enable"]
     #[inline(always)]
-    pub const fn set_grpabl(&mut self, val: super::vals::Grpabl) {
-        self.0 = (self.0 & !(0x01 << 30usize)) | (((val.to_bits() as u32) & 0x01) << 30usize);
+    pub const fn set_grpabl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 30usize)) | (((val as u32) & 0x01) << 30usize);
     }
 }
 impl Default for Gtintad {
@@ -2124,7 +2124,7 @@ impl defmt::Format for Gtintad {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtintad {{ reserved: {=u32:?}, grp: {:?}, reserved_2: {=u8:?}, grpabh: {:?}, grpabl: {:?} }}",
+            "Gtintad {{ reserved: {=u32:?}, grp: {:?}, reserved_2: {=u8:?}, grpabh: {=bool:?}, grpabl: {=bool:?} }}",
             self.reserved(),
             self.grp(),
             self.reserved_2(),
@@ -2165,38 +2165,38 @@ impl Gtior {
     #[doc = "GTIOCA Pin Output Value Setting at the Count Stop"]
     #[must_use]
     #[inline(always)]
-    pub const fn oadflt(&self) -> super::vals::Oadflt {
+    pub const fn oadflt(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Oadflt::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Output Value Setting at the Count Stop"]
     #[inline(always)]
-    pub const fn set_oadflt(&mut self, val: super::vals::Oadflt) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u32) & 0x01) << 6usize);
+    pub const fn set_oadflt(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
     }
     #[doc = "GTIOCA Pin Output Setting at the Start/Stop Count"]
     #[must_use]
     #[inline(always)]
-    pub const fn oahld(&self) -> super::vals::Oahld {
+    pub const fn oahld(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Oahld::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Output Setting at the Start/Stop Count"]
     #[inline(always)]
-    pub const fn set_oahld(&mut self, val: super::vals::Oahld) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u32) & 0x01) << 7usize);
+    pub const fn set_oahld(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u32) & 0x01) << 7usize);
     }
     #[doc = "GTIOCA Pin Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn oae(&self) -> super::vals::Oae {
+    pub const fn oae(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Oae::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Output Enable"]
     #[inline(always)]
-    pub const fn set_oae(&mut self, val: super::vals::Oae) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u32) & 0x01) << 8usize);
+    pub const fn set_oae(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u32) & 0x01) << 8usize);
     }
     #[doc = "GTIOCA Pin Disable Value Setting"]
     #[must_use]
@@ -2225,14 +2225,14 @@ impl Gtior {
     #[doc = "Noise Filter A Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn nfaen(&self) -> super::vals::Nfaen {
+    pub const fn nfaen(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Nfaen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Noise Filter A Enable"]
     #[inline(always)]
-    pub const fn set_nfaen(&mut self, val: super::vals::Nfaen) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u32) & 0x01) << 13usize);
+    pub const fn set_nfaen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
     }
     #[doc = "Noise Filter A Sampling Clock Select"]
     #[must_use]
@@ -2273,38 +2273,38 @@ impl Gtior {
     #[doc = "GTIOCB Pin Output Value Setting at the Count Stop"]
     #[must_use]
     #[inline(always)]
-    pub const fn obdflt(&self) -> super::vals::Obdflt {
+    pub const fn obdflt(&self) -> bool {
         let val = (self.0 >> 22usize) & 0x01;
-        super::vals::Obdflt::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Output Value Setting at the Count Stop"]
     #[inline(always)]
-    pub const fn set_obdflt(&mut self, val: super::vals::Obdflt) {
-        self.0 = (self.0 & !(0x01 << 22usize)) | (((val.to_bits() as u32) & 0x01) << 22usize);
+    pub const fn set_obdflt(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 22usize)) | (((val as u32) & 0x01) << 22usize);
     }
     #[doc = "GTIOCB Pin Output Setting at the Start/Stop Count"]
     #[must_use]
     #[inline(always)]
-    pub const fn obhld(&self) -> super::vals::Obhld {
+    pub const fn obhld(&self) -> bool {
         let val = (self.0 >> 23usize) & 0x01;
-        super::vals::Obhld::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Output Setting at the Start/Stop Count"]
     #[inline(always)]
-    pub const fn set_obhld(&mut self, val: super::vals::Obhld) {
-        self.0 = (self.0 & !(0x01 << 23usize)) | (((val.to_bits() as u32) & 0x01) << 23usize);
+    pub const fn set_obhld(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 23usize)) | (((val as u32) & 0x01) << 23usize);
     }
     #[doc = "GTIOCB Pin Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn obe(&self) -> super::vals::Obe {
+    pub const fn obe(&self) -> bool {
         let val = (self.0 >> 24usize) & 0x01;
-        super::vals::Obe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Output Enable"]
     #[inline(always)]
-    pub const fn set_obe(&mut self, val: super::vals::Obe) {
-        self.0 = (self.0 & !(0x01 << 24usize)) | (((val.to_bits() as u32) & 0x01) << 24usize);
+    pub const fn set_obe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 24usize)) | (((val as u32) & 0x01) << 24usize);
     }
     #[doc = "GTIOCB Pin Disable Value Setting"]
     #[must_use]
@@ -2333,14 +2333,14 @@ impl Gtior {
     #[doc = "Noise Filter B Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn nfben(&self) -> super::vals::Nfben {
+    pub const fn nfben(&self) -> bool {
         let val = (self.0 >> 29usize) & 0x01;
-        super::vals::Nfben::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Noise Filter B Enable"]
     #[inline(always)]
-    pub const fn set_nfben(&mut self, val: super::vals::Nfben) {
-        self.0 = (self.0 & !(0x01 << 29usize)) | (((val.to_bits() as u32) & 0x01) << 29usize);
+    pub const fn set_nfben(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 29usize)) | (((val as u32) & 0x01) << 29usize);
     }
     #[doc = "Noise Filter B Sampling Clock Select"]
     #[must_use]
@@ -2390,7 +2390,7 @@ impl defmt::Format for Gtior {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtior {{ gtioa: {:?}, reserved: {=bool:?}, oadflt: {:?}, oahld: {:?}, oae: {:?}, oadf: {:?}, reserved_2: {=u8:?}, nfaen: {:?}, nfcsa: {:?}, gtiob: {:?}, reserved_3: {=bool:?}, obdflt: {:?}, obhld: {:?}, obe: {:?}, obdf: {:?}, reserved_4: {=u8:?}, nfben: {:?}, nfcsb: {:?} }}",
+            "Gtior {{ gtioa: {:?}, reserved: {=bool:?}, oadflt: {=bool:?}, oahld: {=bool:?}, oae: {=bool:?}, oadf: {:?}, reserved_2: {=u8:?}, nfaen: {=bool:?}, nfcsa: {:?}, gtiob: {:?}, reserved_3: {=bool:?}, obdflt: {=bool:?}, obhld: {=bool:?}, obe: {=bool:?}, obdf: {:?}, reserved_4: {=u8:?}, nfben: {=bool:?}, nfcsb: {:?} }}",
             self.gtioa(),
             self.reserved(),
             self.oadflt(),
@@ -2492,50 +2492,50 @@ impl Gtpsr {
     #[doc = "GTETRGA Pin Rising Input Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn psgtrgar(&self) -> super::vals::Psgtrgar {
+    pub const fn psgtrgar(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Psgtrgar::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Rising Input Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_psgtrgar(&mut self, val: super::vals::Psgtrgar) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_psgtrgar(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "GTETRGA Pin Falling Input Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn psgtrgaf(&self) -> super::vals::Psgtrgaf {
+    pub const fn psgtrgaf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Psgtrgaf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Falling Input Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_psgtrgaf(&mut self, val: super::vals::Psgtrgaf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_psgtrgaf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "GTETRGB Pin Rising Input Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn psgtrgbr(&self) -> super::vals::Psgtrgbr {
+    pub const fn psgtrgbr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Psgtrgbr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Rising Input Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_psgtrgbr(&mut self, val: super::vals::Psgtrgbr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_psgtrgbr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "GTETRGB Pin Falling Input Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn psgtrgbf(&self) -> super::vals::Psgtrgbf {
+    pub const fn psgtrgbf(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Psgtrgbf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Falling Input Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_psgtrgbf(&mut self, val: super::vals::Psgtrgbf) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_psgtrgbf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 0000. The write value should be 0000."]
     #[must_use]
@@ -2552,194 +2552,194 @@ impl Gtpsr {
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pscarbl(&self) -> super::vals::Pscarbl {
+    pub const fn pscarbl(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Pscarbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pscarbl(&mut self, val: super::vals::Pscarbl) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u32) & 0x01) << 8usize);
+    pub const fn set_pscarbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u32) & 0x01) << 8usize);
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pscarbh(&self) -> super::vals::Pscarbh {
+    pub const fn pscarbh(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Pscarbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pscarbh(&mut self, val: super::vals::Pscarbh) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u32) & 0x01) << 9usize);
+    pub const fn set_pscarbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u32) & 0x01) << 9usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pscafbl(&self) -> super::vals::Pscafbl {
+    pub const fn pscafbl(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Pscafbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pscafbl(&mut self, val: super::vals::Pscafbl) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_pscafbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pscafbh(&self) -> super::vals::Pscafbh {
+    pub const fn pscafbh(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Pscafbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pscafbh(&mut self, val: super::vals::Pscafbh) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u32) & 0x01) << 11usize);
+    pub const fn set_pscafbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u32) & 0x01) << 11usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pscbral(&self) -> super::vals::Pscbral {
+    pub const fn pscbral(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Pscbral::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pscbral(&mut self, val: super::vals::Pscbral) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u32) & 0x01) << 12usize);
+    pub const fn set_pscbral(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u32) & 0x01) << 12usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pscbrah(&self) -> super::vals::Pscbrah {
+    pub const fn pscbrah(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Pscbrah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pscbrah(&mut self, val: super::vals::Pscbrah) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u32) & 0x01) << 13usize);
+    pub const fn set_pscbrah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pscbfal(&self) -> super::vals::Pscbfal {
+    pub const fn pscbfal(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Pscbfal::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pscbfal(&mut self, val: super::vals::Pscbfal) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_pscbfal(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pscbfah(&self) -> super::vals::Pscbfah {
+    pub const fn pscbfah(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Pscbfah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pscbfah(&mut self, val: super::vals::Pscbfah) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_pscbfah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "ELC_GPTA Event Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pselca(&self) -> super::vals::Pselca {
+    pub const fn pselca(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::Pselca::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTA Event Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pselca(&mut self, val: super::vals::Pselca) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_pselca(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "ELC_GPTB Event Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pselcb(&self) -> super::vals::Pselcb {
+    pub const fn pselcb(&self) -> bool {
         let val = (self.0 >> 17usize) & 0x01;
-        super::vals::Pselcb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTB Event Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pselcb(&mut self, val: super::vals::Pselcb) {
-        self.0 = (self.0 & !(0x01 << 17usize)) | (((val.to_bits() as u32) & 0x01) << 17usize);
+    pub const fn set_pselcb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 17usize)) | (((val as u32) & 0x01) << 17usize);
     }
     #[doc = "ELC_GPTC Event Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pselcc(&self) -> super::vals::Pselcc {
+    pub const fn pselcc(&self) -> bool {
         let val = (self.0 >> 18usize) & 0x01;
-        super::vals::Pselcc::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTC Event Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pselcc(&mut self, val: super::vals::Pselcc) {
-        self.0 = (self.0 & !(0x01 << 18usize)) | (((val.to_bits() as u32) & 0x01) << 18usize);
+    pub const fn set_pselcc(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 18usize)) | (((val as u32) & 0x01) << 18usize);
     }
     #[doc = "ELC_GPTD Event Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pselcd(&self) -> super::vals::Pselcd {
+    pub const fn pselcd(&self) -> bool {
         let val = (self.0 >> 19usize) & 0x01;
-        super::vals::Pselcd::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTD Event Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pselcd(&mut self, val: super::vals::Pselcd) {
-        self.0 = (self.0 & !(0x01 << 19usize)) | (((val.to_bits() as u32) & 0x01) << 19usize);
+    pub const fn set_pselcd(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 19usize)) | (((val as u32) & 0x01) << 19usize);
     }
     #[doc = "ELC_GPTE Event Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pselce(&self) -> super::vals::Pselce {
+    pub const fn pselce(&self) -> bool {
         let val = (self.0 >> 20usize) & 0x01;
-        super::vals::Pselce::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTE Event Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pselce(&mut self, val: super::vals::Pselce) {
-        self.0 = (self.0 & !(0x01 << 20usize)) | (((val.to_bits() as u32) & 0x01) << 20usize);
+    pub const fn set_pselce(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 20usize)) | (((val as u32) & 0x01) << 20usize);
     }
     #[doc = "ELC_GPTF Event Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pselcf(&self) -> super::vals::Pselcf {
+    pub const fn pselcf(&self) -> bool {
         let val = (self.0 >> 21usize) & 0x01;
-        super::vals::Pselcf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTF Event Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pselcf(&mut self, val: super::vals::Pselcf) {
-        self.0 = (self.0 & !(0x01 << 21usize)) | (((val.to_bits() as u32) & 0x01) << 21usize);
+    pub const fn set_pselcf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 21usize)) | (((val as u32) & 0x01) << 21usize);
     }
     #[doc = "ELC_GPTG Event Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pselcg(&self) -> super::vals::Pselcg {
+    pub const fn pselcg(&self) -> bool {
         let val = (self.0 >> 22usize) & 0x01;
-        super::vals::Pselcg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTG Event Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pselcg(&mut self, val: super::vals::Pselcg) {
-        self.0 = (self.0 & !(0x01 << 22usize)) | (((val.to_bits() as u32) & 0x01) << 22usize);
+    pub const fn set_pselcg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 22usize)) | (((val as u32) & 0x01) << 22usize);
     }
     #[doc = "ELC_GPTH Event Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pselch(&self) -> super::vals::Pselch {
+    pub const fn pselch(&self) -> bool {
         let val = (self.0 >> 23usize) & 0x01;
-        super::vals::Pselch::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTH Event Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_pselch(&mut self, val: super::vals::Pselch) {
-        self.0 = (self.0 & !(0x01 << 23usize)) | (((val.to_bits() as u32) & 0x01) << 23usize);
+    pub const fn set_pselch(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 23usize)) | (((val as u32) & 0x01) << 23usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -2756,14 +2756,14 @@ impl Gtpsr {
     #[doc = "Software Source Counter Stop Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cstop(&self) -> super::vals::Cstop {
+    pub const fn cstop(&self) -> bool {
         let val = (self.0 >> 31usize) & 0x01;
-        super::vals::Cstop::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Software Source Counter Stop Enable"]
     #[inline(always)]
-    pub const fn set_cstop(&mut self, val: super::vals::Cstop) {
-        self.0 = (self.0 & !(0x01 << 31usize)) | (((val.to_bits() as u32) & 0x01) << 31usize);
+    pub const fn set_cstop(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 31usize)) | (((val as u32) & 0x01) << 31usize);
     }
 }
 impl Default for Gtpsr {
@@ -2806,7 +2806,7 @@ impl defmt::Format for Gtpsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtpsr {{ psgtrgar: {:?}, psgtrgaf: {:?}, psgtrgbr: {:?}, psgtrgbf: {:?}, reserved: {=u8:?}, pscarbl: {:?}, pscarbh: {:?}, pscafbl: {:?}, pscafbh: {:?}, pscbral: {:?}, pscbrah: {:?}, pscbfal: {:?}, pscbfah: {:?}, pselca: {:?}, pselcb: {:?}, pselcc: {:?}, pselcd: {:?}, pselce: {:?}, pselcf: {:?}, pselcg: {:?}, pselch: {:?}, reserved_2: {=u8:?}, cstop: {:?} }}",
+            "Gtpsr {{ psgtrgar: {=bool:?}, psgtrgaf: {=bool:?}, psgtrgbr: {=bool:?}, psgtrgbf: {=bool:?}, reserved: {=u8:?}, pscarbl: {=bool:?}, pscarbh: {=bool:?}, pscafbl: {=bool:?}, pscafbh: {=bool:?}, pscbral: {=bool:?}, pscbrah: {=bool:?}, pscbfal: {=bool:?}, pscbfah: {=bool:?}, pselca: {=bool:?}, pselcb: {=bool:?}, pselcc: {=bool:?}, pselcd: {=bool:?}, pselce: {=bool:?}, pselcf: {=bool:?}, pselcg: {=bool:?}, pselch: {=bool:?}, reserved_2: {=u8:?}, cstop: {=bool:?} }}",
             self.psgtrgar(),
             self.psgtrgaf(),
             self.psgtrgbr(),
@@ -2841,50 +2841,50 @@ impl Gtssr {
     #[doc = "GTETRGA Pin Rising Input Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ssgtrgar(&self) -> super::vals::Ssgtrgar {
+    pub const fn ssgtrgar(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ssgtrgar::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Rising Input Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_ssgtrgar(&mut self, val: super::vals::Ssgtrgar) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_ssgtrgar(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "GTETRGA Pin Falling Input Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ssgtrgaf(&self) -> super::vals::Ssgtrgaf {
+    pub const fn ssgtrgaf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ssgtrgaf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Falling Input Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_ssgtrgaf(&mut self, val: super::vals::Ssgtrgaf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_ssgtrgaf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "GTETRGB Pin Rising Input Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ssgtrgbr(&self) -> super::vals::Ssgtrgbr {
+    pub const fn ssgtrgbr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ssgtrgbr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Rising Input Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_ssgtrgbr(&mut self, val: super::vals::Ssgtrgbr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_ssgtrgbr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "GTETRGB Pin Falling Input Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ssgtrgbf(&self) -> super::vals::Ssgtrgbf {
+    pub const fn ssgtrgbf(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ssgtrgbf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Falling Input Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_ssgtrgbf(&mut self, val: super::vals::Ssgtrgbf) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_ssgtrgbf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 0000. The write value should be 0000."]
     #[must_use]
@@ -2901,194 +2901,194 @@ impl Gtssr {
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sscarbl(&self) -> super::vals::Sscarbl {
+    pub const fn sscarbl(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Sscarbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sscarbl(&mut self, val: super::vals::Sscarbl) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u32) & 0x01) << 8usize);
+    pub const fn set_sscarbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u32) & 0x01) << 8usize);
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sscarbh(&self) -> super::vals::Sscarbh {
+    pub const fn sscarbh(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Sscarbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sscarbh(&mut self, val: super::vals::Sscarbh) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u32) & 0x01) << 9usize);
+    pub const fn set_sscarbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u32) & 0x01) << 9usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sscafbl(&self) -> super::vals::Sscafbl {
+    pub const fn sscafbl(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Sscafbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sscafbl(&mut self, val: super::vals::Sscafbl) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_sscafbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sscafbh(&self) -> super::vals::Sscafbh {
+    pub const fn sscafbh(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Sscafbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sscafbh(&mut self, val: super::vals::Sscafbh) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u32) & 0x01) << 11usize);
+    pub const fn set_sscafbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u32) & 0x01) << 11usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sscbral(&self) -> super::vals::Sscbral {
+    pub const fn sscbral(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Sscbral::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sscbral(&mut self, val: super::vals::Sscbral) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u32) & 0x01) << 12usize);
+    pub const fn set_sscbral(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u32) & 0x01) << 12usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sscbrah(&self) -> super::vals::Sscbrah {
+    pub const fn sscbrah(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Sscbrah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sscbrah(&mut self, val: super::vals::Sscbrah) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u32) & 0x01) << 13usize);
+    pub const fn set_sscbrah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sscbfal(&self) -> super::vals::Sscbfal {
+    pub const fn sscbfal(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Sscbfal::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sscbfal(&mut self, val: super::vals::Sscbfal) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_sscbfal(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sscbfah(&self) -> super::vals::Sscbfah {
+    pub const fn sscbfah(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Sscbfah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sscbfah(&mut self, val: super::vals::Sscbfah) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_sscbfah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "ELC_GPTA Event Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sselca(&self) -> super::vals::Sselca {
+    pub const fn sselca(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::Sselca::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTA Event Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sselca(&mut self, val: super::vals::Sselca) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_sselca(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "ELC_GPTB Event Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sselcb(&self) -> super::vals::Sselcb {
+    pub const fn sselcb(&self) -> bool {
         let val = (self.0 >> 17usize) & 0x01;
-        super::vals::Sselcb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTB Event Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sselcb(&mut self, val: super::vals::Sselcb) {
-        self.0 = (self.0 & !(0x01 << 17usize)) | (((val.to_bits() as u32) & 0x01) << 17usize);
+    pub const fn set_sselcb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 17usize)) | (((val as u32) & 0x01) << 17usize);
     }
     #[doc = "ELC_GPTC Event Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sselcc(&self) -> super::vals::Sselcc {
+    pub const fn sselcc(&self) -> bool {
         let val = (self.0 >> 18usize) & 0x01;
-        super::vals::Sselcc::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTC Event Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sselcc(&mut self, val: super::vals::Sselcc) {
-        self.0 = (self.0 & !(0x01 << 18usize)) | (((val.to_bits() as u32) & 0x01) << 18usize);
+    pub const fn set_sselcc(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 18usize)) | (((val as u32) & 0x01) << 18usize);
     }
     #[doc = "ELC_GPTD Event Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sselcd(&self) -> super::vals::Sselcd {
+    pub const fn sselcd(&self) -> bool {
         let val = (self.0 >> 19usize) & 0x01;
-        super::vals::Sselcd::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTD Event Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sselcd(&mut self, val: super::vals::Sselcd) {
-        self.0 = (self.0 & !(0x01 << 19usize)) | (((val.to_bits() as u32) & 0x01) << 19usize);
+    pub const fn set_sselcd(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 19usize)) | (((val as u32) & 0x01) << 19usize);
     }
     #[doc = "ELC_GPTE Event Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sselce(&self) -> super::vals::Sselce {
+    pub const fn sselce(&self) -> bool {
         let val = (self.0 >> 20usize) & 0x01;
-        super::vals::Sselce::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTE Event Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sselce(&mut self, val: super::vals::Sselce) {
-        self.0 = (self.0 & !(0x01 << 20usize)) | (((val.to_bits() as u32) & 0x01) << 20usize);
+    pub const fn set_sselce(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 20usize)) | (((val as u32) & 0x01) << 20usize);
     }
     #[doc = "ELC_GPTF Event Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sselcf(&self) -> super::vals::Sselcf {
+    pub const fn sselcf(&self) -> bool {
         let val = (self.0 >> 21usize) & 0x01;
-        super::vals::Sselcf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTF Event Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sselcf(&mut self, val: super::vals::Sselcf) {
-        self.0 = (self.0 & !(0x01 << 21usize)) | (((val.to_bits() as u32) & 0x01) << 21usize);
+    pub const fn set_sselcf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 21usize)) | (((val as u32) & 0x01) << 21usize);
     }
     #[doc = "ELC_GPTG Event Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sselcg(&self) -> super::vals::Sselcg {
+    pub const fn sselcg(&self) -> bool {
         let val = (self.0 >> 22usize) & 0x01;
-        super::vals::Sselcg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTG Event Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sselcg(&mut self, val: super::vals::Sselcg) {
-        self.0 = (self.0 & !(0x01 << 22usize)) | (((val.to_bits() as u32) & 0x01) << 22usize);
+    pub const fn set_sselcg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 22usize)) | (((val as u32) & 0x01) << 22usize);
     }
     #[doc = "ELC_GPTH Event Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sselch(&self) -> super::vals::Sselch {
+    pub const fn sselch(&self) -> bool {
         let val = (self.0 >> 23usize) & 0x01;
-        super::vals::Sselch::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTH Event Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_sselch(&mut self, val: super::vals::Sselch) {
-        self.0 = (self.0 & !(0x01 << 23usize)) | (((val.to_bits() as u32) & 0x01) << 23usize);
+    pub const fn set_sselch(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 23usize)) | (((val as u32) & 0x01) << 23usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -3105,14 +3105,14 @@ impl Gtssr {
     #[doc = "Software Source Counter Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cstrt(&self) -> super::vals::Cstrt {
+    pub const fn cstrt(&self) -> bool {
         let val = (self.0 >> 31usize) & 0x01;
-        super::vals::Cstrt::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Software Source Counter Start Enable"]
     #[inline(always)]
-    pub const fn set_cstrt(&mut self, val: super::vals::Cstrt) {
-        self.0 = (self.0 & !(0x01 << 31usize)) | (((val.to_bits() as u32) & 0x01) << 31usize);
+    pub const fn set_cstrt(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 31usize)) | (((val as u32) & 0x01) << 31usize);
     }
 }
 impl Default for Gtssr {
@@ -3155,7 +3155,7 @@ impl defmt::Format for Gtssr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtssr {{ ssgtrgar: {:?}, ssgtrgaf: {:?}, ssgtrgbr: {:?}, ssgtrgbf: {:?}, reserved: {=u8:?}, sscarbl: {:?}, sscarbh: {:?}, sscafbl: {:?}, sscafbh: {:?}, sscbral: {:?}, sscbrah: {:?}, sscbfal: {:?}, sscbfah: {:?}, sselca: {:?}, sselcb: {:?}, sselcc: {:?}, sselcd: {:?}, sselce: {:?}, sselcf: {:?}, sselcg: {:?}, sselch: {:?}, reserved_2: {=u8:?}, cstrt: {:?} }}",
+            "Gtssr {{ ssgtrgar: {=bool:?}, ssgtrgaf: {=bool:?}, ssgtrgbr: {=bool:?}, ssgtrgbf: {=bool:?}, reserved: {=u8:?}, sscarbl: {=bool:?}, sscarbh: {=bool:?}, sscafbl: {=bool:?}, sscafbh: {=bool:?}, sscbral: {=bool:?}, sscbrah: {=bool:?}, sscbfal: {=bool:?}, sscbfah: {=bool:?}, sselca: {=bool:?}, sselcb: {=bool:?}, sselcc: {=bool:?}, sselcd: {=bool:?}, sselce: {=bool:?}, sselcf: {=bool:?}, sselcg: {=bool:?}, sselch: {=bool:?}, reserved_2: {=u8:?}, cstrt: {=bool:?} }}",
             self.ssgtrgar(),
             self.ssgtrgaf(),
             self.ssgtrgbr(),
@@ -3190,98 +3190,98 @@ impl Gtst {
     #[doc = "Input Capture/Compare Match Flag A"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcfa(&self) -> super::vals::Tcfa {
+    pub const fn tcfa(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Tcfa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Input Capture/Compare Match Flag A"]
     #[inline(always)]
-    pub const fn set_tcfa(&mut self, val: super::vals::Tcfa) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_tcfa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Input Capture/Compare Match Flag B"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcfb(&self) -> super::vals::Tcfb {
+    pub const fn tcfb(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Tcfb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Input Capture/Compare Match Flag B"]
     #[inline(always)]
-    pub const fn set_tcfb(&mut self, val: super::vals::Tcfb) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_tcfb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "Input Compare Match Flag C"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcfc(&self) -> super::vals::Tcfc {
+    pub const fn tcfc(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Tcfc::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Input Compare Match Flag C"]
     #[inline(always)]
-    pub const fn set_tcfc(&mut self, val: super::vals::Tcfc) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_tcfc(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "Input Compare Match Flag D"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcfd(&self) -> super::vals::Tcfd {
+    pub const fn tcfd(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Tcfd::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Input Compare Match Flag D"]
     #[inline(always)]
-    pub const fn set_tcfd(&mut self, val: super::vals::Tcfd) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_tcfd(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "Input Compare Match Flag E"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcfe(&self) -> super::vals::Tcfe {
+    pub const fn tcfe(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Tcfe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Input Compare Match Flag E"]
     #[inline(always)]
-    pub const fn set_tcfe(&mut self, val: super::vals::Tcfe) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u32) & 0x01) << 4usize);
+    pub const fn set_tcfe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
     }
     #[doc = "Input Compare Match Flag F"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcff(&self) -> super::vals::Tcff {
+    pub const fn tcff(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Tcff::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Input Compare Match Flag F"]
     #[inline(always)]
-    pub const fn set_tcff(&mut self, val: super::vals::Tcff) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u32) & 0x01) << 5usize);
+    pub const fn set_tcff(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u32) & 0x01) << 5usize);
     }
     #[doc = "Overflow Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcfpo(&self) -> super::vals::Tcfpo {
+    pub const fn tcfpo(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Tcfpo::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Overflow Flag"]
     #[inline(always)]
-    pub const fn set_tcfpo(&mut self, val: super::vals::Tcfpo) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u32) & 0x01) << 6usize);
+    pub const fn set_tcfpo(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
     }
     #[doc = "Underflow Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcfpu(&self) -> super::vals::Tcfpu {
+    pub const fn tcfpu(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Tcfpu::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Underflow Flag"]
     #[inline(always)]
-    pub const fn set_tcfpu(&mut self, val: super::vals::Tcfpu) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u32) & 0x01) << 7usize);
+    pub const fn set_tcfpu(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u32) & 0x01) << 7usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -3298,14 +3298,14 @@ impl Gtst {
     #[doc = "Count Direction Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn tucf(&self) -> super::vals::Tucf {
+    pub const fn tucf(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Tucf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Count Direction Flag"]
     #[inline(always)]
-    pub const fn set_tucf(&mut self, val: super::vals::Tucf) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_tucf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "These bits are read as 00000000. The write value should be 00000000."]
     #[must_use]
@@ -3322,14 +3322,14 @@ impl Gtst {
     #[doc = "Output Disable Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn odf(&self) -> super::vals::Odf {
+    pub const fn odf(&self) -> bool {
         let val = (self.0 >> 24usize) & 0x01;
-        super::vals::Odf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Output Disable Flag"]
     #[inline(always)]
-    pub const fn set_odf(&mut self, val: super::vals::Odf) {
-        self.0 = (self.0 & !(0x01 << 24usize)) | (((val.to_bits() as u32) & 0x01) << 24usize);
+    pub const fn set_odf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 24usize)) | (((val as u32) & 0x01) << 24usize);
     }
     #[doc = "These bits are read as 0000. The write value should be 0000."]
     #[must_use]
@@ -3346,26 +3346,26 @@ impl Gtst {
     #[doc = "Same Time Output Level High Disable Request Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn oabhf(&self) -> super::vals::Oabhf {
+    pub const fn oabhf(&self) -> bool {
         let val = (self.0 >> 29usize) & 0x01;
-        super::vals::Oabhf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Same Time Output Level High Disable Request Enable"]
     #[inline(always)]
-    pub const fn set_oabhf(&mut self, val: super::vals::Oabhf) {
-        self.0 = (self.0 & !(0x01 << 29usize)) | (((val.to_bits() as u32) & 0x01) << 29usize);
+    pub const fn set_oabhf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 29usize)) | (((val as u32) & 0x01) << 29usize);
     }
     #[doc = "Same Time Output Level Low Disable Request Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn oablf(&self) -> super::vals::Oablf {
+    pub const fn oablf(&self) -> bool {
         let val = (self.0 >> 30usize) & 0x01;
-        super::vals::Oablf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Same Time Output Level Low Disable Request Enable"]
     #[inline(always)]
-    pub const fn set_oablf(&mut self, val: super::vals::Oablf) {
-        self.0 = (self.0 & !(0x01 << 30usize)) | (((val.to_bits() as u32) & 0x01) << 30usize);
+    pub const fn set_oablf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 30usize)) | (((val as u32) & 0x01) << 30usize);
     }
 }
 impl Default for Gtst {
@@ -3400,7 +3400,7 @@ impl defmt::Format for Gtst {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtst {{ tcfa: {:?}, tcfb: {:?}, tcfc: {:?}, tcfd: {:?}, tcfe: {:?}, tcff: {:?}, tcfpo: {:?}, tcfpu: {:?}, reserved: {=u8:?}, tucf: {:?}, reserved_2: {=u8:?}, odf: {:?}, reserved_3: {=u8:?}, oabhf: {:?}, oablf: {:?} }}",
+            "Gtst {{ tcfa: {=bool:?}, tcfb: {=bool:?}, tcfc: {=bool:?}, tcfd: {=bool:?}, tcfe: {=bool:?}, tcff: {=bool:?}, tcfpo: {=bool:?}, tcfpu: {=bool:?}, reserved: {=u8:?}, tucf: {=bool:?}, reserved_2: {=u8:?}, odf: {=bool:?}, reserved_3: {=u8:?}, oabhf: {=bool:?}, oablf: {=bool:?} }}",
             self.tcfa(),
             self.tcfb(),
             self.tcfc(),
@@ -3427,98 +3427,98 @@ impl Gtstp {
     #[doc = "Channel 0 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstop0(&self) -> super::vals::Cstop0 {
+    pub const fn cstop0(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cstop0::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 0 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[inline(always)]
-    pub const fn set_cstop0(&mut self, val: super::vals::Cstop0) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_cstop0(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Channel 1 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstop1(&self) -> super::vals::Cstop1 {
+    pub const fn cstop1(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cstop1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 1 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[inline(always)]
-    pub const fn set_cstop1(&mut self, val: super::vals::Cstop1) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_cstop1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "Channel 2 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstop2(&self) -> super::vals::Cstop2 {
+    pub const fn cstop2(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Cstop2::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 2 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[inline(always)]
-    pub const fn set_cstop2(&mut self, val: super::vals::Cstop2) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_cstop2(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "Channel 3 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstop3(&self) -> super::vals::Cstop3 {
+    pub const fn cstop3(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Cstop3::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 3 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[inline(always)]
-    pub const fn set_cstop3(&mut self, val: super::vals::Cstop3) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_cstop3(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "Channel 4 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstop4(&self) -> super::vals::Cstop4 {
+    pub const fn cstop4(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Cstop4::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 4 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[inline(always)]
-    pub const fn set_cstop4(&mut self, val: super::vals::Cstop4) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u32) & 0x01) << 4usize);
+    pub const fn set_cstop4(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
     }
     #[doc = "Channel 5 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstop5(&self) -> super::vals::Cstop5 {
+    pub const fn cstop5(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Cstop5::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 5 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[inline(always)]
-    pub const fn set_cstop5(&mut self, val: super::vals::Cstop5) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u32) & 0x01) << 5usize);
+    pub const fn set_cstop5(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u32) & 0x01) << 5usize);
     }
     #[doc = "Channel 6 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstop6(&self) -> super::vals::Cstop6 {
+    pub const fn cstop6(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Cstop6::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 6 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[inline(always)]
-    pub const fn set_cstop6(&mut self, val: super::vals::Cstop6) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u32) & 0x01) << 6usize);
+    pub const fn set_cstop6(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
     }
     #[doc = "Channel 7 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstop7(&self) -> super::vals::Cstop7 {
+    pub const fn cstop7(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Cstop7::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 7 GTCNT Count Stop Read data shows each channel's counter status (GTCR.CST bit). 0 means counter runnning. 1 means counter stop."]
     #[inline(always)]
-    pub const fn set_cstop7(&mut self, val: super::vals::Cstop7) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u32) & 0x01) << 7usize);
+    pub const fn set_cstop7(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u32) & 0x01) << 7usize);
     }
     #[doc = "These bits are read as 111111111111111111111111. The write value should be 111111111111111111111111."]
     #[must_use]
@@ -3559,7 +3559,7 @@ impl defmt::Format for Gtstp {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtstp {{ cstop0: {:?}, cstop1: {:?}, cstop2: {:?}, cstop3: {:?}, cstop4: {:?}, cstop5: {:?}, cstop6: {:?}, cstop7: {:?}, reserved: {=u32:?} }}",
+            "Gtstp {{ cstop0: {=bool:?}, cstop1: {=bool:?}, cstop2: {=bool:?}, cstop3: {=bool:?}, cstop4: {=bool:?}, cstop5: {=bool:?}, cstop6: {=bool:?}, cstop7: {=bool:?}, reserved: {=u32:?} }}",
             self.cstop0(),
             self.cstop1(),
             self.cstop2(),
@@ -3580,98 +3580,98 @@ impl Gtstr {
     #[doc = "Channel 0 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstrt0(&self) -> super::vals::Cstrt0 {
+    pub const fn cstrt0(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cstrt0::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 0 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[inline(always)]
-    pub const fn set_cstrt0(&mut self, val: super::vals::Cstrt0) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_cstrt0(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Channel 1 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstrt1(&self) -> super::vals::Cstrt1 {
+    pub const fn cstrt1(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cstrt1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 1 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[inline(always)]
-    pub const fn set_cstrt1(&mut self, val: super::vals::Cstrt1) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_cstrt1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "Channel 2 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstrt2(&self) -> super::vals::Cstrt2 {
+    pub const fn cstrt2(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Cstrt2::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 2 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[inline(always)]
-    pub const fn set_cstrt2(&mut self, val: super::vals::Cstrt2) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_cstrt2(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "Channel 3 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstrt3(&self) -> super::vals::Cstrt3 {
+    pub const fn cstrt3(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Cstrt3::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 3 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[inline(always)]
-    pub const fn set_cstrt3(&mut self, val: super::vals::Cstrt3) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_cstrt3(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "Channel 4 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstrt4(&self) -> super::vals::Cstrt4 {
+    pub const fn cstrt4(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Cstrt4::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 4 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[inline(always)]
-    pub const fn set_cstrt4(&mut self, val: super::vals::Cstrt4) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u32) & 0x01) << 4usize);
+    pub const fn set_cstrt4(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
     }
     #[doc = "Channel 5 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstrt5(&self) -> super::vals::Cstrt5 {
+    pub const fn cstrt5(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Cstrt5::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 5 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[inline(always)]
-    pub const fn set_cstrt5(&mut self, val: super::vals::Cstrt5) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u32) & 0x01) << 5usize);
+    pub const fn set_cstrt5(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u32) & 0x01) << 5usize);
     }
     #[doc = "Channel 6 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstrt6(&self) -> super::vals::Cstrt6 {
+    pub const fn cstrt6(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Cstrt6::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 6 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[inline(always)]
-    pub const fn set_cstrt6(&mut self, val: super::vals::Cstrt6) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u32) & 0x01) << 6usize);
+    pub const fn set_cstrt6(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
     }
     #[doc = "Channel 7 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[must_use]
     #[inline(always)]
-    pub const fn cstrt7(&self) -> super::vals::Cstrt7 {
+    pub const fn cstrt7(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Cstrt7::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Channel 7 GTCNT Count Start Read data shows each channel's counter status (GTCR.CST bit). 0 means counter stop. 1 means counter running."]
     #[inline(always)]
-    pub const fn set_cstrt7(&mut self, val: super::vals::Cstrt7) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u32) & 0x01) << 7usize);
+    pub const fn set_cstrt7(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u32) & 0x01) << 7usize);
     }
     #[doc = "These bits are read as 000000000000000000000000. The write value should be 000000000000000000000000."]
     #[must_use]
@@ -3712,7 +3712,7 @@ impl defmt::Format for Gtstr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtstr {{ cstrt0: {:?}, cstrt1: {:?}, cstrt2: {:?}, cstrt3: {:?}, cstrt4: {:?}, cstrt5: {:?}, cstrt6: {:?}, cstrt7: {:?}, reserved: {=u32:?} }}",
+            "Gtstr {{ cstrt0: {=bool:?}, cstrt1: {=bool:?}, cstrt2: {=bool:?}, cstrt3: {=bool:?}, cstrt4: {=bool:?}, cstrt5: {=bool:?}, cstrt6: {=bool:?}, cstrt7: {=bool:?}, reserved: {=u32:?} }}",
             self.cstrt0(),
             self.cstrt1(),
             self.cstrt2(),
@@ -3733,26 +3733,26 @@ impl Gtuddtyc {
     #[doc = "Count Direction Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn ud(&self) -> super::vals::Ud {
+    pub const fn ud(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ud::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Count Direction Setting"]
     #[inline(always)]
-    pub const fn set_ud(&mut self, val: super::vals::Ud) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_ud(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Forcible Count Direction Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn udf(&self) -> super::vals::Udf {
+    pub const fn udf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Udf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Forcible Count Direction Setting"]
     #[inline(always)]
-    pub const fn set_udf(&mut self, val: super::vals::Udf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_udf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "GTIOCA Output Duty Setting"]
     #[must_use]
@@ -3769,26 +3769,26 @@ impl Gtuddtyc {
     #[doc = "Forcible GTIOCA Output Duty Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn oadtyf(&self) -> super::vals::Oadtyf {
+    pub const fn oadtyf(&self) -> bool {
         let val = (self.0 >> 18usize) & 0x01;
-        super::vals::Oadtyf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Forcible GTIOCA Output Duty Setting"]
     #[inline(always)]
-    pub const fn set_oadtyf(&mut self, val: super::vals::Oadtyf) {
-        self.0 = (self.0 & !(0x01 << 18usize)) | (((val.to_bits() as u32) & 0x01) << 18usize);
+    pub const fn set_oadtyf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 18usize)) | (((val as u32) & 0x01) << 18usize);
     }
     #[doc = "GTIOCA Output Value Selecting after Releasing 0 percent/100 percent Duty Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn oadtyr(&self) -> super::vals::Oadtyr {
+    pub const fn oadtyr(&self) -> bool {
         let val = (self.0 >> 19usize) & 0x01;
-        super::vals::Oadtyr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Output Value Selecting after Releasing 0 percent/100 percent Duty Setting"]
     #[inline(always)]
-    pub const fn set_oadtyr(&mut self, val: super::vals::Oadtyr) {
-        self.0 = (self.0 & !(0x01 << 19usize)) | (((val.to_bits() as u32) & 0x01) << 19usize);
+    pub const fn set_oadtyr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 19usize)) | (((val as u32) & 0x01) << 19usize);
     }
     #[doc = "These bits are read as 0000. The write value should be 0000."]
     #[must_use]
@@ -3817,26 +3817,26 @@ impl Gtuddtyc {
     #[doc = "Forcible GTIOCB Output Duty Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn obdtyf(&self) -> super::vals::Obdtyf {
+    pub const fn obdtyf(&self) -> bool {
         let val = (self.0 >> 26usize) & 0x01;
-        super::vals::Obdtyf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Forcible GTIOCB Output Duty Setting"]
     #[inline(always)]
-    pub const fn set_obdtyf(&mut self, val: super::vals::Obdtyf) {
-        self.0 = (self.0 & !(0x01 << 26usize)) | (((val.to_bits() as u32) & 0x01) << 26usize);
+    pub const fn set_obdtyf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 26usize)) | (((val as u32) & 0x01) << 26usize);
     }
     #[doc = "GTIOCB Output Value Selecting after Releasing 0 percent/100 percent Duty Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn obdtyr(&self) -> super::vals::Obdtyr {
+    pub const fn obdtyr(&self) -> bool {
         let val = (self.0 >> 27usize) & 0x01;
-        super::vals::Obdtyr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Output Value Selecting after Releasing 0 percent/100 percent Duty Setting"]
     #[inline(always)]
-    pub const fn set_obdtyr(&mut self, val: super::vals::Obdtyr) {
-        self.0 = (self.0 & !(0x01 << 27usize)) | (((val.to_bits() as u32) & 0x01) << 27usize);
+    pub const fn set_obdtyr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 27usize)) | (((val as u32) & 0x01) << 27usize);
     }
 }
 impl Default for Gtuddtyc {
@@ -3865,7 +3865,7 @@ impl defmt::Format for Gtuddtyc {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtuddtyc {{ ud: {:?}, udf: {:?}, oadty: {:?}, oadtyf: {:?}, oadtyr: {:?}, reserved: {=u8:?}, obdty: {:?}, obdtyf: {:?}, obdtyr: {:?} }}",
+            "Gtuddtyc {{ ud: {=bool:?}, udf: {=bool:?}, oadty: {:?}, oadtyf: {=bool:?}, oadtyr: {=bool:?}, reserved: {=u8:?}, obdty: {:?}, obdtyf: {=bool:?}, obdtyr: {=bool:?} }}",
             self.ud(),
             self.udf(),
             self.oadty(),
@@ -3886,242 +3886,242 @@ impl Gtupsr {
     #[doc = "GTETRGA Pin Rising Input Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn usgtrgar(&self) -> super::vals::Usgtrgar {
+    pub const fn usgtrgar(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Usgtrgar::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Rising Input Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_usgtrgar(&mut self, val: super::vals::Usgtrgar) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_usgtrgar(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "GTETRGA Pin Falling Input Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn usgtrgaf(&self) -> super::vals::Usgtrgaf {
+    pub const fn usgtrgaf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Usgtrgaf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGA Pin Falling Input Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_usgtrgaf(&mut self, val: super::vals::Usgtrgaf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_usgtrgaf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "GTETRGB Pin Rising Input Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn usgtrgbr(&self) -> super::vals::Usgtrgbr {
+    pub const fn usgtrgbr(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Usgtrgbr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Rising Input Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_usgtrgbr(&mut self, val: super::vals::Usgtrgbr) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_usgtrgbr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "GTETRGB Pin Falling Input Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn usgtrgbf(&self) -> super::vals::Usgtrgbf {
+    pub const fn usgtrgbf(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Usgtrgbf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTETRGB Pin Falling Input Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_usgtrgbf(&mut self, val: super::vals::Usgtrgbf) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_usgtrgbf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uscarbl(&self) -> super::vals::Uscarbl {
+    pub const fn uscarbl(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Uscarbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value Low Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uscarbl(&mut self, val: super::vals::Uscarbl) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u32) & 0x01) << 8usize);
+    pub const fn set_uscarbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u32) & 0x01) << 8usize);
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uscarbh(&self) -> super::vals::Uscarbh {
+    pub const fn uscarbh(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Uscarbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Rising Input during GTIOCB Value High Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uscarbh(&mut self, val: super::vals::Uscarbh) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u32) & 0x01) << 9usize);
+    pub const fn set_uscarbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u32) & 0x01) << 9usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uscafbl(&self) -> super::vals::Uscafbl {
+    pub const fn uscafbl(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Uscafbl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value Low Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uscafbl(&mut self, val: super::vals::Uscafbl) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_uscafbl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uscafbh(&self) -> super::vals::Uscafbh {
+    pub const fn uscafbh(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Uscafbh::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCA Pin Falling Input during GTIOCB Value High Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uscafbh(&mut self, val: super::vals::Uscafbh) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u32) & 0x01) << 11usize);
+    pub const fn set_uscafbh(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u32) & 0x01) << 11usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uscbral(&self) -> super::vals::Uscbral {
+    pub const fn uscbral(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Uscbral::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value Low Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uscbral(&mut self, val: super::vals::Uscbral) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u32) & 0x01) << 12usize);
+    pub const fn set_uscbral(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u32) & 0x01) << 12usize);
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uscbrah(&self) -> super::vals::Uscbrah {
+    pub const fn uscbrah(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Uscbrah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Rising Input during GTIOCA Value High Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uscbrah(&mut self, val: super::vals::Uscbrah) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u32) & 0x01) << 13usize);
+    pub const fn set_uscbrah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uscbfal(&self) -> super::vals::Uscbfal {
+    pub const fn uscbfal(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Uscbfal::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value Low Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uscbfal(&mut self, val: super::vals::Uscbfal) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_uscbfal(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uscbfah(&self) -> super::vals::Uscbfah {
+    pub const fn uscbfah(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Uscbfah::from_bits(val as u8)
+        val != 0
     }
     #[doc = "GTIOCB Pin Falling Input during GTIOCA Value High Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uscbfah(&mut self, val: super::vals::Uscbfah) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_uscbfah(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "ELC_GPTA Event Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uselca(&self) -> super::vals::Uselca {
+    pub const fn uselca(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::Uselca::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTA Event Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uselca(&mut self, val: super::vals::Uselca) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_uselca(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "ELC_GPTB Event Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uselcb(&self) -> super::vals::Uselcb {
+    pub const fn uselcb(&self) -> bool {
         let val = (self.0 >> 17usize) & 0x01;
-        super::vals::Uselcb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTB Event Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uselcb(&mut self, val: super::vals::Uselcb) {
-        self.0 = (self.0 & !(0x01 << 17usize)) | (((val.to_bits() as u32) & 0x01) << 17usize);
+    pub const fn set_uselcb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 17usize)) | (((val as u32) & 0x01) << 17usize);
     }
     #[doc = "ELC_GPTC Event Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uselcc(&self) -> super::vals::Uselcc {
+    pub const fn uselcc(&self) -> bool {
         let val = (self.0 >> 18usize) & 0x01;
-        super::vals::Uselcc::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTC Event Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uselcc(&mut self, val: super::vals::Uselcc) {
-        self.0 = (self.0 & !(0x01 << 18usize)) | (((val.to_bits() as u32) & 0x01) << 18usize);
+    pub const fn set_uselcc(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 18usize)) | (((val as u32) & 0x01) << 18usize);
     }
     #[doc = "ELC_GPTD Event Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uselcd(&self) -> super::vals::Uselcd {
+    pub const fn uselcd(&self) -> bool {
         let val = (self.0 >> 19usize) & 0x01;
-        super::vals::Uselcd::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTD Event Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uselcd(&mut self, val: super::vals::Uselcd) {
-        self.0 = (self.0 & !(0x01 << 19usize)) | (((val.to_bits() as u32) & 0x01) << 19usize);
+    pub const fn set_uselcd(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 19usize)) | (((val as u32) & 0x01) << 19usize);
     }
     #[doc = "ELC_GPTE Event Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uselce(&self) -> super::vals::Uselce {
+    pub const fn uselce(&self) -> bool {
         let val = (self.0 >> 20usize) & 0x01;
-        super::vals::Uselce::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTE Event Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uselce(&mut self, val: super::vals::Uselce) {
-        self.0 = (self.0 & !(0x01 << 20usize)) | (((val.to_bits() as u32) & 0x01) << 20usize);
+    pub const fn set_uselce(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 20usize)) | (((val as u32) & 0x01) << 20usize);
     }
     #[doc = "ELC_GPTF Event Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uselcf(&self) -> super::vals::Uselcf {
+    pub const fn uselcf(&self) -> bool {
         let val = (self.0 >> 21usize) & 0x01;
-        super::vals::Uselcf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTF Event Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uselcf(&mut self, val: super::vals::Uselcf) {
-        self.0 = (self.0 & !(0x01 << 21usize)) | (((val.to_bits() as u32) & 0x01) << 21usize);
+    pub const fn set_uselcf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 21usize)) | (((val as u32) & 0x01) << 21usize);
     }
     #[doc = "ELC_GPTG Event Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uselcg(&self) -> super::vals::Uselcg {
+    pub const fn uselcg(&self) -> bool {
         let val = (self.0 >> 22usize) & 0x01;
-        super::vals::Uselcg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTG Event Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uselcg(&mut self, val: super::vals::Uselcg) {
-        self.0 = (self.0 & !(0x01 << 22usize)) | (((val.to_bits() as u32) & 0x01) << 22usize);
+    pub const fn set_uselcg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 22usize)) | (((val as u32) & 0x01) << 22usize);
     }
     #[doc = "ELC_GPTH Event Source Counter Count Up Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn uselch(&self) -> super::vals::Uselch {
+    pub const fn uselch(&self) -> bool {
         let val = (self.0 >> 23usize) & 0x01;
-        super::vals::Uselch::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ELC_GPTH Event Source Counter Count Up Enable"]
     #[inline(always)]
-    pub const fn set_uselch(&mut self, val: super::vals::Uselch) {
-        self.0 = (self.0 & !(0x01 << 23usize)) | (((val.to_bits() as u32) & 0x01) << 23usize);
+    pub const fn set_uselch(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 23usize)) | (((val as u32) & 0x01) << 23usize);
     }
 }
 impl Default for Gtupsr {
@@ -4161,7 +4161,7 @@ impl defmt::Format for Gtupsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtupsr {{ usgtrgar: {:?}, usgtrgaf: {:?}, usgtrgbr: {:?}, usgtrgbf: {:?}, uscarbl: {:?}, uscarbh: {:?}, uscafbl: {:?}, uscafbh: {:?}, uscbral: {:?}, uscbrah: {:?}, uscbfal: {:?}, uscbfah: {:?}, uselca: {:?}, uselcb: {:?}, uselcc: {:?}, uselcd: {:?}, uselce: {:?}, uselcf: {:?}, uselcg: {:?}, uselch: {:?} }}",
+            "Gtupsr {{ usgtrgar: {=bool:?}, usgtrgaf: {=bool:?}, usgtrgbr: {=bool:?}, usgtrgbf: {=bool:?}, uscarbl: {=bool:?}, uscarbh: {=bool:?}, uscafbl: {=bool:?}, uscafbh: {=bool:?}, uscbral: {=bool:?}, uscbrah: {=bool:?}, uscbfal: {=bool:?}, uscbfah: {=bool:?}, uselca: {=bool:?}, uselcb: {=bool:?}, uselcc: {=bool:?}, uselcd: {=bool:?}, uselce: {=bool:?}, uselcf: {=bool:?}, uselcg: {=bool:?}, uselch: {=bool:?} }}",
             self.usgtrgar(),
             self.usgtrgaf(),
             self.usgtrgbr(),
@@ -4193,14 +4193,14 @@ impl Gtwp {
     #[doc = "Register Write Disable"]
     #[must_use]
     #[inline(always)]
-    pub const fn wp(&self) -> super::vals::Wp {
+    pub const fn wp(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Wp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Register Write Disable"]
     #[inline(always)]
-    pub const fn set_wp(&mut self, val: super::vals::Wp) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_wp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -4260,7 +4260,7 @@ impl defmt::Format for Gtwp {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtwp {{ wp: {:?}, reserved: {=u8:?}, prkey: {:?}, reserved_2: {=u16:?} }}",
+            "Gtwp {{ wp: {=bool:?}, reserved: {=u8:?}, prkey: {:?}, reserved_2: {=u16:?} }}",
             self.wp(),
             self.reserved(),
             self.prkey(),

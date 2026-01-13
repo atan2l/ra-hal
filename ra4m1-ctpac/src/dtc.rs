@@ -36,4 +36,3 @@ impl Dtc {
     }
 }
 pub mod regs;
-pub mod vals;

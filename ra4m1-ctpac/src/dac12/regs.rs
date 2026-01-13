@@ -6,14 +6,14 @@ impl Daadscr {
     #[doc = "D/A-A/D Synchronous Conversion"]
     #[must_use]
     #[inline(always)]
-    pub const fn daadst(&self) -> super::vals::Daadst {
+    pub const fn daadst(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Daadst::from_bits(val as u8)
+        val != 0
     }
     #[doc = "D/A-A/D Synchronous Conversion"]
     #[inline(always)]
-    pub const fn set_daadst(&mut self, val: super::vals::Daadst) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_daadst(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Daadscr {
@@ -32,7 +32,7 @@ impl core::fmt::Debug for Daadscr {
 #[cfg(feature = "defmt")]
 impl defmt::Format for Daadscr {
     fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Daadscr {{ daadst: {:?} }}", self.daadst())
+        defmt::write!(f, "Daadscr {{ daadst: {=bool:?} }}", self.daadst())
     }
 }
 #[doc = "D/A Control Register"]
@@ -67,14 +67,14 @@ impl Dacr {
     #[doc = "D/A Output Enable 0"]
     #[must_use]
     #[inline(always)]
-    pub const fn daoe0(&self) -> super::vals::Daoe0 {
+    pub const fn daoe0(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Daoe0::from_bits(val as u8)
+        val != 0
     }
     #[doc = "D/A Output Enable 0"]
     #[inline(always)]
-    pub const fn set_daoe0(&mut self, val: super::vals::Daoe0) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_daoe0(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -110,7 +110,7 @@ impl defmt::Format for Dacr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Dacr {{ reserved: {=u8:?}, reserved_2: {=bool:?}, daoe0: {:?}, reserved_3: {=bool:?} }}",
+            "Dacr {{ reserved: {=u8:?}, reserved_2: {=bool:?}, daoe0: {=bool:?}, reserved_3: {=bool:?} }}",
             self.reserved(),
             self.reserved_2(),
             self.daoe0(),
@@ -138,14 +138,14 @@ impl Dadpr {
     #[doc = "DADRm Format Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn dpsel(&self) -> super::vals::Dpsel {
+    pub const fn dpsel(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Dpsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "DADRm Format Select"]
     #[inline(always)]
-    pub const fn set_dpsel(&mut self, val: super::vals::Dpsel) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_dpsel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Dadpr {
@@ -167,7 +167,7 @@ impl defmt::Format for Dadpr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Dadpr {{ reserved: {=u8:?}, dpsel: {:?} }}",
+            "Dadpr {{ reserved: {=u8:?}, dpsel: {=bool:?} }}",
             self.reserved(),
             self.dpsel()
         )

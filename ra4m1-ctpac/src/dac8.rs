@@ -27,4 +27,3 @@ impl Dac8 {
     }
 }
 pub mod regs;
-pub mod vals;

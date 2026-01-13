@@ -6,38 +6,38 @@ impl Mmpuaca {
     #[doc = "Region enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn enable(&self) -> super::vals::MmpuacaEnable {
+    pub const fn enable(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::MmpuacaEnable::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Region enable"]
     #[inline(always)]
-    pub const fn set_enable(&mut self, val: super::vals::MmpuacaEnable) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_enable(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Read protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn rp(&self) -> super::vals::Rp {
+    pub const fn rp(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Rp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Read protection"]
     #[inline(always)]
-    pub const fn set_rp(&mut self, val: super::vals::Rp) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_rp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Write protection"]
     #[must_use]
     #[inline(always)]
-    pub const fn wp(&self) -> super::vals::Wp {
+    pub const fn wp(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Wp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Write protection"]
     #[inline(always)]
-    pub const fn set_wp(&mut self, val: super::vals::Wp) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_wp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "These bits are read as 0000000000000. The write value should be 0000000000000."]
     #[must_use]
@@ -73,7 +73,7 @@ impl defmt::Format for Mmpuaca {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Mmpuaca {{ enable: {:?}, rp: {:?}, wp: {:?}, reserved: {=u16:?} }}",
+            "Mmpuaca {{ enable: {=bool:?}, rp: {=bool:?}, wp: {=bool:?}, reserved: {=u16:?} }}",
             self.enable(),
             self.rp(),
             self.wp(),
@@ -89,26 +89,26 @@ impl Mmpuctla {
     #[doc = "Master Group enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn enable(&self) -> super::vals::MmpuctlaEnable {
+    pub const fn enable(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::MmpuctlaEnable::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Master Group enable"]
     #[inline(always)]
-    pub const fn set_enable(&mut self, val: super::vals::MmpuctlaEnable) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_enable(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Operation after detection"]
     #[must_use]
     #[inline(always)]
-    pub const fn oad(&self) -> super::vals::Oad {
+    pub const fn oad(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Oad::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operation after detection"]
     #[inline(always)]
-    pub const fn set_oad(&mut self, val: super::vals::Oad) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_oad(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -156,7 +156,7 @@ impl defmt::Format for Mmpuctla {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Mmpuctla {{ enable: {:?}, oad: {:?}, reserved: {=u8:?}, key: {=u8:?} }}",
+            "Mmpuctla {{ enable: {=bool:?}, oad: {=bool:?}, reserved: {=u8:?}, key: {=u8:?} }}",
             self.enable(),
             self.oad(),
             self.reserved(),
@@ -209,14 +209,14 @@ impl Mmpupta {
     #[doc = "Protection of register (MMPUSAn, MMPUEAn and MMPUACAn)"]
     #[must_use]
     #[inline(always)]
-    pub const fn protect(&self) -> super::vals::Protect {
+    pub const fn protect(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Protect::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Protection of register (MMPUSAn, MMPUEAn and MMPUACAn)"]
     #[inline(always)]
-    pub const fn set_protect(&mut self, val: super::vals::Protect) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_protect(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -263,7 +263,7 @@ impl defmt::Format for Mmpupta {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Mmpupta {{ protect: {:?}, reserved: {=u8:?}, key: {:?} }}",
+            "Mmpupta {{ protect: {=bool:?}, reserved: {=u8:?}, key: {:?} }}",
             self.protect(),
             self.reserved(),
             self.key()

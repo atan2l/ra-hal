@@ -31,4 +31,3 @@ impl Kint {
     }
 }
 pub mod regs;
-pub mod vals;

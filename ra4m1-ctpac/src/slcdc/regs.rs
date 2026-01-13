@@ -65,14 +65,14 @@ impl Lcdm0 {
     #[doc = "LCD display waveform selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn lwave(&self) -> super::vals::Lwave {
+    pub const fn lwave(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Lwave::from_bits(val as u8)
+        val != 0
     }
     #[doc = "LCD display waveform selection"]
     #[inline(always)]
-    pub const fn set_lwave(&mut self, val: super::vals::Lwave) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_lwave(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "LCD drive voltage generator selection"]
     #[must_use]
@@ -108,7 +108,7 @@ impl defmt::Format for Lcdm0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Lcdm0 {{ lbas: {:?}, ldty: {:?}, lwave: {:?}, mdset: {:?} }}",
+            "Lcdm0 {{ lbas: {:?}, ldty: {:?}, lwave: {=bool:?}, mdset: {:?} }}",
             self.lbas(),
             self.ldty(),
             self.lwave(),
@@ -124,14 +124,14 @@ impl Lcdm1 {
     #[doc = "Voltage Boosting Pin Initial Value Switching Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn lcdvlm(&self) -> super::vals::Lcdvlm {
+    pub const fn lcdvlm(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Lcdvlm::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage Boosting Pin Initial Value Switching Control"]
     #[inline(always)]
-    pub const fn set_lcdvlm(&mut self, val: super::vals::Lcdvlm) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_lcdvlm(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -148,62 +148,62 @@ impl Lcdm1 {
     #[doc = "Display data area control"]
     #[must_use]
     #[inline(always)]
-    pub const fn lcdsel(&self) -> super::vals::Lcdsel {
+    pub const fn lcdsel(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Lcdsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Display data area control"]
     #[inline(always)]
-    pub const fn set_lcdsel(&mut self, val: super::vals::Lcdsel) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_lcdsel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "Display data area control"]
     #[must_use]
     #[inline(always)]
-    pub const fn blon(&self) -> super::vals::Blon {
+    pub const fn blon(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Blon::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Display data area control"]
     #[inline(always)]
-    pub const fn set_blon(&mut self, val: super::vals::Blon) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_blon(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "Voltage boost circuit or capacitor split circuit operation enable/disable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vlcon(&self) -> super::vals::Vlcon {
+    pub const fn vlcon(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Vlcon::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage boost circuit or capacitor split circuit operation enable/disable"]
     #[inline(always)]
-    pub const fn set_vlcon(&mut self, val: super::vals::Vlcon) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_vlcon(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "LCD Display Enable/Disable"]
     #[must_use]
     #[inline(always)]
-    pub const fn scoc(&self) -> super::vals::Scoc {
+    pub const fn scoc(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Scoc::from_bits(val as u8)
+        val != 0
     }
     #[doc = "LCD Display Enable/Disable"]
     #[inline(always)]
-    pub const fn set_scoc(&mut self, val: super::vals::Scoc) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_scoc(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "LCD Display Enable/Disable"]
     #[must_use]
     #[inline(always)]
-    pub const fn lcdon(&self) -> super::vals::Lcdon {
+    pub const fn lcdon(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Lcdon::from_bits(val as u8)
+        val != 0
     }
     #[doc = "LCD Display Enable/Disable"]
     #[inline(always)]
-    pub const fn set_lcdon(&mut self, val: super::vals::Lcdon) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_lcdon(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Lcdm1 {
@@ -230,7 +230,7 @@ impl defmt::Format for Lcdm1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Lcdm1 {{ lcdvlm: {:?}, reserved: {=u8:?}, lcdsel: {:?}, blon: {:?}, vlcon: {:?}, scoc: {:?}, lcdon: {:?} }}",
+            "Lcdm1 {{ lcdvlm: {=bool:?}, reserved: {=u8:?}, lcdsel: {=bool:?}, blon: {=bool:?}, vlcon: {=bool:?}, scoc: {=bool:?}, lcdon: {=bool:?} }}",
             self.lcdvlm(),
             self.reserved(),
             self.lcdsel(),

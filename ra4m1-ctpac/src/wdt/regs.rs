@@ -143,14 +143,14 @@ impl Wdtcstpr {
     #[doc = "Sleep-Mode Count Stop Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn slcstp(&self) -> super::vals::Slcstp {
+    pub const fn slcstp(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Slcstp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Sleep-Mode Count Stop Control"]
     #[inline(always)]
-    pub const fn set_slcstp(&mut self, val: super::vals::Slcstp) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_slcstp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Wdtcstpr {
@@ -172,7 +172,7 @@ impl defmt::Format for Wdtcstpr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Wdtcstpr {{ reserved: {=u8:?}, slcstp: {:?} }}",
+            "Wdtcstpr {{ reserved: {=u8:?}, slcstp: {=bool:?} }}",
             self.reserved(),
             self.slcstp()
         )
@@ -186,14 +186,14 @@ impl Wdtrcr {
     #[doc = "Reset Interrupt Request Selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn rstirqs(&self) -> super::vals::Rstirqs {
+    pub const fn rstirqs(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Rstirqs::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Reset Interrupt Request Selection"]
     #[inline(always)]
-    pub const fn set_rstirqs(&mut self, val: super::vals::Rstirqs) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_rstirqs(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Wdtrcr {
@@ -212,7 +212,7 @@ impl core::fmt::Debug for Wdtrcr {
 #[cfg(feature = "defmt")]
 impl defmt::Format for Wdtrcr {
     fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Wdtrcr {{ rstirqs: {:?} }}", self.rstirqs())
+        defmt::write!(f, "Wdtrcr {{ rstirqs: {=bool:?} }}", self.rstirqs())
     }
 }
 #[doc = "WDT Refresh Register"]
@@ -272,26 +272,26 @@ impl Wdtsr {
     #[doc = "Underflow Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn undff(&self) -> super::vals::Undff {
+    pub const fn undff(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Undff::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Underflow Flag"]
     #[inline(always)]
-    pub const fn set_undff(&mut self, val: super::vals::Undff) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_undff(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "Refresh Error Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn refef(&self) -> super::vals::Refef {
+    pub const fn refef(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Refef::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Refresh Error Flag"]
     #[inline(always)]
-    pub const fn set_refef(&mut self, val: super::vals::Refef) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_refef(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for Wdtsr {
@@ -314,7 +314,7 @@ impl defmt::Format for Wdtsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Wdtsr {{ cntval: {=u16:?}, undff: {:?}, refef: {:?} }}",
+            "Wdtsr {{ cntval: {=u16:?}, undff: {=bool:?}, refef: {=bool:?} }}",
             self.cntval(),
             self.undff(),
             self.refef()

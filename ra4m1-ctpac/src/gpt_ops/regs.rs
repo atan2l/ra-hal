@@ -102,14 +102,14 @@ impl Opscr {
     #[doc = "Enable-Phase Output Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn en(&self) -> super::vals::En {
+    pub const fn en(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::En::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Enable-Phase Output Control"]
     #[inline(always)]
-    pub const fn set_en(&mut self, val: super::vals::En) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u32) & 0x01) << 8usize);
+    pub const fn set_en(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u32) & 0x01) << 8usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -126,74 +126,74 @@ impl Opscr {
     #[doc = "External Feedback Signal Enable This bit selects the input phase from the software settings and external input."]
     #[must_use]
     #[inline(always)]
-    pub const fn fb(&self) -> super::vals::Fb {
+    pub const fn fb(&self) -> bool {
         let val = (self.0 >> 16usize) & 0x01;
-        super::vals::Fb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "External Feedback Signal Enable This bit selects the input phase from the software settings and external input."]
     #[inline(always)]
-    pub const fn set_fb(&mut self, val: super::vals::Fb) {
-        self.0 = (self.0 & !(0x01 << 16usize)) | (((val.to_bits() as u32) & 0x01) << 16usize);
+    pub const fn set_fb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
     #[doc = "Positive-Phase Output (P) Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn p(&self) -> super::vals::P {
+    pub const fn p(&self) -> bool {
         let val = (self.0 >> 17usize) & 0x01;
-        super::vals::P::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Positive-Phase Output (P) Control"]
     #[inline(always)]
-    pub const fn set_p(&mut self, val: super::vals::P) {
-        self.0 = (self.0 & !(0x01 << 17usize)) | (((val.to_bits() as u32) & 0x01) << 17usize);
+    pub const fn set_p(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 17usize)) | (((val as u32) & 0x01) << 17usize);
     }
     #[doc = "Negative-Phase Output (N) Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn n(&self) -> super::vals::N {
+    pub const fn n(&self) -> bool {
         let val = (self.0 >> 18usize) & 0x01;
-        super::vals::N::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Negative-Phase Output (N) Control"]
     #[inline(always)]
-    pub const fn set_n(&mut self, val: super::vals::N) {
-        self.0 = (self.0 & !(0x01 << 18usize)) | (((val.to_bits() as u32) & 0x01) << 18usize);
+    pub const fn set_n(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 18usize)) | (((val as u32) & 0x01) << 18usize);
     }
     #[doc = "Invert-Phase Output Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn inv(&self) -> super::vals::Inv {
+    pub const fn inv(&self) -> bool {
         let val = (self.0 >> 19usize) & 0x01;
-        super::vals::Inv::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Invert-Phase Output Control"]
     #[inline(always)]
-    pub const fn set_inv(&mut self, val: super::vals::Inv) {
-        self.0 = (self.0 & !(0x01 << 19usize)) | (((val.to_bits() as u32) & 0x01) << 19usize);
+    pub const fn set_inv(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 19usize)) | (((val as u32) & 0x01) << 19usize);
     }
     #[doc = "Output phase rotation direction reversal"]
     #[must_use]
     #[inline(always)]
-    pub const fn rv(&self) -> super::vals::Rv {
+    pub const fn rv(&self) -> bool {
         let val = (self.0 >> 20usize) & 0x01;
-        super::vals::Rv::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Output phase rotation direction reversal"]
     #[inline(always)]
-    pub const fn set_rv(&mut self, val: super::vals::Rv) {
-        self.0 = (self.0 & !(0x01 << 20usize)) | (((val.to_bits() as u32) & 0x01) << 20usize);
+    pub const fn set_rv(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 20usize)) | (((val as u32) & 0x01) << 20usize);
     }
     #[doc = "Input phase alignment"]
     #[must_use]
     #[inline(always)]
-    pub const fn align(&self) -> super::vals::Align {
+    pub const fn align(&self) -> bool {
         let val = (self.0 >> 21usize) & 0x01;
-        super::vals::Align::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Input phase alignment"]
     #[inline(always)]
-    pub const fn set_align(&mut self, val: super::vals::Align) {
-        self.0 = (self.0 & !(0x01 << 21usize)) | (((val.to_bits() as u32) & 0x01) << 21usize);
+    pub const fn set_align(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 21usize)) | (((val as u32) & 0x01) << 21usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -222,14 +222,14 @@ impl Opscr {
     #[doc = "Group output disable function"]
     #[must_use]
     #[inline(always)]
-    pub const fn godf(&self) -> super::vals::Godf {
+    pub const fn godf(&self) -> bool {
         let val = (self.0 >> 26usize) & 0x01;
-        super::vals::Godf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Group output disable function"]
     #[inline(always)]
-    pub const fn set_godf(&mut self, val: super::vals::Godf) {
-        self.0 = (self.0 & !(0x01 << 26usize)) | (((val.to_bits() as u32) & 0x01) << 26usize);
+    pub const fn set_godf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 26usize)) | (((val as u32) & 0x01) << 26usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -246,14 +246,14 @@ impl Opscr {
     #[doc = "External Input Noise Filter Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn nfen(&self) -> super::vals::Nfen {
+    pub const fn nfen(&self) -> bool {
         let val = (self.0 >> 29usize) & 0x01;
-        super::vals::Nfen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "External Input Noise Filter Enable"]
     #[inline(always)]
-    pub const fn set_nfen(&mut self, val: super::vals::Nfen) {
-        self.0 = (self.0 & !(0x01 << 29usize)) | (((val.to_bits() as u32) & 0x01) << 29usize);
+    pub const fn set_nfen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 29usize)) | (((val as u32) & 0x01) << 29usize);
     }
     #[doc = "External Input Noise Filter Clock selection Noise filter sampling clock setting of the external input."]
     #[must_use]
@@ -307,7 +307,7 @@ impl defmt::Format for Opscr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Opscr {{ uf: {=bool:?}, vf: {=bool:?}, wf: {=bool:?}, reserved: {=bool:?}, u: {=bool:?}, v: {=bool:?}, w: {=bool:?}, reserved_2: {=bool:?}, en: {:?}, reserved_3: {=u8:?}, fb: {:?}, p: {:?}, n: {:?}, inv: {:?}, rv: {:?}, align: {:?}, reserved_4: {=u8:?}, grp: {:?}, godf: {:?}, reserved_5: {=u8:?}, nfen: {:?}, nfcs: {:?} }}",
+            "Opscr {{ uf: {=bool:?}, vf: {=bool:?}, wf: {=bool:?}, reserved: {=bool:?}, u: {=bool:?}, v: {=bool:?}, w: {=bool:?}, reserved_2: {=bool:?}, en: {=bool:?}, reserved_3: {=u8:?}, fb: {=bool:?}, p: {=bool:?}, n: {=bool:?}, inv: {=bool:?}, rv: {=bool:?}, align: {=bool:?}, reserved_4: {=u8:?}, grp: {:?}, godf: {=bool:?}, reserved_5: {=u8:?}, nfen: {=bool:?}, nfcs: {:?} }}",
             self.uf(),
             self.vf(),
             self.wf(),

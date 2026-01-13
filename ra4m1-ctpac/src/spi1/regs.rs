@@ -96,26 +96,26 @@ impl Spcmd0 {
     #[doc = "RSPCK Phase Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn cpha(&self) -> super::vals::Cpha {
+    pub const fn cpha(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cpha::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RSPCK Phase Setting"]
     #[inline(always)]
-    pub const fn set_cpha(&mut self, val: super::vals::Cpha) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_cpha(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "RSPCK Polarity Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn cpol(&self) -> super::vals::Cpol {
+    pub const fn cpol(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cpol::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RSPCK Polarity Setting"]
     #[inline(always)]
-    pub const fn set_cpol(&mut self, val: super::vals::Cpol) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_cpol(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Bit Rate Division Setting"]
     #[must_use]
@@ -168,50 +168,50 @@ impl Spcmd0 {
     #[doc = "RSPI LSB First"]
     #[must_use]
     #[inline(always)]
-    pub const fn lsbf(&self) -> super::vals::Lsbf {
+    pub const fn lsbf(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Lsbf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RSPI LSB First"]
     #[inline(always)]
-    pub const fn set_lsbf(&mut self, val: super::vals::Lsbf) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u16) & 0x01) << 12usize);
+    pub const fn set_lsbf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u16) & 0x01) << 12usize);
     }
     #[doc = "RSPI Next-Access Delay Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn spnden(&self) -> super::vals::Spnden {
+    pub const fn spnden(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Spnden::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RSPI Next-Access Delay Enable"]
     #[inline(always)]
-    pub const fn set_spnden(&mut self, val: super::vals::Spnden) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u16) & 0x01) << 13usize);
+    pub const fn set_spnden(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u16) & 0x01) << 13usize);
     }
     #[doc = "SSL Negation Delay Setting Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn slnden(&self) -> super::vals::Slnden {
+    pub const fn slnden(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Slnden::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SSL Negation Delay Setting Enable"]
     #[inline(always)]
-    pub const fn set_slnden(&mut self, val: super::vals::Slnden) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_slnden(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "RSPCK Delay Setting Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sckden(&self) -> super::vals::Sckden {
+    pub const fn sckden(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Sckden::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RSPCK Delay Setting Enable"]
     #[inline(always)]
-    pub const fn set_sckden(&mut self, val: super::vals::Sckden) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_sckden(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for Spcmd0 {
@@ -241,7 +241,7 @@ impl defmt::Format for Spcmd0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Spcmd0 {{ cpha: {:?}, cpol: {:?}, brdv: {:?}, ssla: {:?}, reserved: {=bool:?}, spb: {:?}, lsbf: {:?}, spnden: {:?}, slnden: {:?}, sckden: {:?} }}",
+            "Spcmd0 {{ cpha: {=bool:?}, cpol: {=bool:?}, brdv: {:?}, ssla: {:?}, reserved: {=bool:?}, spb: {:?}, lsbf: {=bool:?}, spnden: {=bool:?}, slnden: {=bool:?}, sckden: {=bool:?} }}",
             self.cpha(),
             self.cpol(),
             self.brdv(),
@@ -263,98 +263,98 @@ impl Spcr {
     #[doc = "SPI Mode Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn spms(&self) -> super::vals::Spms {
+    pub const fn spms(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Spms::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SPI Mode Select"]
     #[inline(always)]
-    pub const fn set_spms(&mut self, val: super::vals::Spms) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_spms(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Communications Operating Mode Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn txmd(&self) -> super::vals::Txmd {
+    pub const fn txmd(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Txmd::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Communications Operating Mode Select"]
     #[inline(always)]
-    pub const fn set_txmd(&mut self, val: super::vals::Txmd) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_txmd(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Mode Fault Error Detection Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn modfen(&self) -> super::vals::Modfen {
+    pub const fn modfen(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Modfen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Mode Fault Error Detection Enable"]
     #[inline(always)]
-    pub const fn set_modfen(&mut self, val: super::vals::Modfen) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_modfen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "SPI Master/Slave Mode Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn mstr(&self) -> super::vals::Mstr {
+    pub const fn mstr(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Mstr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SPI Master/Slave Mode Select"]
     #[inline(always)]
-    pub const fn set_mstr(&mut self, val: super::vals::Mstr) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_mstr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "SPI Error Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn speie(&self) -> super::vals::Speie {
+    pub const fn speie(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Speie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SPI Error Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_speie(&mut self, val: super::vals::Speie) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_speie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "Transmit Buffer Empty Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sptie(&self) -> super::vals::Sptie {
+    pub const fn sptie(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Sptie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Transmit Buffer Empty Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_sptie(&mut self, val: super::vals::Sptie) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_sptie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "SPI Function Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn spe(&self) -> super::vals::Spe {
+    pub const fn spe(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Spe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SPI Function Enable"]
     #[inline(always)]
-    pub const fn set_spe(&mut self, val: super::vals::Spe) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_spe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "SPI Receive Buffer Full Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sprie(&self) -> super::vals::Sprie {
+    pub const fn sprie(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Sprie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SPI Receive Buffer Full Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_sprie(&mut self, val: super::vals::Sprie) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_sprie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Spcr {
@@ -382,7 +382,7 @@ impl defmt::Format for Spcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Spcr {{ spms: {:?}, txmd: {:?}, modfen: {:?}, mstr: {:?}, speie: {:?}, sptie: {:?}, spe: {:?}, sprie: {:?} }}",
+            "Spcr {{ spms: {=bool:?}, txmd: {=bool:?}, modfen: {=bool:?}, mstr: {=bool:?}, speie: {=bool:?}, sptie: {=bool:?}, spe: {=bool:?}, sprie: {=bool:?} }}",
             self.spms(),
             self.txmd(),
             self.modfen(),
@@ -402,62 +402,62 @@ impl Spcr2 {
     #[doc = "Parity Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sppe(&self) -> super::vals::Sppe {
+    pub const fn sppe(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Sppe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Parity Enable"]
     #[inline(always)]
-    pub const fn set_sppe(&mut self, val: super::vals::Sppe) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_sppe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Parity Mode"]
     #[must_use]
     #[inline(always)]
-    pub const fn spoe(&self) -> super::vals::Spoe {
+    pub const fn spoe(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Spoe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Parity Mode"]
     #[inline(always)]
-    pub const fn set_spoe(&mut self, val: super::vals::Spoe) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_spoe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "SPI Idle Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn spiie(&self) -> super::vals::Spiie {
+    pub const fn spiie(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Spiie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SPI Idle Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_spiie(&mut self, val: super::vals::Spiie) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_spiie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "Parity Self-Testing"]
     #[must_use]
     #[inline(always)]
-    pub const fn pte(&self) -> super::vals::Pte {
+    pub const fn pte(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Pte::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Parity Self-Testing"]
     #[inline(always)]
-    pub const fn set_pte(&mut self, val: super::vals::Pte) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_pte(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "RSPCK Auto-Stop Function Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sckase(&self) -> super::vals::Sckase {
+    pub const fn sckase(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Sckase::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RSPCK Auto-Stop Function Enable"]
     #[inline(always)]
-    pub const fn set_sckase(&mut self, val: super::vals::Sckase) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_sckase(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -495,7 +495,7 @@ impl defmt::Format for Spcr2 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Spcr2 {{ sppe: {:?}, spoe: {:?}, spiie: {:?}, pte: {:?}, sckase: {:?}, reserved: {=u8:?} }}",
+            "Spcr2 {{ sppe: {=bool:?}, spoe: {=bool:?}, spiie: {=bool:?}, pte: {=bool:?}, sckase: {=bool:?}, reserved: {=u8:?} }}",
             self.sppe(),
             self.spoe(),
             self.spiie(),
@@ -525,26 +525,26 @@ impl Spdcr {
     #[doc = "RSPI Receive/Transmit Data Selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn sprdtd(&self) -> super::vals::Sprdtd {
+    pub const fn sprdtd(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Sprdtd::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RSPI Receive/Transmit Data Selection"]
     #[inline(always)]
-    pub const fn set_sprdtd(&mut self, val: super::vals::Sprdtd) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_sprdtd(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "SPI Word Access/Halfword Access Specification"]
     #[must_use]
     #[inline(always)]
-    pub const fn splw(&self) -> super::vals::Splw {
+    pub const fn splw(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Splw::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SPI Word Access/Halfword Access Specification"]
     #[inline(always)]
-    pub const fn set_splw(&mut self, val: super::vals::Splw) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_splw(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -580,7 +580,7 @@ impl defmt::Format for Spdcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Spdcr {{ reserved: {=u8:?}, sprdtd: {:?}, splw: {:?}, reserved_2: {=u8:?} }}",
+            "Spdcr {{ reserved: {=u8:?}, sprdtd: {=bool:?}, splw: {=bool:?}, reserved_2: {=u8:?} }}",
             self.reserved(),
             self.sprdtd(),
             self.splw(),
@@ -723,26 +723,26 @@ impl Sppcr {
     #[doc = "RSPI Loopback"]
     #[must_use]
     #[inline(always)]
-    pub const fn splp(&self) -> super::vals::Splp {
+    pub const fn splp(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Splp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RSPI Loopback"]
     #[inline(always)]
-    pub const fn set_splp(&mut self, val: super::vals::Splp) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_splp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "RSPI Loopback 2"]
     #[must_use]
     #[inline(always)]
-    pub const fn splp2(&self) -> super::vals::Splp2 {
+    pub const fn splp2(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Splp2::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RSPI Loopback 2"]
     #[inline(always)]
-    pub const fn set_splp2(&mut self, val: super::vals::Splp2) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_splp2(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -759,26 +759,26 @@ impl Sppcr {
     #[doc = "MOSI Idle Fixed Value"]
     #[must_use]
     #[inline(always)]
-    pub const fn moifv(&self) -> super::vals::Moifv {
+    pub const fn moifv(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Moifv::from_bits(val as u8)
+        val != 0
     }
     #[doc = "MOSI Idle Fixed Value"]
     #[inline(always)]
-    pub const fn set_moifv(&mut self, val: super::vals::Moifv) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_moifv(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "MOSI Idle Value Fixing Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn moife(&self) -> super::vals::Moife {
+    pub const fn moife(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Moife::from_bits(val as u8)
+        val != 0
     }
     #[doc = "MOSI Idle Value Fixing Enable"]
     #[inline(always)]
-    pub const fn set_moife(&mut self, val: super::vals::Moife) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_moife(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -816,7 +816,7 @@ impl defmt::Format for Sppcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Sppcr {{ splp: {:?}, splp2: {:?}, reserved: {=u8:?}, moifv: {:?}, moife: {:?}, reserved_2: {=u8:?} }}",
+            "Sppcr {{ splp: {=bool:?}, splp2: {=bool:?}, reserved: {=u8:?}, moifv: {=bool:?}, moife: {=bool:?}, reserved_2: {=u8:?} }}",
             self.splp(),
             self.splp2(),
             self.reserved(),
@@ -834,74 +834,74 @@ impl Spsr {
     #[doc = "Overrun Error Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn ovrf(&self) -> super::vals::Ovrf {
+    pub const fn ovrf(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ovrf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Overrun Error Flag"]
     #[inline(always)]
-    pub const fn set_ovrf(&mut self, val: super::vals::Ovrf) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ovrf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "SPI Idle Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn idlnf(&self) -> super::vals::Idlnf {
+    pub const fn idlnf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Idlnf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SPI Idle Flag"]
     #[inline(always)]
-    pub const fn set_idlnf(&mut self, val: super::vals::Idlnf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_idlnf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Mode Fault Error Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn modf(&self) -> super::vals::Modf {
+    pub const fn modf(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Modf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Mode Fault Error Flag"]
     #[inline(always)]
-    pub const fn set_modf(&mut self, val: super::vals::Modf) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_modf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "Parity Error Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn perf(&self) -> super::vals::Perf {
+    pub const fn perf(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Perf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Parity Error Flag"]
     #[inline(always)]
-    pub const fn set_perf(&mut self, val: super::vals::Perf) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_perf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "Underrun Error Flag (When MODF is 0, This bit is invalid.)"]
     #[must_use]
     #[inline(always)]
-    pub const fn udrf(&self) -> super::vals::Udrf {
+    pub const fn udrf(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Udrf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Underrun Error Flag (When MODF is 0, This bit is invalid.)"]
     #[inline(always)]
-    pub const fn set_udrf(&mut self, val: super::vals::Udrf) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_udrf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "SPI Transmit Buffer Empty Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn sptef(&self) -> super::vals::Sptef {
+    pub const fn sptef(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Sptef::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SPI Transmit Buffer Empty Flag"]
     #[inline(always)]
-    pub const fn set_sptef(&mut self, val: super::vals::Sptef) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_sptef(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -918,14 +918,14 @@ impl Spsr {
     #[doc = "SPI Receive Buffer Full Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn sprf(&self) -> super::vals::Sprf {
+    pub const fn sprf(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Sprf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SPI Receive Buffer Full Flag"]
     #[inline(always)]
-    pub const fn set_sprf(&mut self, val: super::vals::Sprf) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_sprf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Spsr {
@@ -953,7 +953,7 @@ impl defmt::Format for Spsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Spsr {{ ovrf: {:?}, idlnf: {:?}, modf: {:?}, perf: {:?}, udrf: {:?}, sptef: {:?}, reserved: {=bool:?}, sprf: {:?} }}",
+            "Spsr {{ ovrf: {=bool:?}, idlnf: {=bool:?}, modf: {=bool:?}, perf: {=bool:?}, udrf: {=bool:?}, sptef: {=bool:?}, reserved: {=bool:?}, sprf: {=bool:?} }}",
             self.ovrf(),
             self.idlnf(),
             self.modf(),
@@ -1028,50 +1028,50 @@ impl Sslp {
     #[doc = "SSL0 Signal Polarity Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn ssl0p(&self) -> super::vals::Ssl0p {
+    pub const fn ssl0p(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ssl0p::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SSL0 Signal Polarity Setting"]
     #[inline(always)]
-    pub const fn set_ssl0p(&mut self, val: super::vals::Ssl0p) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ssl0p(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "SSL1 Signal Polarity Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn ssl1p(&self) -> super::vals::Ssl1p {
+    pub const fn ssl1p(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ssl1p::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SSL1 Signal Polarity Setting"]
     #[inline(always)]
-    pub const fn set_ssl1p(&mut self, val: super::vals::Ssl1p) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_ssl1p(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "SSL2 Signal Polarity Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn ssl2p(&self) -> super::vals::Ssl2p {
+    pub const fn ssl2p(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ssl2p::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SSL2 Signal Polarity Setting"]
     #[inline(always)]
-    pub const fn set_ssl2p(&mut self, val: super::vals::Ssl2p) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_ssl2p(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "SSL3 Signal Polarity Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn ssl3p(&self) -> super::vals::Ssl3p {
+    pub const fn ssl3p(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ssl3p::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SSL3 Signal Polarity Setting"]
     #[inline(always)]
-    pub const fn set_ssl3p(&mut self, val: super::vals::Ssl3p) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_ssl3p(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 0000. The write value should be 0000."]
     #[must_use]
@@ -1108,7 +1108,7 @@ impl defmt::Format for Sslp {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Sslp {{ ssl0p: {:?}, ssl1p: {:?}, ssl2p: {:?}, ssl3p: {:?}, reserved: {=u8:?} }}",
+            "Sslp {{ ssl0p: {=bool:?}, ssl1p: {=bool:?}, ssl2p: {=bool:?}, ssl3p: {=bool:?}, reserved: {=u8:?} }}",
             self.ssl0p(),
             self.ssl1p(),
             self.ssl2p(),

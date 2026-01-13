@@ -6,14 +6,14 @@ impl Dmast {
     #[doc = "DMAC Operation Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dmst(&self) -> super::vals::Dmst {
+    pub const fn dmst(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Dmst::from_bits(val as u8)
+        val != 0
     }
     #[doc = "DMAC Operation Enable"]
     #[inline(always)]
-    pub const fn set_dmst(&mut self, val: super::vals::Dmst) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_dmst(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -47,7 +47,7 @@ impl defmt::Format for Dmast {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Dmast {{ dmst: {:?}, reserved: {=u8:?} }}",
+            "Dmast {{ dmst: {=bool:?}, reserved: {=u8:?} }}",
             self.dmst(),
             self.reserved()
         )

@@ -117,14 +117,14 @@ impl Dmcnt {
     #[doc = "DMA Transfer Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dte(&self) -> super::vals::Dte {
+    pub const fn dte(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Dte::from_bits(val as u8)
+        val != 0
     }
     #[doc = "DMA Transfer Enable"]
     #[inline(always)]
-    pub const fn set_dte(&mut self, val: super::vals::Dte) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_dte(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -158,7 +158,7 @@ impl defmt::Format for Dmcnt {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Dmcnt {{ dte: {:?}, reserved: {=u8:?} }}",
+            "Dmcnt {{ dte: {=bool:?}, reserved: {=u8:?} }}",
             self.dte(),
             self.reserved()
         )
@@ -315,62 +315,62 @@ impl Dmint {
     #[doc = "Destination Address Extended Repeat Area Overflow Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn darie(&self) -> super::vals::Darie {
+    pub const fn darie(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Darie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Destination Address Extended Repeat Area Overflow Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_darie(&mut self, val: super::vals::Darie) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_darie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Source Address Extended Repeat Area Overflow Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sarie(&self) -> super::vals::Sarie {
+    pub const fn sarie(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Sarie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Source Address Extended Repeat Area Overflow Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_sarie(&mut self, val: super::vals::Sarie) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_sarie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Repeat Size End Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn rptie(&self) -> super::vals::Rptie {
+    pub const fn rptie(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Rptie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Repeat Size End Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_rptie(&mut self, val: super::vals::Rptie) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_rptie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "Transfer Escape End Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn esie(&self) -> super::vals::Esie {
+    pub const fn esie(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Esie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Transfer Escape End Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_esie(&mut self, val: super::vals::Esie) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_esie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "Transfer End Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dtie(&self) -> super::vals::Dtie {
+    pub const fn dtie(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Dtie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Transfer End Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_dtie(&mut self, val: super::vals::Dtie) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_dtie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -408,7 +408,7 @@ impl defmt::Format for Dmint {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Dmint {{ darie: {:?}, sarie: {:?}, rptie: {:?}, esie: {:?}, dtie: {:?}, reserved: {=u8:?} }}",
+            "Dmint {{ darie: {=bool:?}, sarie: {=bool:?}, rptie: {=bool:?}, esie: {=bool:?}, dtie: {=bool:?}, reserved: {=u8:?} }}",
             self.darie(),
             self.sarie(),
             self.rptie(),
@@ -463,14 +463,14 @@ impl Dmreq {
     #[doc = "DMA Software Start"]
     #[must_use]
     #[inline(always)]
-    pub const fn swreq(&self) -> super::vals::Swreq {
+    pub const fn swreq(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Swreq::from_bits(val as u8)
+        val != 0
     }
     #[doc = "DMA Software Start"]
     #[inline(always)]
-    pub const fn set_swreq(&mut self, val: super::vals::Swreq) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_swreq(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -487,14 +487,14 @@ impl Dmreq {
     #[doc = "DMA Software Start Bit Auto Clear Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn clrs(&self) -> super::vals::Clrs {
+    pub const fn clrs(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Clrs::from_bits(val as u8)
+        val != 0
     }
     #[doc = "DMA Software Start Bit Auto Clear Select"]
     #[inline(always)]
-    pub const fn set_clrs(&mut self, val: super::vals::Clrs) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_clrs(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -530,7 +530,7 @@ impl defmt::Format for Dmreq {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Dmreq {{ swreq: {:?}, reserved: {=u8:?}, clrs: {:?}, reserved_2: {=u8:?} }}",
+            "Dmreq {{ swreq: {=bool:?}, reserved: {=u8:?}, clrs: {=bool:?}, reserved_2: {=u8:?} }}",
             self.swreq(),
             self.reserved(),
             self.clrs(),
@@ -583,14 +583,14 @@ impl Dmsts {
     #[doc = "Transfer Escape End Interrupt Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn esif(&self) -> super::vals::Esif {
+    pub const fn esif(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Esif::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Transfer Escape End Interrupt Flag"]
     #[inline(always)]
-    pub const fn set_esif(&mut self, val: super::vals::Esif) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_esif(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -607,14 +607,14 @@ impl Dmsts {
     #[doc = "Transfer End Interrupt Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn dtif(&self) -> super::vals::Dtif {
+    pub const fn dtif(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Dtif::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Transfer End Interrupt Flag"]
     #[inline(always)]
-    pub const fn set_dtif(&mut self, val: super::vals::Dtif) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_dtif(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -631,14 +631,14 @@ impl Dmsts {
     #[doc = "DMA Active Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn act(&self) -> super::vals::Act {
+    pub const fn act(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Act::from_bits(val as u8)
+        val != 0
     }
     #[doc = "DMA Active Flag"]
     #[inline(always)]
-    pub const fn set_act(&mut self, val: super::vals::Act) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_act(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Dmsts {
@@ -663,7 +663,7 @@ impl defmt::Format for Dmsts {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Dmsts {{ esif: {:?}, reserved: {=u8:?}, dtif: {:?}, reserved_2: {=u8:?}, act: {:?} }}",
+            "Dmsts {{ esif: {=bool:?}, reserved: {=u8:?}, dtif: {=bool:?}, reserved_2: {=u8:?}, act: {=bool:?} }}",
             self.esif(),
             self.reserved(),
             self.dtif(),

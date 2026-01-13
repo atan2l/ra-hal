@@ -796,50 +796,50 @@ impl Rcr1 {
     #[doc = "Alarm Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn aie(&self) -> super::vals::Aie {
+    pub const fn aie(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Aie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Alarm Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_aie(&mut self, val: super::vals::Aie) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_aie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Carry Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cie(&self) -> super::vals::Cie {
+    pub const fn cie(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Carry Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_cie(&mut self, val: super::vals::Cie) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_cie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Periodic Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn pie(&self) -> super::vals::Pie {
+    pub const fn pie(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Pie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Periodic Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_pie(&mut self, val: super::vals::Pie) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_pie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "RTCOUT Output Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn rtcos(&self) -> super::vals::Rtcos {
+    pub const fn rtcos(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Rtcos::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RTCOUT Output Select"]
     #[inline(always)]
-    pub const fn set_rtcos(&mut self, val: super::vals::Rtcos) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_rtcos(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "Periodic Interrupt Select"]
     #[must_use]
@@ -876,7 +876,7 @@ impl defmt::Format for Rcr1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rcr1 {{ aie: {:?}, cie: {:?}, pie: {:?}, rtcos: {:?}, pes: {:?} }}",
+            "Rcr1 {{ aie: {=bool:?}, cie: {=bool:?}, pie: {=bool:?}, rtcos: {=bool:?}, pes: {:?} }}",
             self.aie(),
             self.cie(),
             self.pie(),
@@ -893,98 +893,98 @@ impl Rcr2 {
     #[doc = "Start"]
     #[must_use]
     #[inline(always)]
-    pub const fn start(&self) -> super::vals::Start {
+    pub const fn start(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Start::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Start"]
     #[inline(always)]
-    pub const fn set_start(&mut self, val: super::vals::Start) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_start(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "RTC Software Reset"]
     #[must_use]
     #[inline(always)]
-    pub const fn reset(&self) -> super::vals::Reset {
+    pub const fn reset(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Reset::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RTC Software Reset"]
     #[inline(always)]
-    pub const fn set_reset(&mut self, val: super::vals::Reset) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_reset(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "30-Second Adjustment"]
     #[must_use]
     #[inline(always)]
-    pub const fn adj30(&self) -> super::vals::Adj30 {
+    pub const fn adj30(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Adj30::from_bits(val as u8)
+        val != 0
     }
     #[doc = "30-Second Adjustment"]
     #[inline(always)]
-    pub const fn set_adj30(&mut self, val: super::vals::Adj30) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_adj30(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "RTCOUT Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn rtcoe(&self) -> super::vals::Rtcoe {
+    pub const fn rtcoe(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Rtcoe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RTCOUT Output Enable"]
     #[inline(always)]
-    pub const fn set_rtcoe(&mut self, val: super::vals::Rtcoe) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_rtcoe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "Automatic Adjustment Enable (When the LOCO clock is selected, the setting of this bit is disabled.)"]
     #[must_use]
     #[inline(always)]
-    pub const fn aadje(&self) -> super::vals::Aadje {
+    pub const fn aadje(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Aadje::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Automatic Adjustment Enable (When the LOCO clock is selected, the setting of this bit is disabled.)"]
     #[inline(always)]
-    pub const fn set_aadje(&mut self, val: super::vals::Aadje) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_aadje(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "Automatic Adjustment Period Select (When the LOCO clock is selected, the setting of this bit is disabled.)"]
     #[must_use]
     #[inline(always)]
-    pub const fn aadjp(&self) -> super::vals::Aadjp {
+    pub const fn aadjp(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Aadjp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Automatic Adjustment Period Select (When the LOCO clock is selected, the setting of this bit is disabled.)"]
     #[inline(always)]
-    pub const fn set_aadjp(&mut self, val: super::vals::Aadjp) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_aadjp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "Hours Mode"]
     #[must_use]
     #[inline(always)]
-    pub const fn hr24(&self) -> super::vals::Hr24 {
+    pub const fn hr24(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Hr24::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Hours Mode"]
     #[inline(always)]
-    pub const fn set_hr24(&mut self, val: super::vals::Hr24) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_hr24(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "Count Mode Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cntmd(&self) -> super::vals::Cntmd {
+    pub const fn cntmd(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Cntmd::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Count Mode Select"]
     #[inline(always)]
-    pub const fn set_cntmd(&mut self, val: super::vals::Cntmd) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_cntmd(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Rcr2 {
@@ -1012,7 +1012,7 @@ impl defmt::Format for Rcr2 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rcr2 {{ start: {:?}, reset: {:?}, adj30: {:?}, rtcoe: {:?}, aadje: {:?}, aadjp: {:?}, hr24: {:?}, cntmd: {:?} }}",
+            "Rcr2 {{ start: {=bool:?}, reset: {=bool:?}, adj30: {=bool:?}, rtcoe: {=bool:?}, aadje: {=bool:?}, aadjp: {=bool:?}, hr24: {=bool:?}, cntmd: {=bool:?} }}",
             self.start(),
             self.reset(),
             self.adj30(),
@@ -1032,14 +1032,14 @@ impl Rcr4 {
     #[doc = "Count Source Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn rcksel(&self) -> super::vals::Rcksel {
+    pub const fn rcksel(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Rcksel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Count Source Select"]
     #[inline(always)]
-    pub const fn set_rcksel(&mut self, val: super::vals::Rcksel) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_rcksel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -1073,7 +1073,7 @@ impl defmt::Format for Rcr4 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rcr4 {{ rcksel: {:?}, reserved: {=u8:?} }}",
+            "Rcr4 {{ rcksel: {=bool:?}, reserved: {=u8:?} }}",
             self.rcksel(),
             self.reserved()
         )
@@ -1123,14 +1123,14 @@ impl Rdayar {
     #[doc = "Compare enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn enb(&self) -> super::vals::RdayarEnb {
+    pub const fn enb(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::RdayarEnb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare enable"]
     #[inline(always)]
-    pub const fn set_enb(&mut self, val: super::vals::RdayarEnb) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_enb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Rdayar {
@@ -1154,7 +1154,7 @@ impl defmt::Format for Rdayar {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rdayar {{ date1: {=u8:?}, date10: {=u8:?}, reserved: {=bool:?}, enb: {:?} }}",
+            "Rdayar {{ date1: {=u8:?}, date10: {=u8:?}, reserved: {=bool:?}, enb: {=bool:?} }}",
             self.date1(),
             self.date10(),
             self.reserved(),
@@ -1408,26 +1408,26 @@ impl Rhrar {
     #[doc = "Time Counter Setting for a.m./p.m."]
     #[must_use]
     #[inline(always)]
-    pub const fn pm(&self) -> super::vals::RhrarPm {
+    pub const fn pm(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::RhrarPm::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Time Counter Setting for a.m./p.m."]
     #[inline(always)]
-    pub const fn set_pm(&mut self, val: super::vals::RhrarPm) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_pm(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "Compare enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn enb(&self) -> super::vals::RhrarEnb {
+    pub const fn enb(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::RhrarEnb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare enable"]
     #[inline(always)]
-    pub const fn set_enb(&mut self, val: super::vals::RhrarEnb) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_enb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Rhrar {
@@ -1451,7 +1451,7 @@ impl defmt::Format for Rhrar {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rhrar {{ hr1: {=u8:?}, hr10: {=u8:?}, pm: {:?}, enb: {:?} }}",
+            "Rhrar {{ hr1: {=u8:?}, hr10: {=u8:?}, pm: {=bool:?}, enb: {=bool:?} }}",
             self.hr1(),
             self.hr10(),
             self.pm(),
@@ -1491,14 +1491,14 @@ impl Rhrcnt {
     #[doc = "Time Counter Setting for a.m./p.m."]
     #[must_use]
     #[inline(always)]
-    pub const fn pm(&self) -> super::vals::RhrcntPm {
+    pub const fn pm(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::RhrcntPm::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Time Counter Setting for a.m./p.m."]
     #[inline(always)]
-    pub const fn set_pm(&mut self, val: super::vals::RhrcntPm) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_pm(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
 }
 impl Default for Rhrcnt {
@@ -1521,7 +1521,7 @@ impl defmt::Format for Rhrcnt {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rhrcnt {{ hr1: {=u8:?}, hr10: {=u8:?}, pm: {:?} }}",
+            "Rhrcnt {{ hr1: {=u8:?}, hr10: {=u8:?}, pm: {=bool:?} }}",
             self.hr1(),
             self.hr10(),
             self.pm()
@@ -1560,14 +1560,14 @@ impl Rhrcp {
     #[doc = "A.m./p.m. select for time counter setting."]
     #[must_use]
     #[inline(always)]
-    pub const fn pm(&self) -> super::vals::RhrcpPm {
+    pub const fn pm(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::RhrcpPm::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A.m./p.m. select for time counter setting."]
     #[inline(always)]
-    pub const fn set_pm(&mut self, val: super::vals::RhrcpPm) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_pm(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "This bit is read as 0."]
     #[must_use]
@@ -1603,7 +1603,7 @@ impl defmt::Format for Rhrcp {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rhrcp {{ hr1: {=u8:?}, hr10: {=u8:?}, pm: {:?}, reserved: {=bool:?} }}",
+            "Rhrcp {{ hr1: {=u8:?}, hr10: {=u8:?}, pm: {=bool:?}, reserved: {=bool:?} }}",
             self.hr1(),
             self.hr10(),
             self.pm(),
@@ -1643,14 +1643,14 @@ impl Rminar {
     #[doc = "Compare enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn enb(&self) -> super::vals::RminarEnb {
+    pub const fn enb(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::RminarEnb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare enable"]
     #[inline(always)]
-    pub const fn set_enb(&mut self, val: super::vals::RminarEnb) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_enb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Rminar {
@@ -1673,7 +1673,7 @@ impl defmt::Format for Rminar {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rminar {{ min1: {=u8:?}, min10: {=u8:?}, enb: {:?} }}",
+            "Rminar {{ min1: {=u8:?}, min10: {=u8:?}, enb: {=bool:?} }}",
             self.min1(),
             self.min10(),
             self.enb()
@@ -1848,14 +1848,14 @@ impl Rmonar {
     #[doc = "Compare enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn enb(&self) -> super::vals::RmonarEnb {
+    pub const fn enb(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::RmonarEnb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare enable"]
     #[inline(always)]
-    pub const fn set_enb(&mut self, val: super::vals::RmonarEnb) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_enb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Rmonar {
@@ -1879,7 +1879,7 @@ impl defmt::Format for Rmonar {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rmonar {{ mon1: {=u8:?}, mon10: {=bool:?}, reserved: {=u8:?}, enb: {:?} }}",
+            "Rmonar {{ mon1: {=u8:?}, mon10: {=bool:?}, reserved: {=u8:?}, enb: {=bool:?} }}",
             self.mon1(),
             self.mon10(),
             self.reserved(),
@@ -2043,14 +2043,14 @@ impl Rsecar {
     #[doc = "Compare enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn enb(&self) -> super::vals::RsecarEnb {
+    pub const fn enb(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::RsecarEnb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare enable"]
     #[inline(always)]
-    pub const fn set_enb(&mut self, val: super::vals::RsecarEnb) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_enb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Rsecar {
@@ -2073,7 +2073,7 @@ impl defmt::Format for Rsecar {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rsecar {{ sec1: {=u8:?}, sec10: {=u8:?}, enb: {:?} }}",
+            "Rsecar {{ sec1: {=u8:?}, sec10: {=u8:?}, enb: {=bool:?} }}",
             self.sec1(),
             self.sec10(),
             self.enb()
@@ -2224,14 +2224,14 @@ impl Rtccr {
     #[doc = "Time Capture Status"]
     #[must_use]
     #[inline(always)]
-    pub const fn tcst(&self) -> super::vals::Tcst {
+    pub const fn tcst(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Tcst::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Time Capture Status"]
     #[inline(always)]
-    pub const fn set_tcst(&mut self, val: super::vals::Tcst) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_tcst(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2305,7 +2305,7 @@ impl defmt::Format for Rtccr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rtccr {{ tcct: {:?}, tcst: {:?}, reserved: {=bool:?}, tcnf: {:?}, reserved_2: {=bool:?}, reserved_3: {=bool:?} }}",
+            "Rtccr {{ tcct: {:?}, tcst: {=bool:?}, reserved: {=bool:?}, tcnf: {:?}, reserved_2: {=bool:?}, reserved_3: {=bool:?} }}",
             self.tcct(),
             self.tcst(),
             self.reserved(),
@@ -2347,14 +2347,14 @@ impl Rwkar {
     #[doc = "Compare enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn enb(&self) -> super::vals::RwkarEnb {
+    pub const fn enb(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::RwkarEnb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare enable"]
     #[inline(always)]
-    pub const fn set_enb(&mut self, val: super::vals::RwkarEnb) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_enb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Rwkar {
@@ -2377,7 +2377,7 @@ impl defmt::Format for Rwkar {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rwkar {{ dayw: {:?}, reserved: {=u8:?}, enb: {:?} }}",
+            "Rwkar {{ dayw: {:?}, reserved: {=u8:?}, enb: {=bool:?} }}",
             self.dayw(),
             self.reserved(),
             self.enb()
@@ -2510,14 +2510,14 @@ impl Ryraren {
     #[doc = "Compare enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn enb(&self) -> super::vals::RyrarenEnb {
+    pub const fn enb(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::RyrarenEnb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare enable"]
     #[inline(always)]
-    pub const fn set_enb(&mut self, val: super::vals::RyrarenEnb) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_enb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Ryraren {
@@ -2539,7 +2539,7 @@ impl defmt::Format for Ryraren {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ryraren {{ reserved: {=u8:?}, enb: {:?} }}",
+            "Ryraren {{ reserved: {=u8:?}, enb: {=bool:?} }}",
             self.reserved(),
             self.enb()
         )

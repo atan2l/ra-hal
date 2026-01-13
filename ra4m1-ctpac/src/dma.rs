@@ -21,4 +21,3 @@ impl Dma {
     }
 }
 pub mod regs;
-pub mod vals;

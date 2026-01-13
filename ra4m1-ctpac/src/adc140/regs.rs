@@ -30,14 +30,14 @@ impl Adadc {
     #[doc = "Average mode enable bit. Note: The AVEE bit converts twice, and only when converting it four times, is effective. Please do not set (ADADC.AVEE=1) to conversion (ADADC.ADC 2:0=010b) three times when you select the average mode."]
     #[must_use]
     #[inline(always)]
-    pub const fn avee(&self) -> super::vals::Avee {
+    pub const fn avee(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Avee::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Average mode enable bit. Note: The AVEE bit converts twice, and only when converting it four times, is effective. Please do not set (ADADC.AVEE=1) to conversion (ADADC.ADC 2:0=010b) three times when you select the average mode."]
     #[inline(always)]
-    pub const fn set_avee(&mut self, val: super::vals::Avee) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_avee(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Adadc {
@@ -60,7 +60,7 @@ impl defmt::Format for Adadc {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adadc {{ adc: {:?}, reserved: {=u8:?}, avee: {:?} }}",
+            "Adadc {{ adc: {:?}, reserved: {=u8:?}, avee: {=bool:?} }}",
             self.adc(),
             self.reserved(),
             self.avee()
@@ -75,182 +75,182 @@ impl Adads0 {
     #[doc = "A/D-Converted Value Addition/Average Channel AN000 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads00(&self) -> super::vals::Ads00 {
+    pub const fn ads00(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ads00::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN000 Select"]
     #[inline(always)]
-    pub const fn set_ads00(&mut self, val: super::vals::Ads00) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_ads00(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN001 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads01(&self) -> super::vals::Ads01 {
+    pub const fn ads01(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ads01::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN001 Select"]
     #[inline(always)]
-    pub const fn set_ads01(&mut self, val: super::vals::Ads01) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_ads01(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN002 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads02(&self) -> super::vals::Ads02 {
+    pub const fn ads02(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ads02::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN002 Select"]
     #[inline(always)]
-    pub const fn set_ads02(&mut self, val: super::vals::Ads02) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_ads02(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN003 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads03(&self) -> super::vals::Ads03 {
+    pub const fn ads03(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ads03::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN003 Select"]
     #[inline(always)]
-    pub const fn set_ads03(&mut self, val: super::vals::Ads03) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_ads03(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN004 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads04(&self) -> super::vals::Ads04 {
+    pub const fn ads04(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ads04::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN004 Select"]
     #[inline(always)]
-    pub const fn set_ads04(&mut self, val: super::vals::Ads04) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_ads04(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN005 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads05(&self) -> super::vals::Ads05 {
+    pub const fn ads05(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Ads05::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN005 Select"]
     #[inline(always)]
-    pub const fn set_ads05(&mut self, val: super::vals::Ads05) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u16) & 0x01) << 5usize);
+    pub const fn set_ads05(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN006 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads06(&self) -> super::vals::Ads06 {
+    pub const fn ads06(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Ads06::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN006 Select"]
     #[inline(always)]
-    pub const fn set_ads06(&mut self, val: super::vals::Ads06) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_ads06(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN007 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads07(&self) -> super::vals::Ads07 {
+    pub const fn ads07(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Ads07::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN007 Select"]
     #[inline(always)]
-    pub const fn set_ads07(&mut self, val: super::vals::Ads07) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u16) & 0x01) << 7usize);
+    pub const fn set_ads07(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN008 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads08(&self) -> super::vals::Ads08 {
+    pub const fn ads08(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Ads08::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN008 Select"]
     #[inline(always)]
-    pub const fn set_ads08(&mut self, val: super::vals::Ads08) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_ads08(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN009 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads09(&self) -> super::vals::Ads09 {
+    pub const fn ads09(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Ads09::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN009 Select"]
     #[inline(always)]
-    pub const fn set_ads09(&mut self, val: super::vals::Ads09) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_ads09(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN010 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads10(&self) -> super::vals::Ads10 {
+    pub const fn ads10(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Ads10::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN010 Select"]
     #[inline(always)]
-    pub const fn set_ads10(&mut self, val: super::vals::Ads10) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_ads10(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN011 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads11(&self) -> super::vals::Ads11 {
+    pub const fn ads11(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Ads11::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN011 Select"]
     #[inline(always)]
-    pub const fn set_ads11(&mut self, val: super::vals::Ads11) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u16) & 0x01) << 11usize);
+    pub const fn set_ads11(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u16) & 0x01) << 11usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN012 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads12(&self) -> super::vals::Ads12 {
+    pub const fn ads12(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Ads12::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN012 Select"]
     #[inline(always)]
-    pub const fn set_ads12(&mut self, val: super::vals::Ads12) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u16) & 0x01) << 12usize);
+    pub const fn set_ads12(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u16) & 0x01) << 12usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN013 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads13(&self) -> super::vals::Ads13 {
+    pub const fn ads13(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Ads13::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN013 Select"]
     #[inline(always)]
-    pub const fn set_ads13(&mut self, val: super::vals::Ads13) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u16) & 0x01) << 13usize);
+    pub const fn set_ads13(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u16) & 0x01) << 13usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN014 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads14(&self) -> super::vals::Ads14 {
+    pub const fn ads14(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Ads14::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN014 Select"]
     #[inline(always)]
-    pub const fn set_ads14(&mut self, val: super::vals::Ads14) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_ads14(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -298,7 +298,7 @@ impl defmt::Format for Adads0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adads0 {{ ads00: {:?}, ads01: {:?}, ads02: {:?}, ads03: {:?}, ads04: {:?}, ads05: {:?}, ads06: {:?}, ads07: {:?}, ads08: {:?}, ads09: {:?}, ads10: {:?}, ads11: {:?}, ads12: {:?}, ads13: {:?}, ads14: {:?}, reserved: {=bool:?} }}",
+            "Adads0 {{ ads00: {=bool:?}, ads01: {=bool:?}, ads02: {=bool:?}, ads03: {=bool:?}, ads04: {=bool:?}, ads05: {=bool:?}, ads06: {=bool:?}, ads07: {=bool:?}, ads08: {=bool:?}, ads09: {=bool:?}, ads10: {=bool:?}, ads11: {=bool:?}, ads12: {=bool:?}, ads13: {=bool:?}, ads14: {=bool:?}, reserved: {=bool:?} }}",
             self.ads00(),
             self.ads01(),
             self.ads02(),
@@ -326,122 +326,122 @@ impl Adads1 {
     #[doc = "A/D-Converted Value Addition/Average Channel AN016 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads16(&self) -> super::vals::Ads16 {
+    pub const fn ads16(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ads16::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN016 Select"]
     #[inline(always)]
-    pub const fn set_ads16(&mut self, val: super::vals::Ads16) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_ads16(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN017 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads17(&self) -> super::vals::Ads17 {
+    pub const fn ads17(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ads17::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN017 Select"]
     #[inline(always)]
-    pub const fn set_ads17(&mut self, val: super::vals::Ads17) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_ads17(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN018 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads18(&self) -> super::vals::Ads18 {
+    pub const fn ads18(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ads18::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN018 Select"]
     #[inline(always)]
-    pub const fn set_ads18(&mut self, val: super::vals::Ads18) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_ads18(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN019 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads19(&self) -> super::vals::Ads19 {
+    pub const fn ads19(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ads19::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN019 Select"]
     #[inline(always)]
-    pub const fn set_ads19(&mut self, val: super::vals::Ads19) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_ads19(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN020 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads20(&self) -> super::vals::Ads20 {
+    pub const fn ads20(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ads20::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN020 Select"]
     #[inline(always)]
-    pub const fn set_ads20(&mut self, val: super::vals::Ads20) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_ads20(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN021 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads21(&self) -> super::vals::Ads21 {
+    pub const fn ads21(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Ads21::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN021 Select"]
     #[inline(always)]
-    pub const fn set_ads21(&mut self, val: super::vals::Ads21) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u16) & 0x01) << 5usize);
+    pub const fn set_ads21(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN022 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads22(&self) -> super::vals::Ads22 {
+    pub const fn ads22(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Ads22::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN022 Select"]
     #[inline(always)]
-    pub const fn set_ads22(&mut self, val: super::vals::Ads22) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_ads22(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN023 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads23(&self) -> super::vals::Ads23 {
+    pub const fn ads23(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Ads23::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN023 Select"]
     #[inline(always)]
-    pub const fn set_ads23(&mut self, val: super::vals::Ads23) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u16) & 0x01) << 7usize);
+    pub const fn set_ads23(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN024 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads24(&self) -> super::vals::Ads24 {
+    pub const fn ads24(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Ads24::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN024 Select"]
     #[inline(always)]
-    pub const fn set_ads24(&mut self, val: super::vals::Ads24) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_ads24(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN025 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ads25(&self) -> super::vals::Ads25 {
+    pub const fn ads25(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Ads25::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D-Converted Value Addition/Average Channel AN025 Select"]
     #[inline(always)]
-    pub const fn set_ads25(&mut self, val: super::vals::Ads25) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_ads25(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -484,7 +484,7 @@ impl defmt::Format for Adads1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adads1 {{ ads16: {:?}, ads17: {:?}, ads18: {:?}, ads19: {:?}, ads20: {:?}, ads21: {:?}, ads22: {:?}, ads23: {:?}, ads24: {:?}, ads25: {:?}, reserved: {=u8:?} }}",
+            "Adads1 {{ ads16: {=bool:?}, ads17: {=bool:?}, ads18: {=bool:?}, ads19: {=bool:?}, ads20: {=bool:?}, ads21: {=bool:?}, ads22: {=bool:?}, ads23: {=bool:?}, ads24: {=bool:?}, ads25: {=bool:?}, reserved: {=u8:?} }}",
             self.ads16(),
             self.ads17(),
             self.ads18(),
@@ -507,182 +507,182 @@ impl Adansa0 {
     #[doc = "AN000 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa00(&self) -> super::vals::Ansa00 {
+    pub const fn ansa00(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ansa00::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN000 Select"]
     #[inline(always)]
-    pub const fn set_ansa00(&mut self, val: super::vals::Ansa00) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_ansa00(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "AN001 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa01(&self) -> super::vals::Ansa01 {
+    pub const fn ansa01(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ansa01::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN001 Select"]
     #[inline(always)]
-    pub const fn set_ansa01(&mut self, val: super::vals::Ansa01) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_ansa01(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "AN002 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa02(&self) -> super::vals::Ansa02 {
+    pub const fn ansa02(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ansa02::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN002 Select"]
     #[inline(always)]
-    pub const fn set_ansa02(&mut self, val: super::vals::Ansa02) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_ansa02(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "AN003 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa03(&self) -> super::vals::Ansa03 {
+    pub const fn ansa03(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ansa03::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN003 Select"]
     #[inline(always)]
-    pub const fn set_ansa03(&mut self, val: super::vals::Ansa03) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_ansa03(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "AN004 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa04(&self) -> super::vals::Ansa04 {
+    pub const fn ansa04(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ansa04::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN004 Select"]
     #[inline(always)]
-    pub const fn set_ansa04(&mut self, val: super::vals::Ansa04) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_ansa04(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "AN005 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa05(&self) -> super::vals::Ansa05 {
+    pub const fn ansa05(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Ansa05::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN005 Select"]
     #[inline(always)]
-    pub const fn set_ansa05(&mut self, val: super::vals::Ansa05) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u16) & 0x01) << 5usize);
+    pub const fn set_ansa05(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
     }
     #[doc = "AN006 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa06(&self) -> super::vals::Ansa06 {
+    pub const fn ansa06(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Ansa06::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN006 Select"]
     #[inline(always)]
-    pub const fn set_ansa06(&mut self, val: super::vals::Ansa06) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_ansa06(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "AN007 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa07(&self) -> super::vals::Ansa07 {
+    pub const fn ansa07(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Ansa07::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN007 Select"]
     #[inline(always)]
-    pub const fn set_ansa07(&mut self, val: super::vals::Ansa07) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u16) & 0x01) << 7usize);
+    pub const fn set_ansa07(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
     }
     #[doc = "AN008 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa08(&self) -> super::vals::Ansa08 {
+    pub const fn ansa08(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Ansa08::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN008 Select"]
     #[inline(always)]
-    pub const fn set_ansa08(&mut self, val: super::vals::Ansa08) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_ansa08(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "AN009 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa09(&self) -> super::vals::Ansa09 {
+    pub const fn ansa09(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Ansa09::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN009 Select"]
     #[inline(always)]
-    pub const fn set_ansa09(&mut self, val: super::vals::Ansa09) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_ansa09(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "AN010 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa010(&self) -> super::vals::Ansa010 {
+    pub const fn ansa010(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Ansa010::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN010 Select"]
     #[inline(always)]
-    pub const fn set_ansa010(&mut self, val: super::vals::Ansa010) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_ansa010(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "AN011 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa011(&self) -> super::vals::Ansa011 {
+    pub const fn ansa011(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Ansa011::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN011 Select"]
     #[inline(always)]
-    pub const fn set_ansa011(&mut self, val: super::vals::Ansa011) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u16) & 0x01) << 11usize);
+    pub const fn set_ansa011(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u16) & 0x01) << 11usize);
     }
     #[doc = "AN012 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa012(&self) -> super::vals::Ansa012 {
+    pub const fn ansa012(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Ansa012::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN012 Select"]
     #[inline(always)]
-    pub const fn set_ansa012(&mut self, val: super::vals::Ansa012) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u16) & 0x01) << 12usize);
+    pub const fn set_ansa012(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u16) & 0x01) << 12usize);
     }
     #[doc = "AN013 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa013(&self) -> super::vals::Ansa013 {
+    pub const fn ansa013(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Ansa013::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN013 Select"]
     #[inline(always)]
-    pub const fn set_ansa013(&mut self, val: super::vals::Ansa013) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u16) & 0x01) << 13usize);
+    pub const fn set_ansa013(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u16) & 0x01) << 13usize);
     }
     #[doc = "AN014 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa014(&self) -> super::vals::Ansa014 {
+    pub const fn ansa014(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Ansa014::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN014 Select"]
     #[inline(always)]
-    pub const fn set_ansa014(&mut self, val: super::vals::Ansa014) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_ansa014(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -730,7 +730,7 @@ impl defmt::Format for Adansa0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adansa0 {{ ansa00: {:?}, ansa01: {:?}, ansa02: {:?}, ansa03: {:?}, ansa04: {:?}, ansa05: {:?}, ansa06: {:?}, ansa07: {:?}, ansa08: {:?}, ansa09: {:?}, ansa010: {:?}, ansa011: {:?}, ansa012: {:?}, ansa013: {:?}, ansa014: {:?}, reserved: {=bool:?} }}",
+            "Adansa0 {{ ansa00: {=bool:?}, ansa01: {=bool:?}, ansa02: {=bool:?}, ansa03: {=bool:?}, ansa04: {=bool:?}, ansa05: {=bool:?}, ansa06: {=bool:?}, ansa07: {=bool:?}, ansa08: {=bool:?}, ansa09: {=bool:?}, ansa010: {=bool:?}, ansa011: {=bool:?}, ansa012: {=bool:?}, ansa013: {=bool:?}, ansa014: {=bool:?}, reserved: {=bool:?} }}",
             self.ansa00(),
             self.ansa01(),
             self.ansa02(),
@@ -758,122 +758,122 @@ impl Adansa1 {
     #[doc = "AN016 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa16(&self) -> super::vals::Ansa16 {
+    pub const fn ansa16(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ansa16::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN016 Select"]
     #[inline(always)]
-    pub const fn set_ansa16(&mut self, val: super::vals::Ansa16) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_ansa16(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "AN017 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa17(&self) -> super::vals::Ansa17 {
+    pub const fn ansa17(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ansa17::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN017 Select"]
     #[inline(always)]
-    pub const fn set_ansa17(&mut self, val: super::vals::Ansa17) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_ansa17(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "AN018 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa18(&self) -> super::vals::Ansa18 {
+    pub const fn ansa18(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ansa18::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN018 Select"]
     #[inline(always)]
-    pub const fn set_ansa18(&mut self, val: super::vals::Ansa18) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_ansa18(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "AN019 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa19(&self) -> super::vals::Ansa19 {
+    pub const fn ansa19(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ansa19::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN019 Select"]
     #[inline(always)]
-    pub const fn set_ansa19(&mut self, val: super::vals::Ansa19) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_ansa19(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "AN020 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa20(&self) -> super::vals::Ansa20 {
+    pub const fn ansa20(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ansa20::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN020 Select"]
     #[inline(always)]
-    pub const fn set_ansa20(&mut self, val: super::vals::Ansa20) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_ansa20(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "AN021 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa21(&self) -> super::vals::Ansa21 {
+    pub const fn ansa21(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Ansa21::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN021 Select"]
     #[inline(always)]
-    pub const fn set_ansa21(&mut self, val: super::vals::Ansa21) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u16) & 0x01) << 5usize);
+    pub const fn set_ansa21(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
     }
     #[doc = "AN022 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa22(&self) -> super::vals::Ansa22 {
+    pub const fn ansa22(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Ansa22::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN022 Select"]
     #[inline(always)]
-    pub const fn set_ansa22(&mut self, val: super::vals::Ansa22) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_ansa22(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "AN023 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa23(&self) -> super::vals::Ansa23 {
+    pub const fn ansa23(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Ansa23::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN023 Select"]
     #[inline(always)]
-    pub const fn set_ansa23(&mut self, val: super::vals::Ansa23) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u16) & 0x01) << 7usize);
+    pub const fn set_ansa23(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
     }
     #[doc = "AN024 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa24(&self) -> super::vals::Ansa24 {
+    pub const fn ansa24(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Ansa24::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN024 Select"]
     #[inline(always)]
-    pub const fn set_ansa24(&mut self, val: super::vals::Ansa24) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_ansa24(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "AN025 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa25(&self) -> super::vals::Ansa25 {
+    pub const fn ansa25(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Ansa25::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN025 Select"]
     #[inline(always)]
-    pub const fn set_ansa25(&mut self, val: super::vals::Ansa25) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_ansa25(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -916,7 +916,7 @@ impl defmt::Format for Adansa1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adansa1 {{ ansa16: {:?}, ansa17: {:?}, ansa18: {:?}, ansa19: {:?}, ansa20: {:?}, ansa21: {:?}, ansa22: {:?}, ansa23: {:?}, ansa24: {:?}, ansa25: {:?}, reserved: {=u8:?} }}",
+            "Adansa1 {{ ansa16: {=bool:?}, ansa17: {=bool:?}, ansa18: {=bool:?}, ansa19: {=bool:?}, ansa20: {=bool:?}, ansa21: {=bool:?}, ansa22: {=bool:?}, ansa23: {=bool:?}, ansa24: {=bool:?}, ansa25: {=bool:?}, reserved: {=u8:?} }}",
             self.ansa16(),
             self.ansa17(),
             self.ansa18(),
@@ -939,182 +939,182 @@ impl Adansb0 {
     #[doc = "AN000 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb00(&self) -> super::vals::Ansb00 {
+    pub const fn ansb00(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ansb00::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN000 Select"]
     #[inline(always)]
-    pub const fn set_ansb00(&mut self, val: super::vals::Ansb00) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_ansb00(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "AN001 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb01(&self) -> super::vals::Ansb01 {
+    pub const fn ansb01(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ansb01::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN001 Select"]
     #[inline(always)]
-    pub const fn set_ansb01(&mut self, val: super::vals::Ansb01) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_ansb01(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "AN002 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb02(&self) -> super::vals::Ansb02 {
+    pub const fn ansb02(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ansb02::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN002 Select"]
     #[inline(always)]
-    pub const fn set_ansb02(&mut self, val: super::vals::Ansb02) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_ansb02(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "AN003 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb03(&self) -> super::vals::Ansb03 {
+    pub const fn ansb03(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ansb03::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN003 Select"]
     #[inline(always)]
-    pub const fn set_ansb03(&mut self, val: super::vals::Ansb03) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_ansb03(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "AN004 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb04(&self) -> super::vals::Ansb04 {
+    pub const fn ansb04(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ansb04::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN004 Select"]
     #[inline(always)]
-    pub const fn set_ansb04(&mut self, val: super::vals::Ansb04) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_ansb04(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "AN005 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb05(&self) -> super::vals::Ansb05 {
+    pub const fn ansb05(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Ansb05::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN005 Select"]
     #[inline(always)]
-    pub const fn set_ansb05(&mut self, val: super::vals::Ansb05) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u16) & 0x01) << 5usize);
+    pub const fn set_ansb05(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
     }
     #[doc = "AN006 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb06(&self) -> super::vals::Ansb06 {
+    pub const fn ansb06(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Ansb06::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN006 Select"]
     #[inline(always)]
-    pub const fn set_ansb06(&mut self, val: super::vals::Ansb06) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_ansb06(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "AN007 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb07(&self) -> super::vals::Ansb07 {
+    pub const fn ansb07(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Ansb07::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN007 Select"]
     #[inline(always)]
-    pub const fn set_ansb07(&mut self, val: super::vals::Ansb07) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u16) & 0x01) << 7usize);
+    pub const fn set_ansb07(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
     }
     #[doc = "AN008 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb08(&self) -> super::vals::Ansb08 {
+    pub const fn ansb08(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Ansb08::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN008 Select"]
     #[inline(always)]
-    pub const fn set_ansb08(&mut self, val: super::vals::Ansb08) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_ansb08(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "AN009 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb09(&self) -> super::vals::Ansb09 {
+    pub const fn ansb09(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Ansb09::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN009 Select"]
     #[inline(always)]
-    pub const fn set_ansb09(&mut self, val: super::vals::Ansb09) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_ansb09(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "AN010 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb10(&self) -> super::vals::Ansb10 {
+    pub const fn ansb10(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Ansb10::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN010 Select"]
     #[inline(always)]
-    pub const fn set_ansb10(&mut self, val: super::vals::Ansb10) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_ansb10(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "AN011 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb11(&self) -> super::vals::Ansb11 {
+    pub const fn ansb11(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Ansb11::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN011 Select"]
     #[inline(always)]
-    pub const fn set_ansb11(&mut self, val: super::vals::Ansb11) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u16) & 0x01) << 11usize);
+    pub const fn set_ansb11(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u16) & 0x01) << 11usize);
     }
     #[doc = "AN012 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb12(&self) -> super::vals::Ansb12 {
+    pub const fn ansb12(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Ansb12::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN012 Select"]
     #[inline(always)]
-    pub const fn set_ansb12(&mut self, val: super::vals::Ansb12) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u16) & 0x01) << 12usize);
+    pub const fn set_ansb12(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u16) & 0x01) << 12usize);
     }
     #[doc = "AN013 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb13(&self) -> super::vals::Ansb13 {
+    pub const fn ansb13(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Ansb13::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN013 Select"]
     #[inline(always)]
-    pub const fn set_ansb13(&mut self, val: super::vals::Ansb13) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u16) & 0x01) << 13usize);
+    pub const fn set_ansb13(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u16) & 0x01) << 13usize);
     }
     #[doc = "AN014 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb14(&self) -> super::vals::Ansb14 {
+    pub const fn ansb14(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Ansb14::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN014 Select"]
     #[inline(always)]
-    pub const fn set_ansb14(&mut self, val: super::vals::Ansb14) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_ansb14(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1162,7 +1162,7 @@ impl defmt::Format for Adansb0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adansb0 {{ ansb00: {:?}, ansb01: {:?}, ansb02: {:?}, ansb03: {:?}, ansb04: {:?}, ansb05: {:?}, ansb06: {:?}, ansb07: {:?}, ansb08: {:?}, ansb09: {:?}, ansb10: {:?}, ansb11: {:?}, ansb12: {:?}, ansb13: {:?}, ansb14: {:?}, reserved: {=bool:?} }}",
+            "Adansb0 {{ ansb00: {=bool:?}, ansb01: {=bool:?}, ansb02: {=bool:?}, ansb03: {=bool:?}, ansb04: {=bool:?}, ansb05: {=bool:?}, ansb06: {=bool:?}, ansb07: {=bool:?}, ansb08: {=bool:?}, ansb09: {=bool:?}, ansb10: {=bool:?}, ansb11: {=bool:?}, ansb12: {=bool:?}, ansb13: {=bool:?}, ansb14: {=bool:?}, reserved: {=bool:?} }}",
             self.ansb00(),
             self.ansb01(),
             self.ansb02(),
@@ -1190,122 +1190,122 @@ impl Adansb1 {
     #[doc = "AN016 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb16(&self) -> super::vals::Ansb16 {
+    pub const fn ansb16(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ansb16::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN016 Select"]
     #[inline(always)]
-    pub const fn set_ansb16(&mut self, val: super::vals::Ansb16) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_ansb16(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "AN017 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb17(&self) -> super::vals::Ansb17 {
+    pub const fn ansb17(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ansb17::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN017 Select"]
     #[inline(always)]
-    pub const fn set_ansb17(&mut self, val: super::vals::Ansb17) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_ansb17(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "AN018 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb18(&self) -> super::vals::Ansb18 {
+    pub const fn ansb18(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ansb18::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN018 Select"]
     #[inline(always)]
-    pub const fn set_ansb18(&mut self, val: super::vals::Ansb18) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_ansb18(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "AN019 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb19(&self) -> super::vals::Ansb19 {
+    pub const fn ansb19(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ansb19::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN019 Select"]
     #[inline(always)]
-    pub const fn set_ansb19(&mut self, val: super::vals::Ansb19) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_ansb19(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "AN020 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb20(&self) -> super::vals::Ansb20 {
+    pub const fn ansb20(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ansb20::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN020 Select"]
     #[inline(always)]
-    pub const fn set_ansb20(&mut self, val: super::vals::Ansb20) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_ansb20(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "AN021 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb21(&self) -> super::vals::Ansb21 {
+    pub const fn ansb21(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Ansb21::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN021 Select"]
     #[inline(always)]
-    pub const fn set_ansb21(&mut self, val: super::vals::Ansb21) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u16) & 0x01) << 5usize);
+    pub const fn set_ansb21(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
     }
     #[doc = "AN022 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb22(&self) -> super::vals::Ansb22 {
+    pub const fn ansb22(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Ansb22::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN022 Select"]
     #[inline(always)]
-    pub const fn set_ansb22(&mut self, val: super::vals::Ansb22) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_ansb22(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "AN023 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb23(&self) -> super::vals::Ansb23 {
+    pub const fn ansb23(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Ansb23::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN023 Select"]
     #[inline(always)]
-    pub const fn set_ansb23(&mut self, val: super::vals::Ansb23) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u16) & 0x01) << 7usize);
+    pub const fn set_ansb23(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
     }
     #[doc = "AN024 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb24(&self) -> super::vals::Ansb24 {
+    pub const fn ansb24(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Ansb24::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN024 Select"]
     #[inline(always)]
-    pub const fn set_ansb24(&mut self, val: super::vals::Ansb24) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_ansb24(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "AN025 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansb25(&self) -> super::vals::Ansb25 {
+    pub const fn ansb25(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Ansb25::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN025 Select"]
     #[inline(always)]
-    pub const fn set_ansb25(&mut self, val: super::vals::Ansb25) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_ansb25(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -1348,7 +1348,7 @@ impl defmt::Format for Adansb1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adansb1 {{ ansb16: {:?}, ansb17: {:?}, ansb18: {:?}, ansb19: {:?}, ansb20: {:?}, ansb21: {:?}, ansb22: {:?}, ansb23: {:?}, ansb24: {:?}, ansb25: {:?}, reserved: {=u8:?} }}",
+            "Adansb1 {{ ansb16: {=bool:?}, ansb17: {=bool:?}, ansb18: {=bool:?}, ansb19: {=bool:?}, ansb20: {=bool:?}, ansb21: {=bool:?}, ansb22: {=bool:?}, ansb23: {=bool:?}, ansb24: {=bool:?}, ansb25: {=bool:?}, reserved: {=u8:?} }}",
             self.ansb16(),
             self.ansb17(),
             self.ansb18(),
@@ -1419,14 +1419,14 @@ impl Adcer {
     #[doc = "A/D Data Register Automatic Clearing Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ace(&self) -> super::vals::Ace {
+    pub const fn ace(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Ace::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D Data Register Automatic Clearing Enable"]
     #[inline(always)]
-    pub const fn set_ace(&mut self, val: super::vals::Ace) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u16) & 0x01) << 5usize);
+    pub const fn set_ace(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -1455,26 +1455,26 @@ impl Adcer {
     #[doc = "Self-Diagnosis Mode Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn diagld(&self) -> super::vals::Diagld {
+    pub const fn diagld(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Diagld::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Self-Diagnosis Mode Select"]
     #[inline(always)]
-    pub const fn set_diagld(&mut self, val: super::vals::Diagld) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_diagld(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "Self-Diagnosis Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn diagm(&self) -> super::vals::Diagm {
+    pub const fn diagm(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Diagm::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Self-Diagnosis Enable"]
     #[inline(always)]
-    pub const fn set_diagm(&mut self, val: super::vals::Diagm) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u16) & 0x01) << 11usize);
+    pub const fn set_diagm(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u16) & 0x01) << 11usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -1491,14 +1491,14 @@ impl Adcer {
     #[doc = "A/D Data Register Format Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn adrfmt(&self) -> super::vals::Adrfmt {
+    pub const fn adrfmt(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Adrfmt::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D Data Register Format Select"]
     #[inline(always)]
-    pub const fn set_adrfmt(&mut self, val: super::vals::Adrfmt) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_adrfmt(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for Adcer {
@@ -1529,7 +1529,7 @@ impl defmt::Format for Adcer {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcer {{ reserved: {=bool:?}, adprc: {:?}, reserved_2: {=bool:?}, reserved_3: {=bool:?}, ace: {:?}, reserved_4: {=u8:?}, diagval: {:?}, diagld: {:?}, diagm: {:?}, reserved_5: {=u8:?}, adrfmt: {:?} }}",
+            "Adcer {{ reserved: {=bool:?}, adprc: {:?}, reserved_2: {=bool:?}, reserved_3: {=bool:?}, ace: {=bool:?}, reserved_4: {=u8:?}, diagval: {:?}, diagld: {=bool:?}, diagm: {=bool:?}, reserved_5: {=u8:?}, adrfmt: {=bool:?} }}",
             self.reserved(),
             self.adprc(),
             self.reserved_2(),
@@ -1552,26 +1552,26 @@ impl Adcmpanser {
     #[doc = "Temperature sensor output Compare selection bit."]
     #[must_use]
     #[inline(always)]
-    pub const fn cmptsa(&self) -> super::vals::Cmptsa {
+    pub const fn cmptsa(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cmptsa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Temperature sensor output Compare selection bit."]
     #[inline(always)]
-    pub const fn set_cmptsa(&mut self, val: super::vals::Cmptsa) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_cmptsa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Internal reference voltage Compare selection bit."]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpoca(&self) -> super::vals::Cmpoca {
+    pub const fn cmpoca(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cmpoca::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Internal reference voltage Compare selection bit."]
     #[inline(always)]
-    pub const fn set_cmpoca(&mut self, val: super::vals::Cmpoca) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_cmpoca(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -1606,7 +1606,7 @@ impl defmt::Format for Adcmpanser {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcmpanser {{ cmptsa: {:?}, cmpoca: {:?}, reserved: {=u8:?} }}",
+            "Adcmpanser {{ cmptsa: {=bool:?}, cmpoca: {=bool:?}, reserved: {=u8:?} }}",
             self.cmptsa(),
             self.cmpoca(),
             self.reserved()
@@ -1621,182 +1621,182 @@ impl Adcmpansr0 {
     #[doc = "AN000 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha00(&self) -> super::vals::Cmpcha00 {
+    pub const fn cmpcha00(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cmpcha00::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN000 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha00(&mut self, val: super::vals::Cmpcha00) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_cmpcha00(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "AN001 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha01(&self) -> super::vals::Cmpcha01 {
+    pub const fn cmpcha01(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cmpcha01::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN001 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha01(&mut self, val: super::vals::Cmpcha01) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_cmpcha01(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "AN002 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha02(&self) -> super::vals::Cmpcha02 {
+    pub const fn cmpcha02(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Cmpcha02::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN002 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha02(&mut self, val: super::vals::Cmpcha02) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_cmpcha02(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "AN003 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha03(&self) -> super::vals::Cmpcha03 {
+    pub const fn cmpcha03(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Cmpcha03::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN003 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha03(&mut self, val: super::vals::Cmpcha03) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_cmpcha03(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "AN004 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha04(&self) -> super::vals::Cmpcha04 {
+    pub const fn cmpcha04(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Cmpcha04::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN004 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha04(&mut self, val: super::vals::Cmpcha04) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_cmpcha04(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "AN005 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha05(&self) -> super::vals::Cmpcha05 {
+    pub const fn cmpcha05(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Cmpcha05::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN005 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha05(&mut self, val: super::vals::Cmpcha05) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u16) & 0x01) << 5usize);
+    pub const fn set_cmpcha05(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
     }
     #[doc = "AN006 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha06(&self) -> super::vals::Cmpcha06 {
+    pub const fn cmpcha06(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Cmpcha06::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN006 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha06(&mut self, val: super::vals::Cmpcha06) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_cmpcha06(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "AN007 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha07(&self) -> super::vals::Cmpcha07 {
+    pub const fn cmpcha07(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Cmpcha07::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN007 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha07(&mut self, val: super::vals::Cmpcha07) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u16) & 0x01) << 7usize);
+    pub const fn set_cmpcha07(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
     }
     #[doc = "AN008 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha08(&self) -> super::vals::Cmpcha08 {
+    pub const fn cmpcha08(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Cmpcha08::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN008 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha08(&mut self, val: super::vals::Cmpcha08) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_cmpcha08(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "AN009 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha09(&self) -> super::vals::Cmpcha09 {
+    pub const fn cmpcha09(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Cmpcha09::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN009 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha09(&mut self, val: super::vals::Cmpcha09) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_cmpcha09(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "AN010 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha10(&self) -> super::vals::Cmpcha10 {
+    pub const fn cmpcha10(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Cmpcha10::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN010 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha10(&mut self, val: super::vals::Cmpcha10) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_cmpcha10(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "AN011 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha11(&self) -> super::vals::Cmpcha11 {
+    pub const fn cmpcha11(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Cmpcha11::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN011 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha11(&mut self, val: super::vals::Cmpcha11) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u16) & 0x01) << 11usize);
+    pub const fn set_cmpcha11(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u16) & 0x01) << 11usize);
     }
     #[doc = "AN012 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha12(&self) -> super::vals::Cmpcha12 {
+    pub const fn cmpcha12(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Cmpcha12::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN012 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha12(&mut self, val: super::vals::Cmpcha12) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u16) & 0x01) << 12usize);
+    pub const fn set_cmpcha12(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u16) & 0x01) << 12usize);
     }
     #[doc = "AN013 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha13(&self) -> super::vals::Cmpcha13 {
+    pub const fn cmpcha13(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Cmpcha13::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN013 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha13(&mut self, val: super::vals::Cmpcha13) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u16) & 0x01) << 13usize);
+    pub const fn set_cmpcha13(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u16) & 0x01) << 13usize);
     }
     #[doc = "AN014 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha14(&self) -> super::vals::Cmpcha14 {
+    pub const fn cmpcha14(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Cmpcha14::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN014 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha14(&mut self, val: super::vals::Cmpcha14) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_cmpcha14(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1844,7 +1844,7 @@ impl defmt::Format for Adcmpansr0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcmpansr0 {{ cmpcha00: {:?}, cmpcha01: {:?}, cmpcha02: {:?}, cmpcha03: {:?}, cmpcha04: {:?}, cmpcha05: {:?}, cmpcha06: {:?}, cmpcha07: {:?}, cmpcha08: {:?}, cmpcha09: {:?}, cmpcha10: {:?}, cmpcha11: {:?}, cmpcha12: {:?}, cmpcha13: {:?}, cmpcha14: {:?}, reserved: {=bool:?} }}",
+            "Adcmpansr0 {{ cmpcha00: {=bool:?}, cmpcha01: {=bool:?}, cmpcha02: {=bool:?}, cmpcha03: {=bool:?}, cmpcha04: {=bool:?}, cmpcha05: {=bool:?}, cmpcha06: {=bool:?}, cmpcha07: {=bool:?}, cmpcha08: {=bool:?}, cmpcha09: {=bool:?}, cmpcha10: {=bool:?}, cmpcha11: {=bool:?}, cmpcha12: {=bool:?}, cmpcha13: {=bool:?}, cmpcha14: {=bool:?}, reserved: {=bool:?} }}",
             self.cmpcha00(),
             self.cmpcha01(),
             self.cmpcha02(),
@@ -1872,122 +1872,122 @@ impl Adcmpansr1 {
     #[doc = "AN016 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha16(&self) -> super::vals::Cmpcha16 {
+    pub const fn cmpcha16(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cmpcha16::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN016 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha16(&mut self, val: super::vals::Cmpcha16) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_cmpcha16(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "AN017 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha17(&self) -> super::vals::Cmpcha17 {
+    pub const fn cmpcha17(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cmpcha17::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN017 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha17(&mut self, val: super::vals::Cmpcha17) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_cmpcha17(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "AN018 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha18(&self) -> super::vals::Cmpcha18 {
+    pub const fn cmpcha18(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Cmpcha18::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN018 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha18(&mut self, val: super::vals::Cmpcha18) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_cmpcha18(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "AN019 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha19(&self) -> super::vals::Cmpcha19 {
+    pub const fn cmpcha19(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Cmpcha19::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN019 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha19(&mut self, val: super::vals::Cmpcha19) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_cmpcha19(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "AN020 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha20(&self) -> super::vals::Cmpcha20 {
+    pub const fn cmpcha20(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Cmpcha20::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN020 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha20(&mut self, val: super::vals::Cmpcha20) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_cmpcha20(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "AN021 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha21(&self) -> super::vals::Cmpcha21 {
+    pub const fn cmpcha21(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Cmpcha21::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN021 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha21(&mut self, val: super::vals::Cmpcha21) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u16) & 0x01) << 5usize);
+    pub const fn set_cmpcha21(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
     }
     #[doc = "AN022 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha22(&self) -> super::vals::Cmpcha22 {
+    pub const fn cmpcha22(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Cmpcha22::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN022 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha22(&mut self, val: super::vals::Cmpcha22) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_cmpcha22(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "AN023 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha23(&self) -> super::vals::Cmpcha23 {
+    pub const fn cmpcha23(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Cmpcha23::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN023 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha23(&mut self, val: super::vals::Cmpcha23) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u16) & 0x01) << 7usize);
+    pub const fn set_cmpcha23(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
     }
     #[doc = "AN024 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha24(&self) -> super::vals::Cmpcha24 {
+    pub const fn cmpcha24(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Cmpcha24::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN024 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha24(&mut self, val: super::vals::Cmpcha24) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_cmpcha24(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "AN025 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpcha25(&self) -> super::vals::Cmpcha25 {
+    pub const fn cmpcha25(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Cmpcha25::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AN025 Select"]
     #[inline(always)]
-    pub const fn set_cmpcha25(&mut self, val: super::vals::Cmpcha25) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_cmpcha25(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -2030,7 +2030,7 @@ impl defmt::Format for Adcmpansr1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcmpansr1 {{ cmpcha16: {:?}, cmpcha17: {:?}, cmpcha18: {:?}, cmpcha19: {:?}, cmpcha20: {:?}, cmpcha21: {:?}, cmpcha22: {:?}, cmpcha23: {:?}, cmpcha24: {:?}, cmpcha25: {:?}, reserved: {=u8:?} }}",
+            "Adcmpansr1 {{ cmpcha16: {=bool:?}, cmpcha17: {=bool:?}, cmpcha18: {=bool:?}, cmpcha19: {=bool:?}, cmpcha20: {=bool:?}, cmpcha21: {=bool:?}, cmpcha22: {=bool:?}, cmpcha23: {=bool:?}, cmpcha24: {=bool:?}, cmpcha25: {=bool:?}, reserved: {=u8:?} }}",
             self.cmpcha16(),
             self.cmpcha17(),
             self.cmpcha18(),
@@ -2077,14 +2077,14 @@ impl Adcmpbnsr {
     #[doc = "Compare window B Compare condition setting bit."]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplb(&self) -> super::vals::Cmplb {
+    pub const fn cmplb(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Cmplb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window B Compare condition setting bit."]
     #[inline(always)]
-    pub const fn set_cmplb(&mut self, val: super::vals::Cmplb) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_cmplb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Adcmpbnsr {
@@ -2107,7 +2107,7 @@ impl defmt::Format for Adcmpbnsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcmpbnsr {{ cmpchb: {:?}, reserved: {=bool:?}, cmplb: {:?} }}",
+            "Adcmpbnsr {{ cmpchb: {:?}, reserved: {=bool:?}, cmplb: {=bool:?} }}",
             self.cmpchb(),
             self.reserved(),
             self.cmplb()
@@ -2122,14 +2122,14 @@ impl Adcmpbsr {
     #[doc = "Compare window B flag. It is a status flag that shows the comparative result of CH (AN000-AN027, temperature sensor, and internal reference voltage) made the object of window B relation condition."]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstb(&self) -> super::vals::Cmpstb {
+    pub const fn cmpstb(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cmpstb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window B flag. It is a status flag that shows the comparative result of CH (AN000-AN027, temperature sensor, and internal reference voltage) made the object of window B relation condition."]
     #[inline(always)]
-    pub const fn set_cmpstb(&mut self, val: super::vals::Cmpstb) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_cmpstb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -2163,7 +2163,7 @@ impl defmt::Format for Adcmpbsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcmpbsr {{ cmpstb: {:?}, reserved: {=u8:?} }}",
+            "Adcmpbsr {{ cmpstb: {=bool:?}, reserved: {=u8:?} }}",
             self.cmpstb(),
             self.reserved()
         )
@@ -2201,14 +2201,14 @@ impl Adcmpcr {
     #[doc = "Compare Window B Operation Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpbe(&self) -> super::vals::Cmpbe {
+    pub const fn cmpbe(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Cmpbe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare Window B Operation Enable"]
     #[inline(always)]
-    pub const fn set_cmpbe(&mut self, val: super::vals::Cmpbe) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_cmpbe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2225,14 +2225,14 @@ impl Adcmpcr {
     #[doc = "Compare Window A Operation Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpae(&self) -> super::vals::Cmpae {
+    pub const fn cmpae(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Cmpae::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare Window A Operation Enable"]
     #[inline(always)]
-    pub const fn set_cmpae(&mut self, val: super::vals::Cmpae) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u16) & 0x01) << 11usize);
+    pub const fn set_cmpae(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u16) & 0x01) << 11usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2249,38 +2249,38 @@ impl Adcmpcr {
     #[doc = "Compare B Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpbie(&self) -> super::vals::Cmpbie {
+    pub const fn cmpbie(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Cmpbie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare B Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_cmpbie(&mut self, val: super::vals::Cmpbie) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u16) & 0x01) << 13usize);
+    pub const fn set_cmpbie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u16) & 0x01) << 13usize);
     }
     #[doc = "Window Function Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn wcmpe(&self) -> super::vals::Wcmpe {
+    pub const fn wcmpe(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Wcmpe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Window Function Setting"]
     #[inline(always)]
-    pub const fn set_wcmpe(&mut self, val: super::vals::Wcmpe) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_wcmpe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "Compare A Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpaie(&self) -> super::vals::Cmpaie {
+    pub const fn cmpaie(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Cmpaie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare A Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_cmpaie(&mut self, val: super::vals::Cmpaie) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_cmpaie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for Adcmpcr {
@@ -2309,7 +2309,7 @@ impl defmt::Format for Adcmpcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcmpcr {{ cmpab: {:?}, reserved: {=u8:?}, cmpbe: {:?}, reserved_2: {=bool:?}, cmpae: {:?}, reserved_3: {=bool:?}, cmpbie: {:?}, wcmpe: {:?}, cmpaie: {:?} }}",
+            "Adcmpcr {{ cmpab: {:?}, reserved: {=u8:?}, cmpbe: {=bool:?}, reserved_2: {=bool:?}, cmpae: {=bool:?}, reserved_3: {=bool:?}, cmpbie: {=bool:?}, wcmpe: {=bool:?}, cmpaie: {=bool:?} }}",
             self.cmpab(),
             self.reserved(),
             self.cmpbe(),
@@ -2404,26 +2404,26 @@ impl Adcmpler {
     #[doc = "Compare Window A Temperature Sensor Output Comparison Condition Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpltsa(&self) -> super::vals::Cmpltsa {
+    pub const fn cmpltsa(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cmpltsa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare Window A Temperature Sensor Output Comparison Condition Select"]
     #[inline(always)]
-    pub const fn set_cmpltsa(&mut self, val: super::vals::Cmpltsa) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_cmpltsa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Compare Window A Internal Reference Voltage Comparison Condition Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmploca(&self) -> super::vals::Cmploca {
+    pub const fn cmploca(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cmploca::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare Window A Internal Reference Voltage Comparison Condition Select"]
     #[inline(always)]
-    pub const fn set_cmploca(&mut self, val: super::vals::Cmploca) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_cmploca(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -2458,7 +2458,7 @@ impl defmt::Format for Adcmpler {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcmpler {{ cmpltsa: {:?}, cmploca: {:?}, reserved: {=u8:?} }}",
+            "Adcmpler {{ cmpltsa: {=bool:?}, cmploca: {=bool:?}, reserved: {=u8:?} }}",
             self.cmpltsa(),
             self.cmploca(),
             self.reserved()
@@ -2473,182 +2473,182 @@ impl Adcmplr0 {
     #[doc = "Comparison condition of AN000"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha00(&self) -> super::vals::Cmplcha00 {
+    pub const fn cmplcha00(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cmplcha00::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN000"]
     #[inline(always)]
-    pub const fn set_cmplcha00(&mut self, val: super::vals::Cmplcha00) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_cmplcha00(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Comparison condition of AN001"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha01(&self) -> super::vals::Cmplcha01 {
+    pub const fn cmplcha01(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cmplcha01::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN001"]
     #[inline(always)]
-    pub const fn set_cmplcha01(&mut self, val: super::vals::Cmplcha01) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_cmplcha01(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Comparison condition of AN002"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha02(&self) -> super::vals::Cmplcha02 {
+    pub const fn cmplcha02(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Cmplcha02::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN002"]
     #[inline(always)]
-    pub const fn set_cmplcha02(&mut self, val: super::vals::Cmplcha02) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_cmplcha02(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "Comparison condition of AN003"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha03(&self) -> super::vals::Cmplcha03 {
+    pub const fn cmplcha03(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Cmplcha03::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN003"]
     #[inline(always)]
-    pub const fn set_cmplcha03(&mut self, val: super::vals::Cmplcha03) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_cmplcha03(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "Comparison condition of AN004"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha04(&self) -> super::vals::Cmplcha04 {
+    pub const fn cmplcha04(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Cmplcha04::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN004"]
     #[inline(always)]
-    pub const fn set_cmplcha04(&mut self, val: super::vals::Cmplcha04) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_cmplcha04(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "Comparison condition of AN005"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha05(&self) -> super::vals::Cmplcha05 {
+    pub const fn cmplcha05(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Cmplcha05::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN005"]
     #[inline(always)]
-    pub const fn set_cmplcha05(&mut self, val: super::vals::Cmplcha05) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u16) & 0x01) << 5usize);
+    pub const fn set_cmplcha05(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
     }
     #[doc = "Comparison condition of AN006"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha06(&self) -> super::vals::Cmplcha06 {
+    pub const fn cmplcha06(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Cmplcha06::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN006"]
     #[inline(always)]
-    pub const fn set_cmplcha06(&mut self, val: super::vals::Cmplcha06) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_cmplcha06(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "Comparison condition of AN007"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha07(&self) -> super::vals::Cmplcha07 {
+    pub const fn cmplcha07(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Cmplcha07::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN007"]
     #[inline(always)]
-    pub const fn set_cmplcha07(&mut self, val: super::vals::Cmplcha07) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u16) & 0x01) << 7usize);
+    pub const fn set_cmplcha07(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
     }
     #[doc = "Comparison condition of AN008"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha08(&self) -> super::vals::Cmplcha08 {
+    pub const fn cmplcha08(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Cmplcha08::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN008"]
     #[inline(always)]
-    pub const fn set_cmplcha08(&mut self, val: super::vals::Cmplcha08) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_cmplcha08(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "Comparison condition of AN009"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha09(&self) -> super::vals::Cmplcha09 {
+    pub const fn cmplcha09(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Cmplcha09::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN009"]
     #[inline(always)]
-    pub const fn set_cmplcha09(&mut self, val: super::vals::Cmplcha09) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_cmplcha09(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "Comparison condition of AN010"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha10(&self) -> super::vals::Cmplcha10 {
+    pub const fn cmplcha10(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Cmplcha10::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN010"]
     #[inline(always)]
-    pub const fn set_cmplcha10(&mut self, val: super::vals::Cmplcha10) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_cmplcha10(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "Comparison condition of AN011"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha11(&self) -> super::vals::Cmplcha11 {
+    pub const fn cmplcha11(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Cmplcha11::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN011"]
     #[inline(always)]
-    pub const fn set_cmplcha11(&mut self, val: super::vals::Cmplcha11) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u16) & 0x01) << 11usize);
+    pub const fn set_cmplcha11(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u16) & 0x01) << 11usize);
     }
     #[doc = "Comparison condition of AN012"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha12(&self) -> super::vals::Cmplcha12 {
+    pub const fn cmplcha12(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Cmplcha12::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN012"]
     #[inline(always)]
-    pub const fn set_cmplcha12(&mut self, val: super::vals::Cmplcha12) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u16) & 0x01) << 12usize);
+    pub const fn set_cmplcha12(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u16) & 0x01) << 12usize);
     }
     #[doc = "Comparison condition of AN013"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha13(&self) -> super::vals::Cmplcha13 {
+    pub const fn cmplcha13(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Cmplcha13::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN013"]
     #[inline(always)]
-    pub const fn set_cmplcha13(&mut self, val: super::vals::Cmplcha13) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u16) & 0x01) << 13usize);
+    pub const fn set_cmplcha13(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u16) & 0x01) << 13usize);
     }
     #[doc = "Comparison condition of AN014"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha14(&self) -> super::vals::Cmplcha14 {
+    pub const fn cmplcha14(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Cmplcha14::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN014"]
     #[inline(always)]
-    pub const fn set_cmplcha14(&mut self, val: super::vals::Cmplcha14) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_cmplcha14(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -2696,7 +2696,7 @@ impl defmt::Format for Adcmplr0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcmplr0 {{ cmplcha00: {:?}, cmplcha01: {:?}, cmplcha02: {:?}, cmplcha03: {:?}, cmplcha04: {:?}, cmplcha05: {:?}, cmplcha06: {:?}, cmplcha07: {:?}, cmplcha08: {:?}, cmplcha09: {:?}, cmplcha10: {:?}, cmplcha11: {:?}, cmplcha12: {:?}, cmplcha13: {:?}, cmplcha14: {:?}, reserved: {=bool:?} }}",
+            "Adcmplr0 {{ cmplcha00: {=bool:?}, cmplcha01: {=bool:?}, cmplcha02: {=bool:?}, cmplcha03: {=bool:?}, cmplcha04: {=bool:?}, cmplcha05: {=bool:?}, cmplcha06: {=bool:?}, cmplcha07: {=bool:?}, cmplcha08: {=bool:?}, cmplcha09: {=bool:?}, cmplcha10: {=bool:?}, cmplcha11: {=bool:?}, cmplcha12: {=bool:?}, cmplcha13: {=bool:?}, cmplcha14: {=bool:?}, reserved: {=bool:?} }}",
             self.cmplcha00(),
             self.cmplcha01(),
             self.cmplcha02(),
@@ -2724,122 +2724,122 @@ impl Adcmplr1 {
     #[doc = "Comparison condition of AN016"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha16(&self) -> super::vals::Cmplcha16 {
+    pub const fn cmplcha16(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cmplcha16::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN016"]
     #[inline(always)]
-    pub const fn set_cmplcha16(&mut self, val: super::vals::Cmplcha16) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_cmplcha16(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Comparison condition of AN017"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha17(&self) -> super::vals::Cmplcha17 {
+    pub const fn cmplcha17(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cmplcha17::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN017"]
     #[inline(always)]
-    pub const fn set_cmplcha17(&mut self, val: super::vals::Cmplcha17) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_cmplcha17(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Comparison condition of AN018"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha18(&self) -> super::vals::Cmplcha18 {
+    pub const fn cmplcha18(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Cmplcha18::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN018"]
     #[inline(always)]
-    pub const fn set_cmplcha18(&mut self, val: super::vals::Cmplcha18) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_cmplcha18(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "Comparison condition of AN019"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha19(&self) -> super::vals::Cmplcha19 {
+    pub const fn cmplcha19(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Cmplcha19::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN019"]
     #[inline(always)]
-    pub const fn set_cmplcha19(&mut self, val: super::vals::Cmplcha19) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_cmplcha19(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "Comparison condition of AN020"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha20(&self) -> super::vals::Cmplcha20 {
+    pub const fn cmplcha20(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Cmplcha20::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN020"]
     #[inline(always)]
-    pub const fn set_cmplcha20(&mut self, val: super::vals::Cmplcha20) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_cmplcha20(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "Comparison condition of AN021"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha21(&self) -> super::vals::Cmplcha21 {
+    pub const fn cmplcha21(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Cmplcha21::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN021"]
     #[inline(always)]
-    pub const fn set_cmplcha21(&mut self, val: super::vals::Cmplcha21) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u16) & 0x01) << 5usize);
+    pub const fn set_cmplcha21(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
     }
     #[doc = "Comparison condition of AN022"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha22(&self) -> super::vals::Cmplcha22 {
+    pub const fn cmplcha22(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Cmplcha22::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN022"]
     #[inline(always)]
-    pub const fn set_cmplcha22(&mut self, val: super::vals::Cmplcha22) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_cmplcha22(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "Comparison condition of AN023"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha23(&self) -> super::vals::Cmplcha23 {
+    pub const fn cmplcha23(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Cmplcha23::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN023"]
     #[inline(always)]
-    pub const fn set_cmplcha23(&mut self, val: super::vals::Cmplcha23) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u16) & 0x01) << 7usize);
+    pub const fn set_cmplcha23(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
     }
     #[doc = "Comparison condition of AN024"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha24(&self) -> super::vals::Cmplcha24 {
+    pub const fn cmplcha24(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Cmplcha24::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN024"]
     #[inline(always)]
-    pub const fn set_cmplcha24(&mut self, val: super::vals::Cmplcha24) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_cmplcha24(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "Comparison condition of AN025"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmplcha25(&self) -> super::vals::Cmplcha25 {
+    pub const fn cmplcha25(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Cmplcha25::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison condition of AN025"]
     #[inline(always)]
-    pub const fn set_cmplcha25(&mut self, val: super::vals::Cmplcha25) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_cmplcha25(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -2882,7 +2882,7 @@ impl defmt::Format for Adcmplr1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcmplr1 {{ cmplcha16: {:?}, cmplcha17: {:?}, cmplcha18: {:?}, cmplcha19: {:?}, cmplcha20: {:?}, cmplcha21: {:?}, cmplcha22: {:?}, cmplcha23: {:?}, cmplcha24: {:?}, cmplcha25: {:?}, reserved: {=u8:?} }}",
+            "Adcmplr1 {{ cmplcha16: {=bool:?}, cmplcha17: {=bool:?}, cmplcha18: {=bool:?}, cmplcha19: {=bool:?}, cmplcha20: {=bool:?}, cmplcha21: {=bool:?}, cmplcha22: {=bool:?}, cmplcha23: {=bool:?}, cmplcha24: {=bool:?}, cmplcha25: {=bool:?}, reserved: {=u8:?} }}",
             self.cmplcha16(),
             self.cmplcha17(),
             self.cmplcha18(),
@@ -2905,26 +2905,26 @@ impl Adcmpser {
     #[doc = "Compare Window A Temperature Sensor Output Compare Flag When window A operation is enabled (ADCMPCR.CMPAE = 1b), this bit indicates the temperature sensor output comparison result. When window A operation is disabled (ADCMPCR.CMPAE = 0b), comparison conditions for CMPSTTSA are not met any time."]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpsttsa(&self) -> super::vals::Cmpsttsa {
+    pub const fn cmpsttsa(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cmpsttsa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare Window A Temperature Sensor Output Compare Flag When window A operation is enabled (ADCMPCR.CMPAE = 1b), this bit indicates the temperature sensor output comparison result. When window A operation is disabled (ADCMPCR.CMPAE = 0b), comparison conditions for CMPSTTSA are not met any time."]
     #[inline(always)]
-    pub const fn set_cmpsttsa(&mut self, val: super::vals::Cmpsttsa) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_cmpsttsa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Compare Window A Internal Reference Voltage Compare Flag When window A operation is enabled (ADCMPCR.CMPAE = 1b), this bit indicates the temperature sensor output comparison result. When window A operation is disabled (ADCMPCR.CMPAE = 0b), comparison conditions for CMPSTTSA are not met any time."]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstoca(&self) -> super::vals::Cmpstoca {
+    pub const fn cmpstoca(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cmpstoca::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare Window A Internal Reference Voltage Compare Flag When window A operation is enabled (ADCMPCR.CMPAE = 1b), this bit indicates the temperature sensor output comparison result. When window A operation is disabled (ADCMPCR.CMPAE = 0b), comparison conditions for CMPSTTSA are not met any time."]
     #[inline(always)]
-    pub const fn set_cmpstoca(&mut self, val: super::vals::Cmpstoca) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_cmpstoca(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -2959,7 +2959,7 @@ impl defmt::Format for Adcmpser {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcmpser {{ cmpsttsa: {:?}, cmpstoca: {:?}, reserved: {=u8:?} }}",
+            "Adcmpser {{ cmpsttsa: {=bool:?}, cmpstoca: {=bool:?}, reserved: {=u8:?} }}",
             self.cmpsttsa(),
             self.cmpstoca(),
             self.reserved()
@@ -2974,182 +2974,182 @@ impl Adcmpsr0 {
     #[doc = "Compare window A flag of AN000"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha00(&self) -> super::vals::Cmpstcha00 {
+    pub const fn cmpstcha00(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cmpstcha00::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN000"]
     #[inline(always)]
-    pub const fn set_cmpstcha00(&mut self, val: super::vals::Cmpstcha00) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_cmpstcha00(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Compare window A flag of AN001"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha01(&self) -> super::vals::Cmpstcha01 {
+    pub const fn cmpstcha01(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cmpstcha01::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN001"]
     #[inline(always)]
-    pub const fn set_cmpstcha01(&mut self, val: super::vals::Cmpstcha01) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_cmpstcha01(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Compare window A flag of AN002"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha02(&self) -> super::vals::Cmpstcha02 {
+    pub const fn cmpstcha02(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Cmpstcha02::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN002"]
     #[inline(always)]
-    pub const fn set_cmpstcha02(&mut self, val: super::vals::Cmpstcha02) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_cmpstcha02(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "Compare window A flag of AN003"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha03(&self) -> super::vals::Cmpstcha03 {
+    pub const fn cmpstcha03(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Cmpstcha03::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN003"]
     #[inline(always)]
-    pub const fn set_cmpstcha03(&mut self, val: super::vals::Cmpstcha03) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_cmpstcha03(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "Compare window A flag of AN004"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha04(&self) -> super::vals::Cmpstcha04 {
+    pub const fn cmpstcha04(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Cmpstcha04::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN004"]
     #[inline(always)]
-    pub const fn set_cmpstcha04(&mut self, val: super::vals::Cmpstcha04) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_cmpstcha04(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "Compare window A flag of AN005"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha05(&self) -> super::vals::Cmpstcha05 {
+    pub const fn cmpstcha05(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Cmpstcha05::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN005"]
     #[inline(always)]
-    pub const fn set_cmpstcha05(&mut self, val: super::vals::Cmpstcha05) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u16) & 0x01) << 5usize);
+    pub const fn set_cmpstcha05(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
     }
     #[doc = "Compare window A flag of AN006"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha06(&self) -> super::vals::Cmpstcha06 {
+    pub const fn cmpstcha06(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Cmpstcha06::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN006"]
     #[inline(always)]
-    pub const fn set_cmpstcha06(&mut self, val: super::vals::Cmpstcha06) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_cmpstcha06(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "Compare window A flag of AN007"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha07(&self) -> super::vals::Cmpstcha07 {
+    pub const fn cmpstcha07(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Cmpstcha07::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN007"]
     #[inline(always)]
-    pub const fn set_cmpstcha07(&mut self, val: super::vals::Cmpstcha07) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u16) & 0x01) << 7usize);
+    pub const fn set_cmpstcha07(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
     }
     #[doc = "Compare window A flag of AN008"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha08(&self) -> super::vals::Cmpstcha08 {
+    pub const fn cmpstcha08(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Cmpstcha08::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN008"]
     #[inline(always)]
-    pub const fn set_cmpstcha08(&mut self, val: super::vals::Cmpstcha08) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_cmpstcha08(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "Compare window A flag of AN009"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha09(&self) -> super::vals::Cmpstcha09 {
+    pub const fn cmpstcha09(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Cmpstcha09::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN009"]
     #[inline(always)]
-    pub const fn set_cmpstcha09(&mut self, val: super::vals::Cmpstcha09) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_cmpstcha09(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "Compare window A flag of AN010"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha10(&self) -> super::vals::Cmpstcha10 {
+    pub const fn cmpstcha10(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Cmpstcha10::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN010"]
     #[inline(always)]
-    pub const fn set_cmpstcha10(&mut self, val: super::vals::Cmpstcha10) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_cmpstcha10(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "Compare window A flag of AN011"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha11(&self) -> super::vals::Cmpstcha11 {
+    pub const fn cmpstcha11(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Cmpstcha11::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN011"]
     #[inline(always)]
-    pub const fn set_cmpstcha11(&mut self, val: super::vals::Cmpstcha11) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u16) & 0x01) << 11usize);
+    pub const fn set_cmpstcha11(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u16) & 0x01) << 11usize);
     }
     #[doc = "Compare window A flag of AN012"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha12(&self) -> super::vals::Cmpstcha12 {
+    pub const fn cmpstcha12(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Cmpstcha12::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN012"]
     #[inline(always)]
-    pub const fn set_cmpstcha12(&mut self, val: super::vals::Cmpstcha12) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u16) & 0x01) << 12usize);
+    pub const fn set_cmpstcha12(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u16) & 0x01) << 12usize);
     }
     #[doc = "Compare window A flag of AN013"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha13(&self) -> super::vals::Cmpstcha13 {
+    pub const fn cmpstcha13(&self) -> bool {
         let val = (self.0 >> 13usize) & 0x01;
-        super::vals::Cmpstcha13::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN013"]
     #[inline(always)]
-    pub const fn set_cmpstcha13(&mut self, val: super::vals::Cmpstcha13) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val.to_bits() as u16) & 0x01) << 13usize);
+    pub const fn set_cmpstcha13(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u16) & 0x01) << 13usize);
     }
     #[doc = "Compare window A flag of AN014"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha14(&self) -> super::vals::Cmpstcha14 {
+    pub const fn cmpstcha14(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Cmpstcha14::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN014"]
     #[inline(always)]
-    pub const fn set_cmpstcha14(&mut self, val: super::vals::Cmpstcha14) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u16) & 0x01) << 14usize);
+    pub const fn set_cmpstcha14(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -3197,7 +3197,7 @@ impl defmt::Format for Adcmpsr0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcmpsr0 {{ cmpstcha00: {:?}, cmpstcha01: {:?}, cmpstcha02: {:?}, cmpstcha03: {:?}, cmpstcha04: {:?}, cmpstcha05: {:?}, cmpstcha06: {:?}, cmpstcha07: {:?}, cmpstcha08: {:?}, cmpstcha09: {:?}, cmpstcha10: {:?}, cmpstcha11: {:?}, cmpstcha12: {:?}, cmpstcha13: {:?}, cmpstcha14: {:?}, reserved: {=bool:?} }}",
+            "Adcmpsr0 {{ cmpstcha00: {=bool:?}, cmpstcha01: {=bool:?}, cmpstcha02: {=bool:?}, cmpstcha03: {=bool:?}, cmpstcha04: {=bool:?}, cmpstcha05: {=bool:?}, cmpstcha06: {=bool:?}, cmpstcha07: {=bool:?}, cmpstcha08: {=bool:?}, cmpstcha09: {=bool:?}, cmpstcha10: {=bool:?}, cmpstcha11: {=bool:?}, cmpstcha12: {=bool:?}, cmpstcha13: {=bool:?}, cmpstcha14: {=bool:?}, reserved: {=bool:?} }}",
             self.cmpstcha00(),
             self.cmpstcha01(),
             self.cmpstcha02(),
@@ -3225,122 +3225,122 @@ impl Adcmpsr1 {
     #[doc = "Compare window A flag of AN016"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha16(&self) -> super::vals::Cmpstcha16 {
+    pub const fn cmpstcha16(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cmpstcha16::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN016"]
     #[inline(always)]
-    pub const fn set_cmpstcha16(&mut self, val: super::vals::Cmpstcha16) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_cmpstcha16(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Compare window A flag of AN017"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha17(&self) -> super::vals::Cmpstcha17 {
+    pub const fn cmpstcha17(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Cmpstcha17::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN017"]
     #[inline(always)]
-    pub const fn set_cmpstcha17(&mut self, val: super::vals::Cmpstcha17) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_cmpstcha17(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Compare window A flag of AN018"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha18(&self) -> super::vals::Cmpstcha18 {
+    pub const fn cmpstcha18(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Cmpstcha18::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN018"]
     #[inline(always)]
-    pub const fn set_cmpstcha18(&mut self, val: super::vals::Cmpstcha18) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_cmpstcha18(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "Compare window A flag of AN019"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha19(&self) -> super::vals::Cmpstcha19 {
+    pub const fn cmpstcha19(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Cmpstcha19::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN019"]
     #[inline(always)]
-    pub const fn set_cmpstcha19(&mut self, val: super::vals::Cmpstcha19) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u16) & 0x01) << 3usize);
+    pub const fn set_cmpstcha19(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
     }
     #[doc = "Compare window A flag of AN020"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha20(&self) -> super::vals::Cmpstcha20 {
+    pub const fn cmpstcha20(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Cmpstcha20::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN020"]
     #[inline(always)]
-    pub const fn set_cmpstcha20(&mut self, val: super::vals::Cmpstcha20) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u16) & 0x01) << 4usize);
+    pub const fn set_cmpstcha20(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
     }
     #[doc = "Compare window A flag of AN021"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha21(&self) -> super::vals::Cmpstcha21 {
+    pub const fn cmpstcha21(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Cmpstcha21::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN021"]
     #[inline(always)]
-    pub const fn set_cmpstcha21(&mut self, val: super::vals::Cmpstcha21) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u16) & 0x01) << 5usize);
+    pub const fn set_cmpstcha21(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
     }
     #[doc = "Compare window A flag of AN022"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha22(&self) -> super::vals::Cmpstcha22 {
+    pub const fn cmpstcha22(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Cmpstcha22::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN022"]
     #[inline(always)]
-    pub const fn set_cmpstcha22(&mut self, val: super::vals::Cmpstcha22) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_cmpstcha22(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "Compare window A flag of AN023"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha23(&self) -> super::vals::Cmpstcha23 {
+    pub const fn cmpstcha23(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Cmpstcha23::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN023"]
     #[inline(always)]
-    pub const fn set_cmpstcha23(&mut self, val: super::vals::Cmpstcha23) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u16) & 0x01) << 7usize);
+    pub const fn set_cmpstcha23(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
     }
     #[doc = "Compare window A flag of AN024"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha24(&self) -> super::vals::Cmpstcha24 {
+    pub const fn cmpstcha24(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Cmpstcha24::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN024"]
     #[inline(always)]
-    pub const fn set_cmpstcha24(&mut self, val: super::vals::Cmpstcha24) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_cmpstcha24(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "Compare window A flag of AN025"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpstcha25(&self) -> super::vals::Cmpstcha25 {
+    pub const fn cmpstcha25(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Cmpstcha25::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Compare window A flag of AN025"]
     #[inline(always)]
-    pub const fn set_cmpstcha25(&mut self, val: super::vals::Cmpstcha25) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_cmpstcha25(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -3383,7 +3383,7 @@ impl defmt::Format for Adcmpsr1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcmpsr1 {{ cmpstcha16: {:?}, cmpstcha17: {:?}, cmpstcha18: {:?}, cmpstcha19: {:?}, cmpstcha20: {:?}, cmpstcha21: {:?}, cmpstcha22: {:?}, cmpstcha23: {:?}, cmpstcha24: {:?}, cmpstcha25: {:?}, reserved: {=u8:?} }}",
+            "Adcmpsr1 {{ cmpstcha16: {=bool:?}, cmpstcha17: {=bool:?}, cmpstcha18: {=bool:?}, cmpstcha19: {=bool:?}, cmpstcha20: {=bool:?}, cmpstcha21: {=bool:?}, cmpstcha22: {=bool:?}, cmpstcha23: {=bool:?}, cmpstcha24: {=bool:?}, cmpstcha25: {=bool:?}, reserved: {=u8:?} }}",
             self.cmpstcha16(),
             self.cmpstcha17(),
             self.cmpstcha18(),
@@ -3430,62 +3430,62 @@ impl Adcsr {
     #[doc = "Group B Scan End Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn gbadie(&self) -> super::vals::Gbadie {
+    pub const fn gbadie(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Gbadie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Group B Scan End Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_gbadie(&mut self, val: super::vals::Gbadie) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u16) & 0x01) << 6usize);
+    pub const fn set_gbadie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
     }
     #[doc = "Double Trigger Mode Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn dble(&self) -> super::vals::Dble {
+    pub const fn dble(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Dble::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Double Trigger Mode Select"]
     #[inline(always)]
-    pub const fn set_dble(&mut self, val: super::vals::Dble) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u16) & 0x01) << 7usize);
+    pub const fn set_dble(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
     }
     #[doc = "Trigger Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn extrg(&self) -> super::vals::Extrg {
+    pub const fn extrg(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Extrg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Trigger Select"]
     #[inline(always)]
-    pub const fn set_extrg(&mut self, val: super::vals::Extrg) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_extrg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "Trigger Start Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn trge(&self) -> super::vals::Trge {
+    pub const fn trge(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Trge::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Trigger Start Enable"]
     #[inline(always)]
-    pub const fn set_trge(&mut self, val: super::vals::Trge) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_trge(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "A/D Conversion Operation Mode Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn adhsc(&self) -> super::vals::Adhsc {
+    pub const fn adhsc(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Adhsc::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D Conversion Operation Mode Select"]
     #[inline(always)]
-    pub const fn set_adhsc(&mut self, val: super::vals::Adhsc) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_adhsc(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -3514,14 +3514,14 @@ impl Adcsr {
     #[doc = "A/D Conversion Start"]
     #[must_use]
     #[inline(always)]
-    pub const fn adst(&self) -> super::vals::Adst {
+    pub const fn adst(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Adst::from_bits(val as u8)
+        val != 0
     }
     #[doc = "A/D Conversion Start"]
     #[inline(always)]
-    pub const fn set_adst(&mut self, val: super::vals::Adst) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_adst(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for Adcsr {
@@ -3551,7 +3551,7 @@ impl defmt::Format for Adcsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adcsr {{ dblans: {=u8:?}, reserved: {=bool:?}, gbadie: {:?}, dble: {:?}, extrg: {:?}, trge: {:?}, adhsc: {:?}, reserved_2: {=u8:?}, adcs: {:?}, adst: {:?} }}",
+            "Adcsr {{ dblans: {=u8:?}, reserved: {=bool:?}, gbadie: {=bool:?}, dble: {=bool:?}, extrg: {=bool:?}, trge: {=bool:?}, adhsc: {=bool:?}, reserved_2: {=u8:?}, adcs: {:?}, adst: {=bool:?} }}",
             self.dblans(),
             self.reserved(),
             self.gbadie(),
@@ -3696,14 +3696,14 @@ impl Addiscr {
     #[doc = "Selection of Precharge or Discharge"]
     #[must_use]
     #[inline(always)]
-    pub const fn pchg(&self) -> super::vals::Pchg {
+    pub const fn pchg(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Pchg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Selection of Precharge or Discharge"]
     #[inline(always)]
-    pub const fn set_pchg(&mut self, val: super::vals::Pchg) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_pchg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -3738,7 +3738,7 @@ impl defmt::Format for Addiscr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Addiscr {{ adndis: {:?}, pchg: {:?}, reserved: {=u8:?} }}",
+            "Addiscr {{ adndis: {:?}, pchg: {=bool:?}, reserved: {=u8:?} }}",
             self.adndis(),
             self.pchg(),
             self.reserved()
@@ -3823,26 +3823,26 @@ impl Adexicr {
     #[doc = "Temperature Sensor Output A/D converted Value Addition/Average Mode Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn tssad(&self) -> super::vals::Tssad {
+    pub const fn tssad(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Tssad::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Temperature Sensor Output A/D converted Value Addition/Average Mode Select"]
     #[inline(always)]
-    pub const fn set_tssad(&mut self, val: super::vals::Tssad) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_tssad(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Internal Reference Voltage A/D converted Value Addition/Average Mode Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ocsad(&self) -> super::vals::Ocsad {
+    pub const fn ocsad(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ocsad::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Internal Reference Voltage A/D converted Value Addition/Average Mode Select"]
     #[inline(always)]
-    pub const fn set_ocsad(&mut self, val: super::vals::Ocsad) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_ocsad(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -3859,26 +3859,26 @@ impl Adexicr {
     #[doc = "Temperature Sensor Output A/D Conversion Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn tssa(&self) -> super::vals::Tssa {
+    pub const fn tssa(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Tssa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Temperature Sensor Output A/D Conversion Select"]
     #[inline(always)]
-    pub const fn set_tssa(&mut self, val: super::vals::Tssa) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_tssa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "Internal Reference Voltage A/D Conversion Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ocsa(&self) -> super::vals::Ocsa {
+    pub const fn ocsa(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Ocsa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Internal Reference Voltage A/D Conversion Select"]
     #[inline(always)]
-    pub const fn set_ocsa(&mut self, val: super::vals::Ocsa) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_ocsa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -3968,7 +3968,7 @@ impl defmt::Format for Adexicr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adexicr {{ tssad: {:?}, ocsad: {:?}, reserved: {=u8:?}, tssa: {:?}, ocsa: {:?}, reserved_2: {=bool:?}, reserved_3: {=bool:?}, reserved_4: {=bool:?}, reserved_5: {=bool:?}, reserved_6: {=bool:?} }}",
+            "Adexicr {{ tssad: {=bool:?}, ocsad: {=bool:?}, reserved: {=u8:?}, tssa: {=bool:?}, ocsa: {=bool:?}, reserved_2: {=bool:?}, reserved_3: {=bool:?}, reserved_4: {=bool:?}, reserved_5: {=bool:?}, reserved_6: {=bool:?} }}",
             self.tssad(),
             self.ocsad(),
             self.reserved(),
@@ -3990,26 +3990,26 @@ impl Adgspcr {
     #[doc = "Group A priority control setting bit. Note: When the PGS bit is to be set to 1, the ADCSR.ADCS\\[1:0\\] bits must be set to 01b (group scan mode). If the bits are set to any other values, proper operation is not guaranteed."]
     #[must_use]
     #[inline(always)]
-    pub const fn pgs(&self) -> super::vals::Pgs {
+    pub const fn pgs(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Pgs::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Group A priority control setting bit. Note: When the PGS bit is to be set to 1, the ADCSR.ADCS\\[1:0\\] bits must be set to 01b (group scan mode). If the bits are set to any other values, proper operation is not guaranteed."]
     #[inline(always)]
-    pub const fn set_pgs(&mut self, val: super::vals::Pgs) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_pgs(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Group B Restart Setting (Enabled only when PGS = 1. Reserved when PGS = 0.)"]
     #[must_use]
     #[inline(always)]
-    pub const fn gbrscn(&self) -> super::vals::Gbrscn {
+    pub const fn gbrscn(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Gbrscn::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Group B Restart Setting (Enabled only when PGS = 1. Reserved when PGS = 0.)"]
     #[inline(always)]
-    pub const fn set_gbrscn(&mut self, val: super::vals::Gbrscn) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_gbrscn(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -4050,14 +4050,14 @@ impl Adgspcr {
     #[doc = "Group B Single Scan Continuous Start (Enabled only when PGS = 1. Reserved when PGS = 0.) Note: When the GBRP bit has been set to 1, single scan is performed continuously for group B regardless of the setting of the GBRSCN bit."]
     #[must_use]
     #[inline(always)]
-    pub const fn gbrp(&self) -> super::vals::Gbrp {
+    pub const fn gbrp(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Gbrp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Group B Single Scan Continuous Start (Enabled only when PGS = 1. Reserved when PGS = 0.) Note: When the GBRP bit has been set to 1, single scan is performed continuously for group B regardless of the setting of the GBRSCN bit."]
     #[inline(always)]
-    pub const fn set_gbrp(&mut self, val: super::vals::Gbrp) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_gbrp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for Adgspcr {
@@ -4083,7 +4083,7 @@ impl defmt::Format for Adgspcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adgspcr {{ pgs: {:?}, gbrscn: {:?}, reserved: {=u8:?}, reserved_2: {=bool:?}, reserved_3: {=u8:?}, gbrp: {:?} }}",
+            "Adgspcr {{ pgs: {=bool:?}, gbrscn: {=bool:?}, reserved: {=u8:?}, reserved_2: {=bool:?}, reserved_3: {=u8:?}, gbrp: {=bool:?} }}",
             self.pgs(),
             self.gbrscn(),
             self.reserved(),
@@ -4149,14 +4149,14 @@ impl Adhvrefcnt {
     #[doc = "Sleep"]
     #[must_use]
     #[inline(always)]
-    pub const fn adslp(&self) -> super::vals::Adslp {
+    pub const fn adslp(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Adslp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Sleep"]
     #[inline(always)]
-    pub const fn set_adslp(&mut self, val: super::vals::Adslp) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_adslp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Adhvrefcnt {
@@ -4181,7 +4181,7 @@ impl defmt::Format for Adhvrefcnt {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adhvrefcnt {{ hvsel: {:?}, lvsel: {:?}, reserved: {=u8:?}, reserved_2: {=u8:?}, adslp: {:?} }}",
+            "Adhvrefcnt {{ hvsel: {:?}, lvsel: {:?}, reserved: {=u8:?}, reserved_2: {=u8:?}, adslp: {=bool:?} }}",
             self.hvsel(),
             self.lvsel(),
             self.reserved(),
@@ -4587,14 +4587,14 @@ impl Adwinmon {
     #[doc = "Combination result monitor This bit indicates the combination result. This bit is valid when both window A operation and window B operation are enabled."]
     #[must_use]
     #[inline(always)]
-    pub const fn moncomb(&self) -> super::vals::Moncomb {
+    pub const fn moncomb(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Moncomb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Combination result monitor This bit indicates the combination result. This bit is valid when both window A operation and window B operation are enabled."]
     #[inline(always)]
-    pub const fn set_moncomb(&mut self, val: super::vals::Moncomb) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_moncomb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 000."]
     #[must_use]
@@ -4611,26 +4611,26 @@ impl Adwinmon {
     #[doc = "Comparison Result Monitor A"]
     #[must_use]
     #[inline(always)]
-    pub const fn moncmpa(&self) -> super::vals::Moncmpa {
+    pub const fn moncmpa(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Moncmpa::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison Result Monitor A"]
     #[inline(always)]
-    pub const fn set_moncmpa(&mut self, val: super::vals::Moncmpa) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_moncmpa(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "Comparison Result Monitor B"]
     #[must_use]
     #[inline(always)]
-    pub const fn moncmpb(&self) -> super::vals::Moncmpb {
+    pub const fn moncmpb(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Moncmpb::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Comparison Result Monitor B"]
     #[inline(always)]
-    pub const fn set_moncmpb(&mut self, val: super::vals::Moncmpb) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_moncmpb(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "These bits are read as 00."]
     #[must_use]
@@ -4667,7 +4667,7 @@ impl defmt::Format for Adwinmon {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adwinmon {{ moncomb: {:?}, reserved: {=u8:?}, moncmpa: {:?}, moncmpb: {:?}, reserved_2: {=u8:?} }}",
+            "Adwinmon {{ moncomb: {=bool:?}, reserved: {=u8:?}, moncmpa: {=bool:?}, moncmpb: {=bool:?}, reserved_2: {=u8:?} }}",
             self.moncomb(),
             self.reserved(),
             self.moncmpa(),

@@ -30,26 +30,26 @@ impl Crccr0 {
     #[doc = "CRC Calculation Switching"]
     #[must_use]
     #[inline(always)]
-    pub const fn lms(&self) -> super::vals::Lms {
+    pub const fn lms(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Lms::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CRC Calculation Switching"]
     #[inline(always)]
-    pub const fn set_lms(&mut self, val: super::vals::Lms) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_lms(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "CRCDOR Register Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn dorclr(&self) -> super::vals::Dorclr {
+    pub const fn dorclr(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Dorclr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CRCDOR Register Clear"]
     #[inline(always)]
-    pub const fn set_dorclr(&mut self, val: super::vals::Dorclr) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_dorclr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Crccr0 {
@@ -73,7 +73,7 @@ impl defmt::Format for Crccr0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Crccr0 {{ gps: {:?}, reserved: {=u8:?}, lms: {:?}, dorclr: {:?} }}",
+            "Crccr0 {{ gps: {:?}, reserved: {=u8:?}, lms: {=bool:?}, dorclr: {=bool:?} }}",
             self.gps(),
             self.reserved(),
             self.lms(),
@@ -101,26 +101,26 @@ impl Crccr1 {
     #[doc = "Snoop-on-write/read switch bit"]
     #[must_use]
     #[inline(always)]
-    pub const fn crcswr(&self) -> super::vals::Crcswr {
+    pub const fn crcswr(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Crcswr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snoop-on-write/read switch bit"]
     #[inline(always)]
-    pub const fn set_crcswr(&mut self, val: super::vals::Crcswr) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_crcswr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "Snoop enable bit"]
     #[must_use]
     #[inline(always)]
-    pub const fn crcsen(&self) -> super::vals::Crcsen {
+    pub const fn crcsen(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Crcsen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snoop enable bit"]
     #[inline(always)]
-    pub const fn set_crcsen(&mut self, val: super::vals::Crcsen) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_crcsen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Crccr1 {
@@ -143,7 +143,7 @@ impl defmt::Format for Crccr1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Crccr1 {{ reserved: {=u8:?}, crcswr: {:?}, crcsen: {:?} }}",
+            "Crccr1 {{ reserved: {=u8:?}, crcswr: {=bool:?}, crcsen: {=bool:?} }}",
             self.reserved(),
             self.crcswr(),
             self.crcsen()

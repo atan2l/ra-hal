@@ -97,14 +97,14 @@ impl Ckocr {
     #[doc = "Clock out enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ckoen(&self) -> super::vals::Ckoen {
+    pub const fn ckoen(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Ckoen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Clock out enable"]
     #[inline(always)]
-    pub const fn set_ckoen(&mut self, val: super::vals::Ckoen) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_ckoen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Ckocr {
@@ -128,7 +128,7 @@ impl defmt::Format for Ckocr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ckocr {{ ckosel: {:?}, reserved: {=bool:?}, ckodiv: {:?}, ckoen: {:?} }}",
+            "Ckocr {{ ckosel: {:?}, reserved: {=bool:?}, ckodiv: {:?}, ckoen: {=bool:?} }}",
             self.ckosel(),
             self.reserved(),
             self.ckodiv(),
@@ -144,14 +144,14 @@ impl Flstop {
     #[doc = "Selecting ON/OFF of the Flash Memory Operation"]
     #[must_use]
     #[inline(always)]
-    pub const fn flstop(&self) -> super::vals::Flstop {
+    pub const fn flstop(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Flstop::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Selecting ON/OFF of the Flash Memory Operation"]
     #[inline(always)]
-    pub const fn set_flstop(&mut self, val: super::vals::Flstop) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_flstop(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -168,14 +168,14 @@ impl Flstop {
     #[doc = "Flash Memory Operation Status Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn flstpf(&self) -> super::vals::Flstpf {
+    pub const fn flstpf(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Flstpf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Flash Memory Operation Status Flag"]
     #[inline(always)]
-    pub const fn set_flstpf(&mut self, val: super::vals::Flstpf) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_flstpf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -211,7 +211,7 @@ impl defmt::Format for Flstop {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Flstop {{ flstop: {:?}, reserved: {=u8:?}, flstpf: {:?}, reserved_2: {=u8:?} }}",
+            "Flstop {{ flstop: {=bool:?}, reserved: {=u8:?}, flstpf: {=bool:?}, reserved_2: {=u8:?} }}",
             self.flstop(),
             self.reserved(),
             self.flstpf(),
@@ -374,14 +374,14 @@ impl Lococr {
     #[doc = "LOCO Stop"]
     #[must_use]
     #[inline(always)]
-    pub const fn lcstp(&self) -> super::vals::Lcstp {
+    pub const fn lcstp(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Lcstp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "LOCO Stop"]
     #[inline(always)]
-    pub const fn set_lcstp(&mut self, val: super::vals::Lcstp) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_lcstp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -415,7 +415,7 @@ impl defmt::Format for Lococr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Lococr {{ lcstp: {:?}, reserved: {=u8:?} }}",
+            "Lococr {{ lcstp: {=bool:?}, reserved: {=u8:?} }}",
             self.lcstp(),
             self.reserved()
         )
@@ -502,26 +502,26 @@ impl Lvcmpcr {
     #[doc = "Voltage Detection 1 Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn lvd1e(&self) -> super::vals::Lvd1e {
+    pub const fn lvd1e(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Lvd1e::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage Detection 1 Enable"]
     #[inline(always)]
-    pub const fn set_lvd1e(&mut self, val: super::vals::Lvd1e) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_lvd1e(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "Voltage Detection 2 Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn lvd2e(&self) -> super::vals::Lvd2e {
+    pub const fn lvd2e(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Lvd2e::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage Detection 2 Enable"]
     #[inline(always)]
-    pub const fn set_lvd2e(&mut self, val: super::vals::Lvd2e) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_lvd2e(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -559,7 +559,7 @@ impl defmt::Format for Lvcmpcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Lvcmpcr {{ reserved: {=u8:?}, reserved_2: {=u8:?}, reserved_3: {=bool:?}, lvd1e: {:?}, lvd2e: {:?}, reserved_4: {=bool:?} }}",
+            "Lvcmpcr {{ reserved: {=u8:?}, reserved_2: {=u8:?}, reserved_3: {=bool:?}, lvd1e: {=bool:?}, lvd2e: {=bool:?}, reserved_4: {=bool:?} }}",
             self.reserved(),
             self.reserved_2(),
             self.reserved_3(),
@@ -577,14 +577,14 @@ impl Lvdcr0 {
     #[doc = "Voltage Monitor Interrupt/Reset Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn rie(&self) -> super::vals::Rie {
+    pub const fn rie(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Rie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage Monitor Interrupt/Reset Enable"]
     #[inline(always)]
-    pub const fn set_rie(&mut self, val: super::vals::Rie) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_rie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -601,14 +601,14 @@ impl Lvdcr0 {
     #[doc = "Voltage Monitor Circuit Comparison Result Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn cmpe(&self) -> super::vals::Cmpe {
+    pub const fn cmpe(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Cmpe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage Monitor Circuit Comparison Result Output Enable"]
     #[inline(always)]
-    pub const fn set_cmpe(&mut self, val: super::vals::Cmpe) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_cmpe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -625,26 +625,26 @@ impl Lvdcr0 {
     #[doc = "Voltage Monitor Circuit Mode Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ri(&self) -> super::vals::Ri {
+    pub const fn ri(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Ri::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage Monitor Circuit Mode Select"]
     #[inline(always)]
-    pub const fn set_ri(&mut self, val: super::vals::Ri) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_ri(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "Voltage Monitor Reset Negate Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn rn(&self) -> super::vals::Rn {
+    pub const fn rn(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Rn::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage Monitor Reset Negate Select"]
     #[inline(always)]
-    pub const fn set_rn(&mut self, val: super::vals::Rn) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_rn(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Lvdcr0 {
@@ -670,7 +670,7 @@ impl defmt::Format for Lvdcr0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Lvdcr0 {{ rie: {:?}, reserved: {=bool:?}, cmpe: {:?}, reserved_2: {=u8:?}, ri: {:?}, rn: {:?} }}",
+            "Lvdcr0 {{ rie: {=bool:?}, reserved: {=bool:?}, cmpe: {=bool:?}, reserved_2: {=u8:?}, ri: {=bool:?}, rn: {=bool:?} }}",
             self.rie(),
             self.reserved(),
             self.cmpe(),
@@ -700,14 +700,14 @@ impl Lvdcr1 {
     #[doc = "Voltage Monitor Interrupt Type Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn irqsel(&self) -> super::vals::Irqsel {
+    pub const fn irqsel(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Irqsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage Monitor Interrupt Type Select"]
     #[inline(always)]
-    pub const fn set_irqsel(&mut self, val: super::vals::Irqsel) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_irqsel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "These bits are read as 00000. The write value should be 00000."]
     #[must_use]
@@ -742,7 +742,7 @@ impl defmt::Format for Lvdcr1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Lvdcr1 {{ idtsel: {:?}, irqsel: {:?}, reserved: {=u8:?} }}",
+            "Lvdcr1 {{ idtsel: {:?}, irqsel: {=bool:?}, reserved: {=u8:?} }}",
             self.idtsel(),
             self.irqsel(),
             self.reserved()
@@ -812,26 +812,26 @@ impl Lvdsr {
     #[doc = "Voltage Monitor Voltage Change Detection Flag NOTE: Only 0 can be written to this bit. After writing 0 to this bit, it takes 2 system clock cycles for the bit to be read as 0."]
     #[must_use]
     #[inline(always)]
-    pub const fn det(&self) -> super::vals::Det {
+    pub const fn det(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Det::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage Monitor Voltage Change Detection Flag NOTE: Only 0 can be written to this bit. After writing 0 to this bit, it takes 2 system clock cycles for the bit to be read as 0."]
     #[inline(always)]
-    pub const fn set_det(&mut self, val: super::vals::Det) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_det(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Voltage Monitor 1 Signal Monitor Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn mon(&self) -> super::vals::Mon {
+    pub const fn mon(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Mon::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage Monitor 1 Signal Monitor Flag"]
     #[inline(always)]
-    pub const fn set_mon(&mut self, val: super::vals::Mon) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_mon(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -866,7 +866,7 @@ impl defmt::Format for Lvdsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Lvdsr {{ det: {:?}, mon: {:?}, reserved: {=u8:?} }}",
+            "Lvdsr {{ det: {=bool:?}, mon: {=bool:?}, reserved: {=u8:?} }}",
             self.det(),
             self.mon(),
             self.reserved()
@@ -936,14 +936,14 @@ impl Mococr {
     #[doc = "MOCO Stop"]
     #[must_use]
     #[inline(always)]
-    pub const fn mcstp(&self) -> super::vals::Mcstp {
+    pub const fn mcstp(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Mcstp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "MOCO Stop"]
     #[inline(always)]
-    pub const fn set_mcstp(&mut self, val: super::vals::Mcstp) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_mcstp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -977,7 +977,7 @@ impl defmt::Format for Mococr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Mococr {{ mcstp: {:?}, reserved: {=u8:?} }}",
+            "Mococr {{ mcstp: {=bool:?}, reserved: {=u8:?} }}",
             self.mcstp(),
             self.reserved()
         )
@@ -1040,14 +1040,14 @@ impl Momcr {
     #[doc = "Main Clock Oscillator Drive Capability 1 Switching"]
     #[must_use]
     #[inline(always)]
-    pub const fn modrv1(&self) -> super::vals::Modrv1 {
+    pub const fn modrv1(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Modrv1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Main Clock Oscillator Drive Capability 1 Switching"]
     #[inline(always)]
-    pub const fn set_modrv1(&mut self, val: super::vals::Modrv1) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_modrv1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -1064,14 +1064,14 @@ impl Momcr {
     #[doc = "Main Clock Oscillator Switching"]
     #[must_use]
     #[inline(always)]
-    pub const fn mosel(&self) -> super::vals::Mosel {
+    pub const fn mosel(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Mosel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Main Clock Oscillator Switching"]
     #[inline(always)]
-    pub const fn set_mosel(&mut self, val: super::vals::Mosel) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_mosel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1108,7 +1108,7 @@ impl defmt::Format for Momcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Momcr {{ reserved: {=u8:?}, modrv1: {:?}, reserved_2: {=u8:?}, mosel: {:?}, reserved_3: {=bool:?} }}",
+            "Momcr {{ reserved: {=u8:?}, modrv1: {=bool:?}, reserved_2: {=u8:?}, mosel: {=bool:?}, reserved_3: {=bool:?} }}",
             self.reserved(),
             self.modrv1(),
             self.reserved_2(),
@@ -1125,14 +1125,14 @@ impl Mosccr {
     #[doc = "Main Clock Oscillator Stop Note: MOMCR register must be set before setting MOSTP to 0."]
     #[must_use]
     #[inline(always)]
-    pub const fn mostp(&self) -> super::vals::Mostp {
+    pub const fn mostp(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Mostp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Main Clock Oscillator Stop Note: MOMCR register must be set before setting MOSTP to 0."]
     #[inline(always)]
-    pub const fn set_mostp(&mut self, val: super::vals::Mostp) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_mostp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -1166,7 +1166,7 @@ impl defmt::Format for Mosccr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Mosccr {{ mostp: {:?}, reserved: {=u8:?} }}",
+            "Mosccr {{ mostp: {=bool:?}, reserved: {=u8:?} }}",
             self.mostp(),
             self.reserved()
         )
@@ -1235,14 +1235,14 @@ impl Mstpcra {
     #[doc = "RAM0 Module Stop"]
     #[must_use]
     #[inline(always)]
-    pub const fn mstpa0(&self) -> super::vals::Mstpa0 {
+    pub const fn mstpa0(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Mstpa0::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RAM0 Module Stop"]
     #[inline(always)]
-    pub const fn set_mstpa0(&mut self, val: super::vals::Mstpa0) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_mstpa0(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 11111. The write value should be 11111."]
     #[must_use]
@@ -1259,14 +1259,14 @@ impl Mstpcra {
     #[doc = "ECCRAM Module Stop"]
     #[must_use]
     #[inline(always)]
-    pub const fn mstpa6(&self) -> super::vals::Mstpa6 {
+    pub const fn mstpa6(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Mstpa6::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ECCRAM Module Stop"]
     #[inline(always)]
-    pub const fn set_mstpa6(&mut self, val: super::vals::Mstpa6) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u32) & 0x01) << 6usize);
+    pub const fn set_mstpa6(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
     }
     #[doc = "These bits are read as 111111111111111. The write value should be 111111111111111."]
     #[must_use]
@@ -1283,14 +1283,14 @@ impl Mstpcra {
     #[doc = "DMA Controller/Data Transfer Controller Module Stop"]
     #[must_use]
     #[inline(always)]
-    pub const fn mstpa22(&self) -> super::vals::Mstpa22 {
+    pub const fn mstpa22(&self) -> bool {
         let val = (self.0 >> 22usize) & 0x01;
-        super::vals::Mstpa22::from_bits(val as u8)
+        val != 0
     }
     #[doc = "DMA Controller/Data Transfer Controller Module Stop"]
     #[inline(always)]
-    pub const fn set_mstpa22(&mut self, val: super::vals::Mstpa22) {
-        self.0 = (self.0 & !(0x01 << 22usize)) | (((val.to_bits() as u32) & 0x01) << 22usize);
+    pub const fn set_mstpa22(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 22usize)) | (((val as u32) & 0x01) << 22usize);
     }
     #[doc = "These bits are read as 111111111. The write value should be 111111111."]
     #[must_use]
@@ -1328,7 +1328,7 @@ impl defmt::Format for Mstpcra {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Mstpcra {{ mstpa0: {:?}, reserved: {=u8:?}, mstpa6: {:?}, reserved_2: {=u16:?}, mstpa22: {:?}, reserved_3: {=u16:?} }}",
+            "Mstpcra {{ mstpa0: {=bool:?}, reserved: {=u8:?}, mstpa6: {=bool:?}, reserved_2: {=u16:?}, mstpa22: {=bool:?}, reserved_3: {=u16:?} }}",
             self.mstpa0(),
             self.reserved(),
             self.mstpa6(),
@@ -1429,14 +1429,14 @@ impl Oscsf {
     #[doc = "HOCO Clock Oscillation Stabilization Flag NOTE: The HOCOSF bit value after a reset is 1 when the OFS1.HOCOEN bit is 0. It is 0 when the OFS1.HOCOEN bit is 1."]
     #[must_use]
     #[inline(always)]
-    pub const fn hocosf(&self) -> super::vals::Hocosf {
+    pub const fn hocosf(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Hocosf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "HOCO Clock Oscillation Stabilization Flag NOTE: The HOCOSF bit value after a reset is 1 when the OFS1.HOCOEN bit is 0. It is 0 when the OFS1.HOCOEN bit is 1."]
     #[inline(always)]
-    pub const fn set_hocosf(&mut self, val: super::vals::Hocosf) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_hocosf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 00."]
     #[must_use]
@@ -1453,14 +1453,14 @@ impl Oscsf {
     #[doc = "Main Clock Oscillation Stabilization Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn moscsf(&self) -> super::vals::Moscsf {
+    pub const fn moscsf(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Moscsf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Main Clock Oscillation Stabilization Flag"]
     #[inline(always)]
-    pub const fn set_moscsf(&mut self, val: super::vals::Moscsf) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_moscsf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "This bit is read as 0."]
     #[must_use]
@@ -1477,14 +1477,14 @@ impl Oscsf {
     #[doc = "PLL Clock Oscillation Stabilization Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn pllsf(&self) -> super::vals::Pllsf {
+    pub const fn pllsf(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Pllsf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "PLL Clock Oscillation Stabilization Flag"]
     #[inline(always)]
-    pub const fn set_pllsf(&mut self, val: super::vals::Pllsf) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_pllsf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "These bits are read as 00."]
     #[must_use]
@@ -1522,7 +1522,7 @@ impl defmt::Format for Oscsf {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Oscsf {{ hocosf: {:?}, reserved: {=u8:?}, moscsf: {:?}, reserved_2: {=bool:?}, pllsf: {:?}, reserved_3: {=u8:?} }}",
+            "Oscsf {{ hocosf: {=bool:?}, reserved: {=u8:?}, moscsf: {=bool:?}, reserved_2: {=bool:?}, pllsf: {=bool:?}, reserved_3: {=u8:?} }}",
             self.hocosf(),
             self.reserved(),
             self.moscsf(),
@@ -1540,14 +1540,14 @@ impl Ostdcr {
     #[doc = "Oscillation Stop Detection Interrupt Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ostdie(&self) -> super::vals::Ostdie {
+    pub const fn ostdie(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ostdie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Oscillation Stop Detection Interrupt Enable"]
     #[inline(always)]
-    pub const fn set_ostdie(&mut self, val: super::vals::Ostdie) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ostdie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -1564,14 +1564,14 @@ impl Ostdcr {
     #[doc = "Oscillation Stop Detection Function Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ostde(&self) -> super::vals::Ostde {
+    pub const fn ostde(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Ostde::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Oscillation Stop Detection Function Enable"]
     #[inline(always)]
-    pub const fn set_ostde(&mut self, val: super::vals::Ostde) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_ostde(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Ostdcr {
@@ -1594,7 +1594,7 @@ impl defmt::Format for Ostdcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ostdcr {{ ostdie: {:?}, reserved: {=u8:?}, ostde: {:?} }}",
+            "Ostdcr {{ ostdie: {=bool:?}, reserved: {=u8:?}, ostde: {=bool:?} }}",
             self.ostdie(),
             self.reserved(),
             self.ostde()
@@ -1609,14 +1609,14 @@ impl Ostdsr {
     #[doc = "Oscillation Stop Detection Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn ostdf(&self) -> super::vals::Ostdf {
+    pub const fn ostdf(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ostdf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Oscillation Stop Detection Flag"]
     #[inline(always)]
-    pub const fn set_ostdf(&mut self, val: super::vals::Ostdf) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ostdf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -1650,7 +1650,7 @@ impl defmt::Format for Ostdsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ostdsr {{ ostdf: {:?}, reserved: {=u8:?} }}",
+            "Ostdsr {{ ostdf: {=bool:?}, reserved: {=u8:?} }}",
             self.ostdf(),
             self.reserved()
         )
@@ -1733,14 +1733,14 @@ impl Pllcr {
     #[doc = "PLL Stop Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn pllstp(&self) -> super::vals::Pllstp {
+    pub const fn pllstp(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Pllstp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "PLL Stop Control"]
     #[inline(always)]
-    pub const fn set_pllstp(&mut self, val: super::vals::Pllstp) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_pllstp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -1774,7 +1774,7 @@ impl defmt::Format for Pllcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Pllcr {{ pllstp: {:?}, reserved: {=u8:?} }}",
+            "Pllcr {{ pllstp: {=bool:?}, reserved: {=u8:?} }}",
             self.pllstp(),
             self.reserved()
         )
@@ -1899,50 +1899,50 @@ impl Rstsr0 {
     #[doc = "Power-On Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written with 0 after the reset flag is read as 1."]
     #[must_use]
     #[inline(always)]
-    pub const fn porf(&self) -> super::vals::Porf {
+    pub const fn porf(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Porf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Power-On Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written with 0 after the reset flag is read as 1."]
     #[inline(always)]
-    pub const fn set_porf(&mut self, val: super::vals::Porf) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_porf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Voltage Monitor 0 Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written with 0 after the reset flag is read as 1."]
     #[must_use]
     #[inline(always)]
-    pub const fn lvd0rf(&self) -> super::vals::Lvd0rf {
+    pub const fn lvd0rf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Lvd0rf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage Monitor 0 Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written with 0 after the reset flag is read as 1."]
     #[inline(always)]
-    pub const fn set_lvd0rf(&mut self, val: super::vals::Lvd0rf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_lvd0rf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Voltage Monitor 1 Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written with 0 after the reset flag is read as 1."]
     #[must_use]
     #[inline(always)]
-    pub const fn lvd1rf(&self) -> super::vals::Lvd1rf {
+    pub const fn lvd1rf(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Lvd1rf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage Monitor 1 Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written with 0 after the reset flag is read as 1."]
     #[inline(always)]
-    pub const fn set_lvd1rf(&mut self, val: super::vals::Lvd1rf) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_lvd1rf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "Voltage Monitor 2 Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written with 0 after the reset flag is read as 1."]
     #[must_use]
     #[inline(always)]
-    pub const fn lvd2rf(&self) -> super::vals::Lvd2rf {
+    pub const fn lvd2rf(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Lvd2rf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Voltage Monitor 2 Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written with 0 after the reset flag is read as 1."]
     #[inline(always)]
-    pub const fn set_lvd2rf(&mut self, val: super::vals::Lvd2rf) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_lvd2rf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "These bits are read as 0000. The write value should be 0000."]
     #[must_use]
@@ -1979,7 +1979,7 @@ impl defmt::Format for Rstsr0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rstsr0 {{ porf: {:?}, lvd0rf: {:?}, lvd1rf: {:?}, lvd2rf: {:?}, reserved: {=u8:?} }}",
+            "Rstsr0 {{ porf: {=bool:?}, lvd0rf: {=bool:?}, lvd1rf: {=bool:?}, lvd2rf: {=bool:?}, reserved: {=u8:?} }}",
             self.porf(),
             self.lvd0rf(),
             self.lvd1rf(),
@@ -1996,38 +1996,38 @@ impl Rstsr1 {
     #[doc = "Independent Watchdog Timer Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[must_use]
     #[inline(always)]
-    pub const fn iwdtrf(&self) -> super::vals::Iwdtrf {
+    pub const fn iwdtrf(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Iwdtrf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Independent Watchdog Timer Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[inline(always)]
-    pub const fn set_iwdtrf(&mut self, val: super::vals::Iwdtrf) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_iwdtrf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "Watchdog Timer Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[must_use]
     #[inline(always)]
-    pub const fn wdtrf(&self) -> super::vals::Wdtrf {
+    pub const fn wdtrf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Wdtrf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Watchdog Timer Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[inline(always)]
-    pub const fn set_wdtrf(&mut self, val: super::vals::Wdtrf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u16) & 0x01) << 1usize);
+    pub const fn set_wdtrf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
     }
     #[doc = "Software Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[must_use]
     #[inline(always)]
-    pub const fn swrf(&self) -> super::vals::Swrf {
+    pub const fn swrf(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Swrf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Software Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[inline(always)]
-    pub const fn set_swrf(&mut self, val: super::vals::Swrf) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u16) & 0x01) << 2usize);
+    pub const fn set_swrf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
     }
     #[doc = "These bits are read as 00000. The write value should be 00000."]
     #[must_use]
@@ -2044,62 +2044,62 @@ impl Rstsr1 {
     #[doc = "RAM Parity Error Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[must_use]
     #[inline(always)]
-    pub const fn rperf(&self) -> super::vals::Rperf {
+    pub const fn rperf(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Rperf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RAM Parity Error Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[inline(always)]
-    pub const fn set_rperf(&mut self, val: super::vals::Rperf) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u16) & 0x01) << 8usize);
+    pub const fn set_rperf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
     }
     #[doc = "RAM ECC Error Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[must_use]
     #[inline(always)]
-    pub const fn reerf(&self) -> super::vals::Reerf {
+    pub const fn reerf(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Reerf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RAM ECC Error Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[inline(always)]
-    pub const fn set_reerf(&mut self, val: super::vals::Reerf) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u16) & 0x01) << 9usize);
+    pub const fn set_reerf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
     }
     #[doc = "Bus Slave MPU Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[must_use]
     #[inline(always)]
-    pub const fn bussrf(&self) -> super::vals::Bussrf {
+    pub const fn bussrf(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Bussrf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Bus Slave MPU Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[inline(always)]
-    pub const fn set_bussrf(&mut self, val: super::vals::Bussrf) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u16) & 0x01) << 10usize);
+    pub const fn set_bussrf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
     }
     #[doc = "Bus Master MPU Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[must_use]
     #[inline(always)]
-    pub const fn busmrf(&self) -> super::vals::Busmrf {
+    pub const fn busmrf(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Busmrf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Bus Master MPU Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[inline(always)]
-    pub const fn set_busmrf(&mut self, val: super::vals::Busmrf) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u16) & 0x01) << 11usize);
+    pub const fn set_busmrf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u16) & 0x01) << 11usize);
     }
     #[doc = "SP Error Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[must_use]
     #[inline(always)]
-    pub const fn sperf(&self) -> super::vals::Sperf {
+    pub const fn sperf(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Sperf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SP Error Reset Detect Flag Note: Only 0 can be written to clear the flag. The reset flag must be written as 0 after the reset flag is read as 1."]
     #[inline(always)]
-    pub const fn set_sperf(&mut self, val: super::vals::Sperf) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u16) & 0x01) << 12usize);
+    pub const fn set_sperf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u16) & 0x01) << 12usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -2141,7 +2141,7 @@ impl defmt::Format for Rstsr1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rstsr1 {{ iwdtrf: {:?}, wdtrf: {:?}, swrf: {:?}, reserved: {=u8:?}, rperf: {:?}, reerf: {:?}, bussrf: {:?}, busmrf: {:?}, sperf: {:?}, reserved_2: {=u8:?} }}",
+            "Rstsr1 {{ iwdtrf: {=bool:?}, wdtrf: {=bool:?}, swrf: {=bool:?}, reserved: {=u8:?}, rperf: {=bool:?}, reerf: {=bool:?}, bussrf: {=bool:?}, busmrf: {=bool:?}, sperf: {=bool:?}, reserved_2: {=u8:?} }}",
             self.iwdtrf(),
             self.wdtrf(),
             self.swrf(),
@@ -2163,14 +2163,14 @@ impl Rstsr2 {
     #[doc = "Cold/Warm Start Determination Flag Note: Only 1 can be written to set the flag."]
     #[must_use]
     #[inline(always)]
-    pub const fn cwsf(&self) -> super::vals::Cwsf {
+    pub const fn cwsf(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cwsf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Cold/Warm Start Determination Flag Note: Only 1 can be written to set the flag."]
     #[inline(always)]
-    pub const fn set_cwsf(&mut self, val: super::vals::Cwsf) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_cwsf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -2204,7 +2204,7 @@ impl defmt::Format for Rstsr2 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rstsr2 {{ cwsf: {:?}, reserved: {=u8:?} }}",
+            "Rstsr2 {{ cwsf: {=bool:?}, reserved: {=u8:?} }}",
             self.cwsf(),
             self.reserved()
         )
@@ -2242,14 +2242,14 @@ impl Sbycr {
     #[doc = "Software Standby"]
     #[must_use]
     #[inline(always)]
-    pub const fn ssby(&self) -> super::vals::Ssby {
+    pub const fn ssby(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Ssby::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Software Standby"]
     #[inline(always)]
-    pub const fn set_ssby(&mut self, val: super::vals::Ssby) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_ssby(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for Sbycr {
@@ -2272,7 +2272,7 @@ impl defmt::Format for Sbycr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Sbycr {{ reserved: {=u16:?}, reserved_2: {=bool:?}, ssby: {:?} }}",
+            "Sbycr {{ reserved: {=u16:?}, reserved_2: {=bool:?}, ssby: {=bool:?} }}",
             self.reserved(),
             self.reserved_2(),
             self.ssby()
@@ -2603,14 +2603,14 @@ impl Slcdsckcr {
     #[doc = "LCD Source Clock Out Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn lcdscken(&self) -> super::vals::Lcdscken {
+    pub const fn lcdscken(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Lcdscken::from_bits(val as u8)
+        val != 0
     }
     #[doc = "LCD Source Clock Out Enable"]
     #[inline(always)]
-    pub const fn set_lcdscken(&mut self, val: super::vals::Lcdscken) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_lcdscken(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Slcdsckcr {
@@ -2633,7 +2633,7 @@ impl defmt::Format for Slcdsckcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Slcdsckcr {{ lcdscksel: {:?}, reserved: {=u8:?}, lcdscken: {:?} }}",
+            "Slcdsckcr {{ lcdscksel: {:?}, reserved: {=u8:?}, lcdscken: {=bool:?} }}",
             self.lcdscksel(),
             self.reserved(),
             self.lcdscken()
@@ -2648,26 +2648,26 @@ impl Snzcr {
     #[doc = "RXD0 Snooze Request Enable NOTE: Do not set to 1 other than in asynchronous mode."]
     #[must_use]
     #[inline(always)]
-    pub const fn rxdreqen(&self) -> super::vals::Rxdreqen {
+    pub const fn rxdreqen(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Rxdreqen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RXD0 Snooze Request Enable NOTE: Do not set to 1 other than in asynchronous mode."]
     #[inline(always)]
-    pub const fn set_rxdreqen(&mut self, val: super::vals::Rxdreqen) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_rxdreqen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "DTC Enable in Snooze Mode"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzdtcen(&self) -> super::vals::Snzdtcen {
+    pub const fn snzdtcen(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Snzdtcen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "DTC Enable in Snooze Mode"]
     #[inline(always)]
-    pub const fn set_snzdtcen(&mut self, val: super::vals::Snzdtcen) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_snzdtcen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "These bits are read as 00000. The write value should be 00000."]
     #[must_use]
@@ -2684,14 +2684,14 @@ impl Snzcr {
     #[doc = "Snooze Mode Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn snze(&self) -> super::vals::Snze {
+    pub const fn snze(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Snze::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Mode Enable"]
     #[inline(always)]
-    pub const fn set_snze(&mut self, val: super::vals::Snze) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_snze(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Snzcr {
@@ -2715,7 +2715,7 @@ impl defmt::Format for Snzcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Snzcr {{ rxdreqen: {:?}, snzdtcen: {:?}, reserved: {=u8:?}, snze: {:?} }}",
+            "Snzcr {{ rxdreqen: {=bool:?}, snzdtcen: {=bool:?}, reserved: {=u8:?}, snze: {=bool:?} }}",
             self.rxdreqen(),
             self.snzdtcen(),
             self.reserved(),
@@ -2731,62 +2731,62 @@ impl Snzedcr {
     #[doc = "AGT1 Underflow Snooze End Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn agtunfed(&self) -> super::vals::Agtunfed {
+    pub const fn agtunfed(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Agtunfed::from_bits(val as u8)
+        val != 0
     }
     #[doc = "AGT1 Underflow Snooze End Enable"]
     #[inline(always)]
-    pub const fn set_agtunfed(&mut self, val: super::vals::Agtunfed) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_agtunfed(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Last DTC Transmission Completion Snooze End Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dtczred(&self) -> super::vals::Dtczred {
+    pub const fn dtczred(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Dtczred::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Last DTC Transmission Completion Snooze End Enable"]
     #[inline(always)]
-    pub const fn set_dtczred(&mut self, val: super::vals::Dtczred) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_dtczred(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "Not Last DTC Transmission Completion Snooze End Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn dtcnzred(&self) -> super::vals::Dtcnzred {
+    pub const fn dtcnzred(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Dtcnzred::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Not Last DTC Transmission Completion Snooze End Enable"]
     #[inline(always)]
-    pub const fn set_dtcnzred(&mut self, val: super::vals::Dtcnzred) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_dtcnzred(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "ADC140 Compare Match Snooze End Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ad0mated(&self) -> super::vals::Ad0mated {
+    pub const fn ad0mated(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ad0mated::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ADC140 Compare Match Snooze End Enable"]
     #[inline(always)]
-    pub const fn set_ad0mated(&mut self, val: super::vals::Ad0mated) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_ad0mated(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "ADC140 Compare Mismatch Snooze End Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ad0umted(&self) -> super::vals::Ad0umted {
+    pub const fn ad0umted(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ad0umted::from_bits(val as u8)
+        val != 0
     }
     #[doc = "ADC140 Compare Mismatch Snooze End Enable"]
     #[inline(always)]
-    pub const fn set_ad0umted(&mut self, val: super::vals::Ad0umted) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_ad0umted(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -2803,14 +2803,14 @@ impl Snzedcr {
     #[doc = "SCI0 Address Mismatch Snooze End Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn sci0umted(&self) -> super::vals::Sci0umted {
+    pub const fn sci0umted(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Sci0umted::from_bits(val as u8)
+        val != 0
     }
     #[doc = "SCI0 Address Mismatch Snooze End Enable"]
     #[inline(always)]
-    pub const fn set_sci0umted(&mut self, val: super::vals::Sci0umted) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_sci0umted(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Snzedcr {
@@ -2837,7 +2837,7 @@ impl defmt::Format for Snzedcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Snzedcr {{ agtunfed: {:?}, dtczred: {:?}, dtcnzred: {:?}, ad0mated: {:?}, ad0umted: {:?}, reserved: {=u8:?}, sci0umted: {:?} }}",
+            "Snzedcr {{ agtunfed: {=bool:?}, dtczred: {=bool:?}, dtcnzred: {=bool:?}, ad0mated: {=bool:?}, ad0umted: {=bool:?}, reserved: {=u8:?}, sci0umted: {=bool:?} }}",
             self.agtunfed(),
             self.dtczred(),
             self.dtcnzred(),
@@ -2856,158 +2856,158 @@ impl Snzreqcr {
     #[doc = "Snooze Request Enable 0 Enable IRQ0 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen0(&self) -> super::vals::Snzreqen0 {
+    pub const fn snzreqen0(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Snzreqen0::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 0 Enable IRQ0 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen0(&mut self, val: super::vals::Snzreqen0) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_snzreqen0(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "Snooze Request Enable 1 Enable IRQ1 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen1(&self) -> super::vals::Snzreqen1 {
+    pub const fn snzreqen1(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Snzreqen1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 1 Enable IRQ1 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen1(&mut self, val: super::vals::Snzreqen1) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u32) & 0x01) << 1usize);
+    pub const fn set_snzreqen1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u32) & 0x01) << 1usize);
     }
     #[doc = "Snooze Request Enable 2 Enable IRQ2 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen2(&self) -> super::vals::Snzreqen2 {
+    pub const fn snzreqen2(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Snzreqen2::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 2 Enable IRQ2 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen2(&mut self, val: super::vals::Snzreqen2) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u32) & 0x01) << 2usize);
+    pub const fn set_snzreqen2(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u32) & 0x01) << 2usize);
     }
     #[doc = "Snooze Request Enable 3 Enable IRQ3 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen3(&self) -> super::vals::Snzreqen3 {
+    pub const fn snzreqen3(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Snzreqen3::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 3 Enable IRQ3 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen3(&mut self, val: super::vals::Snzreqen3) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u32) & 0x01) << 3usize);
+    pub const fn set_snzreqen3(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
     }
     #[doc = "Snooze Request Enable 4 Enable IRQ4 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen4(&self) -> super::vals::Snzreqen4 {
+    pub const fn snzreqen4(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Snzreqen4::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 4 Enable IRQ4 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen4(&mut self, val: super::vals::Snzreqen4) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u32) & 0x01) << 4usize);
+    pub const fn set_snzreqen4(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
     }
     #[doc = "Snooze Request Enable 5 Enable IRQ5 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen5(&self) -> super::vals::Snzreqen5 {
+    pub const fn snzreqen5(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Snzreqen5::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 5 Enable IRQ5 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen5(&mut self, val: super::vals::Snzreqen5) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u32) & 0x01) << 5usize);
+    pub const fn set_snzreqen5(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u32) & 0x01) << 5usize);
     }
     #[doc = "Snooze Request Enable 6 Enable IRQ6 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen6(&self) -> super::vals::Snzreqen6 {
+    pub const fn snzreqen6(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Snzreqen6::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 6 Enable IRQ6 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen6(&mut self, val: super::vals::Snzreqen6) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u32) & 0x01) << 6usize);
+    pub const fn set_snzreqen6(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
     }
     #[doc = "Snooze Request Enable 7 Enable IRQ7 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen7(&self) -> super::vals::Snzreqen7 {
+    pub const fn snzreqen7(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Snzreqen7::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 7 Enable IRQ7 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen7(&mut self, val: super::vals::Snzreqen7) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u32) & 0x01) << 7usize);
+    pub const fn set_snzreqen7(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u32) & 0x01) << 7usize);
     }
     #[doc = "Snooze Request Enable 8 Enable IRQ8 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen8(&self) -> super::vals::Snzreqen8 {
+    pub const fn snzreqen8(&self) -> bool {
         let val = (self.0 >> 8usize) & 0x01;
-        super::vals::Snzreqen8::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 8 Enable IRQ8 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen8(&mut self, val: super::vals::Snzreqen8) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val.to_bits() as u32) & 0x01) << 8usize);
+    pub const fn set_snzreqen8(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u32) & 0x01) << 8usize);
     }
     #[doc = "Snooze Request Enable 9 Enable IRQ9 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen9(&self) -> super::vals::Snzreqen9 {
+    pub const fn snzreqen9(&self) -> bool {
         let val = (self.0 >> 9usize) & 0x01;
-        super::vals::Snzreqen9::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 9 Enable IRQ9 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen9(&mut self, val: super::vals::Snzreqen9) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val.to_bits() as u32) & 0x01) << 9usize);
+    pub const fn set_snzreqen9(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u32) & 0x01) << 9usize);
     }
     #[doc = "Snooze Request Enable 10 Enable IRQ10 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen10(&self) -> super::vals::Snzreqen10 {
+    pub const fn snzreqen10(&self) -> bool {
         let val = (self.0 >> 10usize) & 0x01;
-        super::vals::Snzreqen10::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 10 Enable IRQ10 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen10(&mut self, val: super::vals::Snzreqen10) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val.to_bits() as u32) & 0x01) << 10usize);
+    pub const fn set_snzreqen10(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u32) & 0x01) << 10usize);
     }
     #[doc = "Snooze Request Enable 11 Enable IRQ11 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen11(&self) -> super::vals::Snzreqen11 {
+    pub const fn snzreqen11(&self) -> bool {
         let val = (self.0 >> 11usize) & 0x01;
-        super::vals::Snzreqen11::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 11 Enable IRQ11 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen11(&mut self, val: super::vals::Snzreqen11) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val.to_bits() as u32) & 0x01) << 11usize);
+    pub const fn set_snzreqen11(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u32) & 0x01) << 11usize);
     }
     #[doc = "Snooze Request Enable 12 Enable IRQ12 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen12(&self) -> super::vals::Snzreqen12 {
+    pub const fn snzreqen12(&self) -> bool {
         let val = (self.0 >> 12usize) & 0x01;
-        super::vals::Snzreqen12::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 12 Enable IRQ12 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen12(&mut self, val: super::vals::Snzreqen12) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val.to_bits() as u32) & 0x01) << 12usize);
+    pub const fn set_snzreqen12(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u32) & 0x01) << 12usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -3024,26 +3024,26 @@ impl Snzreqcr {
     #[doc = "Snooze Request Enable 14 Enable IRQ14 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen14(&self) -> super::vals::Snzreqen14 {
+    pub const fn snzreqen14(&self) -> bool {
         let val = (self.0 >> 14usize) & 0x01;
-        super::vals::Snzreqen14::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 14 Enable IRQ14 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen14(&mut self, val: super::vals::Snzreqen14) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val.to_bits() as u32) & 0x01) << 14usize);
+    pub const fn set_snzreqen14(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
     }
     #[doc = "Snooze Request Enable 15 Enable IRQ15 pin snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen15(&self) -> super::vals::Snzreqen15 {
+    pub const fn snzreqen15(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Snzreqen15::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 15 Enable IRQ15 pin snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen15(&mut self, val: super::vals::Snzreqen15) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u32) & 0x01) << 15usize);
+    pub const fn set_snzreqen15(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -3060,14 +3060,14 @@ impl Snzreqcr {
     #[doc = "Snooze Request Enable 17 Enable KINT snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen17(&self) -> super::vals::Snzreqen17 {
+    pub const fn snzreqen17(&self) -> bool {
         let val = (self.0 >> 17usize) & 0x01;
-        super::vals::Snzreqen17::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 17 Enable KINT snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen17(&mut self, val: super::vals::Snzreqen17) {
-        self.0 = (self.0 & !(0x01 << 17usize)) | (((val.to_bits() as u32) & 0x01) << 17usize);
+    pub const fn set_snzreqen17(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 17usize)) | (((val as u32) & 0x01) << 17usize);
     }
     #[doc = "These bits are read as 00000. The write value should be 00000."]
     #[must_use]
@@ -3084,38 +3084,38 @@ impl Snzreqcr {
     #[doc = "Snooze Request Enable 23 Enable RTC alarm snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen23(&self) -> super::vals::Snzreqen23 {
+    pub const fn snzreqen23(&self) -> bool {
         let val = (self.0 >> 23usize) & 0x01;
-        super::vals::Snzreqen23::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 23 Enable RTC alarm snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen23(&mut self, val: super::vals::Snzreqen23) {
-        self.0 = (self.0 & !(0x01 << 23usize)) | (((val.to_bits() as u32) & 0x01) << 23usize);
+    pub const fn set_snzreqen23(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 23usize)) | (((val as u32) & 0x01) << 23usize);
     }
     #[doc = "Snooze Request Enable 24 Enable RTC alarm snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen24(&self) -> super::vals::Snzreqen24 {
+    pub const fn snzreqen24(&self) -> bool {
         let val = (self.0 >> 24usize) & 0x01;
-        super::vals::Snzreqen24::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 24 Enable RTC alarm snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen24(&mut self, val: super::vals::Snzreqen24) {
-        self.0 = (self.0 & !(0x01 << 24usize)) | (((val.to_bits() as u32) & 0x01) << 24usize);
+    pub const fn set_snzreqen24(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 24usize)) | (((val as u32) & 0x01) << 24usize);
     }
     #[doc = "Snooze Request Enable 25 Enable RTC period snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen25(&self) -> super::vals::Snzreqen25 {
+    pub const fn snzreqen25(&self) -> bool {
         let val = (self.0 >> 25usize) & 0x01;
-        super::vals::Snzreqen25::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 25 Enable RTC period snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen25(&mut self, val: super::vals::Snzreqen25) {
-        self.0 = (self.0 & !(0x01 << 25usize)) | (((val.to_bits() as u32) & 0x01) << 25usize);
+    pub const fn set_snzreqen25(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 25usize)) | (((val as u32) & 0x01) << 25usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -3132,38 +3132,38 @@ impl Snzreqcr {
     #[doc = "Snooze Request Enable 28 Enable AGT1 underflow snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen28(&self) -> super::vals::Snzreqen28 {
+    pub const fn snzreqen28(&self) -> bool {
         let val = (self.0 >> 28usize) & 0x01;
-        super::vals::Snzreqen28::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 28 Enable AGT1 underflow snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen28(&mut self, val: super::vals::Snzreqen28) {
-        self.0 = (self.0 & !(0x01 << 28usize)) | (((val.to_bits() as u32) & 0x01) << 28usize);
+    pub const fn set_snzreqen28(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 28usize)) | (((val as u32) & 0x01) << 28usize);
     }
     #[doc = "Snooze Request Enable 29 Enable AGT1 compare match A snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen29(&self) -> super::vals::Snzreqen29 {
+    pub const fn snzreqen29(&self) -> bool {
         let val = (self.0 >> 29usize) & 0x01;
-        super::vals::Snzreqen29::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 29 Enable AGT1 compare match A snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen29(&mut self, val: super::vals::Snzreqen29) {
-        self.0 = (self.0 & !(0x01 << 29usize)) | (((val.to_bits() as u32) & 0x01) << 29usize);
+    pub const fn set_snzreqen29(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 29usize)) | (((val as u32) & 0x01) << 29usize);
     }
     #[doc = "Snooze Request Enable 30 Enable AGT1 compare match B snooze request"]
     #[must_use]
     #[inline(always)]
-    pub const fn snzreqen30(&self) -> super::vals::Snzreqen30 {
+    pub const fn snzreqen30(&self) -> bool {
         let val = (self.0 >> 30usize) & 0x01;
-        super::vals::Snzreqen30::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Snooze Request Enable 30 Enable AGT1 compare match B snooze request"]
     #[inline(always)]
-    pub const fn set_snzreqen30(&mut self, val: super::vals::Snzreqen30) {
-        self.0 = (self.0 & !(0x01 << 30usize)) | (((val.to_bits() as u32) & 0x01) << 30usize);
+    pub const fn set_snzreqen30(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 30usize)) | (((val as u32) & 0x01) << 30usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -3222,7 +3222,7 @@ impl defmt::Format for Snzreqcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Snzreqcr {{ snzreqen0: {:?}, snzreqen1: {:?}, snzreqen2: {:?}, snzreqen3: {:?}, snzreqen4: {:?}, snzreqen5: {:?}, snzreqen6: {:?}, snzreqen7: {:?}, snzreqen8: {:?}, snzreqen9: {:?}, snzreqen10: {:?}, snzreqen11: {:?}, snzreqen12: {:?}, reserved: {=bool:?}, snzreqen14: {:?}, snzreqen15: {:?}, reserved_2: {=bool:?}, snzreqen17: {:?}, reserved_3: {=u8:?}, snzreqen23: {:?}, snzreqen24: {:?}, snzreqen25: {:?}, reserved_4: {=u8:?}, snzreqen28: {:?}, snzreqen29: {:?}, snzreqen30: {:?}, reserved_5: {=bool:?} }}",
+            "Snzreqcr {{ snzreqen0: {=bool:?}, snzreqen1: {=bool:?}, snzreqen2: {=bool:?}, snzreqen3: {=bool:?}, snzreqen4: {=bool:?}, snzreqen5: {=bool:?}, snzreqen6: {=bool:?}, snzreqen7: {=bool:?}, snzreqen8: {=bool:?}, snzreqen9: {=bool:?}, snzreqen10: {=bool:?}, snzreqen11: {=bool:?}, snzreqen12: {=bool:?}, reserved: {=bool:?}, snzreqen14: {=bool:?}, snzreqen15: {=bool:?}, reserved_2: {=bool:?}, snzreqen17: {=bool:?}, reserved_3: {=u8:?}, snzreqen23: {=bool:?}, snzreqen24: {=bool:?}, snzreqen25: {=bool:?}, reserved_4: {=u8:?}, snzreqen28: {=bool:?}, snzreqen29: {=bool:?}, snzreqen30: {=bool:?}, reserved_5: {=bool:?} }}",
             self.snzreqen0(),
             self.snzreqen1(),
             self.snzreqen2(),
@@ -3316,14 +3316,14 @@ impl Sopccr {
     #[doc = "Sub Operating Power Control Mode Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn sopcm(&self) -> super::vals::Sopcm {
+    pub const fn sopcm(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Sopcm::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Sub Operating Power Control Mode Select"]
     #[inline(always)]
-    pub const fn set_sopcm(&mut self, val: super::vals::Sopcm) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_sopcm(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -3340,14 +3340,14 @@ impl Sopccr {
     #[doc = "Sub Operating Power Control Mode Transition Status Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn sopcmtsf(&self) -> super::vals::Sopcmtsf {
+    pub const fn sopcmtsf(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Sopcmtsf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Sub Operating Power Control Mode Transition Status Flag"]
     #[inline(always)]
-    pub const fn set_sopcmtsf(&mut self, val: super::vals::Sopcmtsf) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_sopcmtsf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -3383,7 +3383,7 @@ impl defmt::Format for Sopccr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Sopccr {{ sopcm: {:?}, reserved: {=u8:?}, sopcmtsf: {:?}, reserved_2: {=u8:?} }}",
+            "Sopccr {{ sopcm: {=bool:?}, reserved: {=u8:?}, sopcmtsf: {=bool:?}, reserved_2: {=u8:?} }}",
             self.sopcm(),
             self.reserved(),
             self.sopcmtsf(),
@@ -3399,14 +3399,14 @@ impl Sosccr {
     #[doc = "Sub-Clock Oscillator Stop"]
     #[must_use]
     #[inline(always)]
-    pub const fn sostp(&self) -> super::vals::Sostp {
+    pub const fn sostp(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Sostp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Sub-Clock Oscillator Stop"]
     #[inline(always)]
-    pub const fn set_sostp(&mut self, val: super::vals::Sostp) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_sostp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -3440,7 +3440,7 @@ impl defmt::Format for Sosccr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Sosccr {{ sostp: {:?}, reserved: {=u8:?} }}",
+            "Sosccr {{ sostp: {=bool:?}, reserved: {=u8:?} }}",
             self.sostp(),
             self.reserved()
         )
@@ -3466,14 +3466,14 @@ impl Syocdcr {
     #[doc = "Debugger Enable bit"]
     #[must_use]
     #[inline(always)]
-    pub const fn dbgen(&self) -> super::vals::Dbgen {
+    pub const fn dbgen(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Dbgen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Debugger Enable bit"]
     #[inline(always)]
-    pub const fn set_dbgen(&mut self, val: super::vals::Dbgen) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_dbgen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Syocdcr {
@@ -3495,7 +3495,7 @@ impl defmt::Format for Syocdcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Syocdcr {{ reserved: {=u8:?}, dbgen: {:?} }}",
+            "Syocdcr {{ reserved: {=u8:?}, dbgen: {=bool:?} }}",
             self.reserved(),
             self.dbgen()
         )
@@ -3533,14 +3533,14 @@ impl Trckcr {
     #[doc = "Trace Clock operating enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn trcken(&self) -> super::vals::Trcken {
+    pub const fn trcken(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Trcken::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Trace Clock operating enable"]
     #[inline(always)]
-    pub const fn set_trcken(&mut self, val: super::vals::Trcken) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_trcken(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Trckcr {
@@ -3563,7 +3563,7 @@ impl defmt::Format for Trckcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Trckcr {{ trck: {:?}, reserved: {=u8:?}, trcken: {:?} }}",
+            "Trckcr {{ trck: {:?}, reserved: {=u8:?}, trcken: {=bool:?} }}",
             self.trck(),
             self.reserved(),
             self.trcken()
@@ -3578,14 +3578,14 @@ impl Usbckcr {
     #[doc = "USB Clock Source Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn usbclksel(&self) -> super::vals::Usbclksel {
+    pub const fn usbclksel(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Usbclksel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "USB Clock Source Select"]
     #[inline(always)]
-    pub const fn set_usbclksel(&mut self, val: super::vals::Usbclksel) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_usbclksel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -3619,7 +3619,7 @@ impl defmt::Format for Usbckcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Usbckcr {{ usbclksel: {:?}, reserved: {=u8:?} }}",
+            "Usbckcr {{ usbclksel: {=bool:?}, reserved: {=u8:?} }}",
             self.usbclksel(),
             self.reserved()
         )
@@ -3670,14 +3670,14 @@ impl Vbtcmpcr {
     #[doc = "VBATT pin low voltage detect circuit output enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vbtcmpe(&self) -> super::vals::Vbtcmpe {
+    pub const fn vbtcmpe(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Vbtcmpe::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT pin low voltage detect circuit output enable"]
     #[inline(always)]
-    pub const fn set_vbtcmpe(&mut self, val: super::vals::Vbtcmpe) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_vbtcmpe(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -3711,7 +3711,7 @@ impl defmt::Format for Vbtcmpcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtcmpcr {{ vbtcmpe: {:?}, reserved: {=u8:?} }}",
+            "Vbtcmpcr {{ vbtcmpe: {=bool:?}, reserved: {=u8:?} }}",
             self.vbtcmpe(),
             self.reserved()
         )
@@ -3725,14 +3725,14 @@ impl Vbtcr1 {
     #[doc = "Battery Power supply Switch Stop"]
     #[must_use]
     #[inline(always)]
-    pub const fn bpwswstp(&self) -> super::vals::Bpwswstp {
+    pub const fn bpwswstp(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Bpwswstp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Battery Power supply Switch Stop"]
     #[inline(always)]
-    pub const fn set_bpwswstp(&mut self, val: super::vals::Bpwswstp) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_bpwswstp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -3766,7 +3766,7 @@ impl defmt::Format for Vbtcr1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtcr1 {{ bpwswstp: {:?}, reserved: {=u8:?} }}",
+            "Vbtcr1 {{ bpwswstp: {=bool:?}, reserved: {=u8:?} }}",
             self.bpwswstp(),
             self.reserved()
         )
@@ -3792,14 +3792,14 @@ impl Vbtcr2 {
     #[doc = "VBATT Pin Low Voltage Detect Enable Bit"]
     #[must_use]
     #[inline(always)]
-    pub const fn vbtlvden(&self) -> super::vals::Vbtlvden {
+    pub const fn vbtlvden(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Vbtlvden::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT Pin Low Voltage Detect Enable Bit"]
     #[inline(always)]
-    pub const fn set_vbtlvden(&mut self, val: super::vals::Vbtlvden) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_vbtlvden(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -3847,7 +3847,7 @@ impl defmt::Format for Vbtcr2 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtcr2 {{ reserved: {=u8:?}, vbtlvden: {:?}, reserved_2: {=bool:?}, vbtlvdlvl: {:?} }}",
+            "Vbtcr2 {{ reserved: {=u8:?}, vbtlvden: {=bool:?}, reserved_2: {=bool:?}, vbtlvdlvl: {:?} }}",
             self.reserved(),
             self.vbtlvden(),
             self.reserved_2(),
@@ -3863,38 +3863,38 @@ impl Vbtictlr {
     #[doc = "VBATT Wakeup I/O 0 Input Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch0inen(&self) -> super::vals::Vch0inen {
+    pub const fn vch0inen(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Vch0inen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT Wakeup I/O 0 Input Enable"]
     #[inline(always)]
-    pub const fn set_vch0inen(&mut self, val: super::vals::Vch0inen) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_vch0inen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "VBATT Wakeup I/O 1 Input Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch1inen(&self) -> super::vals::Vch1inen {
+    pub const fn vch1inen(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Vch1inen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT Wakeup I/O 1 Input Enable"]
     #[inline(always)]
-    pub const fn set_vch1inen(&mut self, val: super::vals::Vch1inen) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_vch1inen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "VBATT Wakeup I/O 2 Input Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch2inen(&self) -> super::vals::Vch2inen {
+    pub const fn vch2inen(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Vch2inen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT Wakeup I/O 2 Input Enable"]
     #[inline(always)]
-    pub const fn set_vch2inen(&mut self, val: super::vals::Vch2inen) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_vch2inen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "These bits are read as 00000. The write value should be 00000."]
     #[must_use]
@@ -3930,7 +3930,7 @@ impl defmt::Format for Vbtictlr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtictlr {{ vch0inen: {:?}, vch1inen: {:?}, vch2inen: {:?}, reserved: {=u8:?} }}",
+            "Vbtictlr {{ vch0inen: {=bool:?}, vch1inen: {=bool:?}, vch2inen: {=bool:?}, reserved: {=u8:?} }}",
             self.vch0inen(),
             self.vch1inen(),
             self.vch2inen(),
@@ -3946,26 +3946,26 @@ impl Vbtlvdicr {
     #[doc = "VBATT Pin Low Voltage Detect Interrupt Enable bit"]
     #[must_use]
     #[inline(always)]
-    pub const fn vbtlvdie(&self) -> super::vals::Vbtlvdie {
+    pub const fn vbtlvdie(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Vbtlvdie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT Pin Low Voltage Detect Interrupt Enable bit"]
     #[inline(always)]
-    pub const fn set_vbtlvdie(&mut self, val: super::vals::Vbtlvdie) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_vbtlvdie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "Pin Low Voltage Detect Interrupt Select bit"]
     #[must_use]
     #[inline(always)]
-    pub const fn vbtlvdisel(&self) -> super::vals::Vbtlvdisel {
+    pub const fn vbtlvdisel(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Vbtlvdisel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Pin Low Voltage Detect Interrupt Select bit"]
     #[inline(always)]
-    pub const fn set_vbtlvdisel(&mut self, val: super::vals::Vbtlvdisel) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_vbtlvdisel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -4000,7 +4000,7 @@ impl defmt::Format for Vbtlvdicr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtlvdicr {{ vbtlvdie: {:?}, vbtlvdisel: {:?}, reserved: {=u8:?} }}",
+            "Vbtlvdicr {{ vbtlvdie: {=bool:?}, vbtlvdisel: {=bool:?}, reserved: {=u8:?} }}",
             self.vbtlvdie(),
             self.vbtlvdisel(),
             self.reserved()
@@ -4015,74 +4015,74 @@ impl Vbtoctlr {
     #[doc = "VBATT Wakeup I/O 0 Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch0oen(&self) -> super::vals::Vch0oen {
+    pub const fn vch0oen(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Vch0oen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT Wakeup I/O 0 Output Enable"]
     #[inline(always)]
-    pub const fn set_vch0oen(&mut self, val: super::vals::Vch0oen) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_vch0oen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "VBATT Wakeup I/O 1 Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch1oen(&self) -> super::vals::Vch1oen {
+    pub const fn vch1oen(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Vch1oen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT Wakeup I/O 1 Output Enable"]
     #[inline(always)]
-    pub const fn set_vch1oen(&mut self, val: super::vals::Vch1oen) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_vch1oen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "VBATT Wakeup I/O 2 Output Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch2oen(&self) -> super::vals::Vch2oen {
+    pub const fn vch2oen(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Vch2oen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT Wakeup I/O 2 Output Enable"]
     #[inline(always)]
-    pub const fn set_vch2oen(&mut self, val: super::vals::Vch2oen) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_vch2oen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "VBATT Wakeup I/O 0 Output Level Selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn vout0lsel(&self) -> super::vals::Vout0lsel {
+    pub const fn vout0lsel(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Vout0lsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT Wakeup I/O 0 Output Level Selection"]
     #[inline(always)]
-    pub const fn set_vout0lsel(&mut self, val: super::vals::Vout0lsel) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_vout0lsel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "VBATT Wakeup I/O 1 Output Level Selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn vout1lsel(&self) -> super::vals::Vout1lsel {
+    pub const fn vout1lsel(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Vout1lsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT Wakeup I/O 1 Output Level Selection"]
     #[inline(always)]
-    pub const fn set_vout1lsel(&mut self, val: super::vals::Vout1lsel) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_vout1lsel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "VBATT Wakeup I/O 2 Output Level Selection"]
     #[must_use]
     #[inline(always)]
-    pub const fn vout2lsel(&self) -> super::vals::Vout2lsel {
+    pub const fn vout2lsel(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Vout2lsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT Wakeup I/O 2 Output Level Selection"]
     #[inline(always)]
-    pub const fn set_vout2lsel(&mut self, val: super::vals::Vout2lsel) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_vout2lsel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -4121,7 +4121,7 @@ impl defmt::Format for Vbtoctlr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtoctlr {{ vch0oen: {:?}, vch1oen: {:?}, vch2oen: {:?}, vout0lsel: {:?}, vout1lsel: {:?}, vout2lsel: {:?}, reserved: {=u8:?} }}",
+            "Vbtoctlr {{ vch0oen: {=bool:?}, vch1oen: {=bool:?}, vch2oen: {=bool:?}, vout0lsel: {=bool:?}, vout1lsel: {=bool:?}, vout2lsel: {=bool:?}, reserved: {=u8:?} }}",
             self.vch0oen(),
             self.vch1oen(),
             self.vch2oen(),
@@ -4140,26 +4140,26 @@ impl Vbtsr {
     #[doc = "VBAT_R Reset Detect Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn vbtrdf(&self) -> super::vals::Vbtrdf {
+    pub const fn vbtrdf(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Vbtrdf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBAT_R Reset Detect Flag"]
     #[inline(always)]
-    pub const fn set_vbtrdf(&mut self, val: super::vals::Vbtrdf) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_vbtrdf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "VBATT Battery Low voltage Detect Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn vbtbldf(&self) -> super::vals::Vbtbldf {
+    pub const fn vbtbldf(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Vbtbldf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT Battery Low voltage Detect Flag"]
     #[inline(always)]
-    pub const fn set_vbtbldf(&mut self, val: super::vals::Vbtbldf) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_vbtbldf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -4176,14 +4176,14 @@ impl Vbtsr {
     #[doc = "VBATT_R Valid"]
     #[must_use]
     #[inline(always)]
-    pub const fn vbtrvld(&self) -> super::vals::Vbtrvld {
+    pub const fn vbtrvld(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Vbtrvld::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT_R Valid"]
     #[inline(always)]
-    pub const fn set_vbtrvld(&mut self, val: super::vals::Vbtrvld) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_vbtrvld(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -4220,7 +4220,7 @@ impl defmt::Format for Vbtsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtsr {{ vbtrdf: {:?}, vbtbldf: {:?}, reserved: {=u8:?}, vbtrvld: {:?}, reserved_2: {=u8:?} }}",
+            "Vbtsr {{ vbtrdf: {=bool:?}, vbtbldf: {=bool:?}, reserved: {=u8:?}, vbtrvld: {=bool:?}, reserved_2: {=u8:?} }}",
             self.vbtrdf(),
             self.vbtbldf(),
             self.reserved(),
@@ -4249,50 +4249,50 @@ impl Vbtwch0otsr {
     #[doc = "VBATWIO0 Output VBATWIO1 Trigger Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ch0vch1te(&self) -> super::vals::Ch0vch1te {
+    pub const fn ch0vch1te(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ch0vch1te::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO0 Output VBATWIO1 Trigger Enable"]
     #[inline(always)]
-    pub const fn set_ch0vch1te(&mut self, val: super::vals::Ch0vch1te) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_ch0vch1te(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "VBATWIO0 Output VBATWIO2 Trigger Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ch0vch2te(&self) -> super::vals::Ch0vch2te {
+    pub const fn ch0vch2te(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ch0vch2te::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO0 Output VBATWIO2 Trigger Enable"]
     #[inline(always)]
-    pub const fn set_ch0vch2te(&mut self, val: super::vals::Ch0vch2te) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_ch0vch2te(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "VBATWIO0 Output RTC Periodic Signal Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ch0vrtcte(&self) -> super::vals::Ch0vrtcte {
+    pub const fn ch0vrtcte(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ch0vrtcte::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO0 Output RTC Periodic Signal Enable"]
     #[inline(always)]
-    pub const fn set_ch0vrtcte(&mut self, val: super::vals::Ch0vrtcte) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_ch0vrtcte(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "VBATWIO0 Output RTC Alarm Signal Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ch0vrtcate(&self) -> super::vals::Ch0vrtcate {
+    pub const fn ch0vrtcate(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ch0vrtcate::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO0 Output RTC Alarm Signal Enable"]
     #[inline(always)]
-    pub const fn set_ch0vrtcate(&mut self, val: super::vals::Ch0vrtcate) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_ch0vrtcate(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -4330,7 +4330,7 @@ impl defmt::Format for Vbtwch0otsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtwch0otsr {{ reserved: {=bool:?}, ch0vch1te: {:?}, ch0vch2te: {:?}, ch0vrtcte: {:?}, ch0vrtcate: {:?}, reserved_2: {=u8:?} }}",
+            "Vbtwch0otsr {{ reserved: {=bool:?}, ch0vch1te: {=bool:?}, ch0vch2te: {=bool:?}, ch0vrtcte: {=bool:?}, ch0vrtcate: {=bool:?}, reserved_2: {=u8:?} }}",
             self.reserved(),
             self.ch0vch1te(),
             self.ch0vch2te(),
@@ -4348,14 +4348,14 @@ impl Vbtwch1otsr {
     #[doc = "VBATWIO1 Output VBATWIO0 Trigger Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ch1vch0te(&self) -> super::vals::Ch1vch0te {
+    pub const fn ch1vch0te(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ch1vch0te::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO1 Output VBATWIO0 Trigger Enable"]
     #[inline(always)]
-    pub const fn set_ch1vch0te(&mut self, val: super::vals::Ch1vch0te) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ch1vch0te(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -4372,38 +4372,38 @@ impl Vbtwch1otsr {
     #[doc = "VBATWIO1 Output VBATWIO2 Trigger Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ch1vch2te(&self) -> super::vals::Ch1vch2te {
+    pub const fn ch1vch2te(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ch1vch2te::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO1 Output VBATWIO2 Trigger Enable"]
     #[inline(always)]
-    pub const fn set_ch1vch2te(&mut self, val: super::vals::Ch1vch2te) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_ch1vch2te(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "VBATWIO1 Output RTC Periodic Signal Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ch1vrtcte(&self) -> super::vals::Ch1vrtcte {
+    pub const fn ch1vrtcte(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ch1vrtcte::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO1 Output RTC Periodic Signal Enable"]
     #[inline(always)]
-    pub const fn set_ch1vrtcte(&mut self, val: super::vals::Ch1vrtcte) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_ch1vrtcte(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "VBATWIO1 Output RTC Alarm Signal Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ch1vrtcate(&self) -> super::vals::Ch1vrtcate {
+    pub const fn ch1vrtcate(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ch1vrtcate::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO1 Output RTC Alarm Signal Enable"]
     #[inline(always)]
-    pub const fn set_ch1vrtcate(&mut self, val: super::vals::Ch1vrtcate) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_ch1vrtcate(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -4441,7 +4441,7 @@ impl defmt::Format for Vbtwch1otsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtwch1otsr {{ ch1vch0te: {:?}, reserved: {=bool:?}, ch1vch2te: {:?}, ch1vrtcte: {:?}, ch1vrtcate: {:?}, reserved_2: {=u8:?} }}",
+            "Vbtwch1otsr {{ ch1vch0te: {=bool:?}, reserved: {=bool:?}, ch1vch2te: {=bool:?}, ch1vrtcte: {=bool:?}, ch1vrtcate: {=bool:?}, reserved_2: {=u8:?} }}",
             self.ch1vch0te(),
             self.reserved(),
             self.ch1vch2te(),
@@ -4459,26 +4459,26 @@ impl Vbtwch2otsr {
     #[doc = "VBATWIO2 Output VBATWIO0 Trigger Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ch2vch0te(&self) -> super::vals::Ch2vch0te {
+    pub const fn ch2vch0te(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ch2vch0te::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO2 Output VBATWIO0 Trigger Enable"]
     #[inline(always)]
-    pub const fn set_ch2vch0te(&mut self, val: super::vals::Ch2vch0te) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ch2vch0te(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "VBATWIO2 Output VBATWIO1 Trigger Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ch2vch1te(&self) -> super::vals::Ch2vch1te {
+    pub const fn ch2vch1te(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ch2vch1te::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO2 Output VBATWIO1 Trigger Enable"]
     #[inline(always)]
-    pub const fn set_ch2vch1te(&mut self, val: super::vals::Ch2vch1te) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_ch2vch1te(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -4495,26 +4495,26 @@ impl Vbtwch2otsr {
     #[doc = "VBATWIO2 Output RTC Periodic Signal Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ch2vrtcte(&self) -> super::vals::Ch2vrtcte {
+    pub const fn ch2vrtcte(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ch2vrtcte::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO2 Output RTC Periodic Signal Enable"]
     #[inline(always)]
-    pub const fn set_ch2vrtcte(&mut self, val: super::vals::Ch2vrtcte) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_ch2vrtcte(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "VBATWIO2 Output RTC Alarm Signal Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ch2vrtcate(&self) -> super::vals::Ch2vrtcate {
+    pub const fn ch2vrtcate(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ch2vrtcate::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO2 Output RTC Alarm Signal Enable"]
     #[inline(always)]
-    pub const fn set_ch2vrtcate(&mut self, val: super::vals::Ch2vrtcate) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_ch2vrtcate(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -4552,7 +4552,7 @@ impl defmt::Format for Vbtwch2otsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtwch2otsr {{ ch2vch0te: {:?}, ch2vch1te: {:?}, reserved: {=bool:?}, ch2vrtcte: {:?}, ch2vrtcate: {:?}, reserved_2: {=u8:?} }}",
+            "Vbtwch2otsr {{ ch2vch0te: {=bool:?}, ch2vch1te: {=bool:?}, reserved: {=bool:?}, ch2vrtcte: {=bool:?}, ch2vrtcate: {=bool:?}, reserved_2: {=u8:?} }}",
             self.ch2vch0te(),
             self.ch2vch1te(),
             self.reserved(),
@@ -4570,14 +4570,14 @@ impl Vbtwctlr {
     #[doc = "VBATT wakeup enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vwen(&self) -> super::vals::Vwen {
+    pub const fn vwen(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Vwen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT wakeup enable"]
     #[inline(always)]
-    pub const fn set_vwen(&mut self, val: super::vals::Vwen) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_vwen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -4611,7 +4611,7 @@ impl defmt::Format for Vbtwctlr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtwctlr {{ vwen: {:?}, reserved: {=u8:?} }}",
+            "Vbtwctlr {{ vwen: {=bool:?}, reserved: {=u8:?} }}",
             self.vwen(),
             self.reserved()
         )
@@ -4625,38 +4625,38 @@ impl Vbtwegr {
     #[doc = "VBATWIO0 Wakeup Trigger Source Edge Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch0eg(&self) -> super::vals::Vch0eg {
+    pub const fn vch0eg(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Vch0eg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO0 Wakeup Trigger Source Edge Select"]
     #[inline(always)]
-    pub const fn set_vch0eg(&mut self, val: super::vals::Vch0eg) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_vch0eg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "VBATWIO1 Wakeup Trigger Source Edge Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch1eg(&self) -> super::vals::Vch1eg {
+    pub const fn vch1eg(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Vch1eg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO1 Wakeup Trigger Source Edge Select"]
     #[inline(always)]
-    pub const fn set_vch1eg(&mut self, val: super::vals::Vch1eg) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_vch1eg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "VBATWIO2 Wakeup Trigger Source Edge Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch2eg(&self) -> super::vals::Vch2eg {
+    pub const fn vch2eg(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Vch2eg::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO2 Wakeup Trigger Source Edge Select"]
     #[inline(always)]
-    pub const fn set_vch2eg(&mut self, val: super::vals::Vch2eg) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_vch2eg(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "These bits are read as 00000. The write value should be 00000."]
     #[must_use]
@@ -4692,7 +4692,7 @@ impl defmt::Format for Vbtwegr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtwegr {{ vch0eg: {:?}, vch1eg: {:?}, vch2eg: {:?}, reserved: {=u8:?} }}",
+            "Vbtwegr {{ vch0eg: {=bool:?}, vch1eg: {=bool:?}, vch2eg: {=bool:?}, reserved: {=u8:?} }}",
             self.vch0eg(),
             self.vch1eg(),
             self.vch2eg(),
@@ -4708,62 +4708,62 @@ impl Vbtwfr {
     #[doc = "VBATWIO0 Wakeup Trigger Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch0f(&self) -> super::vals::Vch0f {
+    pub const fn vch0f(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Vch0f::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO0 Wakeup Trigger Flag"]
     #[inline(always)]
-    pub const fn set_vch0f(&mut self, val: super::vals::Vch0f) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_vch0f(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "VBATWIO1 Wakeup Trigger Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch1f(&self) -> super::vals::Vch1f {
+    pub const fn vch1f(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Vch1f::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO1 Wakeup Trigger Flag"]
     #[inline(always)]
-    pub const fn set_vch1f(&mut self, val: super::vals::Vch1f) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_vch1f(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "VBATWIO2 Wakeup Trigger Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch2f(&self) -> super::vals::Vch2f {
+    pub const fn vch2f(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Vch2f::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO2 Wakeup Trigger Flag"]
     #[inline(always)]
-    pub const fn set_vch2f(&mut self, val: super::vals::Vch2f) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_vch2f(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "VBATT RTC-Interval Wakeup Trigger Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn vrtcif(&self) -> super::vals::Vrtcif {
+    pub const fn vrtcif(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Vrtcif::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT RTC-Interval Wakeup Trigger Flag"]
     #[inline(always)]
-    pub const fn set_vrtcif(&mut self, val: super::vals::Vrtcif) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_vrtcif(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "VBATT RTC-Alarm Wakeup Trigger Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn vrtcaf(&self) -> super::vals::Vrtcaf {
+    pub const fn vrtcaf(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Vrtcaf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATT RTC-Alarm Wakeup Trigger Flag"]
     #[inline(always)]
-    pub const fn set_vrtcaf(&mut self, val: super::vals::Vrtcaf) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_vrtcaf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -4801,7 +4801,7 @@ impl defmt::Format for Vbtwfr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtwfr {{ vch0f: {:?}, vch1f: {:?}, vch2f: {:?}, vrtcif: {:?}, vrtcaf: {:?}, reserved: {=u8:?} }}",
+            "Vbtwfr {{ vch0f: {=bool:?}, vch1f: {=bool:?}, vch2f: {=bool:?}, vrtcif: {=bool:?}, vrtcaf: {=bool:?}, reserved: {=u8:?} }}",
             self.vch0f(),
             self.vch1f(),
             self.vch2f(),
@@ -4819,62 +4819,62 @@ impl Vbtwter {
     #[doc = "VBATWIO0 Pin Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch0e(&self) -> super::vals::Vch0e {
+    pub const fn vch0e(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Vch0e::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO0 Pin Enable"]
     #[inline(always)]
-    pub const fn set_vch0e(&mut self, val: super::vals::Vch0e) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_vch0e(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "VBATWIO1 Pin Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch1e(&self) -> super::vals::Vch1e {
+    pub const fn vch1e(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Vch1e::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO1 Pin Enable"]
     #[inline(always)]
-    pub const fn set_vch1e(&mut self, val: super::vals::Vch1e) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_vch1e(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "VBATWIO2 Pin Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vch2e(&self) -> super::vals::Vch2e {
+    pub const fn vch2e(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Vch2e::from_bits(val as u8)
+        val != 0
     }
     #[doc = "VBATWIO2 Pin Enable"]
     #[inline(always)]
-    pub const fn set_vch2e(&mut self, val: super::vals::Vch2e) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_vch2e(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "RTC Periodic Signal Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vrtcie(&self) -> super::vals::Vrtcie {
+    pub const fn vrtcie(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Vrtcie::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RTC Periodic Signal Enable"]
     #[inline(always)]
-    pub const fn set_vrtcie(&mut self, val: super::vals::Vrtcie) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_vrtcie(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "RTC Alarm Signal Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn vrtcae(&self) -> super::vals::Vrtcae {
+    pub const fn vrtcae(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Vrtcae::from_bits(val as u8)
+        val != 0
     }
     #[doc = "RTC Alarm Signal Enable"]
     #[inline(always)]
-    pub const fn set_vrtcae(&mut self, val: super::vals::Vrtcae) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_vrtcae(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -4912,7 +4912,7 @@ impl defmt::Format for Vbtwter {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Vbtwter {{ vch0e: {:?}, vch1e: {:?}, vch2e: {:?}, vrtcie: {:?}, vrtcae: {:?}, reserved: {=u8:?} }}",
+            "Vbtwter {{ vch0e: {=bool:?}, vch1e: {=bool:?}, vch2e: {=bool:?}, vrtcie: {=bool:?}, vrtcae: {=bool:?}, reserved: {=u8:?} }}",
             self.vch0e(),
             self.vch1e(),
             self.vch2e(),

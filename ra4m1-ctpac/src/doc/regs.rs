@@ -18,14 +18,14 @@ impl Docr {
     #[doc = "Detection Condition Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn dcsel(&self) -> super::vals::Dcsel {
+    pub const fn dcsel(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Dcsel::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Detection Condition Select"]
     #[inline(always)]
-    pub const fn set_dcsel(&mut self, val: super::vals::Dcsel) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_dcsel(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "These bits are read as 00. The write value should be 00."]
     #[must_use]
@@ -54,14 +54,14 @@ impl Docr {
     #[doc = "DOPCF Clear"]
     #[must_use]
     #[inline(always)]
-    pub const fn dopcfcl(&self) -> super::vals::Dopcfcl {
+    pub const fn dopcfcl(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Dopcfcl::from_bits(val as u8)
+        val != 0
     }
     #[doc = "DOPCF Clear"]
     #[inline(always)]
-    pub const fn set_dopcfcl(&mut self, val: super::vals::Dopcfcl) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_dopcfcl(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -99,7 +99,7 @@ impl defmt::Format for Docr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Docr {{ oms: {:?}, dcsel: {:?}, reserved: {=u8:?}, dopcf: {=bool:?}, dopcfcl: {:?}, reserved_2: {=bool:?} }}",
+            "Docr {{ oms: {:?}, dcsel: {=bool:?}, reserved: {=u8:?}, dopcf: {=bool:?}, dopcfcl: {=bool:?}, reserved_2: {=bool:?} }}",
             self.oms(),
             self.dcsel(),
             self.reserved(),

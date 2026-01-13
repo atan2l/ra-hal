@@ -26,4 +26,3 @@ impl Iwdt {
     }
 }
 pub mod regs;
-pub mod vals;

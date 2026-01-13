@@ -50,37 +50,6 @@ impl From<Cks> for u8 {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Refef {
-    #[doc = "No refresh error occurred"]
-    _0 = 0x0,
-    #[doc = "Refresh error occurred"]
-    _1 = 0x01,
-}
-impl Refef {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Refef {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Refef {
-    #[inline(always)]
-    fn from(val: u8) -> Refef {
-        Refef::from_bits(val)
-    }
-}
-impl From<Refef> for u8 {
-    #[inline(always)]
-    fn from(val: Refef) -> u8 {
-        Refef::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Rpes {
     #[doc = "75 percent"]
     _00 = 0x0,
@@ -151,68 +120,6 @@ impl From<Rpss> for u8 {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Rstirqs {
-    #[doc = "Non-maskable interrupt request or interrupt request output is enabled"]
-    _0 = 0x0,
-    #[doc = "Reset output is enabled."]
-    _1 = 0x01,
-}
-impl Rstirqs {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Rstirqs {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Rstirqs {
-    #[inline(always)]
-    fn from(val: u8) -> Rstirqs {
-        Rstirqs::from_bits(val)
-    }
-}
-impl From<Rstirqs> for u8 {
-    #[inline(always)]
-    fn from(val: Rstirqs) -> u8 {
-        Rstirqs::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Slcstp {
-    #[doc = "Count stop is disabled."]
-    _0 = 0x0,
-    #[doc = "Count is stopped at a transition to sleep mode."]
-    _1 = 0x01,
-}
-impl Slcstp {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Slcstp {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Slcstp {
-    #[inline(always)]
-    fn from(val: u8) -> Slcstp {
-        Slcstp::from_bits(val)
-    }
-}
-impl From<Slcstp> for u8 {
-    #[inline(always)]
-    fn from(val: Slcstp) -> u8 {
-        Slcstp::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Tops {
     #[doc = "1,024 cycles (03FFh)"]
     _00 = 0x0,
@@ -243,36 +150,5 @@ impl From<Tops> for u8 {
     #[inline(always)]
     fn from(val: Tops) -> u8 {
         Tops::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Undff {
-    #[doc = "No underflow occurred"]
-    _0 = 0x0,
-    #[doc = "Underflow occurred"]
-    _1 = 0x01,
-}
-impl Undff {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Undff {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Undff {
-    #[inline(always)]
-    fn from(val: u8) -> Undff {
-        Undff::from_bits(val)
-    }
-}
-impl From<Undff> for u8 {
-    #[inline(always)]
-    fn from(val: Undff) -> u8 {
-        Undff::to_bits(val)
     }
 }

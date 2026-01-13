@@ -6,14 +6,14 @@ impl Fcachee {
     #[doc = "FCACHE Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn fcacheen(&self) -> super::vals::Fcacheen {
+    pub const fn fcacheen(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Fcacheen::from_bits(val as u8)
+        val != 0
     }
     #[doc = "FCACHE Enable"]
     #[inline(always)]
-    pub const fn set_fcacheen(&mut self, val: super::vals::Fcacheen) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_fcacheen(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 000000000000000. The write value should be 000000000000000."]
     #[must_use]
@@ -47,7 +47,7 @@ impl defmt::Format for Fcachee {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Fcachee {{ fcacheen: {:?}, reserved: {=u16:?} }}",
+            "Fcachee {{ fcacheen: {=bool:?}, reserved: {=u16:?} }}",
             self.fcacheen(),
             self.reserved()
         )
@@ -61,14 +61,14 @@ impl Fcacheiv {
     #[doc = "FCACHE Invalidation"]
     #[must_use]
     #[inline(always)]
-    pub const fn fcacheiv(&self) -> super::vals::Fcacheiv {
+    pub const fn fcacheiv(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Fcacheiv::from_bits(val as u8)
+        val != 0
     }
     #[doc = "FCACHE Invalidation"]
     #[inline(always)]
-    pub const fn set_fcacheiv(&mut self, val: super::vals::Fcacheiv) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u16) & 0x01) << 0usize);
+    pub const fn set_fcacheiv(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 000000000000000. The write value should be 000000000000000."]
     #[must_use]
@@ -102,7 +102,7 @@ impl defmt::Format for Fcacheiv {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Fcacheiv {{ fcacheiv: {:?}, reserved: {=u16:?} }}",
+            "Fcacheiv {{ fcacheiv: {=bool:?}, reserved: {=u16:?} }}",
             self.fcacheiv(),
             self.reserved()
         )

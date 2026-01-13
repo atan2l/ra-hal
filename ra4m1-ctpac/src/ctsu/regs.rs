@@ -412,38 +412,38 @@ impl Ctsucr0 {
     #[doc = "CTSU Measurement Operation Start"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsustrt(&self) -> super::vals::Ctsustrt {
+    pub const fn ctsustrt(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ctsustrt::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CTSU Measurement Operation Start"]
     #[inline(always)]
-    pub const fn set_ctsustrt(&mut self, val: super::vals::Ctsustrt) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ctsustrt(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "CTSU Measurement Operation Start Trigger Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsucap(&self) -> super::vals::Ctsucap {
+    pub const fn ctsucap(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ctsucap::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CTSU Measurement Operation Start Trigger Select"]
     #[inline(always)]
-    pub const fn set_ctsucap(&mut self, val: super::vals::Ctsucap) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_ctsucap(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "CTSU Wait State Power-Saving Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsusnz(&self) -> super::vals::Ctsusnz {
+    pub const fn ctsusnz(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ctsusnz::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CTSU Wait State Power-Saving Enable"]
     #[inline(always)]
-    pub const fn set_ctsusnz(&mut self, val: super::vals::Ctsusnz) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_ctsusnz(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -460,14 +460,14 @@ impl Ctsucr0 {
     #[doc = "CTSU Control Block Initialization"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsuinit(&self) -> super::vals::Ctsuinit {
+    pub const fn ctsuinit(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ctsuinit::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CTSU Control Block Initialization"]
     #[inline(always)]
-    pub const fn set_ctsuinit(&mut self, val: super::vals::Ctsuinit) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_ctsuinit(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
 }
 impl Default for Ctsucr0 {
@@ -492,7 +492,7 @@ impl defmt::Format for Ctsucr0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ctsucr0 {{ ctsustrt: {:?}, ctsucap: {:?}, ctsusnz: {:?}, reserved: {=bool:?}, ctsuinit: {:?} }}",
+            "Ctsucr0 {{ ctsustrt: {=bool:?}, ctsucap: {=bool:?}, ctsusnz: {=bool:?}, reserved: {=bool:?}, ctsuinit: {=bool:?} }}",
             self.ctsustrt(),
             self.ctsucap(),
             self.ctsusnz(),
@@ -509,50 +509,50 @@ impl Ctsucr1 {
     #[doc = "CTSU Power Supply Enable"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsupon(&self) -> super::vals::Ctsupon {
+    pub const fn ctsupon(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Ctsupon::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CTSU Power Supply Enable"]
     #[inline(always)]
-    pub const fn set_ctsupon(&mut self, val: super::vals::Ctsupon) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_ctsupon(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "CTSU LPF Capacitance Charging Control"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsucsw(&self) -> super::vals::Ctsucsw {
+    pub const fn ctsucsw(&self) -> bool {
         let val = (self.0 >> 1usize) & 0x01;
-        super::vals::Ctsucsw::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CTSU LPF Capacitance Charging Control"]
     #[inline(always)]
-    pub const fn set_ctsucsw(&mut self, val: super::vals::Ctsucsw) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val.to_bits() as u8) & 0x01) << 1usize);
+    pub const fn set_ctsucsw(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
     }
     #[doc = "CTSU Power Supply Operating Mode Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsuatune0(&self) -> super::vals::Ctsuatune0 {
+    pub const fn ctsuatune0(&self) -> bool {
         let val = (self.0 >> 2usize) & 0x01;
-        super::vals::Ctsuatune0::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CTSU Power Supply Operating Mode Setting"]
     #[inline(always)]
-    pub const fn set_ctsuatune0(&mut self, val: super::vals::Ctsuatune0) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val.to_bits() as u8) & 0x01) << 2usize);
+    pub const fn set_ctsuatune0(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u8) & 0x01) << 2usize);
     }
     #[doc = "CTSU Power Supply Capacity Adjustment"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsuatune1(&self) -> super::vals::Ctsuatune1 {
+    pub const fn ctsuatune1(&self) -> bool {
         let val = (self.0 >> 3usize) & 0x01;
-        super::vals::Ctsuatune1::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CTSU Power Supply Capacity Adjustment"]
     #[inline(always)]
-    pub const fn set_ctsuatune1(&mut self, val: super::vals::Ctsuatune1) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
+    pub const fn set_ctsuatune1(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
     }
     #[doc = "CTSU Operating Clock Select"]
     #[must_use]
@@ -602,7 +602,7 @@ impl defmt::Format for Ctsucr1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ctsucr1 {{ ctsupon: {:?}, ctsucsw: {:?}, ctsuatune0: {:?}, ctsuatune1: {:?}, ctsuclk: {:?}, ctsumd: {:?} }}",
+            "Ctsucr1 {{ ctsupon: {=bool:?}, ctsucsw: {=bool:?}, ctsuatune0: {=bool:?}, ctsuatune1: {=bool:?}, ctsuclk: {:?}, ctsumd: {:?} }}",
             self.ctsupon(),
             self.ctsucsw(),
             self.ctsuatune0(),
@@ -715,14 +715,14 @@ impl Ctsuerrs {
     #[doc = "TSCAP Voltage Error Monitor"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsuicomp(&self) -> super::vals::Ctsuicomp {
+    pub const fn ctsuicomp(&self) -> bool {
         let val = (self.0 >> 15usize) & 0x01;
-        super::vals::Ctsuicomp::from_bits(val as u8)
+        val != 0
     }
     #[doc = "TSCAP Voltage Error Monitor"]
     #[inline(always)]
-    pub const fn set_ctsuicomp(&mut self, val: super::vals::Ctsuicomp) {
-        self.0 = (self.0 & !(0x01 << 15usize)) | (((val.to_bits() as u16) & 0x01) << 15usize);
+    pub const fn set_ctsuicomp(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u16) & 0x01) << 15usize);
     }
 }
 impl Default for Ctsuerrs {
@@ -744,7 +744,7 @@ impl defmt::Format for Ctsuerrs {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ctsuerrs {{ reserved: {=u16:?}, ctsuicomp: {:?} }}",
+            "Ctsuerrs {{ reserved: {=u16:?}, ctsuicomp: {=bool:?} }}",
             self.reserved(),
             self.ctsuicomp()
         )
@@ -966,14 +966,14 @@ impl Ctsusdprs {
     #[doc = "CTSU High-Pass Noise Reduction Function Off Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsusoff(&self) -> super::vals::Ctsusoff {
+    pub const fn ctsusoff(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Ctsusoff::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CTSU High-Pass Noise Reduction Function Off Setting"]
     #[inline(always)]
-    pub const fn set_ctsusoff(&mut self, val: super::vals::Ctsusoff) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_ctsusoff(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -1009,7 +1009,7 @@ impl defmt::Format for Ctsusdprs {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ctsusdprs {{ ctsuprratio: {=u8:?}, ctsuprmode: {:?}, ctsusoff: {:?}, reserved: {=bool:?} }}",
+            "Ctsusdprs {{ ctsuprratio: {=u8:?}, ctsuprmode: {:?}, ctsusoff: {=bool:?}, reserved: {=bool:?} }}",
             self.ctsuprratio(),
             self.ctsuprmode(),
             self.ctsusoff(),
@@ -1293,50 +1293,50 @@ impl Ctsust {
     #[doc = "CTSU Data Transfer Status Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsudtsr(&self) -> super::vals::Ctsudtsr {
+    pub const fn ctsudtsr(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Ctsudtsr::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CTSU Data Transfer Status Flag"]
     #[inline(always)]
-    pub const fn set_ctsudtsr(&mut self, val: super::vals::Ctsudtsr) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_ctsudtsr(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "CTSU Sensor Counter Overflow Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsusovf(&self) -> super::vals::Ctsusovf {
+    pub const fn ctsusovf(&self) -> bool {
         let val = (self.0 >> 5usize) & 0x01;
-        super::vals::Ctsusovf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CTSU Sensor Counter Overflow Flag"]
     #[inline(always)]
-    pub const fn set_ctsusovf(&mut self, val: super::vals::Ctsusovf) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val.to_bits() as u8) & 0x01) << 5usize);
+    pub const fn set_ctsusovf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u8) & 0x01) << 5usize);
     }
     #[doc = "CTSU Reference Counter Overflow Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsurovf(&self) -> super::vals::Ctsurovf {
+    pub const fn ctsurovf(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
-        super::vals::Ctsurovf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CTSU Reference Counter Overflow Flag"]
     #[inline(always)]
-    pub const fn set_ctsurovf(&mut self, val: super::vals::Ctsurovf) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val.to_bits() as u8) & 0x01) << 6usize);
+    pub const fn set_ctsurovf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
     }
     #[doc = "CTSU Mutual Capacitance Status Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn ctsups(&self) -> super::vals::Ctsups {
+    pub const fn ctsups(&self) -> bool {
         let val = (self.0 >> 7usize) & 0x01;
-        super::vals::Ctsups::from_bits(val as u8)
+        val != 0
     }
     #[doc = "CTSU Mutual Capacitance Status Flag"]
     #[inline(always)]
-    pub const fn set_ctsups(&mut self, val: super::vals::Ctsups) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val.to_bits() as u8) & 0x01) << 7usize);
+    pub const fn set_ctsups(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u8) & 0x01) << 7usize);
     }
 }
 impl Default for Ctsust {
@@ -1362,7 +1362,7 @@ impl defmt::Format for Ctsust {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Ctsust {{ ctsustc: {:?}, reserved: {=bool:?}, ctsudtsr: {:?}, ctsusovf: {:?}, ctsurovf: {:?}, ctsups: {:?} }}",
+            "Ctsust {{ ctsustc: {:?}, reserved: {=bool:?}, ctsudtsr: {=bool:?}, ctsusovf: {=bool:?}, ctsurovf: {=bool:?}, ctsups: {=bool:?} }}",
             self.ctsustc(),
             self.reserved(),
             self.ctsudtsr(),
