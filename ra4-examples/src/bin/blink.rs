@@ -11,7 +11,14 @@ use defmt_rtt as _;
 use embassy_executor::Spawner;
 // use embassy_time::Timer;
 use panic_probe as _;
-use ra4_hal::{ofs0, ofs1};
+use ra4m1_ctpac::{
+    self as pac,
+    gpt32::{
+        regs::{Gtdnsr, Gtupsr},
+        vals::{Mode, Prkey, Tpcs, Ud},
+    },
+    system::vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd, Prc0},
+};
 
 /// Option Function Select Register 0
 /// Accepts either:
@@ -38,7 +45,7 @@ use ra4_hal::{ofs0, ofs1};
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
-    defmt::error!("Starting main");
+    info!("Starting board init");
 
     // // #define BSP_CLOCK_CFG_MAIN_OSC_WAIT (9)
     // // #define BSP_LOCO_HZ                 (32768)
@@ -47,12 +54,60 @@ async fn main(_spawner: Spawner) {
     // // #define BSP_MCU_VBATT_SUPPORT       (1)
 
     let system = pac::SYSTEM;
-    system.sckscr().write(|w| {
-        // Use HOCO which we set to 48 MHz
-        w.set_cksel(Cksel::_000);
+
+    trace!("HOCO WaitState: {}", system.hocowtcr().read());
+    trace!("HOCO Status: {}", system.hococr().read());
+
+    trace!("SYSTEM WriteProt: {}", system.prcr().read());
+    system.prcr().write(|w| {
+        w.set_prkey(crate::pac::system::vals::Prkey::PROTECT_KEY);
+        w.set_prc0(Prc0::NotProtected);
+    });
+    trace!("SYSTEM WriteProt: {}", system.prcr().read());
+
+    let hoco_freq = system.hococr2().read().hcfrqw();
+    if hoco_freq != Hcfrq1::_48mhz {
+        warn!("Unexpected HOCO frequency: {}", hoco_freq);
+        system.hococr2().write(|w| {
+            w.set_hcfrqw(Hcfrq1::_48mhz);
+        });
+        defmt::warn!("HOCO Frequency: {}", system.hococr2().read());
+    };
+
+    // let hococr2_ptr: *mut u8 = 0x4001E037 as _;
+    // let val: u8 = unsafe { (hococr2_ptr as *mut u8).read_volatile() };
+    // if val != (0b100 << 3) {
+    //     warn!("Unexpected HOCO frequency: {:08b}", val);
+    //     unsafe { (hococr2_ptr).write_volatile(0b100 << 3) };
+    //     let val: u8 = unsafe { (hococr2_ptr as *mut u8).read_volatile() };
+    //     defmt::warn!("HOCO Frequency: {:08b}", val);
+    // }
+
+    system.hococr().write(|w| {
+        w.set_hcstp(Hcstp::Start);
+    });
+    debug!("HOCO Status: {}", system.hococr().read());
+
+    // High speed mode needed for iclk > 32 MHz
+    trace!("Setting high speed mode on");
+    system.opccr().write(|w| {
+        w.set_opcm(Opcm::HighSpeed);
     });
 
-    system.sckdivcr().write(|w| {
+    while system.opccr().read().opcmtsf() {
+        asm::nop();
+    }
+
+    trace!("Setting memwait to 1");
+    system.memwait().write(|w| w.set_memwait(true));
+
+    system.sckscr().write(|w| {
+        // Use HOCO which we set to 48 MHz
+        w.set_cksel(Cksel::Hoco);
+    });
+    debug!("SYSTEM ClkSource: {}", system.sckscr().read());
+
+    system.sckdivcr().modify(|w| {
         // ICLK = HOCO/1 = 48 MHz
         w.set_ick(Ick::_000);
 
@@ -72,7 +127,72 @@ async fn main(_spawner: Spawner) {
         w.set_pcka(Pcka::_000);
     });
 
-    defmt::error!("DONE WITH INIT!");
+    debug!("SYSTEM ClkDiv: {}", system.sckdivcr().read());
+    system.prcr().write(|w| {
+        w.set_prkey(crate::pac::system::vals::Prkey::PROTECT_KEY);
+        w.set_prc0(Prc0::Protected);
+    });
+
+    info!("Finished board init");
+
+    debug!("Enabling GPT32.0");
+    let mstp = pac::MSTP;
+    mstp.mstpcrd().write(|w| {
+        w.set_mstpd5(false);
+    });
+
+    let timer = crate::pac::GPT320;
+
+    // Disable write prot
+    timer.gtwp().write(|w| {
+        w.set_wp(false);
+        w.set_prkey(Prkey::_0X_A5);
+    });
+    trace!("WP: {}", timer.gtwp().read());
+
+    timer.gtupsr().write_value(Gtupsr(0));
+    timer.gtdnsr().write_value(Gtdnsr(0));
+
+    timer.gtcr().write(|w| {
+        w.set_md(Mode::SawWavePwm);
+    });
+
+    timer.gtuddtyc().write(|w| {
+        w.set_udf(true);
+        w.set_ud(Ud::Up);
+    });
+    timer.gtuddtyc().write(|w| {
+        w.set_udf(false);
+        w.set_ud(Ud::Up);
+    });
+
+    timer.gtcr().write(|w| {
+        w.set_tpcs(Tpcs::_000);
+    });
+    debug!("GTCR: {}", timer.gtcr().read());
+
+    timer.gtpr().write(|w| {
+        w.set_gtpr(u32::MAX);
+    });
+    debug!("GTPR: {}", timer.gtpr().read());
+
+    timer.gtcnt().write(|w| {
+        w.set_gtcnt(0);
+    });
+    trace!("GTCNT: {}", timer.gtcnt().read());
+
+    timer.gtcr().write(|w| {
+        w.set_cst(true);
+    });
+    debug!("GTCR: {}", timer.gtcr().read());
+
+    for _ in 0..10 {
+        let cnt = timer.gtcnt().read().gtcnt();
+        defmt::error!("CNT: {}", cnt);
+        for _ in 0..10000 {
+            asm::nop();
+        }
+    }
 
     loop {
         asm::nop();
