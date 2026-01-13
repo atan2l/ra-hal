@@ -22,3 +22,8 @@ embassy-sync = { workspace = true }
 ra4m1-ctpac = { path = "../ra4m1-ctpac" }
 
 cfg-if = "1"
+
+[features]
+default = [ "defmt", "time-driver"]
+defmt = ["dep:defmt", "ra4m1-ctpac/defmt"]
+time-driver = [ "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time-driver/tick-hz-40_000_000" ]
