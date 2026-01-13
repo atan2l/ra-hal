@@ -12,4 +12,4 @@ ofsdump = [ "objdump", "--release", "--quiet", "--", "--full-contents", "-j", ".
 target = "thumbv7em-none-eabihf" # R7FA4M1AB is Cortex-M4F based
 
 [env]
-DEFMT_LOG = "info"
+DEFMT_LOG = "debug"
