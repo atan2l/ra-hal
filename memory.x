@@ -4,13 +4,6 @@ MEMORY
   RAM : ORIGIN = 0x20000000, LENGTH = 32K
 }
 
-/* Move everything well past the vector table because
-   the RA4M1 likes to put config options in that space.
-   For the time being that means that we're dependent
-   on having the Arduino bootloader in place so that
-   the option memory gets set appropriately. */
-PROVIDE(_stext = 0x500);
-
 /*
 Could look a little like this.
 
