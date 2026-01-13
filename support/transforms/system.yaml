@@ -34,6 +34,33 @@ transforms:
   - !DeleteEnumVariants
       enum: system::vals::Prkey
       from: _0X5A
+  - !DeleteEnums
+      from: system::vals::(Memwait|Opcmtsf)
+  - !RenameEnumVariants
+      enum: system::vals::Cksel
+      from: _000
+      to: Hoco
+  - !RenameEnumVariants
+      enum: system::vals::Cksel
+      from: _001
+      to: Moco
+  - !RenameEnumVariants
+      enum: system::vals::Cksel
+      from: _010
+      to: Loco
+  - !RenameEnumVariants
+      enum: system::vals::Cksel
+      from: _011
+      to: Mosc
+  - !RenameEnumVariants
+      enum: system::vals::Cksel
+      from: _100
+      to: Sosc
+  - !RenameEnumVariants
+      enum: system::vals::Cksel
+      from: _101
+      to: Pll
+# Opcmtsf cxd
   - !Add
       ir:
         !IR

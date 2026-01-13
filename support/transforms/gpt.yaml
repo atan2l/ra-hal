@@ -41,4 +41,5 @@ transforms:
       enum: gpt32::vals::Mode
       from: _110
       to: TrianglePwm3
-      
+  - !DeleteEnums
+      from: gpt32::vals::(Cst)

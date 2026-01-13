@@ -2274,37 +2274,6 @@ impl From<Csgtrgbr> for u8 {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Cst {
-    #[doc = "Count operation is stopped"]
-    _0 = 0x0,
-    #[doc = "Count operation is performed"]
-    _1 = 0x01,
-}
-impl Cst {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Cst {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Cst {
-    #[inline(always)]
-    fn from(val: u8) -> Cst {
-        Cst::from_bits(val)
-    }
-}
-impl From<Cst> for u8 {
-    #[inline(always)]
-    fn from(val: Cst) -> u8 {
-        Cst::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Cstop {
     #[doc = "Counter stop is disable by the GTSTP register"]
     _0 = 0x0,

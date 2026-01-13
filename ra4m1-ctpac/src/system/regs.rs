@@ -881,14 +881,14 @@ impl Memwait {
     #[doc = "Memory Wait Cycle Select Note: Writing 0 to the MEMWAIT is prohibited when SCKDIVCR.ICK selects division by 1 and SCKSCR.CKSEL\\[2:0\\] bits select the system clock source that is faster than 32 MHz (ICLK > 32 MHz)."]
     #[must_use]
     #[inline(always)]
-    pub const fn memwait(&self) -> super::vals::Memwait {
+    pub const fn memwait(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Memwait::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Memory Wait Cycle Select Note: Writing 0 to the MEMWAIT is prohibited when SCKDIVCR.ICK selects division by 1 and SCKSCR.CKSEL\\[2:0\\] bits select the system clock source that is faster than 32 MHz (ICLK > 32 MHz)."]
     #[inline(always)]
-    pub const fn set_memwait(&mut self, val: super::vals::Memwait) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    pub const fn set_memwait(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -922,7 +922,7 @@ impl defmt::Format for Memwait {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Memwait {{ memwait: {:?}, reserved: {=u8:?} }}",
+            "Memwait {{ memwait: {=bool:?}, reserved: {=u8:?} }}",
             self.memwait(),
             self.reserved()
         )
@@ -1370,14 +1370,14 @@ impl Opccr {
     #[doc = "Operating Power Control Mode Transition Status Flag"]
     #[must_use]
     #[inline(always)]
-    pub const fn opcmtsf(&self) -> super::vals::Opcmtsf {
+    pub const fn opcmtsf(&self) -> bool {
         let val = (self.0 >> 4usize) & 0x01;
-        super::vals::Opcmtsf::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Operating Power Control Mode Transition Status Flag"]
     #[inline(always)]
-    pub const fn set_opcmtsf(&mut self, val: super::vals::Opcmtsf) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
+    pub const fn set_opcmtsf(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
     }
     #[doc = "These bits are read as 000. The write value should be 000."]
     #[must_use]
@@ -1413,7 +1413,7 @@ impl defmt::Format for Opccr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Opccr {{ opcm: {:?}, reserved: {=u8:?}, opcmtsf: {:?}, reserved_2: {=u8:?} }}",
+            "Opccr {{ opcm: {:?}, reserved: {=u8:?}, opcmtsf: {=bool:?}, reserved_2: {=u8:?} }}",
             self.opcm(),
             self.reserved(),
             self.opcmtsf(),

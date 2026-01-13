@@ -712,17 +712,17 @@ impl From<Ckosel> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Cksel {
     #[doc = "HOCO"]
-    _000 = 0x0,
+    Hoco = 0x0,
     #[doc = "MOCO"]
-    _001 = 0x01,
+    Moco = 0x01,
     #[doc = "LOCO"]
-    _010 = 0x02,
+    Loco = 0x02,
     #[doc = "Main clock oscillator"]
-    _011 = 0x03,
+    Mosc = 0x03,
     #[doc = "Sub-clock oscillator"]
-    _100 = 0x04,
+    Sosc = 0x04,
     #[doc = "PLL"]
-    _101 = 0x05,
+    Pll = 0x05,
     _RESERVED_6 = 0x06,
     _RESERVED_7 = 0x07,
 }
@@ -1680,37 +1680,6 @@ impl From<Mcstp> for u8 {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Memwait {
-    #[doc = "no wait"]
-    _0 = 0x0,
-    #[doc = "wait"]
-    _1 = 0x01,
-}
-impl Memwait {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Memwait {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Memwait {
-    #[inline(always)]
-    fn from(val: u8) -> Memwait {
-        Memwait::from_bits(val)
-    }
-}
-impl From<Memwait> for u8 {
-    #[inline(always)]
-    fn from(val: Memwait) -> u8 {
-        Memwait::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Modrv1 {
     #[doc = "10 MHz to 20 MHz"]
     _0 = 0x0,
@@ -2042,37 +2011,6 @@ impl From<Opcm> for u8 {
     #[inline(always)]
     fn from(val: Opcm) -> u8 {
         Opcm::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Opcmtsf {
-    #[doc = "Transition completed"]
-    _0 = 0x0,
-    #[doc = "During transition"]
-    _1 = 0x01,
-}
-impl Opcmtsf {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Opcmtsf {
-        unsafe { core::mem::transmute(val & 0x01) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Opcmtsf {
-    #[inline(always)]
-    fn from(val: u8) -> Opcmtsf {
-        Opcmtsf::from_bits(val)
-    }
-}
-impl From<Opcmtsf> for u8 {
-    #[inline(always)]
-    fn from(val: Opcmtsf) -> u8 {
-        Opcmtsf::to_bits(val)
     }
 }
 #[repr(u8)]

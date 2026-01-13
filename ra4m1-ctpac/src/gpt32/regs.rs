@@ -515,14 +515,14 @@ impl Gtcr {
     #[doc = "Count Start"]
     #[must_use]
     #[inline(always)]
-    pub const fn cst(&self) -> super::vals::Cst {
+    pub const fn cst(&self) -> bool {
         let val = (self.0 >> 0usize) & 0x01;
-        super::vals::Cst::from_bits(val as u8)
+        val != 0
     }
     #[doc = "Count Start"]
     #[inline(always)]
-    pub const fn set_cst(&mut self, val: super::vals::Cst) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u32) & 0x01) << 0usize);
+    pub const fn set_cst(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u32) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 000000000000000. The write value should be 000000000000000."]
     #[must_use]
@@ -595,7 +595,7 @@ impl defmt::Format for Gtcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Gtcr {{ cst: {:?}, reserved: {=u16:?}, md: {:?}, reserved_2: {=u8:?}, tpcs: {:?} }}",
+            "Gtcr {{ cst: {=bool:?}, reserved: {=u16:?}, md: {:?}, reserved_2: {=u8:?}, tpcs: {:?} }}",
             self.cst(),
             self.reserved(),
             self.md(),
