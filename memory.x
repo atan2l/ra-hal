@@ -1,40 +1,70 @@
-/* Linker script for the RA4M1 */
-/* Note: this *will* clobber the Arduino bootloader */
 MEMORY
 {
-  /* NOTE 1 K = 1 KiBi = 1024 bytes */
+  FLASH : ORIGIN = 0x0000000, LENGTH = 256K
+  RAM : ORIGIN = 0x20000000, LENGTH = 32K
+}
 
-  /* 0x0000_0000-0x0000_03FF (free § 4.1) */
-  UNUSED : ORIGIN = 0x00000000, LENGTH = 1K
+/* Move everything well past the vector table because
+   the RA4M1 likes to put config options in that space.
+   For the time being that means that we're dependent
+   on having the Arduino bootloader in place so that
+   the option memory gets set appropriately. */
+PROVIDE(_stext = 0x500);
 
-  /* 0x0000_0400-0x0000_0403 (OFS0 § 6.2.1) */
-  OFS0 : ORIGIN = 0x00000400, LENGTH = 4
+/*
+Could look a little like this.
 
-  /* 0x0000_0404-0x0000_0407 (OFS1 § 6.2.2) */
-  OFS1 : ORIGIN = 0x00000404, LENGTH = 4
+MEMORY
+{
 
-  /* 0x0000_0408-0x0000_043B (Security MPU SECMPU § 6.2.3) */
+  // 0x0000_0400-0x0000_0403 (OFS0 § 6.2.1)
+  OFS0 : ORIGIN = 0x00000400, LENGTH = 4 
 
-  /* 0x0000_043C-0x0004_0000 (free § 4.1) */
-  FLASH : ORIGIN = 0x00000800, LENGTH = 254K
+  // 0x0000_0404-0x0000_0407 (OFS1 § 6.2.2)
+  OFS1 : ORIGIN = 0x00000404, LENGTH = 4 
 
-  /* 0x2000_0000-0x2000_8000 (RAM § 4.1) */
+  SECMPU_PC_S0 : ORIGIN = 0x408, LENGTH = 4
+  SECMPU_PC_E0 : ORIGIN = 0x40C, LENGTH = 4
+  SECMPU_PC_S1 : ORIGIN = 0x410, LENGTH = 4
+  SECMPU_PC_E1 : ORIGIN = 0x414, LENGTH = 4
+  SECMPU_S0    : ORIGIN = 0x418, LENGTH = 4
+  SECMPU_E0    : ORIGIN = 0x41C, LENGTH = 4
+  SECMPU_S1    : ORIGIN = 0x420, LENGTH = 4
+  SECMPU_E1    : ORIGIN = 0x424, LENGTH = 4
+  SECMPU_S2    : ORIGIN = 0x428, LENGTH = 4
+  SECMPU_E2    : ORIGIN = 0x42C, LENGTH = 4
+  SECMPU_S3    : ORIGIN = 0x430, LENGTH = 4
+  SECMPU_E3    : ORIGIN = 0x434, LENGTH = 4
+  SECMPU_AC    : ORIGIN = 0x438, LENGTH = 4
+
+  SEC_MPU    : ORIGIN = 0x408, LENGTH = 4 * 13
+
+  FLASH : ORIGIN = 0x00000500, LENGTH = 256K - 0x500
+
   RAM : ORIGIN = 0x20000000, LENGTH = 32K
 }
 
 SECTIONS {
-    .ofs0 : 
-    {
-      . = ALIGN(4);
-      KEEP(*(.ofs0));
-    } > OFS0
+  .ofs0 : 
+  {
+    . = ALIGN(4);
+    KEEP(*(.ofs0));
+  } > OFS0
 
-    .ofs1 : 
-    {
-      . = ALIGN(4);
-      KEEP(*(.ofs1));
-    } > OFS1
-} 
+  .ofs1 : 
+  {
+    . = ALIGN(4);
+    KEEP(*(.ofs1));
+  } > OFS1
+  
+  .sec_mpu : 
+  {
+    . = ALIGN(4);
+    KEEP(*(.sec_mpu));
+  } > SEC_MPU
+}
 
 ASSERT(SIZEOF(.ofs0) == 4, "OFS0 must be 32-bits.");
 ASSERT(SIZEOF(.ofs1) == 4, "OFS1 must be 32-bits.");
+ASSERT(SIZEOF(.sec_mpu) == 4*13, "SEC_MPU must have 13 entries.");
+*/
