@@ -1,6 +1,6 @@
 // Reserved bits are to be written as 1.
 pub const OFS1_H: u32 = 0xFFFF0000;
-pub const OFS1_L: u32 = 0x00008CC3;
+pub const OFS1_L: u32 = 0x00008EC3;
 
 trait Lvdas {
     const OFS1: u32;
