@@ -1,0 +1,5 @@
+transforms:
+  - !Rename
+      from: gpt320::Gpt320
+      to: gpt32::Gpt32
+      type: Block
