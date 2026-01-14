@@ -2,6 +2,7 @@
 
 pub mod ofs0;
 pub mod ofs1;
+#[cfg(feature = "time-driver")]
 pub mod time_driver;
 pub mod write_protect;
 
@@ -35,6 +36,7 @@ pub fn init() -> Peripherals {
     critical_section::with(|cs| {
         let p = Peripherals::take_with_cs(cs);
 
+        #[cfg(feature = "time-driver")]
         time_driver::init(crate::interrupt::Priority::P2);
 
         p
