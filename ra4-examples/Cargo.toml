@@ -12,6 +12,7 @@ cortex-m-rt = { workspace = true }
 defmt = { workspace = true }
 defmt-rtt = "1.0.0"
 panic-probe = { version = "1.0.0" }
+critical-section = { workspace = true }
 
 ## Embassy dependencies
 # embassy-embedded-hal = { version = "0.5.0", default-features = false }

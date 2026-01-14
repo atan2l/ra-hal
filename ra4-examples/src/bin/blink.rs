@@ -11,17 +11,22 @@ use defmt_rtt as _;
 use embassy_executor::Spawner;
 // use embassy_time::Timer;
 use panic_probe as _;
-use ra4_hal::pac::{
-    self as pac,
-    gpt32::{
-        regs::{Gtdnsr, Gtupsr},
-        vals::{Mode, Prkey, Tpcs, Ud},
+use ra4_hal::{
+    interrupt,
+    interrupt::InterruptExt as _,
+    pac::{
+        self as pac,
+        gpt32::{
+            regs::{Gtdnsr, Gtupsr},
+            vals::{Mode, Prkey, Tpcs, Ud},
+        },
+        icu::vals::Iels,
+        system::{
+            regs::Sckdivcr,
+            vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd, Prc0},
+        },
     },
-    // interrupt,
-    system::{
-        regs::Sckdivcr,
-        vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd, Prc0},
-    },
+    write_protect::WriteProtect,
 };
 use ra4_hal::{ofs0, ofs1};
 
@@ -132,87 +137,87 @@ async fn main(_spawner: Spawner) {
     trace!("HOCO WaitState: {}", system.hocowtcr().read());
     trace!("HOCO Status: {}", system.hococr().read());
 
-    trace!("SYSTEM WriteProt: {}", system.prcr().read());
-    system.prcr().write(|w| {
-        w.set_prkey(crate::pac::system::vals::Prkey::PROTECT_KEY);
-        w.set_prc0(Prc0::NotProtected);
-    });
-    trace!("SYSTEM WriteProt: {}", system.prcr().read());
+    system.protected_write(|| {
+        let hoco_freq = system.hococr2().read().hcfrqw();
+        if hoco_freq != Hcfrq1::_48mhz {
+            warn!("Unexpected HOCO frequency: {}", hoco_freq);
+            system.hococr2().write(|w| {
+                w.set_hcfrqw(Hcfrq1::_48mhz);
+            });
+        };
 
-    let hoco_freq = system.hococr2().read().hcfrqw();
-    if hoco_freq != Hcfrq1::_48mhz {
-        warn!("Unexpected HOCO frequency: {}", hoco_freq);
-        system.hococr2().write(|w| {
-            w.set_hcfrqw(Hcfrq1::_48mhz);
+        info!("HOCO Frequency: {}", system.hococr2().read().hcfrqw());
+        // let hococr2_ptr: *mut u8 = 0x4001E037 as _;
+        // let val: u8 = unsafe { (hococr2_ptr as *mut u8).read_volatile() };
+        // if val != (0b100 << 3) {
+        //     warn!("Unexpected HOCO frequency: {:08b}", val);
+        //     unsafe { (hococr2_ptr).write_volatile(0b100 << 3) };
+        //     let val: u8 = unsafe { (hococr2_ptr as *mut u8).read_volatile() };
+        //     defmt::warn!("HOCO Frequency: {:08b}", val);
+        // }
+
+        if system.hococr().read().hcstp() != Hcstp::Start {
+            warn!("HOCO not running, attempt to start.");
+            system.hococr().write(|w| {
+                w.set_hcstp(Hcstp::Start);
+            });
+        }
+
+        debug!("HOCO Status: {}", system.hococr().read().hcstp());
+
+        // High speed mode needed for iclk > 32 MHz
+        trace!("Setting high speed mode on");
+        system.opccr().write(|w| {
+            w.set_opcm(Opcm::HighSpeed);
         });
-    };
 
-    info!("HOCO Frequency: {}", system.hococr2().read().hcfrqw());
-    // let hococr2_ptr: *mut u8 = 0x4001E037 as _;
-    // let val: u8 = unsafe { (hococr2_ptr as *mut u8).read_volatile() };
-    // if val != (0b100 << 3) {
-    //     warn!("Unexpected HOCO frequency: {:08b}", val);
-    //     unsafe { (hococr2_ptr).write_volatile(0b100 << 3) };
-    //     let val: u8 = unsafe { (hococr2_ptr as *mut u8).read_volatile() };
-    //     defmt::warn!("HOCO Frequency: {:08b}", val);
-    // }
+        while system.opccr().read().opcmtsf() {
+            asm::nop();
+        }
 
-    if system.hococr().read().hcstp() != Hcstp::Start {
-        warn!("HOCO not running, attempt to start.");
-        system.hococr().write(|w| {
-            w.set_hcstp(Hcstp::Start);
+        trace!("Setting memwait to 1");
+        system.memwait().write(|w| w.set_memwait(true));
+
+        system.sckscr().write(|w| {
+            // Use HOCO which we set to 48 MHz
+            w.set_cksel(Cksel::Hoco);
         });
-    }
+        debug!("SYSTEM ClkSource: {}", system.sckscr().read().cksel());
 
-    debug!("HOCO Status: {}", system.hococr().read().hcstp());
+        system.sckdivcr().modify(|w| {
+            // ICLK = HOCO/1 = 48 MHz
+            w.set_ick(Ick::DIV_1);
 
-    // High speed mode needed for iclk > 32 MHz
-    trace!("Setting high speed mode on");
-    system.opccr().write(|w| {
-        w.set_opcm(Opcm::HighSpeed);
-    });
+            // FCLK max 32 MHz, ICLK/2 = 24 MHz
+            w.set_fck(Fck::DIV_2);
 
-    while system.opccr().read().opcmtsf() {
-        asm::nop();
-    }
+            // PCLKD max 64 MHz, ICLK/1 = 48 MHz
+            w.set_pckd(Pckd::DIV_1);
 
-    trace!("Setting memwait to 1");
-    system.memwait().write(|w| w.set_memwait(true));
+            // PCLKC max 64 MHz, ICLK/1 = 48 MHz
+            w.set_pckc(Pckc::DIV_1);
 
-    system.sckscr().write(|w| {
-        // Use HOCO which we set to 48 MHz
-        w.set_cksel(Cksel::Hoco);
-    });
-    debug!("SYSTEM ClkSource: {}", system.sckscr().read().cksel());
+            // PCLKB max 32 MHz, ICLK/2 = 24 MHz
+            w.set_pckb(Pckb::DIV_2);
 
-    system.sckdivcr().modify(|w| {
-        // ICLK = HOCO/1 = 48 MHz
-        w.set_ick(Ick::DIV_1);
-
-        // FCLK max 32 MHz, ICLK/2 = 24 MHz
-        w.set_fck(Fck::DIV_2);
-
-        // PCLKD max 64 MHz, ICLK/1 = 48 MHz
-        w.set_pckd(Pckd::DIV_1);
-
-        // PCLKC max 64 MHz, ICLK/1 = 48 MHz
-        w.set_pckc(Pckc::DIV_1);
-
-        // PCLKB max 32 MHz, ICLK/2 = 24 MHz
-        w.set_pckb(Pckb::DIV_2);
-
-        // PCKLA max 48 MHz, ICLK/1 = 48 MHz
-        w.set_pcka(Pcka::DIV_1);
-    });
-
-    system.prcr().write(|w| {
-        w.set_prkey(crate::pac::system::vals::Prkey::PROTECT_KEY);
-        w.set_prc0(Prc0::Protected);
+            // PCKLA max 48 MHz, ICLK/1 = 48 MHz
+            w.set_pcka(Pcka::DIV_1);
+        });
     });
 
     print_clock_config(system.sckdivcr().read());
 
     info!("Finished board init");
+
+    debug!("Setting up interrupt");
+    unsafe {
+        ra4_hal::interrupt::IEL0.unpend();
+        ra4_hal::interrupt::IEL0.enable();
+    }
+    let icu = pac::ICU;
+    icu.ielsr(0).write(|w| {
+        w.set_iels(Iels::from_bits(0x5D));
+    });
 
     debug!("Enabling GPT32.0");
     let mstp = pac::MSTP;
@@ -223,65 +228,86 @@ async fn main(_spawner: Spawner) {
     let timer = crate::pac::GPT320;
 
     // Disable write prot
-    timer.gtwp().write(|w| {
-        w.set_wp(false);
-        w.set_prkey(Prkey::_0X_A5);
-    });
-    trace!("WP: {}", timer.gtwp().read());
+    timer.protected_write(|| {
+        timer.gtupsr().write_value(Gtupsr(0));
+        timer.gtdnsr().write_value(Gtdnsr(0));
 
-    timer.gtupsr().write_value(Gtupsr(0));
-    timer.gtdnsr().write_value(Gtdnsr(0));
+        timer.gtcr().write(|w| {
+            w.set_md(Mode::SawWavePwm);
+        });
 
-    timer.gtcr().write(|w| {
-        w.set_md(Mode::SawWavePwm);
+        timer.gtuddtyc().write(|w| {
+            w.set_udf(true);
+            w.set_ud(Ud::Up);
+        });
+        timer.gtuddtyc().write(|w| {
+            w.set_udf(false);
+            w.set_ud(Ud::Up);
+        });
+
+        timer.gtcr().write(|w| {
+            w.set_tpcs(Tpcs::_000);
+        });
+        debug!("GTCR: {}", timer.gtcr().read());
+
+        timer.gtpr().write(|w| {
+            w.set_gtpr(250_000 * 70);
+            // w.set_gtpr(u32::MAX);
+        });
+        debug!("GTPR: {}", timer.gtpr().read());
+
+        timer.gtcnt().write(|w| {
+            w.set_gtcnt(0);
+        });
+        trace!("GTCNT: {}", timer.gtcnt().read());
+
+        // timer.gtccra().write(|w| {
+        //     w.set_gtccra(250_000);
+        // });
+        // timer.gtst().write(|w| {
+        //     w.set_tcfa(true);
+        // });
+
+        // timer.gtcr().write(|w| {
+        //     w.set_cst(true);
+        // });
+        // This is faster??
+        timer.gtssr().write(|w| {
+            w.set_cstrt(true);
+        });
+        timer.gtstr().write(|w| {
+            w.set_cstrt(0, true);
+        });
     });
 
-    timer.gtuddtyc().write(|w| {
-        w.set_udf(true);
-        w.set_ud(Ud::Up);
-    });
-    timer.gtuddtyc().write(|w| {
-        w.set_udf(false);
-        w.set_ud(Ud::Up);
-    });
-
-    timer.gtcr().write(|w| {
-        w.set_tpcs(Tpcs::_000);
-    });
     debug!("GTCR: {}", timer.gtcr().read());
 
-    timer.gtpr().write(|w| {
-        w.set_gtpr(u32::MAX);
-    });
-    debug!("GTPR: {}", timer.gtpr().read());
-
-    timer.gtcnt().write(|w| {
-        w.set_gtcnt(0);
-    });
-    trace!("GTCNT: {}", timer.gtcnt().read());
-
-    // timer.gtcr().write(|w| {
-    //     w.set_cst(true);
-    // });
-
-    // This is faster??
-    timer.gtssr().write(|w| {
-        w.set_cstrt(true);
-    });
-    timer.gtstr().write(|w| {
-        w.set_cstrt(0, true);
-    });
-    debug!("GTCR: {}", timer.gtcr().read());
-
-    for _ in 0..10 {
+    for _ in 0..20 {
         let cnt = timer.gtcnt().read().gtcnt();
-        defmt::error!("CNT: {}", cnt);
+        let status = timer.gtst().read();
+        let over = status.tcfpo();
+        let under = status.tcfpu();
+        defmt::error!("CNT: {}, over={}, under={}", cnt, over, under);
         for _ in 0..10000 {
             asm::nop();
         }
+        // if over {
+        //     timer.gtst().modify(|w| w.set_tcfpo(false));
+        // }
     }
 
     loop {
         asm::nop();
     }
+}
+
+#[interrupt]
+fn IEL0() {
+    critical_section::with(|cs| {
+        error!("INTERRUPTED");
+        let icu = pac::ICU;
+        icu.ielsr(0).modify(|w| {
+            w.set_ir(false);
+        });
+    });
 }

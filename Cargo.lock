@@ -533,6 +533,7 @@ dependencies = [
  "atomic_float",
  "cortex-m",
  "cortex-m-rt",
+ "critical-section",
  "defmt",
  "defmt-rtt",
  "embassy-executor",

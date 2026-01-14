@@ -3,6 +3,7 @@
 pub mod ofs0;
 pub mod ofs1;
 pub mod time_driver;
+pub mod write_protect;
 
 #[cfg(feature = "unstable-pac")]
 pub use ra4m1_ctpac as pac;
