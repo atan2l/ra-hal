@@ -1,0 +1,26 @@
+transforms:
+  - !RenameEnumVariants
+      enum: crc::vals::Gps
+      from: _000
+      to: None
+  - !RenameEnumVariants
+      enum: crc::vals::Gps
+      from: _001
+      to: Crc8
+  - !RenameEnumVariants
+      enum: crc::vals::Gps
+      from: _010
+      to: Crc16
+  - !RenameEnumVariants
+      enum: crc::vals::Gps
+      from: _011
+      to: CrcCcit
+  - !RenameEnumVariants
+      enum: crc::vals::Gps
+      from: _100
+      to: Crc32
+  - !RenameEnumVariants
+      enum: crc::vals::Gps
+      from: _101
+      to: Crc32C
+

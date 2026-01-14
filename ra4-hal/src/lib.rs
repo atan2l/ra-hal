@@ -1,5 +1,6 @@
 #![no_std]
 
+pub mod crc;
 pub mod ofs0;
 pub mod ofs1;
 #[cfg(feature = "time-driver")]
@@ -13,6 +14,7 @@ pub(crate) use ra4m1_ctpac as pac;
 
 #[rustfmt::skip]
 embassy_hal_internal::peripherals_definition!(
+    CRC,
     ICU,
     GPT320,
     GPT321,
@@ -20,6 +22,7 @@ embassy_hal_internal::peripherals_definition!(
 
 #[rustfmt::skip]
 embassy_hal_internal::peripherals_struct!(
+    CRC,
     ICU,
     GPT320,
     GPT321,

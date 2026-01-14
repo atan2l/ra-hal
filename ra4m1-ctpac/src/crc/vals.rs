@@ -91,17 +91,17 @@ impl From<Crcsa> for u16 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Gps {
     #[doc = "No calculation is executed."]
-    _000 = 0x0,
+    None = 0x0,
     #[doc = "8-bit CRC-8 (X8 + X2 + X + 1)"]
-    _001 = 0x01,
+    Crc8 = 0x01,
     #[doc = "16-bit CRC-16 (X16 + X15 + X2 + 1)"]
-    _010 = 0x02,
+    Crc16 = 0x02,
     #[doc = "16-bit CRC-CCITT (X16 + X12 + X5 + 1)"]
-    _011 = 0x03,
+    CrcCcit = 0x03,
     #[doc = "32-bit CRC-32 (X32+X26+X23+X22+X16+X12+X11+X10+X8+X7+X5+X4+X2+X+1)"]
-    _100 = 0x04,
+    Crc32 = 0x04,
     #[doc = "32-bit CRC-32C (X32+X28+X27+X26+ X25+X23+X22+X20+X19+X18+X14+X13+X11+X10+X9+X8+X6+1)"]
-    _101 = 0x05,
+    Crc32C = 0x05,
     _RESERVED_6 = 0x06,
     _RESERVED_7 = 0x07,
 }
