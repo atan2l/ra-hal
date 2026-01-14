@@ -43,7 +43,7 @@ See examples for more details.
 | ⬜⬜⬜⬜⬜ | `ADC14` 14-Bit A/D Converter             | In progress |
 | ⬛⬛⬛⬜⬜ | `CRC` Cyclic Redundancy Check Calculator | In progress, 32-bit CRC support TODO |
 | ⬛⬜⬜⬜⬜ | `GPT` General PWM Timer                  | Embassy timer driver only, general PWM support pending |
-| ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine       | |
+| ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine       | Looking for data sheet / RM |
 | ⬜⬜⬜⬜⬜ | `SCI` Serial Communications Interface    | |
 
 ## TODO
