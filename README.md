@@ -30,13 +30,13 @@ To read OFS values in binary (the default linker script should omit these):
 cargo ofsdump
 ```
 
-## Building your own app:
+## Building your own app
 
 Use `memory.x` and `build.rs` from the examples.
 Note that you will have to specify `OFS1`, `OFS0`, and the Security MPU config and ensure they're in the proper section.
 See examples for more details.
 
-## Supported peripherals:
+## Supported peripherals
 
 |            | Peripheral                               | Notes                                                  |
 | ---------- | ---------------------------------------- | ------------------------------------------------------ |
