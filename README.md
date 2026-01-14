@@ -36,6 +36,9 @@ Use `memory.x` and `build.rs` from the examples.
 Note that you will have to specify `OFS1`, `OFS0`, and the Security MPU config and ensure they're in the proper section.
 See examples for more details.
 
+## Supported peripherals:
+
+* General PWM Timer (`GPT`): Embassy timer driver only, general PWM support pending
 
 ## TODO
 
