@@ -1,8 +1,7 @@
 # `ra4m1`
 
-This repository contains crates that implement a variety of Hardware Abstraction Layer (HAL) to support the Renesas RA4M1 microcontrollers.
+This repository contains crates that implement a variety of Hardware Abstraction Layer (HAL) traits to support the Renesas RA4M1 microcontrollers.
 These traits implement both asynchronous and blocking interfaces that enable compatibility with software like [Embassy](https://embassy.dev).
-
 
 ## Requirements
 
@@ -10,8 +9,10 @@ MSRV is 1.91, `rust-toolchain.toml` has been set to 1.91.
 
 ## Flashing
 
-The most common boards to use this MCU are Arduinos like the Uno R4 Minima and Uno R4 WiFi.
+The most common consumer boards to use this MCU are Arduinos like the Uno R4 Minima and Uno R4 WiFi.
 These crates *will* clobber the stock Arduino bootloader.
+Note that the Uno R4 WiFi lacks a debug header but the included ESP32 chip acts as a CMSIS compliant debug probe.
+Other boards will need a separate debug probe connected to the 10-pin debug header.
 
 To restore the Arduino bootloader on an Uno R4 WiFi:
 
