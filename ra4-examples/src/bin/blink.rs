@@ -9,6 +9,7 @@ use cortex_m::asm;
 use defmt::{debug, error, info, trace, warn};
 use defmt_rtt as _;
 use embassy_executor::Spawner;
+use embassy_time::Timer;
 // use embassy_time::Timer;
 use panic_probe as _;
 use ra4_hal::{
@@ -29,6 +30,15 @@ use ra4_hal::{
     write_protect::WriteProtect,
 };
 use ra4_hal::{ofs0, ofs1};
+
+const GPT0_OVERFLOW: u8 = 0x5D;
+// const GPT0_CCMPA: u8 = 0x57;
+const GPT0_CMPC: u8 = 0x59;
+const IRQ_GPT0_OVERFLOW: usize = 0;
+const IRQ_GPT0_ALARM: usize = 1;
+
+const OVERFLOW_VAL: u32 = 70_225_945;
+const ALARM_VAL: u32 = OVERFLOW_VAL / 4;
 
 /// Option Function Select Register 0
 /// Accepts either:
@@ -209,105 +219,10 @@ async fn main(_spawner: Spawner) {
 
     info!("Finished board init");
 
-    debug!("Setting up interrupt");
-    unsafe {
-        ra4_hal::interrupt::IEL0.unpend();
-        ra4_hal::interrupt::IEL0.enable();
-    }
-    let icu = pac::ICU;
-    icu.ielsr(0).write(|w| {
-        w.set_iels(Iels::from_bits(0x5D));
-    });
-
-    debug!("Enabling GPT32.0");
-    let mstp = pac::MSTP;
-    mstp.mstpcrd().write(|w| {
-        w.set_mstpd5(false);
-    });
-
-    let timer = crate::pac::GPT320;
-
-    // Disable write prot
-    timer.protected_write(|| {
-        timer.gtupsr().write_value(Gtupsr(0));
-        timer.gtdnsr().write_value(Gtdnsr(0));
-
-        timer.gtcr().write(|w| {
-            w.set_md(Mode::SawWavePwm);
-        });
-
-        timer.gtuddtyc().write(|w| {
-            w.set_udf(true);
-            w.set_ud(Ud::Up);
-        });
-        timer.gtuddtyc().write(|w| {
-            w.set_udf(false);
-            w.set_ud(Ud::Up);
-        });
-
-        timer.gtcr().write(|w| {
-            w.set_tpcs(Tpcs::_000);
-        });
-        debug!("GTCR: {}", timer.gtcr().read());
-
-        timer.gtpr().write(|w| {
-            w.set_gtpr(250_000 * 70);
-            // w.set_gtpr(u32::MAX);
-        });
-        debug!("GTPR: {}", timer.gtpr().read());
-
-        timer.gtcnt().write(|w| {
-            w.set_gtcnt(0);
-        });
-        trace!("GTCNT: {}", timer.gtcnt().read());
-
-        // timer.gtccra().write(|w| {
-        //     w.set_gtccra(250_000);
-        // });
-        // timer.gtst().write(|w| {
-        //     w.set_tcfa(true);
-        // });
-
-        // timer.gtcr().write(|w| {
-        //     w.set_cst(true);
-        // });
-        // This is faster??
-        timer.gtssr().write(|w| {
-            w.set_cstrt(true);
-        });
-        timer.gtstr().write(|w| {
-            w.set_cstrt(0, true);
-        });
-    });
-
-    debug!("GTCR: {}", timer.gtcr().read());
-
-    for _ in 0..20 {
-        let cnt = timer.gtcnt().read().gtcnt();
-        let status = timer.gtst().read();
-        let over = status.tcfpo();
-        let under = status.tcfpu();
-        defmt::error!("CNT: {}, over={}, under={}", cnt, over, under);
-        for _ in 0..10000 {
-            asm::nop();
-        }
-        // if over {
-        //     timer.gtst().modify(|w| w.set_tcfpo(false));
-        // }
-    }
+    let _p = ra4_hal::init();
 
     loop {
-        asm::nop();
+        error!("Here");
+        Timer::after_millis(500).await;
     }
-}
-
-#[interrupt]
-fn IEL0() {
-    critical_section::with(|cs| {
-        error!("INTERRUPTED");
-        let icu = pac::ICU;
-        icu.ielsr(0).modify(|w| {
-            w.set_ir(false);
-        });
-    });
 }

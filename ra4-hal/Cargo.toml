@@ -32,5 +32,5 @@ default = [ "defmt", "time-driver", "rt"]
 rt = [ "ra4m1-ctpac/rt" ]
 
 defmt = ["dep:defmt", "ra4m1-ctpac/defmt"]
-time-driver = [ "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time-driver/tick-hz-40_000_000" ]
+time-driver = [ "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time-driver/tick-hz-48_000_000" ]
 unstable-pac = [ ]

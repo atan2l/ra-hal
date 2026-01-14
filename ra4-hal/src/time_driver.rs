@@ -2,16 +2,23 @@ use core::cell::Cell;
 use core::cell::RefCell;
 use core::sync::atomic::{AtomicU32, Ordering};
 
-use cfg_if::cfg_if;
+use crate::interrupt::typelevel::Interrupt;
 use critical_section::{CriticalSection, Mutex};
-use defmt::error;
-use embassy_hal_internal::Peri;
+#[allow(unused)]
+use defmt::{debug, error, info, trace, warn};
 use embassy_hal_internal::interrupt::InterruptExt;
 use embassy_time_driver::Driver;
 use embassy_time_queue_utils::Queue;
-use ra4m1_ctpac::gpt32::vals::{Prkey, Tpcs};
+use ra4m1_ctpac::gpt32::{
+    regs::{Gtdnsr, Gtupsr},
+    vals::{Mode, Tpcs, Ud},
+};
+use ra4m1_ctpac::icu::vals::Iels;
 
+use crate::interrupt;
 use crate::pac;
+use crate::peripherals::GPT320;
+use crate::write_protect::WriteProtect as _;
 
 struct AlarmState {
     timestamp: Cell<u64>,
@@ -26,21 +33,35 @@ impl AlarmState {
         }
     }
 }
+trait IcuEventer {
+    const ICU_INDEX: u8;
+    const ICU_MASK: u8;
+}
+
+impl IcuEventer for crate::interrupt::typelevel::IEL0 {
+    const ICU_INDEX: u8 = 0;
+    const ICU_MASK: u8 = 0x5D;
+}
+
+impl IcuEventer for crate::interrupt::typelevel::IEL1 {
+    const ICU_INDEX: u8 = 1;
+    const ICU_MASK: u8 = 0x59;
+}
 
 trait Instance {
+    type AlarmInterrupt: interrupt::typelevel::Interrupt;
+    type OverflowInterrupt: interrupt::typelevel::Interrupt;
+
     fn regs() -> pac::gpt32::Gpt32;
-    fn int() -> crate::interrupt::Interrupt;
 }
 
 impl Instance for crate::peripherals::GPT320 {
+    type AlarmInterrupt = crate::interrupt::typelevel::IEL1;
+    type OverflowInterrupt = crate::interrupt::typelevel::IEL0;
+
     #[inline(always)]
     fn regs() -> crate::pac::gpt32::Gpt32 {
         crate::pac::GPT320
-    }
-
-    #[inline(always)]
-    fn int() -> crate::interrupt::Interrupt {
-        crate::interrupt::IEL0
     }
 }
 
@@ -57,112 +78,206 @@ impl GptDriver {
 
     pub(crate) fn init(
         &'static self,
-        _timer: Peri<'static, crate::peripherals::GPT320>,
+        // _timer: Peri<'static, crate::peripherals::GPT320>,
         _irq_prio: crate::interrupt::Priority,
     ) {
-        use crate::peripherals::GPT320;
-        unsafe {
-            GPT320::int().enable();
-        };
+        debug!("Enabling GPT32.0 clock");
+        let mstp = pac::MSTP;
+        mstp.mstpcrd().write(|w| {
+            w.set_mstpd5(false);
+        });
+
+        // Enable the interrupts at the NVIC level,
+        // arm the overflow interrupt
+        {
+            type AlarmInt = <GPT320 as Instance>::AlarmInterrupt;
+            type OverflowInt = <GPT320 as Instance>::OverflowInterrupt;
+
+            unsafe {
+                AlarmInt::IRQ.enable();
+                OverflowInt::IRQ.enable();
+            };
+
+            let icu = pac::ICU;
+            icu.ielsr(OverflowInt::ICU_INDEX as _).write(|w| {
+                w.set_iels(Iels::from_bits(OverflowInt::ICU_MASK));
+            });
+        }
 
         let timer = GPT320::regs();
 
-        // Disable write prot
-        timer.gtwp().write(|w| {
-            w.set_wp(false);
-            w.set_prkey(Prkey::_0X_A5);
+        // Disable external things that might modify the counter
+        timer.gtupsr().write_value(Gtupsr(0));
+        timer.gtdnsr().write_value(Gtdnsr(0));
+
+        timer.gtcr().write(|w| {
+            w.set_md(Mode::SawWavePwm);
         });
 
+        // Ensure count direction is UP
+        timer.gtuddtyc().write(|w| {
+            w.set_udf(true);
+            w.set_ud(Ud::Up);
+        });
+        timer.gtuddtyc().write(|w| {
+            w.set_udf(false);
+            w.set_ud(Ud::Up);
+        });
+
+        // Since we're at 48 MHz just use the clock, undivided
         timer.gtcr().write(|w| {
             w.set_tpcs(Tpcs::_000);
         });
+        trace!("GTCR: {}", timer.gtcr().read());
 
+        // Overflow at u32::MAX
+        timer.gtpr().write(|w| {
+            w.set_gtpr(u32::MAX);
+        });
+        trace!("GTPR: {}", timer.gtpr().read());
+
+        timer.gtcnt().write(|w| {
+            w.set_gtcnt(0);
+        });
+        trace!("GTCNT: {}", timer.gtcnt().read());
+
+        // This is faster??
+        timer.gtssr().write(|w| {
+            w.set_cstrt(true);
+        });
         timer.gtstr().write(|w| {
-            w.set_cstrt0(true);
+            w.set_cstrt(0, true);
         });
     }
 
-    fn interrupted(&'static self) {
-        critical_section::with(|cs| {});
+    fn interrupted_alarm(&'static self) {
+        critical_section::with(|cs| {
+            let mut next = self
+                .queue
+                .borrow(cs)
+                .borrow_mut()
+                .next_expiration(self.now());
+
+            while !self.set_alarm(&cs, next) {
+                next = self
+                    .queue
+                    .borrow(cs)
+                    .borrow_mut()
+                    .next_expiration(self.now());
+            } //
+        });
     }
 
-    // #[must_use]
-    // fn set_alarm(&self, cs: &CriticalSection, timestamp: u64) -> bool {
-    //     let timer = T::regs();
+    fn interrupted_overflow(&'static self) {
+        critical_section::with(|_cs| {
+            let _period = self
+                .period
+                .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |p| Some(p + 1))
+                .unwrap_or_else(|p| {
+                    error!("Unable to increment period. Time is now inaccurate");
 
-    //     let alarm = self.alarms.borrow(*cs);
-    //     alarm.timestamp.set(timestamp);
+                    p
+                });
+        });
+    }
 
-    //     let t = self.now();
-    //     if timestamp <= t {
-    //         let timer = T::regs();
+    #[must_use]
+    fn set_alarm(&self, cs: &CriticalSection, timestamp: u64) -> bool {
+        type AlarmInt = <GPT320 as Instance>::AlarmInterrupt;
 
-    //         // Disarm the alarm and return `false` to indicate that.
-    //         timer.idr(TIMER_CHANNEL).write(|w| {
-    //             w.set_cpcs(false);
-    //         });
+        let timer = GPT320::regs();
+        let icu = pac::ICU;
 
-    //         alarm.timestamp.set(u64::MAX);
+        let alarm = self.alarms.borrow(*cs);
+        alarm.timestamp.set(timestamp);
 
-    //         return false;
-    //     }
+        let t = self.now();
+        if timestamp <= t {
+            // Disarm the alarm and return `false` to indicate that.
+            icu.ielsr(AlarmInt::ICU_INDEX as _).modify(|w| {
+                w.set_iels(Iels::_0X000);
+            });
 
-    //     let safe_timestamp = (timestamp.max(t + Self::FUDGE_FACTOR) & 0xFFFF_FFFF) as u32;
+            alarm.timestamp.set(u64::MAX);
 
-    //     let diff = timestamp - t;
+            return false;
+        }
 
-    //     if diff < u64::from(u32::MAX) {
-    //         // Enable the compare interrupt
-    //         timer.ier(TIMER_CHANNEL).write(|w| {
-    //             w.set_cpcs(true);
-    //         });
-    //         timer.protected_write(|| {
-    //             // Load the safe timestamp
-    //             timer.rc(TIMER_CHANNEL).write(|w| {
-    //                 w.set_rc(safe_timestamp);
-    //             });
-    //             timer.ier(TIMER_CHANNEL).write(|w| {
-    //                 w.set_cpcs(true);
-    //             });
-    //         });
-    //     } else {
-    //         // TODO: UHhhhh
-    //         // If alarm must trigger some time after the current period, too far in the future,
-    //         // don't setup the alarm enable, gpreg2, yet. It will be setup later by `next_period`.
-    //     }
+        let safe_timestamp = (timestamp.max(t + Self::FUDGE_FACTOR) & 0xFFFF_FFFF) as u32;
 
-    //     true
-    // }
+        let diff = timestamp - t;
+
+        if diff < u64::from(u32::MAX) {
+            timer.protected_write(|| {
+                // Load the safe timestamp
+                timer.gtccrc().write(|w| {
+                    w.set_gtccrc(safe_timestamp);
+                });
+                // Enable the compare interrupt
+                icu.ielsr(AlarmInt::ICU_INDEX as _).write(|w| {
+                    w.set_iels(Iels::from_bits(AlarmInt::ICU_MASK));
+                });
+            });
+        } else {
+            // TODO: UHhhhh
+            // If alarm must trigger some time after the current period, too far in the future,
+            // don't setup the alarm enable, gpreg2, yet. It will be setup later by `next_period`.
+        }
+
+        true
+    }
 }
 
-// impl Driver for TcDriver {
-//     fn now(&self) -> u64 {
-//         let timer = T::regs();
+impl Driver for GptDriver {
+    fn now(&self) -> u64 {
+        let timer = GPT320::regs();
 
-//         // Ignoring overflows for now
-//         let period = self.period.load(Ordering::Acquire);
-//         ((period as u64) << 32) + (timer.cv(TIMER_CHANNEL).read().0 as u64)
-//     }
+        let period = self.period.load(Ordering::Acquire);
+        let count = timer.gtcnt().read().gtcnt();
+        ((period as u64) << 32) + (count as u64)
+    }
 
-//     fn schedule_wake(&self, at: u64, waker: &core::task::Waker) {
-//         critical_section::with(|cs| {
-//             let mut queue = self.queue.borrow(cs).borrow_mut();
-//             if queue.schedule_wake(at, waker) {
-//                 let mut next = queue.next_expiration(self.now());
-//                 while !self.set_alarm(&cs, next) {
-//                     next = queue.next_expiration(self.now());
-//                 }
-//             }
-//         });
-//     }
-// }
+    fn schedule_wake(&self, at: u64, waker: &core::task::Waker) {
+        critical_section::with(|cs| {
+            let mut queue = self.queue.borrow(cs).borrow_mut();
+            if queue.schedule_wake(at, waker) {
+                let mut next = queue.next_expiration(self.now());
+                while !self.set_alarm(&cs, next) {
+                    next = queue.next_expiration(self.now());
+                }
+            }
+        });
+    }
+}
 
-// embassy_time_driver::time_driver_impl!(static DRIVER: TcDriver = TcDriver{
-//     period: AtomicU32::new(0),
-//     queue: Mutex::new(RefCell::new(Queue::new())),
-//     alarms: Mutex::new(AlarmState::new())
-// });
+embassy_time_driver::time_driver_impl!(static DRIVER: GptDriver = GptDriver{
+    period: AtomicU32::new(0),
+    queue: Mutex::new(RefCell::new(Queue::new())),
+    alarms: Mutex::new(AlarmState::new())
+});
 
-// pub(crate) fn init(irq_prio: crate::interrupt::Priority) {
-//     DRIVER.init(irq_prio)
-// }
+pub(crate) fn init(irq_prio: crate::interrupt::Priority) {
+    DRIVER.init(irq_prio)
+}
+
+#[interrupt]
+fn IEL0() {
+    let icu = pac::ICU;
+
+    icu.ielsr(0).modify(|w| {
+        w.set_ir(false);
+    });
+
+    DRIVER.interrupted_overflow();
+}
+
+#[interrupt]
+fn IEL1() {
+    let icu = pac::ICU;
+
+    icu.ielsr(1).modify(|w| {
+        w.set_ir(false);
+    });
+
+    DRIVER.interrupted_alarm();
+}

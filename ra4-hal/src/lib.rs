@@ -30,3 +30,13 @@ embassy_hal_internal::interrupt_mod!(
     IEL1,
     IEL2,
 );
+
+pub fn init() -> Peripherals {
+    critical_section::with(|cs| {
+        let p = Peripherals::take_with_cs(cs);
+
+        time_driver::init(crate::interrupt::Priority::P2);
+
+        p
+    })
+}
