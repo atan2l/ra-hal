@@ -11,7 +11,7 @@ MSRV is 1.91, `rust-toolchain.toml` has been set to 1.91.
 
 The most common consumer boards to use this MCU are Arduinos like the Uno R4 Minima and Uno R4 WiFi.
 These crates *will* clobber the stock Arduino bootloader.
-Note that the Uno R4 WiFi lacks a debug header but the included ESP32 chip acts as a CMSIS compliant debug probe.
+Note that the Uno R4 WiFi lacks a debug header but the included ESP32 chip acts as a CMSIS compliant debug probe in concert with the USB port.
 Other boards will need a separate debug probe connected to the 10-pin debug header.
 
 To restore the Arduino bootloader on an Uno R4 WiFi:
