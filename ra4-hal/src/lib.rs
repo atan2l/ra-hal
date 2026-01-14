@@ -3,6 +3,8 @@
 pub mod crc;
 pub mod ofs0;
 pub mod ofs1;
+pub mod sce5;
+pub mod sci;
 #[cfg(feature = "time-driver")]
 pub mod time_driver;
 pub mod write_protect;
@@ -17,29 +19,6 @@ use ra4m1_ctpac::system::{
     regs::Sckdivcr,
     vals::{Fck, Ick, Pcka, Pckb, Pckc, Pckd},
 };
-
-#[rustfmt::skip]
-embassy_hal_internal::peripherals_definition!(
-    CRC,
-    ICU,
-    GPT320,
-    GPT321,
-);
-
-#[rustfmt::skip]
-embassy_hal_internal::peripherals_struct!(
-    CRC,
-    ICU,
-    GPT320,
-    GPT321,
-);
-
-#[rustfmt::skip]
-embassy_hal_internal::interrupt_mod!(
-    IEL0,
-    IEL1,
-    IEL2,
-);
 
 pub fn init() -> Peripherals {
     critical_section::with(|cs| {
@@ -119,3 +98,32 @@ pub fn print_clock_config(config: Sckdivcr) {
         ick_freq, fck_freq, pck_a, pck_b, pck_c, pck_d
     );
 }
+
+#[rustfmt::skip]
+embassy_hal_internal::peripherals_definition!(
+    ADC14,
+    CRC,
+    ICU,
+    SCE5,
+    SCI,
+    GPT320,
+    GPT321,
+);
+
+#[rustfmt::skip]
+embassy_hal_internal::peripherals_struct!(
+    ADC14,
+    CRC,
+    ICU,
+    SCE5,
+    SCI,
+    GPT320,
+    GPT321,
+);
+
+#[rustfmt::skip]
+embassy_hal_internal::interrupt_mod!(
+    IEL0,
+    IEL1,
+    IEL2,
+);
