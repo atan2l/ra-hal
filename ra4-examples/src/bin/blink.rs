@@ -11,15 +11,19 @@ use defmt_rtt as _;
 use embassy_executor::Spawner;
 // use embassy_time::Timer;
 use panic_probe as _;
-use ra4_hal::{ofs0, ofs1};
-use ra4m1_ctpac::{
+use ra4_hal::pac::{
     self as pac,
     gpt32::{
         regs::{Gtdnsr, Gtupsr},
         vals::{Mode, Prkey, Tpcs, Ud},
     },
-    system::vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd, Prc0},
+    // interrupt,
+    system::{
+        regs::Sckdivcr,
+        vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd, Prc0},
+    },
 };
+use ra4_hal::{ofs0, ofs1};
 
 /// Option Function Select Register 0
 /// Accepts either:

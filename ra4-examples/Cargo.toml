@@ -20,8 +20,7 @@ embassy-time = { workspace = true }
 # embassy-futures = { version = "0.1.2" }
 
 ## Board stuff
-ra4-hal = { path = "../ra4-hal" }
-ra4m1-ctpac = { path = "../ra4m1-ctpac" }
+ra4-hal = { path = "../ra4-hal", features = [ "unstable-pac" ] }
 
 ## Third party stuff
 atomic_float = { version = "1.1.0" }

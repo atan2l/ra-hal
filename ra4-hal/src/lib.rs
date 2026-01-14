@@ -4,7 +4,10 @@ pub mod ofs0;
 pub mod ofs1;
 pub mod time_driver;
 
-use ra4m1_ctpac as pac;
+#[cfg(feature = "unstable-pac")]
+pub use ra4m1_ctpac as pac;
+#[cfg(not(feature = "unstable-pac"))]
+pub(crate) use ra4m1_ctpac as pac;
 
 #[rustfmt::skip]
 embassy_hal_internal::peripherals_definition!(
