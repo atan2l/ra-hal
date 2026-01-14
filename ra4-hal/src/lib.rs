@@ -9,6 +9,7 @@ pub mod sci;
 pub mod time_driver;
 pub mod write_protect;
 
+use cortex_m::asm;
 #[allow(unused)]
 use defmt::{debug, error, info, trace, warn};
 #[cfg(feature = "unstable-pac")]
@@ -17,11 +18,86 @@ pub use ra4m1_ctpac as pac;
 pub(crate) use ra4m1_ctpac as pac;
 use ra4m1_ctpac::system::{
     regs::Sckdivcr,
-    vals::{Fck, Ick, Pcka, Pckb, Pckc, Pckd},
+    vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd},
 };
 
+use crate::write_protect::WriteProtect as _;
+
 pub fn init() -> Peripherals {
+    // #define BSP_CLOCK_CFG_MAIN_OSC_WAIT (9)
+    // #define BSP_LOCO_HZ                 (32768)
+    // #define BSP_MOCO_HZ                 (8000000)
+    // #define BSP_SUB_CLOCK_HZ            (32768)
+    // #define BSP_MCU_VBATT_SUPPORT       (1)
+
     critical_section::with(|cs| {
+        info!("Starting board init");
+
+        let system = pac::SYSTEM;
+
+        trace!("HOCO WaitState: {}", system.hocowtcr().read());
+        trace!("HOCO Status: {}", system.hococr().read());
+
+        system.protected_write(|| {
+            let hoco_freq = system.hococr2().read().hcfrqw();
+            if hoco_freq != Hcfrq1::_48mhz {
+                warn!("Unexpected HOCO frequency: {}", hoco_freq);
+                system.hococr2().write(|w| {
+                    w.set_hcfrqw(Hcfrq1::_48mhz);
+                });
+            };
+
+            if system.hococr().read().hcstp() != Hcstp::Start {
+                warn!("HOCO not running, attempt to start.");
+                system.hococr().write(|w| {
+                    w.set_hcstp(Hcstp::Start);
+                });
+            }
+
+            info!("HOCO Frequency: {}", system.hococr2().read().hcfrqw());
+            // let hococr2_ptr: *mut u8 = 0x4001E037 as _;
+            // let val: u8 = unsafe { (hococr2_ptr as *mut u8).read_volatile() };
+            // if val != (0b100 << 3) {
+            //     warn!("Unexpected HOCO frequency: {:08b}", val);
+            //     unsafe { (hococr2_ptr).write_volatile(0b100 << 3) };
+            //     let val: u8 = unsafe { (hococr2_ptr as *mut u8).read_volatile() };
+            //     defmt::warn!("HOCO Frequency: {:08b}", val);
+            // }
+
+            debug!("HOCO Status: {}", system.hococr().read().hcstp());
+
+            // High speed mode needed for iclk > 32 MHz
+            trace!("Setting high speed mode on");
+            system.opccr().write(|w| {
+                w.set_opcm(Opcm::HighSpeed);
+            });
+
+            while system.opccr().read().opcmtsf() {
+                asm::nop();
+            }
+
+            // Wait states needed for > 32 MHz
+            trace!("Setting memwait to 1");
+            system.memwait().write(|w| w.set_memwait(true));
+
+            system.sckscr().write(|w| {
+                // Use HOCO which we set to 48 MHz
+                w.set_cksel(Cksel::Hoco);
+            });
+            debug!("SYSTEM ClkSource: {}", system.sckscr().read().cksel());
+
+            system.sckdivcr().modify(|w| {
+                w.set_ick(Ick::DIV_1);
+                w.set_fck(Fck::DIV_2);
+                w.set_pckd(Pckd::DIV_1);
+                w.set_pckc(Pckc::DIV_1);
+                w.set_pckb(Pckb::DIV_2);
+                w.set_pcka(Pcka::DIV_1);
+            });
+        });
+
+        info!("Finished board init");
+
         let p = Peripherals::take_with_cs(cs);
 
         #[cfg(feature = "time-driver")]
@@ -31,7 +107,9 @@ pub fn init() -> Peripherals {
     })
 }
 
-pub fn print_clock_config(config: Sckdivcr) {
+pub fn print_clock_config() {
+    let system = pac::SYSTEM;
+    let config = system.sckdivcr().read();
     let hoco_freq = 48;
     let ick_freq = match config.ick() {
         Ick::DIV_1 => hoco_freq,

@@ -1,16 +1,17 @@
-//! Blink, hello world example
+//! Serial demonstrates SCI comms
 
 #![no_std]
 #![no_main]
 #![warn(missing_docs)]
 
+use cortex_m::asm;
 #[allow(unused)]
 use defmt::{debug, error, info, trace, warn};
 use defmt_rtt as _;
 use embassy_executor::Spawner;
-use embassy_time::Timer;
 use panic_probe as _;
-use ra4_hal::{ofs0, ofs1, print_clock_config};
+use ra4_hal::print_clock_config;
+use ra4_hal::{ofs0, ofs1};
 
 /// Option Function Select Register 0
 /// Accepts either:
@@ -38,12 +39,11 @@ pub static SEC_MPU: [u32; 13] = [
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
-    let _p = ra4_hal::init();
+    let p = ra4_hal::init();
 
     print_clock_config();
 
     loop {
-        error!("Here");
-        Timer::after_millis(500).await;
+        asm::nop();
     }
 }

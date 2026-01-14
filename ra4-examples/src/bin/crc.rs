@@ -12,12 +12,7 @@ use embassy_executor::Spawner;
 use panic_probe as _;
 use ra4_hal::{
     crc::{Config as CrcConfig, Crc, Endian, Polynomial},
-    pac::{
-        self as pac,
-        system::vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd, Prc0},
-    },
     print_clock_config,
-    write_protect::WriteProtect,
 };
 use ra4_hal::{ofs0, ofs1};
 
@@ -47,57 +42,9 @@ pub static SEC_MPU: [u32; 13] = [
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
-    info!("Starting board init");
-
-    let system = pac::SYSTEM;
-
-    system.protected_write(|| {
-        let hoco_freq = system.hococr2().read().hcfrqw();
-        if hoco_freq != Hcfrq1::_48mhz {
-            warn!("Unexpected HOCO frequency: {}", hoco_freq);
-            system.hococr2().write(|w| {
-                w.set_hcfrqw(Hcfrq1::_48mhz);
-            });
-        };
-
-        if system.hococr().read().hcstp() != Hcstp::Start {
-            warn!("HOCO not running, attempt to start.");
-            system.hococr().write(|w| {
-                w.set_hcstp(Hcstp::Start);
-            });
-        }
-
-        // High speed mode needed for iclk > 32 MHz
-        system.opccr().write(|w| {
-            w.set_opcm(Opcm::HighSpeed);
-        });
-
-        while system.opccr().read().opcmtsf() {
-            asm::nop();
-        }
-
-        system.memwait().write(|w| w.set_memwait(true));
-
-        system.sckscr().write(|w| {
-            // Use HOCO which we set to 48 MHz
-            w.set_cksel(Cksel::Hoco);
-        });
-
-        system.sckdivcr().modify(|w| {
-            w.set_ick(Ick::DIV_1);
-            w.set_fck(Fck::DIV_2);
-            w.set_pckd(Pckd::DIV_1);
-            w.set_pckc(Pckc::DIV_1);
-            w.set_pckb(Pckb::DIV_2);
-            w.set_pcka(Pcka::DIV_1);
-        });
-    });
-
-    print_clock_config(system.sckdivcr().read());
-
-    info!("Finished board init");
-
     let p = ra4_hal::init();
+
+    print_clock_config();
 
     let data = b"123456789";
 
