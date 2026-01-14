@@ -38,9 +38,9 @@ See examples for more details.
 
 ## Supported peripherals:
 
-⬤○
-◼▭
-￭￭･･
+| Column 1      | Column 2      |
+| ------------- | ------------- |
+| ￭￭･･          | fjjskfs       |
 
 `⬤○`
 `◼▭`
