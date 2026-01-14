@@ -41,7 +41,7 @@ See examples for more details.
 |            | Peripheral                               | Notes                                                  |
 | ---------- | ---------------------------------------- | ------------------------------------------------------ |
 | ⬜⬜⬜⬜⬜ | `ADC14` 14-Bit A/D Converter             | In progress |
-| ⬛⬛⬛⬜⬜ | `CRC` Cyclic Redundancy Check Calculator | In progress |
+| ⬛⬛⬛⬜⬜ | `CRC` Cyclic Redundancy Check Calculator | In progress, 32-bit CRC support TODO |
 | ⬛⬜⬜⬜⬜ | `GPT` General PWM Timer                  | Embassy timer driver only, general PWM support pending |
 | ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine       | |
 | ⬜⬜⬜⬜⬜ | `SCI` Serial Communications Interface    | |
