@@ -38,17 +38,10 @@ See examples for more details.
 
 ## Supported peripherals:
 
-| Column 1      | Column 2      |
-| ------------- | ------------- |
-| ▮▯⚫ ◐  ▮■▪▫●    | fjjskfs       |
-| `▮▯⚫ ◐  ▮■▪▫●`  | `fjjskfs`     |
-
-`⬤○`
-`◼▭`
-`￭￭･･`
-
-* General PWM Timer (`GPT`): ◖ Embassy timer driver only, general PWM support pending
-* Cyclic Redundancy Check Calculator (`CRC)`: ●
+|            | Peripheral                               | Notes                                                  |
+| ---------- | ---------------------------------------- | ------------------------------------------------------ |
+| ⬛⬜⬜⬜⬜ | `GPT` General PWM Timer                  | Embassy timer driver only, general PWM support pending |
+| ⬛⬛⬛⬜⬜ | `CRC` Cyclic Redundancy Check Calculator | In progress |
 
 ## TODO
 
