@@ -183,7 +183,10 @@ embassy_hal_internal::peripherals_definition!(
     CRC,
     ICU,
     SCE5,
-    SCI,
+    SCI0,
+    SCI1,
+    SCI2,
+    SCI9,
     GPT320,
     GPT321,
 );
@@ -194,7 +197,10 @@ embassy_hal_internal::peripherals_struct!(
     CRC,
     ICU,
     SCE5,
-    SCI,
+    SCI0,
+    SCI1,
+    SCI2,
+    SCI9,
     GPT320,
     GPT321,
 );
