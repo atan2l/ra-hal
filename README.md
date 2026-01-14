@@ -1,7 +1,7 @@
 # `ra4m1`
 
-This repository contains crates that implement a variety of Hardware Abstraction Layer (HAL) traits to support the Renesas RA4M1 microcontrollers.
-These traits implement both asynchronous and blocking interfaces that enable compatibility with software like [Embassy](https://embassy.dev).
+This repository contains Rust crates that implement a variety of Hardware Abstraction Layer (HAL) traits to support the [Renesas RA4M1](https://www.renesas.com/en/products/ra4m1) microcontrollers.
+These traits provide both asynchronous and blocking interfaces that enable compatibility with software like [Embassy](https://embassy.dev).
 
 ## Requirements
 
@@ -20,7 +20,7 @@ To restore the Arduino bootloader on an Uno R4 WiFi:
 RUST_LOG=info probe-rs download --chip R7FA4M1AB --binary-format=ihex support/dfu_wifi.hex
 ```
 
-For other boards check the Arduino [repository](https://github.com/arduino/ArduinoCore-renesas/tree/main/bootloaders) for the suitable Intel Hex file.
+To restore the bootloader on other other boards check the Arduino [repository](https://github.com/arduino/ArduinoCore-renesas/tree/main/bootloaders) for the suitable Intel Hex file and invoke `probe-rs` as above.
 
 ## Miscellaneous 
 
