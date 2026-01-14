@@ -41,6 +41,7 @@ See examples for more details.
 | Column 1      | Column 2      |
 | ------------- | ------------- |
 | ▮▯⚫ ◐  ▮■▪▫●    | fjjskfs       |
+| `▮▯⚫ ◐  ▮■▪▫●`  | `fjjskfs`     |
 
 `⬤○`
 `◼▭`
