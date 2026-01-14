@@ -31,15 +31,6 @@ use ra4_hal::{
 };
 use ra4_hal::{ofs0, ofs1};
 
-const GPT0_OVERFLOW: u8 = 0x5D;
-// const GPT0_CCMPA: u8 = 0x57;
-const GPT0_CMPC: u8 = 0x59;
-const IRQ_GPT0_OVERFLOW: usize = 0;
-const IRQ_GPT0_ALARM: usize = 1;
-
-const OVERFLOW_VAL: u32 = 70_225_945;
-const ALARM_VAL: u32 = OVERFLOW_VAL / 4;
-
 /// Option Function Select Register 0
 /// Accepts either:
 /// - a series of configuration values
