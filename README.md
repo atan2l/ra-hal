@@ -38,7 +38,8 @@ See examples for more details.
 
 ## Supported peripherals:
 
-* General PWM Timer (`GPT`): Embassy timer driver only, general PWM support pending
+* General PWM Timer (`GPT`): ◖ Embassy timer driver only, general PWM support pending
+* Cyclic Redundancy Check Calculator (`CRC)`: ●
 
 ## TODO
 
