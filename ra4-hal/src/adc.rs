@@ -4,16 +4,44 @@ use cortex_m::asm;
 #[allow(unused)]
 use defmt::{debug, error, info, trace, warn};
 use embassy_hal_internal::{Peri, PeripheralType};
-use ra4m1_ctpac::adc14::vals::Adcs;
+use ra4m1_ctpac::adc14::vals::{Adcs, Adprc, Diagval};
 
 use crate::{
     adc::channel::{AdcChannel, Temperature},
     pac, peripherals,
 };
 
+pub mod channel;
+
 #[allow(private_bounds)]
 pub struct Adc<'d, I: Instance> {
     _phantom: PhantomData<&'d I>,
+}
+
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Default)]
+pub enum Resolution {
+    /// 12-bit resolution
+    #[default]
+    Low,
+    /// 14-bit resolution
+    High,
+}
+
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Default)]
+pub enum Alignment {
+    FlushLeft,
+    #[default]
+    FlushRight,
+}
+
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Default)]
+pub struct AdcConfig {
+    pub resolution: Resolution,
+    pub clear_on_read: bool,
+    pub alignment: Alignment,
 }
 
 /// `ADC14` peripheral instance.
@@ -35,7 +63,7 @@ impl Instance for peripherals::ADC14 {}
 impl<'d, I: Instance> Adc<'d, I> {
     pub fn new(
         _adc: Peri<'d, I>,
-        // config: AdcConfig,
+        config: AdcConfig,
         // _irq: impl interrupt::typelevel::Binding<I::Interrupt, InterruptHandler<I>> + 'd,
     ) -> Self {
         debug!("ADC14: stop=false");
@@ -46,12 +74,54 @@ impl<'d, I: Instance> Adc<'d, I> {
             w.set_mstpd16(false);
         });
 
+        let resolution = match config.resolution {
+            Resolution::Low => Adprc::_00,
+            Resolution::High => Adprc::_11,
+        };
+
+        let clear_on_read = config.clear_on_read;
+
+        let alignment = match config.alignment {
+            Alignment::FlushLeft => true,
+            Alignment::FlushRight => false,
+        };
+
+        let adc = I::regs();
+
+        adc.adcer().write(|w| {
+            w.set_adprc(resolution);
+            w.set_ace(clear_on_read);
+            w.set_adrfmt(alignment);
+        });
+
         Self {
             _phantom: PhantomData,
         }
     }
 
-    /// Return the pseudo-channel struct for temprature measurement.  Nothing is configured here.
+    /// Returns the currently configured resolution (12 or 14-bits).
+    pub fn resolution(&self) -> Resolution {
+        let adc = I::regs();
+
+        match adc.adcer().read().adprc() {
+            Adprc::_00 => Resolution::Low,
+            Adprc::_RESERVED_1 => unimplemented!(),
+            Adprc::_RESERVED_2 => unimplemented!(),
+            Adprc::_11 => Resolution::High,
+        }
+    }
+
+    /// Returns the currently configured alignment. §35.2.1, §35.2.11
+    pub fn alignment(&self) -> Alignment {
+        let adc = I::regs();
+
+        match adc.adcer().read().adrfmt() {
+            true => Alignment::FlushLeft,
+            false => Alignment::FlushRight,
+        }
+    }
+
+    /// Return the pseudo-channel struct for temperature measurement.  Nothing is configured here.
     pub fn temperature_channel(&self) -> Temperature {
         Temperature {}
     }
@@ -61,7 +131,7 @@ impl<'d, I: Instance> Adc<'d, I> {
 
         channel.enable::<I>();
 
-        // TODO: read adst first to ensure we're stopped?
+        // TODO: read ADST first to ensure we're stopped?
 
         adc.adcsr().modify(|w| {
             w.set_adcs(Adcs::Single);
@@ -92,213 +162,4 @@ impl<'d, I: Instance> Drop for Adc<'d, I> {
             w.set_mstpd16(true);
         });
     }
-}
-
-mod channel {
-    #[allow(unused)]
-    use defmt::{debug, error, info, trace, warn};
-
-    #[allow(private_bounds)]
-    pub trait AdcChannel: SealedAdcChannel {}
-
-    #[allow(private_bounds)]
-    pub(crate) trait SealedAdcChannel: AdcInputPin {
-        const CHANNEL: u8;
-
-        fn enable<I: super::Instance>(&self) {
-            let adc = I::regs();
-
-            trace!("ADC14: enable_channel({})", Self::CHANNEL);
-
-            assert!(Self::CHANNEL <= 14 || (Self::CHANNEL >= 16 && Self::CHANNEL < 25));
-
-            if Self::CHANNEL <= 14 {
-                adc.adexicr().modify(|w| {
-                    w.set_ocsa(false);
-                    w.set_tssa(false);
-                });
-
-                adc.adansa0().modify(|w| {
-                    w.set_ansa(Self::CHANNEL as _, true);
-                });
-            } else if Self::CHANNEL >= 16 && Self::CHANNEL < 25 {
-                adc.adexicr().modify(|w| {
-                    w.set_ocsa(false);
-                    w.set_tssa(false);
-                });
-
-                adc.adansa1().modify(|w| {
-                    w.set_ansa((Self::CHANNEL - 16) as _, true);
-                });
-            }
-        }
-
-        fn disable<I: super::Instance>(&self) {
-            let adc = I::regs();
-
-            trace!("ADC14: disable_channel({})", Self::CHANNEL);
-
-            assert!(Self::CHANNEL <= 14 || (Self::CHANNEL >= 16 && Self::CHANNEL < 25));
-
-            if Self::CHANNEL <= 14 {
-                adc.adansa0().modify(|w| {
-                    w.set_ansa(Self::CHANNEL as _, false);
-                });
-            } else if Self::CHANNEL >= 16 && Self::CHANNEL < 25 {
-                adc.adansa1().modify(|w| {
-                    w.set_ansa((Self::CHANNEL - 16) as _, false);
-                });
-            }
-        }
-
-        fn read_one<I: super::Instance>(&self) -> u16 {
-            let adc = I::regs();
-
-            trace!("ADC14: read_one({})", Self::CHANNEL);
-
-            assert!(Self::CHANNEL <= 14 || (Self::CHANNEL >= 16 && Self::CHANNEL < 25));
-
-            // TODO: Merge these in the chiptool IR as it's continuous memory with channel 15 being a gap
-            if Self::CHANNEL <= 14 {
-                adc.addr(Self::CHANNEL as _).read().addr()
-            } else if Self::CHANNEL >= 16 && Self::CHANNEL < 25 {
-                adc.addr2((Self::CHANNEL - 16) as _).read().addr()
-            } else {
-                unimplemented!("Invalid ADC channel");
-            }
-        }
-    }
-
-    trait AdcInputPin {}
-
-    pub struct Temperature;
-    impl AdcInputPin for Temperature {}
-    impl AdcChannel for Temperature {}
-
-    impl SealedAdcChannel for Temperature {
-        const CHANNEL: u8 = 255;
-
-        fn enable<I: super::Instance>(&self) {
-            let adc = I::regs();
-
-            trace!("ADC14: enable_channel(TEMPERATURE)");
-
-            if adc.adcsr().read().adst() {
-                warn!("ADC14: Trying to enable temp with a conversion running");
-            }
-
-            adc.adexicr().modify(|w| {
-                w.set_ocsa(false);
-                w.set_tssa(true);
-            });
-        }
-
-        fn disable<I: super::Instance>(&self) {
-            let adc = I::regs();
-
-            trace!("ADC14: disable_channel(TEMPERATURE)");
-
-            if adc.adcsr().read().adst() {
-                warn!("ADC14: Trying to disable temp with a conversion running");
-            }
-
-            adc.adexicr().modify(|w| {
-                w.set_tssa(false);
-            });
-        }
-
-        fn read_one<I: super::Instance>(&self) -> u16 {
-            let adc = I::regs();
-
-            trace!("ADC14: read_one(TEMPERATURE)");
-            adc.adtsdr().read().adtsdr()
-        }
-    }
-
-    macro_rules! input_pin_impl {
-        ($pin:ident) => {
-            impl AdcInputPin for crate::peripherals::$pin {}
-        };
-    }
-
-    macro_rules! chan_impl {
-        ($chan:literal, $pin:ident) => {
-            impl AdcChannel for crate::peripherals::$pin {}
-            impl SealedAdcChannel for crate::peripherals::$pin {
-                const CHANNEL: u8 = $chan;
-            }
-        };
-    }
-
-    input_pin_impl!(P000);
-    input_pin_impl!(P001);
-    input_pin_impl!(P002);
-    input_pin_impl!(P003);
-    input_pin_impl!(P004);
-    input_pin_impl!(P010);
-    input_pin_impl!(P011);
-    input_pin_impl!(P012);
-    input_pin_impl!(P013);
-    input_pin_impl!(P014);
-    input_pin_impl!(P015);
-    #[cfg(feature = "100pin")]
-    input_pin_impl!(P005);
-    #[cfg(feature = "100pin")]
-    input_pin_impl!(P006);
-    #[cfg(feature = "100pin")]
-    input_pin_impl!(P007);
-    #[cfg(feature = "100pin")]
-    input_pin_impl!(P008);
-
-    input_pin_impl!(P500);
-    input_pin_impl!(P501);
-    input_pin_impl!(P502);
-
-    input_pin_impl!(P103);
-    input_pin_impl!(P102);
-    input_pin_impl!(P101);
-    input_pin_impl!(P100);
-
-    #[cfg(feature = "100pin")]
-    input_pin_impl!(P503);
-    #[cfg(feature = "100pin")]
-    input_pin_impl!(P504);
-    #[cfg(feature = "100pin")]
-    input_pin_impl!(P505);
-
-    chan_impl!(0, P000);
-    chan_impl!(1, P001);
-    chan_impl!(2, P002);
-    chan_impl!(3, P003);
-    chan_impl!(4, P004);
-    chan_impl!(5, P010);
-    chan_impl!(6, P011);
-    chan_impl!(7, P012);
-    chan_impl!(8, P013);
-    chan_impl!(9, P014);
-    chan_impl!(10, P015);
-    #[cfg(feature = "100pin")]
-    chan_impl!(11, P005);
-    #[cfg(feature = "100pin")]
-    chan_impl!(12, P006);
-    #[cfg(feature = "100pin")]
-    chan_impl!(13, P007);
-    #[cfg(feature = "100pin")]
-    chan_impl!(14, P008);
-
-    chan_impl!(16, P500);
-    chan_impl!(17, P501);
-    chan_impl!(18, P502);
-
-    chan_impl!(19, P103);
-    chan_impl!(20, P102);
-    chan_impl!(21, P101);
-    chan_impl!(22, P100);
-
-    #[cfg(feature = "100pin")]
-    chan_impl!(23, P503);
-    #[cfg(feature = "100pin")]
-    chan_impl!(24, P504);
-    #[cfg(feature = "100pin")]
-    chan_impl!(25, P505);
 }

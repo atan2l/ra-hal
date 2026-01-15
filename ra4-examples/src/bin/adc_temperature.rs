@@ -10,7 +10,10 @@ use defmt_rtt as _;
 use embassy_executor::Spawner;
 use embassy_time::Timer;
 use panic_probe as _;
-use ra4_hal::{adc::Adc, ofs0, ofs1, print_clock_config};
+use ra4_hal::{
+    adc::{Adc, AdcConfig},
+    ofs0, ofs1, print_clock_config,
+};
 
 /// Option Function Select Register 0
 /// Accepts either:
@@ -42,10 +45,10 @@ async fn main(_spawner: Spawner) {
 
     print_clock_config();
 
-    let adc = Adc::new(p.ADC14);
+    let adc = Adc::new(p.ADC14, AdcConfig::default());
     let adc_channel = adc.temperature_channel();
 
-    loop {
+    for _ in 0..5 {
         // § 48.7 TSN Characteristics
         let slope = -3.65;
         let v_1 = 1050.0;
