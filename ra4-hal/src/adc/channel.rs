@@ -191,8 +191,11 @@ macro_rules! chan_impl {
 
 input_pin_impl!(P000);
 input_pin_impl!(P001);
+#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
 input_pin_impl!(P002);
+#[cfg(any(feature = "_64pin", feature = "_100pin"))]
 input_pin_impl!(P003);
+#[cfg(any(feature = "_64pin", feature = "_100pin"))]
 input_pin_impl!(P004);
 input_pin_impl!(P010);
 input_pin_impl!(P011);
@@ -200,35 +203,39 @@ input_pin_impl!(P012);
 input_pin_impl!(P013);
 input_pin_impl!(P014);
 input_pin_impl!(P015);
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 input_pin_impl!(P005);
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 input_pin_impl!(P006);
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 input_pin_impl!(P007);
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 input_pin_impl!(P008);
 
 input_pin_impl!(P500);
 input_pin_impl!(P501);
 input_pin_impl!(P502);
 
+#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
 input_pin_impl!(P103);
 input_pin_impl!(P102);
 input_pin_impl!(P101);
 input_pin_impl!(P100);
 
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 input_pin_impl!(P503);
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 input_pin_impl!(P504);
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 input_pin_impl!(P505);
 
 chan_impl!(0, P000);
 chan_impl!(1, P001);
+#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
 chan_impl!(2, P002);
+#[cfg(any(feature = "_64pin", feature = "_100pin"))]
 chan_impl!(3, P003);
+#[cfg(any(feature = "_64pin", feature = "_100pin"))]
 chan_impl!(4, P004);
 chan_impl!(5, P010);
 chan_impl!(6, P011);
@@ -236,27 +243,28 @@ chan_impl!(7, P012);
 chan_impl!(8, P013);
 chan_impl!(9, P014);
 chan_impl!(10, P015);
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 chan_impl!(11, P005);
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 chan_impl!(12, P006);
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 chan_impl!(13, P007);
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 chan_impl!(14, P008);
 
 chan_impl!(16, P500);
 chan_impl!(17, P501);
 chan_impl!(18, P502);
 
+#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
 chan_impl!(19, P103);
 chan_impl!(20, P102);
 chan_impl!(21, P101);
 chan_impl!(22, P100);
 
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 chan_impl!(23, P503);
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 chan_impl!(24, P504);
-#[cfg(feature = "100pin")]
+#[cfg(feature = "_100pin")]
 chan_impl!(25, P505);
