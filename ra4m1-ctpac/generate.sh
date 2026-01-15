@@ -58,4 +58,4 @@ RUST_LOG="${RUST_LOG}" "${FORM_CMD}" -i lib.rs -o ./src
 echo "*** Reformatting"
 rm -f lib.rs
 cargo fmt
-# ${SED} -i -e '1i #![doc = include_str!("../README.md")]' src/lib.rs
+${SED} -i -e '1i #![doc = include_str!("../README.md")]' src/lib.rs
