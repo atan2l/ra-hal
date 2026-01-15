@@ -2,6 +2,8 @@
 
 This is a [Peripheral Access Crate](https://rust-embedded.github.io/book/start/registers.html) for Renesas RA4M1 microcontrollers.
 The crate itself is generated programmatically by [chiptool](https://github.com/embassy-rs/chiptool) using the SVD as found on Keil's [site](https://www.keil.arm.com/packs/ra_dfp-renesas/versions/).
+The chiptool documentation covers how the API it generates differs from what svd2rust generates.
+This is primarily intended to be used by an upcoming RA4M1 HAL crate, however a secondary goal is to make this a bit more legible to humans.
 
 ## Supported Hardware
 
@@ -16,4 +18,8 @@ In the consumer space the Renesas RA4M1 is most commonly found in the Aduino "R4
 ## Rebuilding
 
 To regenerate the Rust code run the `generate.sh` script from this directory.
+`generate.sh` depends on chiptool, form, and GNU sed.
+It will install and update chiptool via cargo unless `CHIPTOOL_CMD` is set to a valid executable.
+Form will be installed and locked to a specific version via cargo if needed.
+
 Note: that this crate currently **cannot** be rebuilt with the stock chiptool.
