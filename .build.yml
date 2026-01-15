@@ -1,0 +1,34 @@
+image: debian/bookworm
+secrets:
+  -  f317af3f-6c5f-49d4-8602-78651225c9d2
+sources:
+  - git@git.sr.ht:~az1/ra4m1-rs
+tasks:
+  - env-setup: |
+      echo 'export CROSS_ARCH=aarch64-unknown-linux-gnu' >> ~/.buildenv
+      echo 'export DEBIAN_ARCH=aarch64-linux-gnu' >> ~/.buildenv
+  - cross-setup: |
+      if [ "${CROSS_ARCH}" != "" ]; then
+          sudo dpkg --add-architecture arm64
+          sudo apt-get update
+          sudo apt-get install -y gcc-12-aarch64-linux-gnu libc6-dev-arm64-cross libudev-dev:arm64
+      fi
+  - rust-setup: |
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none
+      source $HOME/.cargo/env
+      cd $HOME/ra4m1-rs
+      rustup show active-toolchain
+      rustup component add clippy
+  - build: |
+      source $HOME/.cargo/env
+      cd $HOME/ra4m1-rs
+      cargo build --quiet
+  - doc: |
+      source $HOME/.cargo/env
+      cd ra4m1-rs
+      cargo haldoc
+  - clippy: |
+      source $HOME/.cargo/env
+      cd ra4m1-rs
+      cargo clip
+
