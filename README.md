@@ -1,4 +1,4 @@
-# `ra4m1`
+# `ra4m1-rs`
 
 This repository contains Rust crates that implement a variety of Hardware Abstraction Layer (HAL) traits to support the [Renesas RA4M1](https://www.renesas.com/en/products/ra4m1) microcontrollers.
 These traits provide both asynchronous and blocking interfaces that enable compatibility with software like [Embassy](https://embassy.dev).
@@ -26,7 +26,7 @@ To restore the bootloader on other other boards check the Arduino [repository](h
 
 Uno R4 WiFi = R7FA4M1AB3CFM#AA0 = 64 pin LQFP
 
-To read OFS values in binary (the default linker script should omit these):
+To read OFS values in binary (the default linker script should include these):
 
 ```
 cargo ofsdump
@@ -44,15 +44,16 @@ Use `memory.x` and `build.rs` from the `ra4-examples` directory.
 Note that you will have to specify `OFS1`, `OFS0`, and the Security MPU config and ensure they're in the proper section.
 See examples for more details.
 
-## Supported peripherals
+## HAL Support
 
-|            | Peripheral                               | Notes                                                  |
-| ---------- | ---------------------------------------- | ------------------------------------------------------ |
-| ⬛⬛⬜⬜⬜ | `ADC14` 14-Bit A/D Converter             | In progress, single shot readings work                 |
-| ⬛⬛⬛⬜⬜ | `CRC` Cyclic Redundancy Check Calculator | In progress, 32-bit CRC support TODO                   |
-| ⬛⬜⬜⬜⬜ | `GPT` General PWM Timer                  | Embassy timer driver only, general PWM support pending |
-| ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine       | Undocumented                                           |
-| ⬛⬜⬜⬜⬜ | `SCI` Serial Communications Interface    | In progress                                            |
+|            | Peripheral                                        | Notes                                                  |
+| ---------- | ------------------------------------------------- | ------------------------------------------------------ |
+| ⬛⬛⬜⬜⬜ | `ADC14` 14-Bit A/D Converter                      | In progress, single shot readings work                 |
+| ⬛⬛⬛⬜⬜ | `CRC` Cyclic Redundancy Check Calculator          | In progress, 32-bit CRC support TODO                   |
+| ⬜⬜⬜⬜⬜ | `FMIFRT` Factory MCU Information Flash Root Table | In progress                                            |
+| ⬛⬜⬜⬜⬜ | `GPT` General PWM Timer                           | Embassy timer driver only, general PWM support pending |
+| ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine                | Undocumented                                           |
+| ⬛⬜⬜⬜⬜ | `SCI` Serial Communications Interface             | In progress                                            |
 
 ## TODO
 
