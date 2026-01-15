@@ -1,24 +1,30 @@
 use core::marker::PhantomData;
 
+use cortex_m::asm;
 #[allow(unused)]
 use defmt::{debug, error, info, trace, warn};
 use embassy_hal_internal::{Peri, PeripheralType};
 
-use crate::{pac, peripherals};
+use crate::{adc::channel::AdcChannel, pac, peripherals};
 
 #[allow(private_bounds)]
 pub struct Adc<'d, I: Instance> {
     _phantom: PhantomData<&'d I>,
 }
 
+/// `ADC14` peripheral instance.
 #[allow(private_bounds)]
 pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
 
 trait SealedInstance: PeripheralType {
-    // fn regs() -> pac::adc::Adc;
+    fn regs() -> pac::adc14::Adc14;
 }
 
-impl SealedInstance for peripherals::ADC14 {}
+impl SealedInstance for peripherals::ADC14 {
+    fn regs() -> ra4m1_ctpac::adc14::Adc14 {
+        pac::ADC14
+    }
+}
 
 impl Instance for peripherals::ADC14 {}
 
@@ -28,19 +34,81 @@ impl<'d, I: Instance> Adc<'d, I> {
         // config: AdcConfig,
         // _irq: impl interrupt::typelevel::Binding<I::Interrupt, InterruptHandler<I>> + 'd,
     ) -> Self {
-        trace!("ADC14: Powering up");
+        warn!("ADC14: Powering up");
         let mstp = pac::MSTP;
         mstp.mstpcrd().write(|w| {
             w.set_mstpd16(false);
         });
 
-        todo!()
+        Self {
+            _phantom: PhantomData,
+        }
+    }
+
+    fn enable_channel(&self, channel: usize) {
+        let adc = I::regs();
+
+        if channel <= 14 {
+            adc.adansa0().modify(|w| {
+                w.set_ansa(channel as _, true);
+            });
+        } else if channel >= 16 && channel < 25 {
+            adc.adansa1().modify(|w| {
+                w.set_ansa((channel - 16) as _, true);
+            });
+        } else {
+            panic!("Invalid ADC channel");
+        }
+    }
+
+    fn disable_channel(&self, channel: usize) {
+        let adc = I::regs();
+        if channel <= 14 {
+            adc.adansa0().modify(|w| {
+                w.set_ansa(channel as _, false);
+            });
+        } else if channel >= 16 && channel < 25 {
+            adc.adansa1().modify(|w| {
+                w.set_ansa((channel - 16) as _, false);
+            });
+        } else {
+            panic!("Invalid ADC channel");
+        }
+    }
+
+    pub fn blocking_read(&self, channel: &impl AdcChannel) -> u16 {
+        let adc = I::regs();
+        let channel = usize::from(channel.channel());
+
+        self.enable_channel(channel);
+
+        adc.adcsr().modify(|w| {
+            w.set_adst(true);
+        });
+
+        // When the conversion is finished an interrupt is fired (without modifying the registers) and the ADST bit is cleared
+        while adc.adcsr().read().adst() {
+            asm::nop()
+        }
+
+        self.disable_channel(channel);
+
+        // TODO: Merge these in the chiptool IR as it's continuous memory with channel 15 being a gap
+        let data: u16 = if channel <= 14 {
+            adc.addr(channel).read().addr()
+        } else if channel >= 16 && channel < 25 {
+            adc.addr2(channel - 16).read().addr()
+        } else {
+            panic!("Invalid ADC channel");
+        };
+
+        return data;
     }
 }
 
 impl<'d, I: Instance> Drop for Adc<'d, I> {
     fn drop(&mut self) {
-        trace!("ADC14: Powering down");
+        warn!("ADC14: Powering down");
 
         let mstp = pac::MSTP;
         mstp.mstpcrd().write(|w| {
