@@ -78,6 +78,8 @@ unsafe impl cortex_m::interrupt::InterruptNumber for Interrupt {
 }
 #[cfg(feature = "rt")]
 mod _vectors;
+#[doc = "Factory MCU Information Flash Root Table (FMIFRT)"]
+pub const FMIFRT: fmifrt::Fmifrt = unsafe { fmifrt::Fmifrt::from_ptr(0x0100_3c00usize as _) };
 #[doc = "Bus Master MPU"]
 pub const MMPU: mmpu::Mmpu = unsafe { mmpu::Mmpu::from_ptr(0x4000_0000usize as _) };
 #[doc = "Bus Slave MPU"]
@@ -212,6 +214,9 @@ pub const USBFS: usbfs::Usbfs = unsafe { usbfs::Usbfs::from_ptr(0x4009_0000usize
 pub const DAC8: dac8::Dac8 = unsafe { dac8::Dac8::from_ptr(0x4009_e000usize as _) };
 #[doc = "Temperature Sensor"]
 pub const TSN: tsn::Tsn = unsafe { tsn::Tsn::from_ptr(0x407e_c000usize as _) };
+#[doc = "Pointer to the actual registers"]
+pub const FMIFRT_BASE: fmifrt_base::FmifrtBase =
+    unsafe { fmifrt_base::FmifrtBase::from_ptr(0x407f_b19cusize as _) };
 #[doc = r" Number available in the NVIC for configuring priority"]
 #[cfg(feature = "rt")]
 pub const NVIC_PRIO_BITS: u8 = 4;
@@ -237,6 +242,8 @@ pub mod doc;
 pub mod dtc;
 pub mod elc;
 pub mod fcache;
+pub mod fmifrt;
+pub mod fmifrt_base;
 pub mod gpt16;
 pub mod gpt32;
 pub mod gpt_ops;

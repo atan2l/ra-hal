@@ -10,6 +10,7 @@ pub mod time_driver;
 pub mod uart;
 pub mod write_protect;
 
+use cfg_if::cfg_if;
 use cortex_m::asm;
 #[allow(unused)]
 use defmt::{debug, error, info, trace, warn};
@@ -29,7 +30,13 @@ pub fn init() -> Peripherals {
     // #define BSP_MCU_VBATT_SUPPORT       (1)
 
     critical_section::with(|cs| {
-        info!("Starting board init");
+        debug!("Starting board init");
+
+        let fmifrt_base = pac::FMIFRT_BASE;
+        // sanity check
+        defmt::assert_eq!(0x0100_3C00, fmifrt_base.base().read().base());
+
+        print_mcu_info();
 
         let system = pac::SYSTEM;
 
@@ -94,7 +101,7 @@ pub fn init() -> Peripherals {
             });
         });
 
-        info!("Finished board init");
+        debug!("Finished board init");
 
         let p = Peripherals::take_with_cs(cs);
 
@@ -103,6 +110,98 @@ pub fn init() -> Peripherals {
 
         p
     })
+}
+
+pub fn print_mcu_info() {
+    let fmifrt = pac::FMIFRT;
+
+    let uid: [u32; 4] = [
+        fmifrt.uidr(0).read().uid(),
+        fmifrt.uidr(1).read().uid(),
+        fmifrt.uidr(2).read().uid(),
+        fmifrt.uidr(3).read().uid(),
+    ];
+
+    let mut part_number: [u8; 16] = [0; 16];
+
+    part_number[0..4].copy_from_slice(&fmifrt.pnr(0).read().0.to_ne_bytes());
+    part_number[4..8].copy_from_slice(&fmifrt.pnr(1).read().0.to_ne_bytes());
+    part_number[8..12].copy_from_slice(&fmifrt.pnr(2).read().0.to_ne_bytes());
+    part_number[12..16].copy_from_slice(&fmifrt.pnr(3).read().0.to_ne_bytes());
+
+    let pn = core::str::from_utf8(&part_number).unwrap().trim();
+    let ver = fmifrt.mcuver().read().mcuver();
+
+    const PN_LEN: usize = 13;
+
+    if pn.len() < PN_LEN {
+        info!(
+            "MCU: {} rev {:02X}, UID: {:08x}-{:08x}-{:08x}-{:08x}",
+            pn, ver, uid[0], uid[1], uid[2], uid[3]
+        );
+        warn!("PN too short to identify");
+    } else {
+        let flash_size = match part_number[8] {
+            b'9' => Some(128),
+            b'B' => Some(256),
+            b'C' => Some(384),
+            b'D' => Some(512),
+            b'E' => Some(768),
+            b'F' => Some(1024),
+            _ => todo!(),
+        };
+
+        // Check if the crate was configured correctly
+        let pin_count = match &part_number[11..=12] {
+            b"FB" | b"BM" => Some(144),
+            b"FP" | b"LJ" => Some(100),
+            b"NB" | b"BQ" | b"BB" | b"FM" => Some(64),
+            b"NG" => Some(56),
+            b"NE" | b"FL" => Some(48),
+            b"NF" => Some(40),
+            b"BC" => Some(36),
+            b"NH" | b"FJ" => Some(32),
+            suffix => {
+                warn!("Unknown suffix: {}", suffix);
+                None
+            }
+        };
+
+        info!(
+            "MCU: {} rev {:02X}, flash={} KB, UID: {:08x}-{:08x}-{:08x}-{:08x}",
+            pn,
+            ver,
+            flash_size.unwrap_or(0),
+            uid[0],
+            uid[1],
+            uid[2],
+            uid[3]
+        );
+
+        match pin_count {
+            Some(actual) => {
+                cfg_if! {
+                    if #[cfg(feature = "100pin")] {
+                        let configured = 100;
+                    } else if #[cfg(feature = "64pin")] {
+                        let configured = 64;
+                    } else if #[cfg(feature = "48pin")] {
+                        let configured = 48;
+                    } else {
+                        let configured = 40;
+                    }
+                }
+
+                if configured != actual {
+                    warn!(
+                        "May not behave as expected. HAL configured with {} pins, MCU has {} pins",
+                        configured, actual
+                    );
+                }
+            }
+            None => warn!("Couldn't determine appropriate pin count"),
+        }
+    }
 }
 
 pub fn print_clock_config() {
