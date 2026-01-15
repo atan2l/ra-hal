@@ -79,19 +79,25 @@ impl McuInfo {
     pub fn print_info(&self) {
         if !self.ok() {
             info!(
-                "MCU: {} rev {:02X}, uid={=u128:032x}",
+                "MCU: {} rev {:02X}, uid={:08x}-{:08x}-{:08x}-{:08x}",
                 self.part_number(),
                 self.revision(),
-                self.uid(),
+                (self.uid() >> 96 & 0xFFFFFFFF),
+                (self.uid() >> 64 & 0xFFFFFFFF),
+                (self.uid() >> 32 & 0xFFFFFFFF),
+                (self.uid() >> 0 & 0xFFFFFFFF),
             );
             warn!("PN too short to identify");
         } else {
             info!(
-                "MCU: {} rev {:02X}, flash={} KB, uid={=u128:032x}",
+                "MCU: {} rev {:02X}, flash={} KB, uid={:08x}-{:08x}-{:08x}-{:08x}",
                 self.part_number(),
                 self.revision(),
                 self.flash_size().unwrap_or(0),
-                self.uid(),
+                (self.uid() >> 96 & 0xFFFFFFFF),
+                (self.uid() >> 64 & 0xFFFFFFFF),
+                (self.uid() >> 32 & 0xFFFFFFFF),
+                (self.uid() >> 0 & 0xFFFFFFFF),
             );
         }
     }
