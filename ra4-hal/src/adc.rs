@@ -5,7 +5,7 @@ use embassy_hal_internal::{Peri, PeripheralType};
 use ra4m1_ctpac::adc14::vals::{Adcs, Adprc, Diagval};
 
 use crate::{
-    adc::channel::{AdcChannel, Temperature},
+    adc::channel::{AdcChannel, Temperature, Vref},
     pac, peripherals,
 };
 
@@ -122,6 +122,10 @@ impl<'d, I: Instance> Adc<'d, I> {
     /// Return the pseudo-channel struct for temperature measurement.  Nothing is configured here.
     pub fn temperature_channel(&self) -> Temperature {
         Temperature {}
+    }
+
+    pub fn vref_channel(&self) -> Vref {
+        Vref {}
     }
 
     pub fn blocking_read(&self, channel: &impl AdcChannel) -> u16 {
