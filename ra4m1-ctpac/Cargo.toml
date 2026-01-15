@@ -1,6 +1,6 @@
 [package]
 name = "ra4m1-ctpac"
-version = "0.1.7-dev"
+version = "0.1.7-dev1"
 authors = ["Alex Zepeda <srht@inferiorhumanorgans.com>"]
 edition = "2024"
 rust-version = "1.91"
@@ -17,3 +17,6 @@ critical-section = { workspace = true }
 [features]
 defmt = ["dep:defmt"]
 rt = ["cortex-m-rt/device"]
+
+[package.metadata.docs.rs]
+default-target = "thumbv7em-none-eabihf"
