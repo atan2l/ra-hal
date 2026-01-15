@@ -364,13 +364,13 @@ impl From<ScrSmciCke> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum SmrCks {
     #[doc = "PCLK clock"]
-    _00 = 0x0,
+    DIV_1 = 0x0,
     #[doc = "PCLK/4 clock"]
-    _01 = 0x01,
+    DIV_4 = 0x01,
     #[doc = "PCLK/16 clock"]
-    _10 = 0x02,
+    DIV_16 = 0x02,
     #[doc = "PCLK/64 clock"]
-    _11 = 0x03,
+    DIV_64 = 0x03,
 }
 impl SmrCks {
     #[inline(always)]
@@ -392,6 +392,37 @@ impl From<SmrCks> for u8 {
     #[inline(always)]
     fn from(val: SmrCks) -> u8 {
         SmrCks::to_bits(val)
+    }
+}
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum SmrPm {
+    #[doc = "Selects even parity"]
+    Even = 0x0,
+    #[doc = "Selects odd parity"]
+    Odd = 0x01,
+}
+impl SmrPm {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> SmrPm {
+        unsafe { core::mem::transmute(val & 0x01) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for SmrPm {
+    #[inline(always)]
+    fn from(val: u8) -> SmrPm {
+        SmrPm::from_bits(val)
+    }
+}
+impl From<SmrPm> for u8 {
+    #[inline(always)]
+    fn from(val: SmrPm) -> u8 {
+        SmrPm::to_bits(val)
     }
 }
 #[repr(u8)]
@@ -427,6 +458,68 @@ impl From<SmrSmciCks> for u8 {
     #[inline(always)]
     fn from(val: SmrSmciCks) -> u8 {
         SmrSmciCks::to_bits(val)
+    }
+}
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum SmrSmciPm {
+    #[doc = "Selects even parity"]
+    Even = 0x0,
+    #[doc = "Selects odd parity"]
+    Odd = 0x01,
+}
+impl SmrSmciPm {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> SmrSmciPm {
+        unsafe { core::mem::transmute(val & 0x01) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for SmrSmciPm {
+    #[inline(always)]
+    fn from(val: u8) -> SmrSmciPm {
+        SmrSmciPm::from_bits(val)
+    }
+}
+impl From<SmrSmciPm> for u8 {
+    #[inline(always)]
+    fn from(val: SmrSmciPm) -> u8 {
+        SmrSmciPm::to_bits(val)
+    }
+}
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum Stop {
+    #[doc = "1 stop bit"]
+    Stop1 = 0x0,
+    #[doc = "2 stop bits"]
+    Stop2 = 0x01,
+}
+impl Stop {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> Stop {
+        unsafe { core::mem::transmute(val & 0x01) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for Stop {
+    #[inline(always)]
+    fn from(val: u8) -> Stop {
+        Stop::from_bits(val)
+    }
+}
+impl From<Stop> for u8 {
+    #[inline(always)]
+    fn from(val: Stop) -> u8 {
+        Stop::to_bits(val)
     }
 }
 #[repr(u8)]

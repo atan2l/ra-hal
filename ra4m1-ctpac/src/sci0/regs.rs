@@ -2063,26 +2063,26 @@ impl Smr {
     #[doc = "Stop Bit Length (Valid only in asynchronous mode)"]
     #[must_use]
     #[inline(always)]
-    pub const fn stop(&self) -> bool {
+    pub const fn stop(&self) -> super::vals::Stop {
         let val = (self.0 >> 3usize) & 0x01;
-        val != 0
+        super::vals::Stop::from_bits(val as u8)
     }
     #[doc = "Stop Bit Length (Valid only in asynchronous mode)"]
     #[inline(always)]
-    pub const fn set_stop(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u8) & 0x01) << 3usize);
+    pub const fn set_stop(&mut self, val: super::vals::Stop) {
+        self.0 = (self.0 & !(0x01 << 3usize)) | (((val.to_bits() as u8) & 0x01) << 3usize);
     }
     #[doc = "Parity Mode (Valid only when the PE bit is 1)"]
     #[must_use]
     #[inline(always)]
-    pub const fn pm(&self) -> bool {
+    pub const fn pm(&self) -> super::vals::SmrPm {
         let val = (self.0 >> 4usize) & 0x01;
-        val != 0
+        super::vals::SmrPm::from_bits(val as u8)
     }
     #[doc = "Parity Mode (Valid only when the PE bit is 1)"]
     #[inline(always)]
-    pub const fn set_pm(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
+    pub const fn set_pm(&mut self, val: super::vals::SmrPm) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
     }
     #[doc = "Parity Enable (Valid only in asynchronous mode)"]
     #[must_use]
@@ -2145,7 +2145,7 @@ impl defmt::Format for Smr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Smr {{ cks: {:?}, mp: {=bool:?}, stop: {=bool:?}, pm: {=bool:?}, pe: {=bool:?}, chr: {=bool:?}, cm: {=bool:?} }}",
+            "Smr {{ cks: {:?}, mp: {=bool:?}, stop: {:?}, pm: {:?}, pe: {=bool:?}, chr: {=bool:?}, cm: {=bool:?} }}",
             self.cks(),
             self.mp(),
             self.stop(),
@@ -2188,14 +2188,14 @@ impl SmrSmci {
     #[doc = "Parity Mode (Valid only when the PE bit is 1)"]
     #[must_use]
     #[inline(always)]
-    pub const fn pm(&self) -> bool {
+    pub const fn pm(&self) -> super::vals::SmrSmciPm {
         let val = (self.0 >> 4usize) & 0x01;
-        val != 0
+        super::vals::SmrSmciPm::from_bits(val as u8)
     }
     #[doc = "Parity Mode (Valid only when the PE bit is 1)"]
     #[inline(always)]
-    pub const fn set_pm(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u8) & 0x01) << 4usize);
+    pub const fn set_pm(&mut self, val: super::vals::SmrSmciPm) {
+        self.0 = (self.0 & !(0x01 << 4usize)) | (((val.to_bits() as u8) & 0x01) << 4usize);
     }
     #[doc = "Parity Enable (Valid only in asynchronous mode)"]
     #[must_use]
@@ -2257,7 +2257,7 @@ impl defmt::Format for SmrSmci {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "SmrSmci {{ cks: {:?}, bcp: {:?}, pm: {=bool:?}, pe: {=bool:?}, blk: {=bool:?}, gm: {=bool:?} }}",
+            "SmrSmci {{ cks: {:?}, bcp: {:?}, pm: {:?}, pe: {=bool:?}, blk: {=bool:?}, gm: {=bool:?} }}",
             self.cks(),
             self.bcp(),
             self.pm(),
