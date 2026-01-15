@@ -1,8 +1,11 @@
 [package]
 name = "ra4-hal"
-version = "0.1.0"
+version = "0.1.4-dev"
 edition = "2024"
+rust-version = "1.91"
 description = "Hardware Abstraction Layer (HAL) for the Renesas RA4 family of MCUs."
+homepage = "https://sr.ht/~az1/ra4m1-rs/"
+license = "LGPL-3.0-or-later"
 
 [dependencies]
 defmt = { workspace = true, optional = true }
@@ -24,19 +27,22 @@ ra4m1-ctpac = { path = "../ra4m1-ctpac" }
 cfg-if = "1"
 
 [features]
-default = [ "defmt", "time-driver", "rt", "uno_r4"]
+default = [ "defmt", "time-driver", "rt", "uno_r4" ]
 
 # Enable the `rt` feature of the PAC.
 # With `rt` enabled the PAC provides interrupt vectors instead of letting [`cortex-m-rt`](https://docs.rs/cortex-m-rt) do that.
 # See <https://docs.rs/cortex-m-rt/latest/cortex_m_rt/#device> for more info.
 rt = [ "ra4m1-ctpac/rt" ]
 
-defmt = ["dep:defmt", "ra4m1-ctpac/defmt"]
+defmt = [ "dep:defmt", "ra4m1-ctpac/defmt" ]
 time-driver = [ "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time-driver/tick-hz-48_000_000" ]
 unstable-pac = [ ]
 
 uno_r4 = [ "64pin" ]
 
-48pin = []
-64pin = []
-100pin = []
+48pin = [ ]
+64pin = [ ]
+100pin = [ ]
+
+[package.metadata.docs.rs]
+default-target = "thumbv7em-none-eabihf"
