@@ -59,3 +59,7 @@ See examples for more details.
 
 * App template
 * Add another layer of macro goodness on top of the option setting registers
+
+## License
+
+All of the code in this repository is available under the terms of the LGPL 3.0 (or newer) license.
