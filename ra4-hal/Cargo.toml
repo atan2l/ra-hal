@@ -24,7 +24,7 @@ ra4m1-ctpac = { path = "../ra4m1-ctpac" }
 cfg-if = "1"
 
 [features]
-default = [ "defmt", "time-driver", "rt"]
+default = [ "defmt", "time-driver", "rt", "uno_r4"]
 
 # Enable the `rt` feature of the PAC.
 # With `rt` enabled the PAC provides interrupt vectors instead of letting [`cortex-m-rt`](https://docs.rs/cortex-m-rt) do that.
@@ -34,3 +34,9 @@ rt = [ "ra4m1-ctpac/rt" ]
 defmt = ["dep:defmt", "ra4m1-ctpac/defmt"]
 time-driver = [ "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time-driver/tick-hz-48_000_000" ]
 unstable-pac = [ ]
+
+uno_r4 = [ "64pin" ]
+
+48pin = []
+64pin = []
+100pin = []

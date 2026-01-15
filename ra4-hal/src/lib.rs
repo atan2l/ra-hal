@@ -189,6 +189,84 @@ embassy_hal_internal::peripherals_definition!(
     SCI9,
     GPT320,
     GPT321,
+
+    P000,
+    P001,
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P002,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P003,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P004,
+    #[cfg(feature = "100pin")]
+    P005,
+    #[cfg(feature = "100pin")]
+    P006,
+    #[cfg(feature = "100pin")]
+    P007,
+    #[cfg(feature = "100pin")]
+    P008,
+    P010,
+    P011,
+    P012,
+    P013,
+    P014,
+    P015,
+
+    P100,
+    P101,
+    P102,
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P103,
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P104,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P105,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P106,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P107,
+    P108,
+    P109,
+    P110,
+    P111,
+    P112,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P113,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P114,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P115,
+
+    P200,
+    P201,
+    #[cfg(feature = "100pin")]
+    P202,
+    #[cfg(feature = "100pin")]
+    P203,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P204,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P205,
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P206,
+    P212,
+    P213,
+    P214,
+    P215,
+
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P500,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P501,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P502,
+    #[cfg(feature = "100pin")]
+    P503,
+    #[cfg(feature = "100pin")]
+    P504,
+    #[cfg(feature = "100pin")]
+    P505,
 );
 
 #[rustfmt::skip]
@@ -203,6 +281,84 @@ embassy_hal_internal::peripherals_struct!(
     SCI9,
     GPT320,
     GPT321,
+
+    P000,
+    P001,
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P002,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P003,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P004,
+    #[cfg(feature = "100pin")]
+    P005,
+    #[cfg(feature = "100pin")]
+    P006,
+    #[cfg(feature = "100pin")]
+    P007,
+    #[cfg(feature = "100pin")]
+    P008,
+    P010,
+    P011,
+    P012,
+    P013,
+    P014,
+    P015,
+
+    P100,
+    P101,
+    P102,
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P103,
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P104,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P105,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P106,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P107,
+    P108,
+    P109,
+    P110,
+    P111,
+    P112,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P113,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P114,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P115,
+
+    P200,
+    P201,
+    #[cfg(feature = "100pin")]
+    P202,
+    #[cfg(feature = "100pin")]
+    P203,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P204,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P205,
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P206,
+    P212,
+    P213,
+    P214,
+    P215,
+
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P500,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P501,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P502,
+    #[cfg(feature = "100pin")]
+    P503,
+    #[cfg(feature = "100pin")]
+    P504,
+    #[cfg(feature = "100pin")]
+    P505,
 );
 
 #[rustfmt::skip]
