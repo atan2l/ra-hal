@@ -10,3 +10,7 @@ transforms:
       from: adc14::Adc140
       to: adc14::Adc14
       type: Block
+  - !MakeFieldArray
+      fieldsets: adc14::regs::(Adansa[01])
+      from: (ansa)\d+
+      to: ${1}

@@ -507,182 +507,18 @@ impl Adansa0 {
     #[doc = "AN000 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa00(&self) -> bool {
-        let val = (self.0 >> 0usize) & 0x01;
+    pub const fn ansa(&self, n: usize) -> bool {
+        assert!(n < 15usize);
+        let offs = 0usize + n * 1usize;
+        let val = (self.0 >> offs) & 0x01;
         val != 0
     }
     #[doc = "AN000 Select"]
     #[inline(always)]
-    pub const fn set_ansa00(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
-    }
-    #[doc = "AN001 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa01(&self) -> bool {
-        let val = (self.0 >> 1usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN001 Select"]
-    #[inline(always)]
-    pub const fn set_ansa01(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
-    }
-    #[doc = "AN002 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa02(&self) -> bool {
-        let val = (self.0 >> 2usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN002 Select"]
-    #[inline(always)]
-    pub const fn set_ansa02(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
-    }
-    #[doc = "AN003 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa03(&self) -> bool {
-        let val = (self.0 >> 3usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN003 Select"]
-    #[inline(always)]
-    pub const fn set_ansa03(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
-    }
-    #[doc = "AN004 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa04(&self) -> bool {
-        let val = (self.0 >> 4usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN004 Select"]
-    #[inline(always)]
-    pub const fn set_ansa04(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
-    }
-    #[doc = "AN005 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa05(&self) -> bool {
-        let val = (self.0 >> 5usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN005 Select"]
-    #[inline(always)]
-    pub const fn set_ansa05(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
-    }
-    #[doc = "AN006 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa06(&self) -> bool {
-        let val = (self.0 >> 6usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN006 Select"]
-    #[inline(always)]
-    pub const fn set_ansa06(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
-    }
-    #[doc = "AN007 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa07(&self) -> bool {
-        let val = (self.0 >> 7usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN007 Select"]
-    #[inline(always)]
-    pub const fn set_ansa07(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
-    }
-    #[doc = "AN008 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa08(&self) -> bool {
-        let val = (self.0 >> 8usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN008 Select"]
-    #[inline(always)]
-    pub const fn set_ansa08(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
-    }
-    #[doc = "AN009 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa09(&self) -> bool {
-        let val = (self.0 >> 9usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN009 Select"]
-    #[inline(always)]
-    pub const fn set_ansa09(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
-    }
-    #[doc = "AN010 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa010(&self) -> bool {
-        let val = (self.0 >> 10usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN010 Select"]
-    #[inline(always)]
-    pub const fn set_ansa010(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 10usize)) | (((val as u16) & 0x01) << 10usize);
-    }
-    #[doc = "AN011 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa011(&self) -> bool {
-        let val = (self.0 >> 11usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN011 Select"]
-    #[inline(always)]
-    pub const fn set_ansa011(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 11usize)) | (((val as u16) & 0x01) << 11usize);
-    }
-    #[doc = "AN012 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa012(&self) -> bool {
-        let val = (self.0 >> 12usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN012 Select"]
-    #[inline(always)]
-    pub const fn set_ansa012(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 12usize)) | (((val as u16) & 0x01) << 12usize);
-    }
-    #[doc = "AN013 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa013(&self) -> bool {
-        let val = (self.0 >> 13usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN013 Select"]
-    #[inline(always)]
-    pub const fn set_ansa013(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u16) & 0x01) << 13usize);
-    }
-    #[doc = "AN014 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa014(&self) -> bool {
-        let val = (self.0 >> 14usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN014 Select"]
-    #[inline(always)]
-    pub const fn set_ansa014(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u16) & 0x01) << 14usize);
+    pub const fn set_ansa(&mut self, n: usize, val: bool) {
+        assert!(n < 15usize);
+        let offs = 0usize + n * 1usize;
+        self.0 = (self.0 & !(0x01 << offs)) | (((val as u16) & 0x01) << offs);
     }
     #[doc = "This bit is read as 0. The write value should be 0."]
     #[must_use]
@@ -706,21 +542,21 @@ impl Default for Adansa0 {
 impl core::fmt::Debug for Adansa0 {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("Adansa0")
-            .field("ansa00", &self.ansa00())
-            .field("ansa01", &self.ansa01())
-            .field("ansa02", &self.ansa02())
-            .field("ansa03", &self.ansa03())
-            .field("ansa04", &self.ansa04())
-            .field("ansa05", &self.ansa05())
-            .field("ansa06", &self.ansa06())
-            .field("ansa07", &self.ansa07())
-            .field("ansa08", &self.ansa08())
-            .field("ansa09", &self.ansa09())
-            .field("ansa010", &self.ansa010())
-            .field("ansa011", &self.ansa011())
-            .field("ansa012", &self.ansa012())
-            .field("ansa013", &self.ansa013())
-            .field("ansa014", &self.ansa014())
+            .field("ansa[0]", &self.ansa(0usize))
+            .field("ansa[1]", &self.ansa(1usize))
+            .field("ansa[2]", &self.ansa(2usize))
+            .field("ansa[3]", &self.ansa(3usize))
+            .field("ansa[4]", &self.ansa(4usize))
+            .field("ansa[5]", &self.ansa(5usize))
+            .field("ansa[6]", &self.ansa(6usize))
+            .field("ansa[7]", &self.ansa(7usize))
+            .field("ansa[8]", &self.ansa(8usize))
+            .field("ansa[9]", &self.ansa(9usize))
+            .field("ansa[10]", &self.ansa(10usize))
+            .field("ansa[11]", &self.ansa(11usize))
+            .field("ansa[12]", &self.ansa(12usize))
+            .field("ansa[13]", &self.ansa(13usize))
+            .field("ansa[14]", &self.ansa(14usize))
             .field("reserved", &self.reserved())
             .finish()
     }
@@ -730,22 +566,22 @@ impl defmt::Format for Adansa0 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adansa0 {{ ansa00: {=bool:?}, ansa01: {=bool:?}, ansa02: {=bool:?}, ansa03: {=bool:?}, ansa04: {=bool:?}, ansa05: {=bool:?}, ansa06: {=bool:?}, ansa07: {=bool:?}, ansa08: {=bool:?}, ansa09: {=bool:?}, ansa010: {=bool:?}, ansa011: {=bool:?}, ansa012: {=bool:?}, ansa013: {=bool:?}, ansa014: {=bool:?}, reserved: {=bool:?} }}",
-            self.ansa00(),
-            self.ansa01(),
-            self.ansa02(),
-            self.ansa03(),
-            self.ansa04(),
-            self.ansa05(),
-            self.ansa06(),
-            self.ansa07(),
-            self.ansa08(),
-            self.ansa09(),
-            self.ansa010(),
-            self.ansa011(),
-            self.ansa012(),
-            self.ansa013(),
-            self.ansa014(),
+            "Adansa0 {{ ansa[0]: {=bool:?}, ansa[1]: {=bool:?}, ansa[2]: {=bool:?}, ansa[3]: {=bool:?}, ansa[4]: {=bool:?}, ansa[5]: {=bool:?}, ansa[6]: {=bool:?}, ansa[7]: {=bool:?}, ansa[8]: {=bool:?}, ansa[9]: {=bool:?}, ansa[10]: {=bool:?}, ansa[11]: {=bool:?}, ansa[12]: {=bool:?}, ansa[13]: {=bool:?}, ansa[14]: {=bool:?}, reserved: {=bool:?} }}",
+            self.ansa(0usize),
+            self.ansa(1usize),
+            self.ansa(2usize),
+            self.ansa(3usize),
+            self.ansa(4usize),
+            self.ansa(5usize),
+            self.ansa(6usize),
+            self.ansa(7usize),
+            self.ansa(8usize),
+            self.ansa(9usize),
+            self.ansa(10usize),
+            self.ansa(11usize),
+            self.ansa(12usize),
+            self.ansa(13usize),
+            self.ansa(14usize),
             self.reserved()
         )
     }
@@ -758,122 +594,18 @@ impl Adansa1 {
     #[doc = "AN016 Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn ansa16(&self) -> bool {
-        let val = (self.0 >> 0usize) & 0x01;
+    pub const fn ansa(&self, n: usize) -> bool {
+        assert!(n < 10usize);
+        let offs = 0usize + n * 1usize;
+        let val = (self.0 >> offs) & 0x01;
         val != 0
     }
     #[doc = "AN016 Select"]
     #[inline(always)]
-    pub const fn set_ansa16(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u16) & 0x01) << 0usize);
-    }
-    #[doc = "AN017 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa17(&self) -> bool {
-        let val = (self.0 >> 1usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN017 Select"]
-    #[inline(always)]
-    pub const fn set_ansa17(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u16) & 0x01) << 1usize);
-    }
-    #[doc = "AN018 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa18(&self) -> bool {
-        let val = (self.0 >> 2usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN018 Select"]
-    #[inline(always)]
-    pub const fn set_ansa18(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 2usize)) | (((val as u16) & 0x01) << 2usize);
-    }
-    #[doc = "AN019 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa19(&self) -> bool {
-        let val = (self.0 >> 3usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN019 Select"]
-    #[inline(always)]
-    pub const fn set_ansa19(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u16) & 0x01) << 3usize);
-    }
-    #[doc = "AN020 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa20(&self) -> bool {
-        let val = (self.0 >> 4usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN020 Select"]
-    #[inline(always)]
-    pub const fn set_ansa20(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u16) & 0x01) << 4usize);
-    }
-    #[doc = "AN021 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa21(&self) -> bool {
-        let val = (self.0 >> 5usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN021 Select"]
-    #[inline(always)]
-    pub const fn set_ansa21(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u16) & 0x01) << 5usize);
-    }
-    #[doc = "AN022 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa22(&self) -> bool {
-        let val = (self.0 >> 6usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN022 Select"]
-    #[inline(always)]
-    pub const fn set_ansa22(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u16) & 0x01) << 6usize);
-    }
-    #[doc = "AN023 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa23(&self) -> bool {
-        let val = (self.0 >> 7usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN023 Select"]
-    #[inline(always)]
-    pub const fn set_ansa23(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u16) & 0x01) << 7usize);
-    }
-    #[doc = "AN024 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa24(&self) -> bool {
-        let val = (self.0 >> 8usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN024 Select"]
-    #[inline(always)]
-    pub const fn set_ansa24(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 8usize)) | (((val as u16) & 0x01) << 8usize);
-    }
-    #[doc = "AN025 Select"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn ansa25(&self) -> bool {
-        let val = (self.0 >> 9usize) & 0x01;
-        val != 0
-    }
-    #[doc = "AN025 Select"]
-    #[inline(always)]
-    pub const fn set_ansa25(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 9usize)) | (((val as u16) & 0x01) << 9usize);
+    pub const fn set_ansa(&mut self, n: usize, val: bool) {
+        assert!(n < 10usize);
+        let offs = 0usize + n * 1usize;
+        self.0 = (self.0 & !(0x01 << offs)) | (((val as u16) & 0x01) << offs);
     }
     #[doc = "These bits are read as 000000. The write value should be 000000."]
     #[must_use]
@@ -897,16 +629,16 @@ impl Default for Adansa1 {
 impl core::fmt::Debug for Adansa1 {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("Adansa1")
-            .field("ansa16", &self.ansa16())
-            .field("ansa17", &self.ansa17())
-            .field("ansa18", &self.ansa18())
-            .field("ansa19", &self.ansa19())
-            .field("ansa20", &self.ansa20())
-            .field("ansa21", &self.ansa21())
-            .field("ansa22", &self.ansa22())
-            .field("ansa23", &self.ansa23())
-            .field("ansa24", &self.ansa24())
-            .field("ansa25", &self.ansa25())
+            .field("ansa[0]", &self.ansa(0usize))
+            .field("ansa[1]", &self.ansa(1usize))
+            .field("ansa[2]", &self.ansa(2usize))
+            .field("ansa[3]", &self.ansa(3usize))
+            .field("ansa[4]", &self.ansa(4usize))
+            .field("ansa[5]", &self.ansa(5usize))
+            .field("ansa[6]", &self.ansa(6usize))
+            .field("ansa[7]", &self.ansa(7usize))
+            .field("ansa[8]", &self.ansa(8usize))
+            .field("ansa[9]", &self.ansa(9usize))
             .field("reserved", &self.reserved())
             .finish()
     }
@@ -916,17 +648,17 @@ impl defmt::Format for Adansa1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Adansa1 {{ ansa16: {=bool:?}, ansa17: {=bool:?}, ansa18: {=bool:?}, ansa19: {=bool:?}, ansa20: {=bool:?}, ansa21: {=bool:?}, ansa22: {=bool:?}, ansa23: {=bool:?}, ansa24: {=bool:?}, ansa25: {=bool:?}, reserved: {=u8:?} }}",
-            self.ansa16(),
-            self.ansa17(),
-            self.ansa18(),
-            self.ansa19(),
-            self.ansa20(),
-            self.ansa21(),
-            self.ansa22(),
-            self.ansa23(),
-            self.ansa24(),
-            self.ansa25(),
+            "Adansa1 {{ ansa[0]: {=bool:?}, ansa[1]: {=bool:?}, ansa[2]: {=bool:?}, ansa[3]: {=bool:?}, ansa[4]: {=bool:?}, ansa[5]: {=bool:?}, ansa[6]: {=bool:?}, ansa[7]: {=bool:?}, ansa[8]: {=bool:?}, ansa[9]: {=bool:?}, reserved: {=u8:?} }}",
+            self.ansa(0usize),
+            self.ansa(1usize),
+            self.ansa(2usize),
+            self.ansa(3usize),
+            self.ansa(4usize),
+            self.ansa(5usize),
+            self.ansa(6usize),
+            self.ansa(7usize),
+            self.ansa(8usize),
+            self.ansa(9usize),
             self.reserved()
         )
     }
