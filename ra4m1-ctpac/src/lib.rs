@@ -179,17 +179,17 @@ pub const GPT32_0: gpt32::Gpt32 = unsafe { gpt32::Gpt32::from_ptr(0x4007_8000usi
 #[doc = "General PWM Timer 1 (32-bit)"]
 pub const GPT32_1: gpt32::Gpt32 = unsafe { gpt32::Gpt32::from_ptr(0x4007_8100usize as _) };
 #[doc = "General PWM Timer 2 (16-bit)"]
-pub const GPT16_2: gpt162::Gpt162 = unsafe { gpt162::Gpt162::from_ptr(0x4007_8200usize as _) };
+pub const GPT16_2: gpt16::Gpt16 = unsafe { gpt16::Gpt16::from_ptr(0x4007_8200usize as _) };
 #[doc = "General PWM Timer 3 (16-bit)"]
-pub const GPT16_3: gpt162::Gpt162 = unsafe { gpt162::Gpt162::from_ptr(0x4007_8300usize as _) };
+pub const GPT16_3: gpt16::Gpt16 = unsafe { gpt16::Gpt16::from_ptr(0x4007_8300usize as _) };
 #[doc = "General PWM Timer 4 (16-bit)"]
-pub const GPT16_4: gpt162::Gpt162 = unsafe { gpt162::Gpt162::from_ptr(0x4007_8400usize as _) };
+pub const GPT16_4: gpt16::Gpt16 = unsafe { gpt16::Gpt16::from_ptr(0x4007_8400usize as _) };
 #[doc = "General PWM Timer 5 (16-bit)"]
-pub const GPT16_5: gpt162::Gpt162 = unsafe { gpt162::Gpt162::from_ptr(0x4007_8500usize as _) };
+pub const GPT16_5: gpt16::Gpt16 = unsafe { gpt16::Gpt16::from_ptr(0x4007_8500usize as _) };
 #[doc = "General PWM Timer 6 (16-bit)"]
-pub const GPT16_6: gpt162::Gpt162 = unsafe { gpt162::Gpt162::from_ptr(0x4007_8600usize as _) };
+pub const GPT16_6: gpt16::Gpt16 = unsafe { gpt16::Gpt16::from_ptr(0x4007_8600usize as _) };
 #[doc = "General PWM Timer 7 (16-bit)"]
-pub const GPT16_7: gpt162::Gpt162 = unsafe { gpt162::Gpt162::from_ptr(0x4007_8700usize as _) };
+pub const GPT16_7: gpt16::Gpt16 = unsafe { gpt16::Gpt16::from_ptr(0x4007_8700usize as _) };
 #[doc = "Output Phase Switching Controller"]
 pub const GPT_OPS: gpt_ops::GptOps = unsafe { gpt_ops::GptOps::from_ptr(0x4007_8ff0usize as _) };
 #[doc = "Key Interrupt Function"]
@@ -237,7 +237,7 @@ pub mod doc;
 pub mod dtc;
 pub mod elc;
 pub mod fcache;
-pub mod gpt162;
+pub mod gpt16;
 pub mod gpt32;
 pub mod gpt_ops;
 pub mod icu;

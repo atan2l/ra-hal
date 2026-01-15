@@ -1,11 +1,11 @@
 #[doc = "General PWM Timer 2 (16-bit)"]
 #[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Gpt162 {
+pub struct Gpt16 {
     ptr: *mut u8,
 }
-unsafe impl Send for Gpt162 {}
-unsafe impl Sync for Gpt162 {}
-impl Gpt162 {
+unsafe impl Send for Gpt16 {}
+unsafe impl Sync for Gpt16 {}
+impl Gpt16 {
     #[inline(always)]
     pub const unsafe fn from_ptr(ptr: *mut ()) -> Self {
         Self { ptr: ptr as _ }

@@ -10,6 +10,14 @@ transforms:
       from: gpt32::Gpt320
       to: gpt32::Gpt32
       type: Block
+  - !Rename
+      from: gpt162::(.+)
+      to: gpt16::${1}
+      type: All
+  - !Rename
+      from: gpt16::Gpt162
+      to: gpt16::Gpt16
+      type: Block
   - !RenameEnumVariants
       enum: gpt32::vals::Ud
       from: _0
