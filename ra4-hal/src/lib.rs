@@ -205,19 +205,19 @@ embassy_hal_internal::peripherals_definition!(
 
     P000,
     P001,
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P002,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P003,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P004,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P005,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P006,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P007,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P008,
     P010,
     P011,
@@ -229,39 +229,39 @@ embassy_hal_internal::peripherals_definition!(
     P100,
     P101,
     P102,
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P103,
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P104,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P105,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P106,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P107,
     P108,
     P109,
     P110,
     P111,
     P112,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P113,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P114,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P115,
 
     P200,
     P201,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P202,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P203,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P204,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P205,
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P206,
     P212,
     P213,
@@ -270,84 +270,84 @@ embassy_hal_internal::peripherals_definition!(
 
     P300,
     P301,
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P302,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P303,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P304,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P305,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P306,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P307,
 
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P400,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P401,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P402,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P403,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P404,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P405,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P406,
     P407,
     P408,
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P409,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P4010,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P4011,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P4012,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P4013,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P4014,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P4015,
 
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P500,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P501,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P502,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P503,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P504,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P505,
 
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P600,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P601,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P602,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P603,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P608,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P609,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P6010,
 
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P708,
 
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P808,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P809,
 
     P914,
@@ -369,19 +369,19 @@ embassy_hal_internal::peripherals_struct!(
 
     P000,
     P001,
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P002,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P003,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P004,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P005,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P006,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P007,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P008,
     P010,
     P011,
@@ -393,39 +393,39 @@ embassy_hal_internal::peripherals_struct!(
     P100,
     P101,
     P102,
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P103,
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P104,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P105,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P106,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P107,
     P108,
     P109,
     P110,
     P111,
     P112,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P113,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P114,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P115,
 
     P200,
     P201,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P202,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P203,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P204,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P205,
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P206,
     P212,
     P213,
@@ -434,84 +434,84 @@ embassy_hal_internal::peripherals_struct!(
 
     P300,
     P301,
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P302,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P303,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P304,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P305,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P306,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P307,
 
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P400,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P401,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P402,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P403,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P404,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P405,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P406,
     P407,
     P408,
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P409,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P4010,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P4011,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P4012,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P4013,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P4014,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P4015,
 
-    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P500,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P501,
-    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
     P502,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P503,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P504,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P505,
 
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P600,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P601,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P602,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P603,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P608,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P609,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P6010,
 
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P708,
 
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P808,
-    #[cfg(feature = "100pin")]
+    #[cfg(feature = "_100pin")]
     P809,
 
     P914,

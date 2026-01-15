@@ -38,11 +38,13 @@ defmt = [ "dep:defmt", "ra4m1-ctpac/defmt" ]
 time-driver = [ "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time-driver/tick-hz-48_000_000" ]
 unstable-pac = [ ]
 
-uno_r4 = [ "64pin" ]
+### Board features
+uno_r4 = [ "_64pin" ]
 
-48pin = [ ]
-64pin = [ ]
-100pin = [ ]
+### Internal use only
+_48pin = [ ]
+_64pin = [ ]
+_100pin = [ ]
 
 [package.metadata.docs.rs]
 default-target = "thumbv7em-none-eabihf"
