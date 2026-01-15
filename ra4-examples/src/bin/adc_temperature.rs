@@ -1,4 +1,4 @@
-//! AdcTemperature — Reads the internal temperature sensor via ADC
+//! AdcTemperature — Reads the CPU die temperature sensor via ADC
 
 #![no_std]
 #![no_main]
@@ -8,6 +8,7 @@
 use defmt::{debug, error, info, trace, warn};
 use defmt_rtt as _;
 use embassy_executor::Spawner;
+use embassy_time::Timer;
 use panic_probe as _;
 use ra4_hal::{adc::Adc, ofs0, ofs1, print_clock_config};
 
@@ -42,8 +43,20 @@ async fn main(_spawner: Spawner) {
     print_clock_config();
 
     let adc = Adc::new(p.ADC14);
+    let adc_channel = adc.temperature_channel();
 
     loop {
-        //
+        // § 48.7 TSN Characteristics
+        let slope = -3.65;
+        let v_1 = 1050.0;
+        let intercept = 25.0;
+
+        let v_s = adc.blocking_read(&adc_channel);
+
+        let temp = ((f32::from(v_s) - v_1) / slope) - intercept;
+
+        info!("Temp: raw={} mV, act={} °C", v_s, temp);
+
+        Timer::after_millis(500).await;
     }
 }

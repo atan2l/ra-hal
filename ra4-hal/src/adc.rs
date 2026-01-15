@@ -4,8 +4,12 @@ use cortex_m::asm;
 #[allow(unused)]
 use defmt::{debug, error, info, trace, warn};
 use embassy_hal_internal::{Peri, PeripheralType};
+use ra4m1_ctpac::adc14::vals::Adcs;
 
-use crate::{adc::channel::AdcChannel, pac, peripherals};
+use crate::{
+    adc::channel::{AdcChannel, Temperature},
+    pac, peripherals,
+};
 
 #[allow(private_bounds)]
 pub struct Adc<'d, I: Instance> {
@@ -48,13 +52,34 @@ impl<'d, I: Instance> Adc<'d, I> {
     fn enable_channel(&self, channel: usize) {
         let adc = I::regs();
 
+        trace!("ADC14: enable_channel({})", channel);
+
         if channel <= 14 {
+            adc.adexicr().modify(|w| {
+                w.set_ocsad(false);
+                w.set_tssa(false);
+            });
+
             adc.adansa0().modify(|w| {
                 w.set_ansa(channel as _, true);
             });
         } else if channel >= 16 && channel < 25 {
+            adc.adexicr().modify(|w| {
+                w.set_ocsad(false);
+                w.set_tssa(false);
+            });
+
             adc.adansa1().modify(|w| {
                 w.set_ansa((channel - 16) as _, true);
+            });
+        } else if channel == 15 {
+            if adc.adcsr().read().adst() {
+                warn!("ADC14: Trying to enable temp with a conversion running");
+            }
+
+            adc.adexicr().modify(|w| {
+                w.set_ocsad(false);
+                w.set_tssa(true);
             });
         } else {
             panic!("Invalid ADC channel");
@@ -63,6 +88,9 @@ impl<'d, I: Instance> Adc<'d, I> {
 
     fn disable_channel(&self, channel: usize) {
         let adc = I::regs();
+
+        trace!("ADC14: disable_channel({})", channel);
+
         if channel <= 14 {
             adc.adansa0().modify(|w| {
                 w.set_ansa(channel as _, false);
@@ -71,9 +99,22 @@ impl<'d, I: Instance> Adc<'d, I> {
             adc.adansa1().modify(|w| {
                 w.set_ansa((channel - 16) as _, false);
             });
+        } else if channel == 15 {
+            if adc.adcsr().read().adst() {
+                warn!("ADC14: Trying to disable temp with a conversion running");
+            }
+
+            adc.adexicr().modify(|w| {
+                w.set_tssa(false);
+            });
         } else {
             panic!("Invalid ADC channel");
         }
+    }
+
+    /// Return the pseudo-channel struct for temprature measurement.  Nothing is configured here.
+    pub fn temperature_channel(&self) -> Temperature {
+        Temperature {}
     }
 
     pub fn blocking_read(&self, channel: &impl AdcChannel) -> u16 {
@@ -81,6 +122,12 @@ impl<'d, I: Instance> Adc<'d, I> {
         let channel = usize::from(channel.channel());
 
         self.enable_channel(channel);
+
+        // TODO: read adst first to ensure we're stopped?
+
+        adc.adcsr().modify(|w| {
+            w.set_adcs(Adcs::_00);
+        });
 
         adc.adcsr().modify(|w| {
             w.set_adst(true);
@@ -98,6 +145,8 @@ impl<'d, I: Instance> Adc<'d, I> {
             adc.addr(channel).read().addr()
         } else if channel >= 16 && channel < 25 {
             adc.addr2(channel - 16).read().addr()
+        } else if channel == 15 {
+            adc.adtsdr().read().adtsdr()
         } else {
             panic!("Invalid ADC channel");
         };
@@ -131,6 +180,13 @@ mod channel {
     }
 
     trait AdcInputPin {}
+
+    pub struct Temperature;
+    impl AdcInputPin for Temperature {}
+    impl AdcChannel for Temperature {}
+    impl SealedAdcChannel for Temperature {
+        const CHANNEL: u8 = 15;
+    }
 
     macro_rules! input_pin_impl {
         ($pin:ident) => {
