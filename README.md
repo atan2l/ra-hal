@@ -24,6 +24,8 @@ To restore the bootloader on other other boards check the Arduino [repository](h
 
 ## Miscellaneous 
 
+Uno R4 WiFi = R7FA4M1AB3CFM#AA0 = 64 pin LQFP
+
 To read OFS values in binary (the default linker script should omit these):
 
 ```
@@ -46,11 +48,11 @@ See examples for more details.
 
 |            | Peripheral                               | Notes                                                  |
 | ---------- | ---------------------------------------- | ------------------------------------------------------ |
-| ⬜⬜⬜⬜⬜ | `ADC14` 14-Bit A/D Converter             | In progress                                            |
+| ⬛⬜⬜⬜⬜ | `ADC14` 14-Bit A/D Converter             | In progress                                            |
 | ⬛⬛⬛⬜⬜ | `CRC` Cyclic Redundancy Check Calculator | In progress, 32-bit CRC support TODO                   |
 | ⬛⬜⬜⬜⬜ | `GPT` General PWM Timer                  | Embassy timer driver only, general PWM support pending |
-| ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine       | Looking for data sheet / RM                            |
-| ⬜⬜⬜⬜⬜ | `SCI` Serial Communications Interface    |                                                        |
+| ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine       | Undocumented                                           |
+| ⬛⬜⬜⬜⬜ | `SCI` Serial Communications Interface    | In progress                                            |
 
 ## TODO
 

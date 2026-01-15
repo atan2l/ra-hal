@@ -43,6 +43,8 @@ async fn main(_spawner: Spawner) {
 
     print_clock_config();
 
+    let sci0 = ra4_hal::uart::Uart::new(p.SCI0);
+
     loop {
         asm::nop();
     }
