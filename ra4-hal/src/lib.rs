@@ -253,6 +253,52 @@ embassy_hal_internal::peripherals_definition!(
     P214,
     P215,
 
+    P300,
+    P301,
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P302,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P303,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P304,
+    #[cfg(feature = "100pin")]
+    P305,
+    #[cfg(feature = "100pin")]
+    P306,
+    #[cfg(feature = "100pin")]
+    P307,
+
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P400,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P401,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P402,
+    #[cfg(feature = "100pin")]
+    P403,
+    #[cfg(feature = "100pin")]
+    P404,
+    #[cfg(feature = "100pin")]
+    P405,
+    #[cfg(feature = "100pin")]
+    P406,
+    P407,
+    P408,
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P409,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P4010,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P4011,
+    #[cfg(feature = "100pin")]
+    P4012,
+    #[cfg(feature = "100pin")]
+    P4013,
+    #[cfg(feature = "100pin")]
+    P4014,
+    #[cfg(feature = "100pin")]
+    P4015,
+
     #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
     P500,
     #[cfg(any(feature = "64pin", feature = "100pin"))]
@@ -265,6 +311,32 @@ embassy_hal_internal::peripherals_definition!(
     P504,
     #[cfg(feature = "100pin")]
     P505,
+
+    #[cfg(feature = "100pin")]
+    P600,
+    #[cfg(feature = "100pin")]
+    P601,
+    #[cfg(feature = "100pin")]
+    P602,
+    #[cfg(feature = "100pin")]
+    P603,
+    #[cfg(feature = "100pin")]
+    P608,
+    #[cfg(feature = "100pin")]
+    P609,
+    #[cfg(feature = "100pin")]
+    P6010,
+
+    #[cfg(feature = "100pin")]
+    P708,
+
+    #[cfg(feature = "100pin")]
+    P808,
+    #[cfg(feature = "100pin")]
+    P809,
+
+    P914,
+    P915,
 );
 
 #[rustfmt::skip]
@@ -345,6 +417,52 @@ embassy_hal_internal::peripherals_struct!(
     P214,
     P215,
 
+    P300,
+    P301,
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P302,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P303,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P304,
+    #[cfg(feature = "100pin")]
+    P305,
+    #[cfg(feature = "100pin")]
+    P306,
+    #[cfg(feature = "100pin")]
+    P307,
+
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P400,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P401,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P402,
+    #[cfg(feature = "100pin")]
+    P403,
+    #[cfg(feature = "100pin")]
+    P404,
+    #[cfg(feature = "100pin")]
+    P405,
+    #[cfg(feature = "100pin")]
+    P406,
+    P407,
+    P408,
+    #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
+    P409,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P4010,
+    #[cfg(any(feature = "64pin", feature = "100pin"))]
+    P4011,
+    #[cfg(feature = "100pin")]
+    P4012,
+    #[cfg(feature = "100pin")]
+    P4013,
+    #[cfg(feature = "100pin")]
+    P4014,
+    #[cfg(feature = "100pin")]
+    P4015,
+
     #[cfg(any(feature = "48pin", feature = "64pin", feature = "100pin"))]
     P500,
     #[cfg(any(feature = "64pin", feature = "100pin"))]
@@ -357,6 +475,32 @@ embassy_hal_internal::peripherals_struct!(
     P504,
     #[cfg(feature = "100pin")]
     P505,
+
+    #[cfg(feature = "100pin")]
+    P600,
+    #[cfg(feature = "100pin")]
+    P601,
+    #[cfg(feature = "100pin")]
+    P602,
+    #[cfg(feature = "100pin")]
+    P603,
+    #[cfg(feature = "100pin")]
+    P608,
+    #[cfg(feature = "100pin")]
+    P609,
+    #[cfg(feature = "100pin")]
+    P6010,
+
+    #[cfg(feature = "100pin")]
+    P708,
+
+    #[cfg(feature = "100pin")]
+    P808,
+    #[cfg(feature = "100pin")]
+    P809,
+
+    P914,
+    P915,
 );
 
 #[rustfmt::skip]
