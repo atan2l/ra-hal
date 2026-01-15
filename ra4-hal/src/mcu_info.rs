@@ -141,6 +141,7 @@ impl McuInfo {
         part_number[8..12].copy_from_slice(&fmifrt.pnr(2).read().0.to_ne_bytes());
         part_number[12..16].copy_from_slice(&fmifrt.pnr(3).read().0.to_ne_bytes());
 
+        // TODO: Why is this register 32 bits wide?
         let rev = fmifrt.mcuver().read().mcuver();
 
         McuInfo {
