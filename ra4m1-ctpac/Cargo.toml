@@ -1,6 +1,6 @@
 [package]
 name = "ra4m1-ctpac"
-version = "0.1.0-dev"
+version = "0.1.7-dev"
 authors = ["Alex Zepeda <srht@inferiorhumanorgans.com>"]
 edition = "2024"
 rust-version = "1.91"
