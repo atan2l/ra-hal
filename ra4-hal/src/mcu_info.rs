@@ -100,11 +100,11 @@ impl McuInfo {
         match self.pin_count() {
             Some(actual) => {
                 cfg_if! {
-                    if #[cfg(feature = "100pin")] {
+                    if #[cfg(feature = "_100pin")] {
                         let configured = 100;
-                    } else if #[cfg(feature = "64pin")] {
+                    } else if #[cfg(feature = "_64pin")] {
                         let configured = 64;
-                    } else if #[cfg(feature = "48pin")] {
+                    } else if #[cfg(feature = "_48pin")] {
                         let configured = 48;
                     } else {
                         let configured = 40;
