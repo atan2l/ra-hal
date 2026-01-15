@@ -1,8 +1,6 @@
 use core::marker::PhantomData;
 
 use cortex_m::asm;
-#[allow(unused)]
-use defmt::{debug, error, info, trace, warn};
 use embassy_hal_internal::{Peri, PeripheralType};
 use ra4m1_ctpac::adc14::vals::{Adcs, Adprc, Diagval};
 

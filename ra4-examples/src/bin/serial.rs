@@ -5,12 +5,13 @@
 #![warn(missing_docs)]
 
 use cortex_m::asm;
-#[allow(unused)]
-use defmt::{debug, error, info, trace, warn};
+#[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
 use panic_probe as _;
 use ra4_hal::print_clock_config;
+#[allow(unused)]
+use ra4_hal::{debug, error, info, trace, warn};
 use ra4_hal::{ofs0, ofs1};
 
 /// Option Function Select Register 0

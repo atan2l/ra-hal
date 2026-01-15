@@ -1,6 +1,3 @@
-#[allow(unused)]
-use defmt::{debug, error, info, trace, warn};
-
 pub struct Temperature;
 pub struct Vref;
 

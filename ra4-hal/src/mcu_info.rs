@@ -5,8 +5,6 @@
 use core::mem::transmute;
 
 use cfg_if::cfg_if;
-#[allow(unused)]
-use defmt::{debug, error, info, trace, warn};
 
 use crate::pac;
 

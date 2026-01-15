@@ -4,8 +4,6 @@ use core::sync::atomic::{AtomicU32, Ordering};
 
 use crate::interrupt::typelevel::Interrupt;
 use critical_section::{CriticalSection, Mutex};
-#[allow(unused)]
-use defmt::{debug, error, info, trace, warn};
 use embassy_hal_internal::interrupt::InterruptExt;
 use embassy_time_driver::Driver;
 use embassy_time_queue_utils::Queue;

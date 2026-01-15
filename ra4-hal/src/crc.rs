@@ -1,5 +1,3 @@
-#[allow(unused)]
-use defmt::{debug, error, info, trace, warn};
 use embassy_hal_internal::Peri;
 use ra4m1_ctpac::crc::{
     regs::{CrcdirBy, Crcdor, CrcdorBy, CrcdorHa},

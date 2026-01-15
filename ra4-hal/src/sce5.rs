@@ -1,5 +1,3 @@
-#[allow(unused)]
-use defmt::{debug, error, info, trace, warn};
 use embassy_hal_internal::Peri;
 
 use crate::{pac, peripherals::SCE5};

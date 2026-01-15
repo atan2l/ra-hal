@@ -1,7 +1,5 @@
 //! Conveniences for registers that are gated by a write protect flag.
 
-#[allow(unused)]
-use defmt::{debug, error, info, trace, warn};
 use ra4m1_ctpac::system::vals::Prc0;
 
 /// Encapsulates access so that write protection is always re-enabled after a write operation.

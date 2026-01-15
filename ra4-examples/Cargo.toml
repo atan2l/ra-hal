@@ -10,8 +10,8 @@ publish = false
 ## Core dependencies
 cortex-m = { workspace = true }
 cortex-m-rt = { workspace = true }
-defmt = { workspace = true }
-defmt-rtt = { version = "1.0.0" }
+defmt = { workspace = true, optional = true }
+defmt-rtt = { version = "1.0.0", optional = true }
 panic-probe = { version = "1.0.0" }
 critical-section = { workspace = true }
 
@@ -37,4 +37,4 @@ vergen-gitcl = { version = "1.0.8" }
 
 [features]
 default = [ "defmt" ]
-defmt = [ "panic-probe/print-defmt", "embassy-executor/defmt", "embassy-time/defmt", "embassy-time/defmt-timestamp-uptime" ]
+defmt = [ "dep:defmt", "dep:defmt-rtt", "panic-probe/print-defmt", "embassy-executor/defmt", "embassy-time/defmt", "embassy-time/defmt-timestamp-uptime", "ra4-hal/defmt" ]

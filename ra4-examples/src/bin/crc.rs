@@ -5,16 +5,16 @@
 #![warn(missing_docs)]
 
 use cortex_m::asm;
-#[allow(unused)]
-use defmt::{debug, error, info, trace, warn};
+#[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
 use panic_probe as _;
+#[allow(unused)]
+use ra4_hal::{assert_eq, debug, error, info, trace, warn};
 use ra4_hal::{
     crc::{Config as CrcConfig, Crc, Endian, Polynomial},
-    print_clock_config,
+    ofs0, ofs1, print_clock_config,
 };
-use ra4_hal::{ofs0, ofs1};
 
 /// Option Function Select Register 0
 /// Accepts either:
@@ -57,7 +57,7 @@ async fn main(_spawner: Spawner) {
     );
 
     let output = crc.feed_bytes(data);
-    defmt::assert_eq!(output, 0xbb3d);
+    assert_eq!(output, 0xbb3d);
     info!("Crc16 Passed");
 
     crc.set_config(CrcConfig {
@@ -67,7 +67,7 @@ async fn main(_spawner: Spawner) {
         ..Default::default()
     });
     let output = crc.feed_bytes(data);
-    defmt::assert_eq!(output, 0x9ecf);
+    assert_eq!(output, 0x9ecf);
     info!("Crc16 DDS-110 Passed");
 
     loop {

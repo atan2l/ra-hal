@@ -4,12 +4,13 @@
 #![no_main]
 #![warn(missing_docs)]
 
-#[allow(unused)]
-use defmt::{debug, error, info, trace, warn};
+#[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
 use embassy_time::Timer;
 use panic_probe as _;
+#[allow(unused)]
+use ra4_hal::{debug, error, info, trace, warn};
 use ra4_hal::{ofs0, ofs1, print_clock_config};
 
 /// Option Function Select Register 0
