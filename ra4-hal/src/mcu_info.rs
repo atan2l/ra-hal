@@ -43,7 +43,7 @@ impl McuInfo {
         self.part_number().len() >= Self::PN_LEN
     }
 
-    /// Returns the amount of on-die flash memory in kilobytes
+    /// Returns the amount of on-die flash memory in kilobytes or `None` if this cannot be determined.
     pub fn flash_size(&self) -> Option<u16> {
         match self.part_number[8] {
             b'9' => Some(128),
@@ -56,6 +56,7 @@ impl McuInfo {
         }
     }
 
+    /// Returns the number of pins attached to the MCU, `None` if this cannot be determined.
     pub fn pin_count(&self) -> Option<u8> {
         match &self.part_number[11..=12] {
             b"FB" | b"BM" => Some(144),
@@ -121,7 +122,7 @@ impl McuInfo {
         }
     }
 
-    /// Loads information from `FMIFRT`.
+    /// Loads MCU information from `FMIFRT`.
     pub fn info() -> Self {
         let fmifrt = pac::FMIFRT;
 
