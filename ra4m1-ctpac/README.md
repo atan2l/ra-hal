@@ -7,7 +7,7 @@ This is primarily intended to be used by an upcoming RA4M1 HAL crate, however a 
 
 ## Supported Hardware
 
-In the consumer space the Renesas RA4M1 is most commonly found in the Aduino "R4" boards like the Uno R4 Minima and Nano R4.
+In the consumer space the Renesas RA4M1 is most commonly found in the Arduino "R4" boards like the Uno R4 Minima and Nano R4.
 
 ## TODO
 
