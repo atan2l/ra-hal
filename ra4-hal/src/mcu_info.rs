@@ -74,6 +74,7 @@ impl McuInfo {
     }
 
     /// Writes MCU information to the logger
+    #[cfg(feature = "defmt")]
     pub fn print_info(&self) {
         if !self.ok() {
             info!(

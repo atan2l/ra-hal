@@ -118,6 +118,8 @@ pub fn init() -> Peripherals {
     })
 }
 
+/// Logs the current clock configuration at the `debug` level.
+#[cfg(feature = "defmt")]
 pub fn print_clock_config() {
     let system = pac::SYSTEM;
     let config = system.sckdivcr().read();
