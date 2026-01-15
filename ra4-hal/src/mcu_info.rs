@@ -52,7 +52,7 @@ impl McuInfo {
             b'D' => Some(512),
             b'E' => Some(768),
             b'F' => Some(1024),
-            _ => todo!(),
+            _ => None,
         }
     }
 
