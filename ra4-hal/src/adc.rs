@@ -49,42 +49,7 @@ impl<'d, I: Instance> Adc<'d, I> {
         }
     }
 
-    fn enable_channel(&self, channel: usize) {
-        let adc = I::regs();
-
-        trace!("ADC14: enable_channel({})", channel);
-
-        if channel <= 14 {
-            adc.adexicr().modify(|w| {
-                w.set_ocsad(false);
-                w.set_tssa(false);
-            });
-
-            adc.adansa0().modify(|w| {
-                w.set_ansa(channel as _, true);
-            });
-        } else if channel >= 16 && channel < 25 {
-            adc.adexicr().modify(|w| {
-                w.set_ocsad(false);
-                w.set_tssa(false);
-            });
-
-            adc.adansa1().modify(|w| {
-                w.set_ansa((channel - 16) as _, true);
-            });
-        } else if channel == 15 {
-            if adc.adcsr().read().adst() {
-                warn!("ADC14: Trying to enable temp with a conversion running");
-            }
-
-            adc.adexicr().modify(|w| {
-                w.set_ocsad(false);
-                w.set_tssa(true);
-            });
-        } else {
-            panic!("Invalid ADC channel");
-        }
-    }
+    fn enable_channel(&self, channel: usize) {}
 
     fn disable_channel(&self, channel: usize) {
         let adc = I::regs();
@@ -119,9 +84,8 @@ impl<'d, I: Instance> Adc<'d, I> {
 
     pub fn blocking_read(&self, channel: &impl AdcChannel) -> u16 {
         let adc = I::regs();
-        let channel = usize::from(channel.channel());
 
-        self.enable_channel(channel);
+        channel.enable::<I>();
 
         // TODO: read adst first to ensure we're stopped?
 
@@ -138,20 +102,9 @@ impl<'d, I: Instance> Adc<'d, I> {
             asm::nop()
         }
 
-        self.disable_channel(channel);
+        channel.disable::<I>();
 
-        // TODO: Merge these in the chiptool IR as it's continuous memory with channel 15 being a gap
-        let data: u16 = if channel <= 14 {
-            adc.addr(channel).read().addr()
-        } else if channel >= 16 && channel < 25 {
-            adc.addr2(channel - 16).read().addr()
-        } else if channel == 15 {
-            adc.adtsdr().read().adtsdr()
-        } else {
-            panic!("Invalid ADC channel");
-        };
-
-        return data;
+        channel.read_one::<I>()
     }
 }
 
@@ -167,6 +120,9 @@ impl<'d, I: Instance> Drop for Adc<'d, I> {
 }
 
 mod channel {
+    #[allow(unused)]
+    use defmt::{debug, error, info, trace, warn};
+
     #[allow(private_bounds)]
     pub trait AdcChannel: SealedAdcChannel {}
 
@@ -174,8 +130,67 @@ mod channel {
     pub(crate) trait SealedAdcChannel: AdcInputPin {
         const CHANNEL: u8;
 
-        fn channel(&self) -> u8 {
-            Self::CHANNEL
+        fn enable<I: super::Instance>(&self) {
+            let adc = I::regs();
+
+            trace!("ADC14: enable_channel({})", Self::CHANNEL);
+
+            assert!(Self::CHANNEL <= 14 || (Self::CHANNEL >= 16 && Self::CHANNEL < 25));
+
+            if Self::CHANNEL <= 14 {
+                adc.adexicr().modify(|w| {
+                    w.set_ocsa(false);
+                    w.set_tssa(false);
+                });
+
+                adc.adansa0().modify(|w| {
+                    w.set_ansa(Self::CHANNEL as _, true);
+                });
+            } else if Self::CHANNEL >= 16 && Self::CHANNEL < 25 {
+                adc.adexicr().modify(|w| {
+                    w.set_ocsa(false);
+                    w.set_tssa(false);
+                });
+
+                adc.adansa1().modify(|w| {
+                    w.set_ansa((Self::CHANNEL - 16) as _, true);
+                });
+            }
+        }
+
+        fn disable<I: super::Instance>(&self) {
+            let adc = I::regs();
+
+            trace!("ADC14: disable_channel({})", Self::CHANNEL);
+
+            assert!(Self::CHANNEL <= 14 || (Self::CHANNEL >= 16 && Self::CHANNEL < 25));
+
+            if Self::CHANNEL <= 14 {
+                adc.adansa0().modify(|w| {
+                    w.set_ansa(Self::CHANNEL as _, false);
+                });
+            } else if Self::CHANNEL >= 16 && Self::CHANNEL < 25 {
+                adc.adansa1().modify(|w| {
+                    w.set_ansa((Self::CHANNEL - 16) as _, false);
+                });
+            }
+        }
+
+        fn read_one<I: super::Instance>(&self) -> u16 {
+            let adc = I::regs();
+
+            trace!("ADC14: read_one({})", Self::CHANNEL);
+
+            assert!(Self::CHANNEL <= 14 || (Self::CHANNEL >= 16 && Self::CHANNEL < 25));
+
+            // TODO: Merge these in the chiptool IR as it's continuous memory with channel 15 being a gap
+            if Self::CHANNEL <= 14 {
+                adc.addr(Self::CHANNEL as _).read().addr()
+            } else if Self::CHANNEL >= 16 && Self::CHANNEL < 25 {
+                adc.addr2((Self::CHANNEL - 16) as _).read().addr()
+            } else {
+                unimplemented!("Invalid ADC channel");
+            }
         }
     }
 
@@ -184,8 +199,45 @@ mod channel {
     pub struct Temperature;
     impl AdcInputPin for Temperature {}
     impl AdcChannel for Temperature {}
+
     impl SealedAdcChannel for Temperature {
-        const CHANNEL: u8 = 15;
+        const CHANNEL: u8 = 255;
+
+        fn enable<I: super::Instance>(&self) {
+            let adc = I::regs();
+
+            trace!("ADC14: enable_channel(TEMPERATURE)");
+
+            if adc.adcsr().read().adst() {
+                warn!("ADC14: Trying to enable temp with a conversion running");
+            }
+
+            adc.adexicr().modify(|w| {
+                w.set_ocsa(false);
+                w.set_tssa(true);
+            });
+        }
+
+        fn disable<I: super::Instance>(&self) {
+            let adc = I::regs();
+
+            trace!("ADC14: disable_channel(TEMPERATURE)");
+
+            if adc.adcsr().read().adst() {
+                warn!("ADC14: Trying to disable temp with a conversion running");
+            }
+
+            adc.adexicr().modify(|w| {
+                w.set_tssa(false);
+            });
+        }
+
+        fn read_one<I: super::Instance>(&self) -> u16 {
+            let adc = I::regs();
+
+            trace!("ADC14: read_one(TEMPERATURE)");
+            adc.adtsdr().read().adtsdr()
+        }
     }
 
     macro_rules! input_pin_impl {
