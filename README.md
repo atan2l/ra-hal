@@ -50,7 +50,7 @@ See examples for more details.
 | ---------- | ------------------------------------------------- | ------------------------------------------------------ |
 | ⬛⬛⬜⬜⬜ | `ADC14` 14-Bit A/D Converter                      | In progress, single shot readings work                 |
 | ⬛⬛⬛⬜⬜ | `CRC` Cyclic Redundancy Check Calculator          | In progress, 32-bit CRC support TODO                   |
-| ⬜⬜⬜⬜⬜ | `FMIFRT` Factory MCU Information Flash Root Table | In progress                                            |
+| ⬛⬛⬛⬛⬛ | `FMIFRT` Factory MCU Information Flash Root Table |                                                        |
 | ⬛⬜⬜⬜⬜ | `GPT` General PWM Timer                           | Embassy timer driver only, general PWM support pending |
 | ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine                | Undocumented                                           |
 | ⬛⬜⬜⬜⬜ | `SCI` Serial Communications Interface             | In progress                                            |
