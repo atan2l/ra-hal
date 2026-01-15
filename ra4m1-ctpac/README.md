@@ -9,17 +9,19 @@ This is primarily intended to be used by an upcoming RA4M1 HAL crate, however a 
 
 In the consumer space the Renesas RA4M1 is most commonly found in the Arduino "R4" boards like the Uno R4 Minima and Nano R4.
 
+## Updating
+
+To update the Rust code run the `generate.sh` script from this directory.
+`generate.sh` depends on chiptool, form, and GNU sed.
+It will install and update chiptool via cargo unless `CHIPTOOL_CMD` is set to a valid executable.
+Form will be installed and locked to a specific version via cargo if needed.
+
+If you wish to use a different SVD, place it in the `support/svd` directory and set the `SVD` environment variable appropriately.
+
+Note: that this crate currently **cannot** be rebuilt with the stock chiptool.
+
 ## TODO
 
 * Get required PRs merged into chiptool.
 * Continue renaming enum variants with symbolic names.
 * Add transforms any additional missing chunks.
-
-## Rebuilding
-
-To regenerate the Rust code run the `generate.sh` script from this directory.
-`generate.sh` depends on chiptool, form, and GNU sed.
-It will install and update chiptool via cargo unless `CHIPTOOL_CMD` is set to a valid executable.
-Form will be installed and locked to a specific version via cargo if needed.
-
-Note: that this crate currently **cannot** be rebuilt with the stock chiptool.
