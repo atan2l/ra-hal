@@ -35,7 +35,7 @@ cargo ofsdump
 To read the OFS values from a board connected to your computer:
 
 ```
-./decode-ofs.rb
+./tools/decode-ofs.rb
 ```
 
 ## Building your own app
