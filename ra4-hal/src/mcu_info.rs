@@ -86,8 +86,6 @@ impl McuInfo {
             );
             warn!("PN too short to identify");
         } else {
-            // Check if the crate was configured correctly
-
             info!(
                 "MCU: {} rev {:02X}, flash={} KB, UID: {=u128:032x}",
                 self.part_number(),
@@ -95,30 +93,32 @@ impl McuInfo {
                 self.flash_size().unwrap_or(0),
                 self.uid(),
             );
+        }
+    }
 
-            match self.pin_count() {
-                Some(actual) => {
-                    cfg_if! {
-                        if #[cfg(feature = "100pin")] {
-                            let configured = 100;
-                        } else if #[cfg(feature = "64pin")] {
-                            let configured = 64;
-                        } else if #[cfg(feature = "48pin")] {
-                            let configured = 48;
-                        } else {
-                            let configured = 40;
-                        }
-                    }
-
-                    if configured != actual {
-                        warn!(
-                            "May not behave as expected. HAL configured with {} pins, MCU has {} pins",
-                            configured, actual
-                        );
+    pub fn validate_pin_count(&self) {
+        match self.pin_count() {
+            Some(actual) => {
+                cfg_if! {
+                    if #[cfg(feature = "100pin")] {
+                        let configured = 100;
+                    } else if #[cfg(feature = "64pin")] {
+                        let configured = 64;
+                    } else if #[cfg(feature = "48pin")] {
+                        let configured = 48;
+                    } else {
+                        let configured = 40;
                     }
                 }
-                None => warn!("Couldn't determine appropriate pin count"),
+
+                if configured != actual {
+                    warn!(
+                        "May not behave as expected. HAL configured with {} pins, MCU has {} pins",
+                        configured, actual
+                    );
+                }
             }
+            None => warn!("Couldn't determine appropriate pin count"),
         }
     }
 

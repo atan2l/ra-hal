@@ -100,8 +100,13 @@ pub fn init() -> Peripherals {
             fmifrt_base.base().read().base()
         );
 
-        McuInfo::info().print_info();
+        let mcu_info = McuInfo::info();
 
+        #[cfg(feature = "defmt")]
+        mcu_info.print_info();
+
+        // Check if the crate was configured correctly
+        mcu_info.validate_pin_count();
 
         trace!("HOCO WaitState: {}", system.hocowtcr().read());
         trace!("HOCO Status: {}", system.hococr().read());
