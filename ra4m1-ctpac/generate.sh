@@ -40,7 +40,7 @@ echo "*** Scanning for transforms"
 _transforms=""
 TRANSFORMS=""
 
-for i in ${TRANSFORMS_DIR}/*.yaml; do
+for i in $(find ${TRANSFORMS_DIR} -name '*.yaml'); do
     if [ -f "${i}" ]; then
         _transforms="${_transforms} $(basename ${i})"
         TRANSFORMS="${TRANSFORMS} --transform $i"
