@@ -126,7 +126,7 @@ impl<'d, I: Instance> Adc<'d, I> {
         // TODO: read adst first to ensure we're stopped?
 
         adc.adcsr().modify(|w| {
-            w.set_adcs(Adcs::_00);
+            w.set_adcs(Adcs::Single);
         });
 
         adc.adcsr().modify(|w| {

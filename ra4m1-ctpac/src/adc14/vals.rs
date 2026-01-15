@@ -43,13 +43,13 @@ impl From<Adc> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Adcs {
     #[doc = "Single scan mode"]
-    _00 = 0x0,
+    Single = 0x0,
     #[doc = "Group scan mode"]
-    _01 = 0x01,
+    Group = 0x01,
     #[doc = "Continuous scan mode"]
-    _10 = 0x02,
+    Continuous = 0x02,
     #[doc = "Setting prohibited"]
-    _11 = 0x03,
+    Prohibited = 0x03,
 }
 impl Adcs {
     #[inline(always)]

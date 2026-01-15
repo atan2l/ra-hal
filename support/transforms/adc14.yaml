@@ -14,3 +14,19 @@ transforms:
       fieldsets: adc14::regs::(Adansa[01])
       from: (ansa)\d+
       to: ${1}
+  - !RenameEnumVariants
+      enum: adc14::vals::Adcs
+      from: _00
+      to: Single
+  - !RenameEnumVariants
+      enum: adc14::vals::Adcs
+      from: _01
+      to: Group
+  - !RenameEnumVariants
+      enum: adc14::vals::Adcs
+      from: _10
+      to: Continuous
+  - !RenameEnumVariants
+      enum: adc14::vals::Adcs
+      from: _11
+      to: Prohibited
