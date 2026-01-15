@@ -4,9 +4,9 @@ pub mod crc;
 pub mod ofs0;
 pub mod ofs1;
 pub mod sce5;
-pub mod sci;
 #[cfg(feature = "time-driver")]
 pub mod time_driver;
+pub mod uart;
 pub mod write_protect;
 
 use cortex_m::asm;
