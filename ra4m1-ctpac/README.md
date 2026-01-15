@@ -12,16 +12,17 @@ In the consumer space the Renesas RA4M1 is most commonly found in the Arduino "R
 ## Updating
 
 To update the Rust code run the `generate.sh` script from this directory.
-`generate.sh` depends on chiptool, form, and GNU sed.
-It will install and update chiptool via cargo unless `CHIPTOOL_CMD` is set to a valid executable.
-Form will be installed and locked to a specific version via cargo if needed.
-
 If you wish to use a different SVD, place it in the `support/svd` directory and set the `SVD` environment variable appropriately.
 
-Note: that this crate currently **cannot** be rebuilt with the stock chiptool.
+`generate.sh` depends on `chiptool`, `form`, and GNU sed.
+`chiptool` will be installed or updated via cargo unless `CHIPTOOL_CMD` is set to a valid executable.
+`form` will be installed and locked to a specific version via cargo if needed.
+If GNU sed is installed as `gsed` it will be used over `sed`.
+
+Note: that this crate currently **cannot** be rebuilt with the stock `chiptool`.
 
 ## TODO
 
-* Get required PRs merged into chiptool.
+* Get required PRs merged into `chiptool`.
 * Continue renaming enum variants with symbolic names.
 * Add transforms any additional missing chunks.
