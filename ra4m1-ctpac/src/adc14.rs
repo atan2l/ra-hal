@@ -1,11 +1,11 @@
 #[doc = "14bit A/D Converter"]
 #[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Adc140 {
+pub struct Adc14 {
     ptr: *mut u8,
 }
-unsafe impl Send for Adc140 {}
-unsafe impl Sync for Adc140 {}
-impl Adc140 {
+unsafe impl Send for Adc14 {}
+unsafe impl Sync for Adc14 {}
+impl Adc14 {
     #[inline(always)]
     pub const unsafe fn from_ptr(ptr: *mut ()) -> Self {
         Self { ptr: ptr as _ }

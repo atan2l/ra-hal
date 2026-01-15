@@ -157,7 +157,7 @@ pub const IIC1: iic1::Iic1 = unsafe { iic1::Iic1::from_ptr(0x4005_3100usize as _
 #[doc = "Data Operation Circuit"]
 pub const DOC: doc::Doc = unsafe { doc::Doc::from_ptr(0x4005_4100usize as _) };
 #[doc = "14bit A/D Converter"]
-pub const ADC140: adc140::Adc140 = unsafe { adc140::Adc140::from_ptr(0x4005_c000usize as _) };
+pub const ADC14: adc14::Adc14 = unsafe { adc14::Adc14::from_ptr(0x4005_c000usize as _) };
 #[doc = "12-bit D/A converter"]
 pub const DAC12: dac12::Dac12 = unsafe { dac12::Dac12::from_ptr(0x4005_e000usize as _) };
 #[doc = "Serial Communication Interface 0"]
@@ -220,7 +220,7 @@ pub use Interrupt as interrupt;
 #[cfg(feature = "rt")]
 pub use cortex_m_rt::interrupt;
 pub mod acmplp;
-pub mod adc140;
+pub mod adc14;
 pub mod agt0;
 pub mod bus;
 pub mod cac;

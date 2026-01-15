@@ -1,0 +1,12 @@
+transforms:
+  - !RenamePeripherals
+      from: ADC140
+      to: ADC14
+  - !Rename
+      from: adc140::(.+)
+      to: adc14::${1}
+      type: All
+  - !Rename
+      from: adc14::Adc140
+      to: adc14::Adc14
+      type: Block
