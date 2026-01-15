@@ -25,6 +25,32 @@ use ra4m1_ctpac::{
 
 use crate::{mcu_info::McuInfo, write_protect::WriteProtect as _};
 
+/// Coarse indication of why the processor reset.
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[allow(unused)]
+pub enum ResetCause {
+    /// Power was turned don.
+    PowerOn,
+
+    /// Low voltage monitor 0, 1, or 2 tripped.
+    LowVoltage,
+
+    /// Watchdog or independent watchdog
+    Watchdog,
+
+    /// Bus error, parity error, or ECC error.
+    HadwareError,
+
+    /// Stack pointer error.
+    StackPointer,
+
+    /// Software reset requested.
+    SoftwareReset,
+
+    /// Should never be here
+    Unknown,
+}
+
 pub fn init() -> Peripherals {
     // #define BSP_CLOCK_CFG_MAIN_OSC_WAIT (9)
     // #define BSP_LOCO_HZ                 (32768)
@@ -33,9 +59,41 @@ pub fn init() -> Peripherals {
     // #define BSP_MCU_VBATT_SUPPORT       (1)
 
     critical_section::with(|cs| {
+        let system = pac::SYSTEM;
+        let fmifrt_base = pac::FMIFRT_BASE;
+
         debug!("Starting board init");
 
-        let fmifrt_base = pac::FMIFRT_BASE;
+        #[cfg(feature = "diag")]
+        {
+            let reset_status_0 = system.rstsr0().read();
+            let reset_status_1 = system.rstsr1().read();
+
+            let reset_cause: ResetCause;
+            if reset_status_0.porf() {
+                reset_cause = ResetCause::PowerOn;
+            } else if reset_status_0.lvd0rf() || reset_status_0.lvd1rf() || reset_status_0.lvd2rf()
+            {
+                reset_cause = ResetCause::LowVoltage;
+            } else if reset_status_1.wdtrf() || reset_status_1.iwdtrf() {
+                reset_cause = ResetCause::Watchdog;
+            } else if reset_status_1.rperf()
+                || reset_status_1.reerf()
+                || reset_status_1.bussrf()
+                || reset_status_1.busmrf()
+            {
+                reset_cause = ResetCause::HadwareError;
+            } else if reset_status_1.sperf() {
+                reset_cause = ResetCause::StackPointer;
+            } else if reset_status_1.swrf() {
+                reset_cause = ResetCause::SoftwareReset;
+            } else {
+                reset_cause = ResetCause::Unknown;
+            }
+
+            debug!("Reset reason: {}", reset_cause);
+        }
+
         // sanity check
         defmt::assert_eq!(
             ExpectedBase::RA4M1.to_bits(),
@@ -44,7 +102,6 @@ pub fn init() -> Peripherals {
 
         McuInfo::info().print_info();
 
-        let system = pac::SYSTEM;
 
         trace!("HOCO WaitState: {}", system.hocowtcr().read());
         trace!("HOCO Status: {}", system.hococr().read());
