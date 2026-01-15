@@ -1,0 +1,10 @@
+transforms:
+  - !Rename
+      from: agt0::(.+)
+      to: agt::${1}
+      type: All
+  - !Rename
+      from: agt::Agt0
+      to: agt::Agt
+      type: Block
+

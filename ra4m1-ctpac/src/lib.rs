@@ -202,9 +202,9 @@ pub const CTSU: ctsu::Ctsu = unsafe { ctsu::Ctsu::from_ptr(0x4008_1000usize as _
 #[doc = "Segment LCD Controller/Driver"]
 pub const SLCDC: slcdc::Slcdc = unsafe { slcdc::Slcdc::from_ptr(0x4008_2000usize as _) };
 #[doc = "Asynchronous General purpose Timer 0"]
-pub const AGT0: agt0::Agt0 = unsafe { agt0::Agt0::from_ptr(0x4008_4000usize as _) };
+pub const AGT0: agt::Agt = unsafe { agt::Agt::from_ptr(0x4008_4000usize as _) };
 #[doc = "Asynchronous General purpose Timer 1"]
-pub const AGT1: agt0::Agt0 = unsafe { agt0::Agt0::from_ptr(0x4008_4100usize as _) };
+pub const AGT1: agt::Agt = unsafe { agt::Agt::from_ptr(0x4008_4100usize as _) };
 #[doc = "Low-Power Analog Comparator"]
 pub const ACMPLP: acmplp::Acmplp = unsafe { acmplp::Acmplp::from_ptr(0x4008_5e00usize as _) };
 #[doc = "OperationalAmplifier"]
@@ -227,7 +227,7 @@ pub use Interrupt as interrupt;
 pub use cortex_m_rt::interrupt;
 pub mod acmplp;
 pub mod adc14;
-pub mod agt0;
+pub mod agt;
 pub mod bus;
 pub mod cac;
 pub mod can0;

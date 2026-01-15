@@ -1,11 +1,11 @@
 #[doc = "Asynchronous General purpose Timer 0"]
 #[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Agt0 {
+pub struct Agt {
     ptr: *mut u8,
 }
-unsafe impl Send for Agt0 {}
-unsafe impl Sync for Agt0 {}
-impl Agt0 {
+unsafe impl Send for Agt {}
+unsafe impl Sync for Agt {}
+impl Agt {
     #[inline(always)]
     pub const unsafe fn from_ptr(ptr: *mut ()) -> Self {
         Self { ptr: ptr as _ }
