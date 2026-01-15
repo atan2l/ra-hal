@@ -92,13 +92,13 @@ pub const SRAM: sram::Sram = unsafe { sram::Sram::from_ptr(0x4000_2000usize as _
 #[doc = "BUS Control"]
 pub const BUS: bus::Bus = unsafe { bus::Bus::from_ptr(0x4000_3000usize as _) };
 #[doc = "Direct memory access controller 0"]
-pub const DMAC0: dmac0::Dmac0 = unsafe { dmac0::Dmac0::from_ptr(0x4000_5000usize as _) };
+pub const DMAC0: dmac::Dmac = unsafe { dmac::Dmac::from_ptr(0x4000_5000usize as _) };
 #[doc = "Direct memory access controller 1"]
-pub const DMAC1: dmac0::Dmac0 = unsafe { dmac0::Dmac0::from_ptr(0x4000_5040usize as _) };
+pub const DMAC1: dmac::Dmac = unsafe { dmac::Dmac::from_ptr(0x4000_5040usize as _) };
 #[doc = "Direct memory access controller 2"]
-pub const DMAC2: dmac0::Dmac0 = unsafe { dmac0::Dmac0::from_ptr(0x4000_5080usize as _) };
+pub const DMAC2: dmac::Dmac = unsafe { dmac::Dmac::from_ptr(0x4000_5080usize as _) };
 #[doc = "Direct memory access controller 3"]
-pub const DMAC3: dmac0::Dmac0 = unsafe { dmac0::Dmac0::from_ptr(0x4000_50c0usize as _) };
+pub const DMAC3: dmac::Dmac = unsafe { dmac::Dmac::from_ptr(0x4000_50c0usize as _) };
 #[doc = "DMAC Module Activation"]
 pub const DMA: dma::Dma = unsafe { dma::Dma::from_ptr(0x4000_5200usize as _) };
 #[doc = "Data Transfer Controller"]
@@ -238,7 +238,7 @@ pub mod dac12;
 pub mod dac8;
 pub mod dbg;
 pub mod dma;
-pub mod dmac0;
+pub mod dmac;
 pub mod doc;
 pub mod dtc;
 pub mod elc;

@@ -1,11 +1,11 @@
 #[doc = "Direct memory access controller 0"]
 #[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Dmac0 {
+pub struct Dmac {
     ptr: *mut u8,
 }
-unsafe impl Send for Dmac0 {}
-unsafe impl Sync for Dmac0 {}
-impl Dmac0 {
+unsafe impl Send for Dmac {}
+unsafe impl Sync for Dmac {}
+impl Dmac {
     #[inline(always)]
     pub const unsafe fn from_ptr(ptr: *mut ()) -> Self {
         Self { ptr: ptr as _ }
