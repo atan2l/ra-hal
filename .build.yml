@@ -1,4 +1,4 @@
-image: debian/bookworm
+image: debian/trixie
 secrets:
   -  f317af3f-6c5f-49d4-8602-78651225c9d2
 sources:
