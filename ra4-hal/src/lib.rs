@@ -1,5 +1,6 @@
 #![no_std]
 
+pub mod adc;
 pub mod crc;
 pub mod ofs0;
 pub mod ofs1;
