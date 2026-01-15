@@ -16,10 +16,7 @@ use defmt::{debug, error, info, trace, warn};
 pub use ra4m1_ctpac as pac;
 #[cfg(not(feature = "unstable-pac"))]
 pub(crate) use ra4m1_ctpac as pac;
-use ra4m1_ctpac::system::{
-    regs::Sckdivcr,
-    vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd},
-};
+use ra4m1_ctpac::system::vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd};
 
 use crate::write_protect::WriteProtect as _;
 
