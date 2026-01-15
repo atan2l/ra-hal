@@ -49,7 +49,10 @@ pub struct Crc<'d> {
 
 impl<'d> Crc<'d> {
     pub fn new(peri: Peri<'d, CRC>, config: Config) -> Self {
+        debug!("CRC: stop=false");
+
         let mstp = pac::MSTP;
+
         mstp.mstpcrc().write(|w| {
             w.set_mstpc1(false);
         });
@@ -136,5 +139,17 @@ impl<'d> Crc<'d> {
                 todo!()
             }
         }
+    }
+}
+
+impl<'d> Drop for Crc<'d> {
+    fn drop(&mut self) {
+        debug!("CRC: stop=true");
+
+        let mstp = pac::MSTP;
+
+        mstp.mstpcrc().write(|w| {
+            w.set_mstpc1(true);
+        });
     }
 }

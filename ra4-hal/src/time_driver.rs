@@ -81,8 +81,10 @@ impl GptDriver {
         // _timer: Peri<'static, crate::peripherals::GPT32_0>,
         _irq_prio: crate::interrupt::Priority,
     ) {
-        debug!("Enabling GPT32.0 clock");
+        debug!("GPT32_0: stop=false");
+
         let mstp = pac::MSTP;
+
         mstp.mstpcrd().write(|w| {
             w.set_mstpd5(false);
         });

@@ -62,7 +62,7 @@ pub fn init() -> Peripherals {
             //     defmt::warn!("HOCO Frequency: {:08b}", val);
             // }
 
-            debug!("HOCO Status: {}", system.hococr().read().hcstp());
+            debug!("SYSTEM: HOCOStatus: {}", system.hococr().read().hcstp());
 
             // High speed mode needed for iclk > 32 MHz
             trace!("Setting high speed mode on");
@@ -82,7 +82,7 @@ pub fn init() -> Peripherals {
                 // Use HOCO which we set to 48 MHz
                 w.set_cksel(Cksel::Hoco);
             });
-            debug!("SYSTEM ClkSource: {}", system.sckscr().read().cksel());
+            debug!("SYSTEM: ClkSource: {}", system.sckscr().read().cksel());
 
             system.sckdivcr().modify(|w| {
                 w.set_ick(Ick::DIV_1);
@@ -170,7 +170,7 @@ pub fn print_clock_config() {
         Pckd::_RESERVED_7 => unimplemented!("Invalid sckdivcr.pckd"),
     };
     debug!(
-        "ICK: {} MHz, FCK: {} MHz, PCKA: {} MHz, PCKB: {} MHz, PCKC: {} MHz, PCKD: {} MHz",
+        "SYSTEM: ICK: {} MHz, FCK: {} MHz, PCKA: {} MHz, PCKB: {} MHz, PCKC: {} MHz, PCKD: {} MHz",
         ick_freq, fck_freq, pck_a, pck_b, pck_c, pck_d
     );
 }

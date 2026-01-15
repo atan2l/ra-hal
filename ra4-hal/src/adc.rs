@@ -38,42 +38,16 @@ impl<'d, I: Instance> Adc<'d, I> {
         // config: AdcConfig,
         // _irq: impl interrupt::typelevel::Binding<I::Interrupt, InterruptHandler<I>> + 'd,
     ) -> Self {
-        warn!("ADC14: Powering up");
+        debug!("ADC14: stop=false");
+
         let mstp = pac::MSTP;
+
         mstp.mstpcrd().write(|w| {
             w.set_mstpd16(false);
         });
 
         Self {
             _phantom: PhantomData,
-        }
-    }
-
-    fn enable_channel(&self, channel: usize) {}
-
-    fn disable_channel(&self, channel: usize) {
-        let adc = I::regs();
-
-        trace!("ADC14: disable_channel({})", channel);
-
-        if channel <= 14 {
-            adc.adansa0().modify(|w| {
-                w.set_ansa(channel as _, false);
-            });
-        } else if channel >= 16 && channel < 25 {
-            adc.adansa1().modify(|w| {
-                w.set_ansa((channel - 16) as _, false);
-            });
-        } else if channel == 15 {
-            if adc.adcsr().read().adst() {
-                warn!("ADC14: Trying to disable temp with a conversion running");
-            }
-
-            adc.adexicr().modify(|w| {
-                w.set_tssa(false);
-            });
-        } else {
-            panic!("Invalid ADC channel");
         }
     }
 
@@ -110,9 +84,10 @@ impl<'d, I: Instance> Adc<'d, I> {
 
 impl<'d, I: Instance> Drop for Adc<'d, I> {
     fn drop(&mut self) {
-        warn!("ADC14: Powering down");
+        debug!("ADC14: stop=true");
 
         let mstp = pac::MSTP;
+
         mstp.mstpcrd().write(|w| {
             w.set_mstpd16(true);
         });

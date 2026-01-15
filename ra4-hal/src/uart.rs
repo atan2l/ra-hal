@@ -32,14 +32,16 @@ impl SealedInstance for peripherals::SCI0 {
     }
 
     fn start() {
+        debug!("SCI0: stop=false");
+
         pac::MSTP.mstpcrb().write(|w| {
-            info!("Starting SCI0");
             w.set_mstpb31(false);
         });
     }
 
     fn stop() {
-        warn!("Stopping SCI0");
+        debug!("SCI0: stop=true");
+
         pac::MSTP.mstpcrb().write(|w| {
             w.set_mstpb31(true);
         });
