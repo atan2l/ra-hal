@@ -1,8 +1,8 @@
 # `ra4m1-ctpac`
 
-This is a [Peripheral Access Crate](https://rust-embedded.github.io/book/start/registers.html) for Renesas RA4M1 microcontrollers.
+`ra4m1-ctpac` is a [Peripheral Access Crate](https://rust-embedded.github.io/book/start/registers.html) for [Renesas RA4M1](https://www.renesas.com/en/products/ra4m1) microcontrollers.
 The crate itself is generated programmatically by [chiptool](https://github.com/embassy-rs/chiptool) using the SVD as found on Keil's [site](https://www.keil.arm.com/packs/ra_dfp-renesas/versions/).
-The chiptool documentation covers how the API it generates differs from what svd2rust generates.
+The resulting API is different from other crates that are generated using svd2rust and the chiptool documentation covers these differences.
 This is primarily intended to be used by an upcoming RA4M1 HAL crate, however a secondary goal is to make this a bit more legible to humans.
 
 ## Supported Hardware
