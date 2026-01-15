@@ -185,8 +185,8 @@ embassy_hal_internal::peripherals_definition!(
     SCI1,
     SCI2,
     SCI9,
-    GPT320,
-    GPT321,
+    GPT32_0,
+    GPT32_1,
 
     P000,
     P001,
@@ -349,8 +349,8 @@ embassy_hal_internal::peripherals_struct!(
     SCI1,
     SCI2,
     SCI9,
-    GPT320,
-    GPT321,
+    GPT32_0,
+    GPT32_1,
 
     P000,
     P001,

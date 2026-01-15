@@ -17,7 +17,7 @@ use ra4m1_ctpac::icu::vals::Iels;
 
 use crate::interrupt;
 use crate::pac;
-use crate::peripherals::GPT320;
+use crate::peripherals::GPT32_0;
 use crate::write_protect::WriteProtect as _;
 
 struct AlarmState {
@@ -55,13 +55,13 @@ trait Instance {
     fn regs() -> pac::gpt32::Gpt32;
 }
 
-impl Instance for crate::peripherals::GPT320 {
+impl Instance for crate::peripherals::GPT32_0 {
     type AlarmInterrupt = crate::interrupt::typelevel::IEL1;
     type OverflowInterrupt = crate::interrupt::typelevel::IEL0;
 
     #[inline(always)]
     fn regs() -> crate::pac::gpt32::Gpt32 {
-        crate::pac::GPT320
+        crate::pac::GPT32_0
     }
 }
 
@@ -78,7 +78,7 @@ impl GptDriver {
 
     pub(crate) fn init(
         &'static self,
-        // _timer: Peri<'static, crate::peripherals::GPT320>,
+        // _timer: Peri<'static, crate::peripherals::GPT32_0>,
         _irq_prio: crate::interrupt::Priority,
     ) {
         debug!("Enabling GPT32.0 clock");
@@ -90,8 +90,8 @@ impl GptDriver {
         // Enable the interrupts at the NVIC level,
         // arm the overflow interrupt
         {
-            type AlarmInt = <GPT320 as Instance>::AlarmInterrupt;
-            type OverflowInt = <GPT320 as Instance>::OverflowInterrupt;
+            type AlarmInt = <GPT32_0 as Instance>::AlarmInterrupt;
+            type OverflowInt = <GPT32_0 as Instance>::OverflowInterrupt;
 
             unsafe {
                 AlarmInt::IRQ.enable();
@@ -104,7 +104,7 @@ impl GptDriver {
             });
         }
 
-        let timer = GPT320::regs();
+        let timer = GPT32_0::regs();
 
         // Disable external things that might modify the counter
         timer.gtupsr().write_value(Gtupsr(0));
@@ -183,9 +183,9 @@ impl GptDriver {
 
     #[must_use]
     fn set_alarm(&self, cs: &CriticalSection, timestamp: u64) -> bool {
-        type AlarmInt = <GPT320 as Instance>::AlarmInterrupt;
+        type AlarmInt = <GPT32_0 as Instance>::AlarmInterrupt;
 
-        let timer = GPT320::regs();
+        let timer = GPT32_0::regs();
         let icu = pac::ICU;
 
         let alarm = self.alarms.borrow(*cs);
@@ -230,7 +230,7 @@ impl GptDriver {
 
 impl Driver for GptDriver {
     fn now(&self) -> u64 {
-        let timer = GPT320::regs();
+        let timer = GPT32_0::regs();
 
         let period = self.period.load(Ordering::Acquire);
         let count = timer.gtcnt().read().gtcnt();

@@ -1,11 +1,15 @@
 transforms:
+  - !RenamePeripherals
+      from: GPT(16|32)(\d)
+      to: GPT${1}_${2}
   - !Rename
-      from: gpt320::Gpt320
+      from: gpt320::(.+)
+      to: gpt32::${1}
+      type: All
+  - !Rename
+      from: gpt32::Gpt320
       to: gpt32::Gpt32
       type: Block
-  - !Rename
-      from: gpt320::(regs|vals)::(.+)
-      to: gpt32::${1}::${2}
   - !RenameEnumVariants
       enum: gpt32::vals::Ud
       from: _0
