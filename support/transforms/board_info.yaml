@@ -12,6 +12,16 @@ transforms:
         description: Factory MCU Information Flash Root Table (FMIFRT)
   - !Add
     ir:
+      # > § 44.4.4 Factory MCU Information Flash Root Table (FMIFRT)
+      # > The base address of the RA4M1 MCU is 0x0100_3C00.
+      # Why this couldn't just go into the freaking SVD is entirely beyond me.
+      enum/fmifrt_base::vals::ExpectedBase:
+        !Enum
+          bit_size: 24
+          variants:
+            - !EnumVariant
+              name: RA4M1
+              value: 0x01003C00
       block/fmifrt_base::FmifrtBase:
         items:
           - name: base

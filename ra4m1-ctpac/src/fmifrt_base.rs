@@ -19,3 +19,4 @@ impl FmifrtBase {
     }
 }
 pub mod regs;
+pub mod vals;

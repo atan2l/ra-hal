@@ -18,7 +18,10 @@ use defmt::{debug, error, info, trace, warn};
 pub use ra4m1_ctpac as pac;
 #[cfg(not(feature = "unstable-pac"))]
 pub(crate) use ra4m1_ctpac as pac;
-use ra4m1_ctpac::system::vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd};
+use ra4m1_ctpac::{
+    fmifrt_base::vals::ExpectedBase,
+    system::vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd},
+};
 
 use crate::write_protect::WriteProtect as _;
 
@@ -34,7 +37,10 @@ pub fn init() -> Peripherals {
 
         let fmifrt_base = pac::FMIFRT_BASE;
         // sanity check
-        defmt::assert_eq!(0x0100_3C00, fmifrt_base.base().read().base());
+        defmt::assert_eq!(
+            ExpectedBase::RA4M1.to_bits(),
+            fmifrt_base.base().read().base()
+        );
 
         print_mcu_info();
 
