@@ -49,14 +49,8 @@ async fn main(_spawner: Spawner) {
     let adc_channel = adc.temperature_channel();
 
     for _ in 0..5 {
-        // § 48.7 TSN Characteristics
-        let slope = -3.65;
-        let v_1 = 1050.0;
-        let intercept = 25.0;
-
         let v_s = adc.blocking_read(&adc_channel);
-
-        let temp = ((f32::from(v_s) - v_1) / slope) - intercept;
+        let temp = adc_channel.millivolt_to_celsius(v_s);
 
         info!("Temp: raw={} mV, act={} °C", v_s, temp);
 

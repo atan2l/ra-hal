@@ -77,6 +77,18 @@ pub(crate) trait SealedAdcChannel: AdcInputPin {
     }
 }
 
+impl Temperature {
+    /// Converts an ADC reading in millivolts to a temperature in degrees celsius.
+    pub fn millivolt_to_celsius(&self, v_s: u16) -> f32 {
+        // § 48.7 TSN Characteristics
+        let slope = -3.65;
+        let v_1 = 1050.0;
+        let intercept = 25.0;
+
+        ((f32::from(v_s) - v_1) / slope) - intercept
+    }
+}
+
 impl AdcChannel for Temperature {}
 
 impl AdcInputPin for Temperature {}
