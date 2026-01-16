@@ -405,7 +405,7 @@ embassy_hal_internal::peripherals_definition!(
     #[cfg(feature = "_100pin")]
     P609,
     #[cfg(feature = "_100pin")]
-    P6010,
+    P610,
 
     #[cfg(feature = "_100pin")]
     P708,
@@ -569,7 +569,7 @@ embassy_hal_internal::peripherals_struct!(
     #[cfg(feature = "_100pin")]
     P609,
     #[cfg(feature = "_100pin")]
-    P6010,
+    P610,
 
     #[cfg(feature = "_100pin")]
     P708,
