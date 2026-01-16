@@ -1,5 +1,4 @@
 use embassy_hal_internal::{Peri, PeripheralType, impl_peripheral};
-use paste::paste;
 
 /// Digital input or output level.
 #[derive(Debug, Eq, PartialEq, Copy, Clone)]
@@ -271,152 +270,160 @@ macro_rules! pin_impl {
     };
 }
 
-pin_impl!(000);
-pin_impl!(001);
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-pin_impl!(002);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(003);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(004);
-#[cfg(feature = "_100pin")]
-pin_impl!(005);
-#[cfg(feature = "_100pin")]
-pin_impl!(006);
-#[cfg(feature = "_100pin")]
-pin_impl!(007);
-#[cfg(feature = "_100pin")]
-pin_impl!(008);
-pin_impl!(010);
-pin_impl!(011);
-pin_impl!(012);
-pin_impl!(013);
-pin_impl!(014);
-pin_impl!(015);
+/// Move this into its own mod so we can quiet the Clippy lint only for the macro invocations.
+mod pin_impls {
+    #![allow(clippy::zero_prefixed_literal)]
 
-pin_impl!(100);
-pin_impl!(101);
-pin_impl!(102);
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-pin_impl!(103);
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-pin_impl!(104);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(105);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(106);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(107);
-pin_impl!(108);
-pin_impl!(109);
-pin_impl!(110);
-pin_impl!(111);
-pin_impl!(112);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(113);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(114);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(115);
+    use super::{AnyPin, Pin, SealedPin};
+    use paste::paste;
 
-pin_impl!(200);
-pin_impl!(201);
-#[cfg(feature = "_100pin")]
-pin_impl!(202);
-#[cfg(feature = "_100pin")]
-pin_impl!(203);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(204);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(205);
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-pin_impl!(206);
-pin_impl!(212);
-pin_impl!(213);
-pin_impl!(214);
-pin_impl!(215);
+    pin_impl!(000);
+    pin_impl!(001);
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(002);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(003);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(004);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(005);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(006);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(007);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(008);
+    pin_impl!(010);
+    pin_impl!(011);
+    pin_impl!(012);
+    pin_impl!(013);
+    pin_impl!(014);
+    pin_impl!(015);
 
-pin_impl!(300);
-pin_impl!(301);
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-pin_impl!(302);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(303);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(304);
-#[cfg(feature = "_100pin")]
-pin_impl!(305);
-#[cfg(feature = "_100pin")]
-pin_impl!(306);
-#[cfg(feature = "_100pin")]
-pin_impl!(307);
+    pin_impl!(100);
+    pin_impl!(101);
+    pin_impl!(102);
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(103);
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(104);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(105);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(106);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(107);
+    pin_impl!(108);
+    pin_impl!(109);
+    pin_impl!(110);
+    pin_impl!(111);
+    pin_impl!(112);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(113);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(114);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(115);
 
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-pin_impl!(400);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(401);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(402);
-#[cfg(feature = "_100pin")]
-pin_impl!(403);
-#[cfg(feature = "_100pin")]
-pin_impl!(404);
-#[cfg(feature = "_100pin")]
-pin_impl!(405);
-#[cfg(feature = "_100pin")]
-pin_impl!(406);
-pin_impl!(407);
-pin_impl!(408);
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-pin_impl!(409);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(4010);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(4011);
-#[cfg(feature = "_100pin")]
-pin_impl!(4012);
-#[cfg(feature = "_100pin")]
-pin_impl!(4013);
-#[cfg(feature = "_100pin")]
-pin_impl!(4014);
-#[cfg(feature = "_100pin")]
-pin_impl!(4015);
+    pin_impl!(200);
+    pin_impl!(201);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(202);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(203);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(204);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(205);
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(206);
+    pin_impl!(212);
+    pin_impl!(213);
+    pin_impl!(214);
+    pin_impl!(215);
 
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-pin_impl!(500);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(501);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-pin_impl!(502);
-#[cfg(feature = "_100pin")]
-pin_impl!(503);
-#[cfg(feature = "_100pin")]
-pin_impl!(504);
-#[cfg(feature = "_100pin")]
-pin_impl!(505);
+    pin_impl!(300);
+    pin_impl!(301);
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(302);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(303);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(304);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(305);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(306);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(307);
 
-#[cfg(feature = "_100pin")]
-pin_impl!(600);
-#[cfg(feature = "_100pin")]
-pin_impl!(601);
-#[cfg(feature = "_100pin")]
-pin_impl!(602);
-#[cfg(feature = "_100pin")]
-pin_impl!(603);
-#[cfg(feature = "_100pin")]
-pin_impl!(608);
-#[cfg(feature = "_100pin")]
-pin_impl!(609);
-#[cfg(feature = "_100pin")]
-pin_impl!(610);
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(400);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(401);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(402);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(403);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(404);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(405);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(406);
+    pin_impl!(407);
+    pin_impl!(408);
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(409);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(4010);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(4011);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(4012);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(4013);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(4014);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(4015);
 
-#[cfg(feature = "_100pin")]
-pin_impl!(708);
+    #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(500);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(501);
+    #[cfg(any(feature = "_64pin", feature = "_100pin"))]
+    pin_impl!(502);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(503);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(504);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(505);
 
-#[cfg(feature = "_100pin")]
-pin_impl!(808);
-#[cfg(feature = "_100pin")]
-pin_impl!(809);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(600);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(601);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(602);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(603);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(608);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(609);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(610);
 
-pin_impl!(914);
-pin_impl!(915);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(708);
+
+    #[cfg(feature = "_100pin")]
+    pin_impl!(808);
+    #[cfg(feature = "_100pin")]
+    pin_impl!(809);
+
+    pin_impl!(914);
+    pin_impl!(915);
+}
