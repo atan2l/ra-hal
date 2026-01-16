@@ -1032,14 +1032,14 @@ impl Rcr4 {
     #[doc = "Count Source Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn rcksel(&self) -> bool {
+    pub const fn rcksel(&self) -> super::vals::Rcksel {
         let val = (self.0 >> 0usize) & 0x01;
-        val != 0
+        super::vals::Rcksel::from_bits(val as u8)
     }
     #[doc = "Count Source Select"]
     #[inline(always)]
-    pub const fn set_rcksel(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
+    pub const fn set_rcksel(&mut self, val: super::vals::Rcksel) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
     }
     #[doc = "These bits are read as 0000000. The write value should be 0000000."]
     #[must_use]
@@ -1073,7 +1073,7 @@ impl defmt::Format for Rcr4 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Rcr4 {{ rcksel: {=bool:?}, reserved: {=u8:?} }}",
+            "Rcr4 {{ rcksel: {:?}, reserved: {=u8:?} }}",
             self.rcksel(),
             self.reserved()
         )

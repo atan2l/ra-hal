@@ -89,6 +89,37 @@ impl From<Pmadj> for u8 {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum Rcksel {
+    #[doc = "Sub-clock oscillator is selected."]
+    SubClock = 0x0,
+    #[doc = "LOCO clock oscillator is selected."]
+    Loco = 0x01,
+}
+impl Rcksel {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> Rcksel {
+        unsafe { core::mem::transmute(val & 0x01) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for Rcksel {
+    #[inline(always)]
+    fn from(val: u8) -> Rcksel {
+        Rcksel::from_bits(val)
+    }
+}
+impl From<Rcksel> for u8 {
+    #[inline(always)]
+    fn from(val: Rcksel) -> u8 {
+        Rcksel::to_bits(val)
+    }
+}
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum RwkarDayw {
     #[doc = "Sunday"]
     _000 = 0x0,
@@ -134,19 +165,19 @@ impl From<RwkarDayw> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum RwkcntDayw {
     #[doc = "Sunday"]
-    _000 = 0x0,
+    Sunday = 0x0,
     #[doc = "Monday"]
-    _001 = 0x01,
+    Monday = 0x01,
     #[doc = "Tuesday"]
-    _010 = 0x02,
+    Tuesday = 0x02,
     #[doc = "Wednesday"]
-    _011 = 0x03,
+    Wednesday = 0x03,
     #[doc = "Thursday"]
-    _100 = 0x04,
+    Thursday = 0x04,
     #[doc = "Friday"]
-    _101 = 0x05,
+    Friday = 0x05,
     #[doc = "Saturday"]
-    _110 = 0x06,
+    Saturday = 0x06,
     #[doc = "Setting Prohibited"]
     _111 = 0x07,
 }
