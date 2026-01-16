@@ -1,4 +1,4 @@
-//! Rtc, demonsrate the (in)accuracy of the RTC.
+//! Rtc, demonstrate the (in)accuracy of the RTC.
 
 #![no_std]
 #![no_main]
@@ -48,7 +48,7 @@ async fn main(_spawner: Spawner) {
     let mut rtc = Rtc::new(p.RTC).await;
 
     rtc.set_time(NaiveDateTime::new(
-        NaiveDate::from_ymd_opt(2026, 02, 01).unwrap(),
+        NaiveDate::from_ymd_opt(2026, 2, 1).unwrap(),
         NaiveTime::from_hms_opt(7, 19, 0).unwrap(),
     ));
 
