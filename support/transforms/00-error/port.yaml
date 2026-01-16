@@ -60,7 +60,7 @@ transforms:
           stride: 1
       -
         name: porr
-        descrription: Pmn Output Reset (low)
+        description: Pmn Output Reset (low)
         bit_offset: 16
         bit_size: 1
         array:

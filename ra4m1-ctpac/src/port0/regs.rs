@@ -227,6 +227,7 @@ impl Pcntr3 {
         let offs = 0usize + n * 1usize;
         self.0 = (self.0 & !(0x01 << offs)) | (((val as u32) & 0x01) << offs);
     }
+    #[doc = "Pmn Output Reset (low)"]
     #[must_use]
     #[inline(always)]
     pub const fn porr(&self, n: usize) -> bool {
@@ -235,6 +236,7 @@ impl Pcntr3 {
         let val = (self.0 >> offs) & 0x01;
         val != 0
     }
+    #[doc = "Pmn Output Reset (low)"]
     #[inline(always)]
     pub const fn set_porr(&mut self, n: usize, val: bool) {
         assert!(n < 16usize);
