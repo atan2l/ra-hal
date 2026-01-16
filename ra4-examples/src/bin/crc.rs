@@ -86,7 +86,6 @@ async fn main(_spawner: Spawner) {
         reverse: true,
         reflect_output: true,
         seed: 0x0000,
-        ..Default::default()
     });
     let output = crc.feed_bytes(data);
     assert_eq!(output, 0x44c2);
@@ -141,7 +140,6 @@ async fn main(_spawner: Spawner) {
         seed: 0xffff_ffff,
         reverse: true,
         reflect_output: true,
-        ..Default::default()
     });
     let output = crc.feed_bytes(data);
     assert_eq!(output, 0x5d34_eb96);
@@ -171,7 +169,6 @@ async fn main(_spawner: Spawner) {
         seed: 0xffff_ffff,
         reverse: true,
         reflect_output: true,
-        ..Default::default()
     });
     let output = crc.feed_bytes(data);
     assert_eq!(output, 0xd75d_fdfb);

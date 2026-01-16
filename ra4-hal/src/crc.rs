@@ -120,7 +120,7 @@ impl<'d> Crc<'d> {
                 }
             }
             Gps::Crc32 | Gps::Crc32C => {
-                if bytes.len() % 4 != 0 {
+                if !bytes.len().is_multiple_of(4) {
                     unimplemented!("CRC-32 input len must be a multiple of 4");
                 }
 
