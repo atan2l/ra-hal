@@ -100,7 +100,7 @@ impl<'d> Crc<'d> {
     }
 
     /// Note: CRC-32 / CRC-32C require 32-bit input values.
-    /// If `bytes.len()` is not a multiple of `4` the function will panic.
+    /// If provided input is not a multiple of `4` bytes the function will panic.
     pub fn feed_bytes(&mut self, bytes: &[u8]) -> u32 {
         let crc = crate::pac::CRC;
 
