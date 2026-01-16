@@ -1,0 +1,21 @@
+transforms:
+  - !DeleteFields
+    fieldset: port[01]::regs::Pcntr1
+    from: (podr|pdr)
+  - !AddFields
+    fieldset: port[01]::regs::Pcntr1
+    fields:
+      -
+        name: podr
+        bit_offset: 16
+        bit_size: 1
+        array:
+          len: 16
+          stride: 1
+      -
+        name: pdr
+        bit_offset: 0
+        bit_size: 1
+        array:
+          len: 16
+          stride: 1

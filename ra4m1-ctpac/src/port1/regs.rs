@@ -108,29 +108,33 @@ impl defmt::Format for Eosr {
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Pcntr1(pub u32);
 impl Pcntr1 {
-    #[doc = "Pmn Direction"]
     #[must_use]
     #[inline(always)]
-    pub const fn pdr(&self) -> super::vals::Pcntr1Pdr {
-        let val = (self.0 >> 0usize) & 0xffff;
-        super::vals::Pcntr1Pdr::from_bits(val as u16)
+    pub const fn pdr(&self, n: usize) -> bool {
+        assert!(n < 16usize);
+        let offs = 0usize + n * 1usize;
+        let val = (self.0 >> offs) & 0x01;
+        val != 0
     }
-    #[doc = "Pmn Direction"]
     #[inline(always)]
-    pub const fn set_pdr(&mut self, val: super::vals::Pcntr1Pdr) {
-        self.0 = (self.0 & !(0xffff << 0usize)) | (((val.to_bits() as u32) & 0xffff) << 0usize);
+    pub const fn set_pdr(&mut self, n: usize, val: bool) {
+        assert!(n < 16usize);
+        let offs = 0usize + n * 1usize;
+        self.0 = (self.0 & !(0x01 << offs)) | (((val as u32) & 0x01) << offs);
     }
-    #[doc = "Pmn Output Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn podr(&self) -> super::vals::Pcntr1Podr {
-        let val = (self.0 >> 16usize) & 0xffff;
-        super::vals::Pcntr1Podr::from_bits(val as u16)
+    pub const fn podr(&self, n: usize) -> bool {
+        assert!(n < 16usize);
+        let offs = 16usize + n * 1usize;
+        let val = (self.0 >> offs) & 0x01;
+        val != 0
     }
-    #[doc = "Pmn Output Data"]
     #[inline(always)]
-    pub const fn set_podr(&mut self, val: super::vals::Pcntr1Podr) {
-        self.0 = (self.0 & !(0xffff << 16usize)) | (((val.to_bits() as u32) & 0xffff) << 16usize);
+    pub const fn set_podr(&mut self, n: usize, val: bool) {
+        assert!(n < 16usize);
+        let offs = 16usize + n * 1usize;
+        self.0 = (self.0 & !(0x01 << offs)) | (((val as u32) & 0x01) << offs);
     }
 }
 impl Default for Pcntr1 {
@@ -142,8 +146,38 @@ impl Default for Pcntr1 {
 impl core::fmt::Debug for Pcntr1 {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("Pcntr1")
-            .field("pdr", &self.pdr())
-            .field("podr", &self.podr())
+            .field("pdr[0]", &self.pdr(0usize))
+            .field("pdr[1]", &self.pdr(1usize))
+            .field("pdr[2]", &self.pdr(2usize))
+            .field("pdr[3]", &self.pdr(3usize))
+            .field("pdr[4]", &self.pdr(4usize))
+            .field("pdr[5]", &self.pdr(5usize))
+            .field("pdr[6]", &self.pdr(6usize))
+            .field("pdr[7]", &self.pdr(7usize))
+            .field("pdr[8]", &self.pdr(8usize))
+            .field("pdr[9]", &self.pdr(9usize))
+            .field("pdr[10]", &self.pdr(10usize))
+            .field("pdr[11]", &self.pdr(11usize))
+            .field("pdr[12]", &self.pdr(12usize))
+            .field("pdr[13]", &self.pdr(13usize))
+            .field("pdr[14]", &self.pdr(14usize))
+            .field("pdr[15]", &self.pdr(15usize))
+            .field("podr[0]", &self.podr(0usize))
+            .field("podr[1]", &self.podr(1usize))
+            .field("podr[2]", &self.podr(2usize))
+            .field("podr[3]", &self.podr(3usize))
+            .field("podr[4]", &self.podr(4usize))
+            .field("podr[5]", &self.podr(5usize))
+            .field("podr[6]", &self.podr(6usize))
+            .field("podr[7]", &self.podr(7usize))
+            .field("podr[8]", &self.podr(8usize))
+            .field("podr[9]", &self.podr(9usize))
+            .field("podr[10]", &self.podr(10usize))
+            .field("podr[11]", &self.podr(11usize))
+            .field("podr[12]", &self.podr(12usize))
+            .field("podr[13]", &self.podr(13usize))
+            .field("podr[14]", &self.podr(14usize))
+            .field("podr[15]", &self.podr(15usize))
             .finish()
     }
 }
@@ -152,9 +186,39 @@ impl defmt::Format for Pcntr1 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Pcntr1 {{ pdr: {:?}, podr: {:?} }}",
-            self.pdr(),
-            self.podr()
+            "Pcntr1 {{ pdr[0]: {=bool:?}, pdr[1]: {=bool:?}, pdr[2]: {=bool:?}, pdr[3]: {=bool:?}, pdr[4]: {=bool:?}, pdr[5]: {=bool:?}, pdr[6]: {=bool:?}, pdr[7]: {=bool:?}, pdr[8]: {=bool:?}, pdr[9]: {=bool:?}, pdr[10]: {=bool:?}, pdr[11]: {=bool:?}, pdr[12]: {=bool:?}, pdr[13]: {=bool:?}, pdr[14]: {=bool:?}, pdr[15]: {=bool:?}, podr[0]: {=bool:?}, podr[1]: {=bool:?}, podr[2]: {=bool:?}, podr[3]: {=bool:?}, podr[4]: {=bool:?}, podr[5]: {=bool:?}, podr[6]: {=bool:?}, podr[7]: {=bool:?}, podr[8]: {=bool:?}, podr[9]: {=bool:?}, podr[10]: {=bool:?}, podr[11]: {=bool:?}, podr[12]: {=bool:?}, podr[13]: {=bool:?}, podr[14]: {=bool:?}, podr[15]: {=bool:?} }}",
+            self.pdr(0usize),
+            self.pdr(1usize),
+            self.pdr(2usize),
+            self.pdr(3usize),
+            self.pdr(4usize),
+            self.pdr(5usize),
+            self.pdr(6usize),
+            self.pdr(7usize),
+            self.pdr(8usize),
+            self.pdr(9usize),
+            self.pdr(10usize),
+            self.pdr(11usize),
+            self.pdr(12usize),
+            self.pdr(13usize),
+            self.pdr(14usize),
+            self.pdr(15usize),
+            self.podr(0usize),
+            self.podr(1usize),
+            self.podr(2usize),
+            self.podr(3usize),
+            self.podr(4usize),
+            self.podr(5usize),
+            self.podr(6usize),
+            self.podr(7usize),
+            self.podr(8usize),
+            self.podr(9usize),
+            self.podr(10usize),
+            self.podr(11usize),
+            self.podr(12usize),
+            self.podr(13usize),
+            self.podr(14usize),
+            self.podr(15usize)
         )
     }
 }
