@@ -230,26 +230,34 @@ impl Pcntr2 {
     #[doc = "Pmn Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::Pcntr2Pidr {
-        let val = (self.0 >> 0usize) & 0xffff;
-        super::vals::Pcntr2Pidr::from_bits(val as u16)
+    pub const fn pidr(&self, n: usize) -> bool {
+        assert!(n < 16usize);
+        let offs = 0usize + n * 1usize;
+        let val = (self.0 >> offs) & 0x01;
+        val != 0
     }
     #[doc = "Pmn Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::Pcntr2Pidr) {
-        self.0 = (self.0 & !(0xffff << 0usize)) | (((val.to_bits() as u32) & 0xffff) << 0usize);
+    pub const fn set_pidr(&mut self, n: usize, val: bool) {
+        assert!(n < 16usize);
+        let offs = 0usize + n * 1usize;
+        self.0 = (self.0 & !(0x01 << offs)) | (((val as u32) & 0x01) << offs);
     }
     #[doc = "Pmn Event Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn eidr(&self) -> super::vals::Pcntr2Eidr {
-        let val = (self.0 >> 16usize) & 0xffff;
-        super::vals::Pcntr2Eidr::from_bits(val as u16)
+    pub const fn eidr(&self, n: usize) -> bool {
+        assert!(n < 16usize);
+        let offs = 16usize + n * 1usize;
+        let val = (self.0 >> offs) & 0x01;
+        val != 0
     }
     #[doc = "Pmn Event Input Data"]
     #[inline(always)]
-    pub const fn set_eidr(&mut self, val: super::vals::Pcntr2Eidr) {
-        self.0 = (self.0 & !(0xffff << 16usize)) | (((val.to_bits() as u32) & 0xffff) << 16usize);
+    pub const fn set_eidr(&mut self, n: usize, val: bool) {
+        assert!(n < 16usize);
+        let offs = 16usize + n * 1usize;
+        self.0 = (self.0 & !(0x01 << offs)) | (((val as u32) & 0x01) << offs);
     }
 }
 impl Default for Pcntr2 {
@@ -261,8 +269,38 @@ impl Default for Pcntr2 {
 impl core::fmt::Debug for Pcntr2 {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("Pcntr2")
-            .field("pidr", &self.pidr())
-            .field("eidr", &self.eidr())
+            .field("pidr[0]", &self.pidr(0usize))
+            .field("pidr[1]", &self.pidr(1usize))
+            .field("pidr[2]", &self.pidr(2usize))
+            .field("pidr[3]", &self.pidr(3usize))
+            .field("pidr[4]", &self.pidr(4usize))
+            .field("pidr[5]", &self.pidr(5usize))
+            .field("pidr[6]", &self.pidr(6usize))
+            .field("pidr[7]", &self.pidr(7usize))
+            .field("pidr[8]", &self.pidr(8usize))
+            .field("pidr[9]", &self.pidr(9usize))
+            .field("pidr[10]", &self.pidr(10usize))
+            .field("pidr[11]", &self.pidr(11usize))
+            .field("pidr[12]", &self.pidr(12usize))
+            .field("pidr[13]", &self.pidr(13usize))
+            .field("pidr[14]", &self.pidr(14usize))
+            .field("pidr[15]", &self.pidr(15usize))
+            .field("eidr[0]", &self.eidr(0usize))
+            .field("eidr[1]", &self.eidr(1usize))
+            .field("eidr[2]", &self.eidr(2usize))
+            .field("eidr[3]", &self.eidr(3usize))
+            .field("eidr[4]", &self.eidr(4usize))
+            .field("eidr[5]", &self.eidr(5usize))
+            .field("eidr[6]", &self.eidr(6usize))
+            .field("eidr[7]", &self.eidr(7usize))
+            .field("eidr[8]", &self.eidr(8usize))
+            .field("eidr[9]", &self.eidr(9usize))
+            .field("eidr[10]", &self.eidr(10usize))
+            .field("eidr[11]", &self.eidr(11usize))
+            .field("eidr[12]", &self.eidr(12usize))
+            .field("eidr[13]", &self.eidr(13usize))
+            .field("eidr[14]", &self.eidr(14usize))
+            .field("eidr[15]", &self.eidr(15usize))
             .finish()
     }
 }
@@ -271,9 +309,39 @@ impl defmt::Format for Pcntr2 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Pcntr2 {{ pidr: {:?}, eidr: {:?} }}",
-            self.pidr(),
-            self.eidr()
+            "Pcntr2 {{ pidr[0]: {=bool:?}, pidr[1]: {=bool:?}, pidr[2]: {=bool:?}, pidr[3]: {=bool:?}, pidr[4]: {=bool:?}, pidr[5]: {=bool:?}, pidr[6]: {=bool:?}, pidr[7]: {=bool:?}, pidr[8]: {=bool:?}, pidr[9]: {=bool:?}, pidr[10]: {=bool:?}, pidr[11]: {=bool:?}, pidr[12]: {=bool:?}, pidr[13]: {=bool:?}, pidr[14]: {=bool:?}, pidr[15]: {=bool:?}, eidr[0]: {=bool:?}, eidr[1]: {=bool:?}, eidr[2]: {=bool:?}, eidr[3]: {=bool:?}, eidr[4]: {=bool:?}, eidr[5]: {=bool:?}, eidr[6]: {=bool:?}, eidr[7]: {=bool:?}, eidr[8]: {=bool:?}, eidr[9]: {=bool:?}, eidr[10]: {=bool:?}, eidr[11]: {=bool:?}, eidr[12]: {=bool:?}, eidr[13]: {=bool:?}, eidr[14]: {=bool:?}, eidr[15]: {=bool:?} }}",
+            self.pidr(0usize),
+            self.pidr(1usize),
+            self.pidr(2usize),
+            self.pidr(3usize),
+            self.pidr(4usize),
+            self.pidr(5usize),
+            self.pidr(6usize),
+            self.pidr(7usize),
+            self.pidr(8usize),
+            self.pidr(9usize),
+            self.pidr(10usize),
+            self.pidr(11usize),
+            self.pidr(12usize),
+            self.pidr(13usize),
+            self.pidr(14usize),
+            self.pidr(15usize),
+            self.eidr(0usize),
+            self.eidr(1usize),
+            self.eidr(2usize),
+            self.eidr(3usize),
+            self.eidr(4usize),
+            self.eidr(5usize),
+            self.eidr(6usize),
+            self.eidr(7usize),
+            self.eidr(8usize),
+            self.eidr(9usize),
+            self.eidr(10usize),
+            self.eidr(11usize),
+            self.eidr(12usize),
+            self.eidr(13usize),
+            self.eidr(14usize),
+            self.eidr(15usize)
         )
     }
 }

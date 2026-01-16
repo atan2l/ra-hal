@@ -19,3 +19,28 @@ transforms:
         array:
           len: 16
           stride: 1
+  - !DeleteFields
+    fieldset: port[01]::regs::Pcntr2
+    from: (pidr|eidr)
+  - !AddFields
+    fieldset: port[01]::regs::Pcntr2
+    fields:
+      -
+        name: pidr
+        description: Pmn Input Data
+        bit_offset: 0
+        bit_size: 1
+        array:
+          len: 16
+          stride: 1
+  - !AddFields
+    fieldset: port1::regs::Pcntr2
+    fields:
+      -
+        name: eidr
+        description: Pmn Event Input Data
+        bit_offset: 16
+        bit_size: 1
+        array:
+          len: 16
+          stride: 1

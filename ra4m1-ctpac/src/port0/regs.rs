@@ -125,14 +125,18 @@ impl Pcntr2 {
     #[doc = "Pmn Input Data"]
     #[must_use]
     #[inline(always)]
-    pub const fn pidr(&self) -> super::vals::Pcntr2Pidr {
-        let val = (self.0 >> 0usize) & 0xffff;
-        super::vals::Pcntr2Pidr::from_bits(val as u16)
+    pub const fn pidr(&self, n: usize) -> bool {
+        assert!(n < 16usize);
+        let offs = 0usize + n * 1usize;
+        let val = (self.0 >> offs) & 0x01;
+        val != 0
     }
     #[doc = "Pmn Input Data"]
     #[inline(always)]
-    pub const fn set_pidr(&mut self, val: super::vals::Pcntr2Pidr) {
-        self.0 = (self.0 & !(0xffff << 0usize)) | (((val.to_bits() as u32) & 0xffff) << 0usize);
+    pub const fn set_pidr(&mut self, n: usize, val: bool) {
+        assert!(n < 16usize);
+        let offs = 0usize + n * 1usize;
+        self.0 = (self.0 & !(0x01 << offs)) | (((val as u32) & 0x01) << offs);
     }
     #[doc = "These bits are read as 0000000000000000."]
     #[must_use]
@@ -156,7 +160,22 @@ impl Default for Pcntr2 {
 impl core::fmt::Debug for Pcntr2 {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("Pcntr2")
-            .field("pidr", &self.pidr())
+            .field("pidr[0]", &self.pidr(0usize))
+            .field("pidr[1]", &self.pidr(1usize))
+            .field("pidr[2]", &self.pidr(2usize))
+            .field("pidr[3]", &self.pidr(3usize))
+            .field("pidr[4]", &self.pidr(4usize))
+            .field("pidr[5]", &self.pidr(5usize))
+            .field("pidr[6]", &self.pidr(6usize))
+            .field("pidr[7]", &self.pidr(7usize))
+            .field("pidr[8]", &self.pidr(8usize))
+            .field("pidr[9]", &self.pidr(9usize))
+            .field("pidr[10]", &self.pidr(10usize))
+            .field("pidr[11]", &self.pidr(11usize))
+            .field("pidr[12]", &self.pidr(12usize))
+            .field("pidr[13]", &self.pidr(13usize))
+            .field("pidr[14]", &self.pidr(14usize))
+            .field("pidr[15]", &self.pidr(15usize))
             .field("reserved", &self.reserved())
             .finish()
     }
@@ -166,8 +185,23 @@ impl defmt::Format for Pcntr2 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Pcntr2 {{ pidr: {:?}, reserved: {=u16:?} }}",
-            self.pidr(),
+            "Pcntr2 {{ pidr[0]: {=bool:?}, pidr[1]: {=bool:?}, pidr[2]: {=bool:?}, pidr[3]: {=bool:?}, pidr[4]: {=bool:?}, pidr[5]: {=bool:?}, pidr[6]: {=bool:?}, pidr[7]: {=bool:?}, pidr[8]: {=bool:?}, pidr[9]: {=bool:?}, pidr[10]: {=bool:?}, pidr[11]: {=bool:?}, pidr[12]: {=bool:?}, pidr[13]: {=bool:?}, pidr[14]: {=bool:?}, pidr[15]: {=bool:?}, reserved: {=u16:?} }}",
+            self.pidr(0usize),
+            self.pidr(1usize),
+            self.pidr(2usize),
+            self.pidr(3usize),
+            self.pidr(4usize),
+            self.pidr(5usize),
+            self.pidr(6usize),
+            self.pidr(7usize),
+            self.pidr(8usize),
+            self.pidr(9usize),
+            self.pidr(10usize),
+            self.pidr(11usize),
+            self.pidr(12usize),
+            self.pidr(13usize),
+            self.pidr(14usize),
+            self.pidr(15usize),
             self.reserved()
         )
     }
