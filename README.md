@@ -49,7 +49,7 @@ See examples for more details.
 |            | Peripheral                                        | Notes                                                  |
 | ---------- | ------------------------------------------------- | ------------------------------------------------------ |
 | ⬛⬛⬜⬜⬜ | `ADC14` 14-Bit A/D Converter                      | In progress, single shot readings work                 |
-| ⬛⬛⬛⬜⬜ | `CRC` Cyclic Redundancy Check Calculator          | In progress, 32-bit CRC support TODO                   |
+| ⬛⬛⬛⬛⬛ | `CRC` Cyclic Redundancy Check Calculator          | 32-bit CRC only works on multiples of 4 bytes.         |
 | ⬛⬛⬛⬛⬛ | `FMIFRT` Factory MCU Information Flash Root Table |                                                        |
 | ⬛⬜⬜⬜⬜ | `GPT` General PWM Timer                           | Embassy timer driver only, general PWM support pending |
 | ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine                | Undocumented                                           |

@@ -1,6 +1,6 @@
 use embassy_hal_internal::Peri;
 use ra4m1_ctpac::crc::{
-    regs::{CrcdirBy, Crcdor, CrcdorBy, CrcdorHa},
+    regs::{Crcdir, CrcdirBy, Crcdor, CrcdorBy, CrcdorHa},
     vals::Gps,
 };
 
@@ -24,20 +24,11 @@ pub enum Polynomial {
 }
 
 #[derive(Default)]
-pub enum Endian {
-    /// MSB first
-    Big,
-
-    /// LSB first
-    #[default]
-    Little,
-}
-
-#[derive(Default)]
 pub struct Config {
     pub polynomial: Polynomial,
-    pub endian: Endian,
+    pub reverse: bool,
     pub seed: u32,
+    pub reflect_output: bool,
 }
 
 pub struct Crc<'d> {
@@ -82,12 +73,7 @@ impl<'d> Crc<'d> {
             Polynomial::Crc32C => Gps::Crc32C,
         };
 
-        let lms = match self.config.endian {
-            Endian::Big => true,
-            Endian::Little => false,
-        };
-
-        info!("New endian: {}", lms);
+        let lms = !self.config.reverse;
 
         crc.crccr0().write(|w| {
             w.set_gps(gps);
@@ -96,7 +82,6 @@ impl<'d> Crc<'d> {
         });
 
         if self.config.seed != 0 {
-            info!("Setting seed to: {:08X}", self.config.seed);
             match self.config.polynomial {
                 Polynomial::None => unimplemented!(),
                 Polynomial::Crc8 => {
@@ -114,12 +99,14 @@ impl<'d> Crc<'d> {
         }
     }
 
+    /// Note: CRC-32 / CRC-32C require 32-bit input values.
+    /// If `bytes.len()` is not a multiple of `4` the function will panic.
     pub fn feed_bytes(&mut self, bytes: &[u8]) -> u32 {
         let crc = crate::pac::CRC;
 
         let algo = crc.crccr0().read().gps();
 
-        match algo {
+        let output = match algo {
             Gps::None | Gps::_RESERVED_6 | Gps::_RESERVED_7 => unimplemented!(),
             Gps::Crc8 | Gps::Crc16 | Gps::CrcCcit => {
                 for byte in bytes.iter() {
@@ -133,9 +120,41 @@ impl<'d> Crc<'d> {
                 }
             }
             Gps::Crc32 | Gps::Crc32C => {
-                //
-                todo!()
+                if bytes.len() % 4 != 0 {
+                    unimplemented!("CRC-32 input len must be a multiple of 4");
+                }
+
+                match self.config.reverse {
+                    false => {
+                        // let it = bytes.chunks_exact(4).rev();
+                        let it = bytes.chunks_exact(4);
+                        for chunk in it {
+                            let word = u32::from_be_bytes(chunk.try_into().unwrap());
+                            crc.crcdir().write_value(Crcdir(word));
+                        }
+                    }
+                    true => {
+                        for chunk in bytes.chunks_exact(4) {
+                            let word = u32::from_ne_bytes(chunk.try_into().unwrap());
+                            crc.crcdir().write_value(Crcdir(word));
+                        }
+                    }
+                }
+
+                crc.crcdor().read().0
             }
+        };
+
+        if self.config.reflect_output {
+            let mask = match algo {
+                Gps::Crc8 => u8::MAX as _,
+                Gps::Crc16 | Gps::CrcCcit => u16::MAX as _,
+                Gps::Crc32 | Gps::Crc32C => u32::MAX,
+                _ => unimplemented!(),
+            };
+            (!output) & mask
+        } else {
+            output
         }
     }
 }
