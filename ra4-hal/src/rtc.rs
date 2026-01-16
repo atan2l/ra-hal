@@ -1,18 +1,12 @@
 use core::marker::PhantomData;
 
-use chrono::{NaiveDate, NaiveDateTime, NaiveTime};
+use chrono::{Datelike, NaiveDate, NaiveDateTime, NaiveTime, Timelike};
 use cortex_m::asm;
 use embassy_hal_internal::{Peri, PeripheralType};
 use embassy_time::Timer;
-use ra4m1_ctpac::{
-    rtc::vals::{Rcksel, RwkcntDayw},
-    system::vals::Sodrv,
-};
+use ra4m1_ctpac::rtc::vals::{Rcksel, RwkcntDayw};
 
-use crate::{
-    pac,
-    peripherals::{self, RTC},
-};
+use crate::{pac, peripherals};
 
 pub struct Rtc<'d, I: Instance> {
     _phantom: PhantomData<&'d I>,
@@ -39,9 +33,7 @@ impl<'d, I: Instance> Rtc<'d, I> {
     pub async fn new(_rtc: Peri<'d, I>) -> Self {
         let system = pac::SYSTEM;
         if system.lococr().read().lcstp() {
-            info!("RTC: LOCO not running");
-
-            debug!("RTC: Starting LOCO");
+            warn!("RTC: LOCO not running. Attempting start.");
 
             let vbatt_enabled = system.vbtcr1().read().bpwswstp();
 
@@ -67,18 +59,15 @@ impl<'d, I: Instance> Rtc<'d, I> {
                     asm::nop();
                 }
             }
-        } else {
-            info!("RTC: LOCO running");
-        }
-
-        if system.lococr().read().lcstp() {
-            info!("RTC: LOCO  stopped??");
-        } else {
-            info!("RTC: LOCO running");
         }
 
         let rtc = I::regs();
 
+        let mut instance = Self {
+            _phantom: PhantomData,
+        };
+
+        // §24.2.20
         rtc.rfrl().write(|w| {
             w.set_rfc(0xFF);
         });
@@ -91,43 +80,30 @@ impl<'d, I: Instance> Rtc<'d, I> {
             rtc.rcr4().read();
         }
 
-        rtc.rcr2().modify(|w| {
-            w.set_start(false);
-            w.set_cntmd(false);
-        });
-        warn!("Waiting for RTC to stop");
-        while rtc.rcr2().read().start() {
-            asm::nop();
-        }
-        warn!("RTC Stopped");
+        instance.stop();
 
         rtc.rcr2().modify(|w| {
+            w.set_cntmd(false);
             w.set_aadje(true);
             w.set_aadjp(true);
         });
-        warn!("Waiting for count mode to change");
         while rtc.rcr2().read().cntmd() != false {
             asm::nop();
         }
-        warn!("Count mode changed");
 
         rtc.rcr2().modify(|w| {
             w.set_reset(true);
         });
-        warn!("Waiting for reset");
         while rtc.rcr2().read().reset() {
             asm::nop();
         }
-        warn!("Reset done");
 
         rtc.rcr2().modify(|w| {
             w.set_start(false);
         });
-        warn!("Waiting for RTC to stop");
         while rtc.rcr2().read().start() {
             asm::nop();
         }
-        warn!("RTC stopped");
 
         rtc.rseccnt().write(|w| {
             w.set_sec1(0);
@@ -155,23 +131,102 @@ impl<'d, I: Instance> Rtc<'d, I> {
         });
 
         rtc.ryrcnt().write(|w| {
-            w.set_yr10(2);
-            w.set_yr1(6);
+            w.set_yr10(7);
+            w.set_yr1(0);
         });
+
+        instance.start();
+
+        instance
+    }
+
+    pub fn start(&mut self) {
+        let rtc = I::regs();
 
         rtc.rcr2().modify(|w| {
             w.set_start(true);
         });
-        warn!("Waiting for RTC to start");
+
         while !rtc.rcr2().read().start() {
             asm::nop();
         }
-        warn!("RTC ready");
+    }
 
-        Self {
-            _phantom: PhantomData,
+    pub fn stop(&mut self) {
+        let rtc = I::regs();
+
+        rtc.rcr2().modify(|w| {
+            w.set_start(false);
+        });
+
+        while rtc.rcr2().read().start() {
+            asm::nop();
         }
     }
+
+    pub fn set_time(&mut self, date_time: NaiveDateTime) {
+        let year = date_time.year_ce().1;
+        let month = date_time.month();
+        let day = date_time.day();
+        let hour = date_time.hour();
+        let minute = date_time.minute();
+        let second = date_time.second();
+
+        self.set_time_ymd_hms(
+            year as u16,
+            month as u8,
+            day as u8,
+            hour as u8,
+            minute as u8,
+            second as u8,
+        );
+    }
+
+    pub fn set_time_ymd_hms(
+        &mut self,
+        year: u16,
+        month: u8,
+        day: u8,
+        hour: u8,
+        minute: u8,
+        second: u8,
+    ) {
+        let rtc = I::regs();
+
+        self.stop();
+
+        rtc.ryrcnt().write(|w| {
+            w.set_yr10(((year / 10) % 10) as _);
+            w.set_yr1((year % 10) as _);
+        });
+
+        rtc.rmoncnt().write(|w| {
+            w.set_mon10(((month / 10) % 10) == 1);
+            w.set_mon1((month % 10) as _);
+        });
+
+        rtc.rdaycnt().write(|w| {
+            w.set_date10(((day / 10) % 10) as _);
+            w.set_date1((day % 10) as _);
+        });
+
+        rtc.rhrcnt().write(|w| {
+            w.set_hr10(((hour / 10) % 10) as _);
+            w.set_hr1((hour % 10) as _);
+        });
+
+        rtc.rmincnt().write(|w| {
+            w.set_min10(((minute / 10) % 10) as _);
+            w.set_min1((minute % 10) as _);
+        });
+        rtc.rseccnt().write(|w| {
+            w.set_sec10(((second / 10) % 10) as _);
+            w.set_sec1((second % 10) as _);
+        });
+
+        self.start();
+    }
+
     pub fn now(&self) -> NaiveDateTime {
         let rtc = I::regs();
 

@@ -9,7 +9,7 @@ use defmt_rtt as _;
 use embassy_executor::Spawner;
 use embassy_time::Timer;
 use panic_probe as _;
-use ra4_hal::chrono::{Datelike, Timelike};
+use ra4_hal::chrono::{Datelike, NaiveDate, NaiveDateTime, NaiveTime, Timelike};
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
 use ra4_hal::{ofs0, ofs1, print_clock_config, rtc::Rtc};
@@ -45,14 +45,19 @@ async fn main(_spawner: Spawner) {
 
     print_clock_config();
 
-    let rtc = Rtc::new(p.RTC).await;
+    let mut rtc = Rtc::new(p.RTC).await;
+
+    rtc.set_time(NaiveDateTime::new(
+        NaiveDate::from_ymd_opt(2026, 02, 01).unwrap(),
+        NaiveTime::from_hms_opt(7, 19, 0).unwrap(),
+    ));
 
     loop {
         let now = rtc.now().and_utc();
         let date = now.date_naive();
         let time = now.time();
         info!(
-            "{}/{}/{} {}:{}:{}",
+            "{:04}/{:02}/{:02} {:02}:{:02}:{:02}",
             date.year_ce().1,
             date.month(),
             date.day(),
