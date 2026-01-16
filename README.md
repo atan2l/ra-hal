@@ -52,6 +52,7 @@ See examples for more details.
 | ⬛⬛⬛⬛⬛ | `CRC` Cyclic Redundancy Check Calculator          | 32-bit CRC only works on multiples of 4 bytes.         |
 | ⬛⬛⬛⬛⬛ | `FMIFRT` Factory MCU Information Flash Root Table |                                                        |
 | ⬛⬜⬜⬜⬜ | `GPT` General PWM Timer                           | Embassy timer driver only, general PWM support pending |
+| ⬛⬛⬜⬜⬜ | `PORT` I/O Ports                                  | SVD cleanup, PFS currently unusable                    |
 | ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine                | Undocumented                                           |
 | ⬛⬜⬜⬜⬜ | `SCI` Serial Communications Interface             | In progress                                            |
 
