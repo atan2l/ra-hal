@@ -32,13 +32,21 @@ pub(crate) trait SealedPin {
     /// Set the output as high.
     #[inline]
     fn set_high(&self) {
-        todo!()
+        let port = self.block();
+
+        port.pcntr3().write(|w| {
+            w.set_posr(self._pin() as _, true);
+        });
     }
 
     /// Set the output as low.
     #[inline]
     fn set_low(&self) {
-        todo!()
+        let port = self.block();
+
+        port.pcntr3().write(|w| {
+            w.set_porr(self._pin() as _, true);
+        });
     }
 
     /// Set the output level.
@@ -53,13 +61,15 @@ pub(crate) trait SealedPin {
     /// Is the output pin set as high?
     #[inline]
     fn is_set_high(&self) -> bool {
-        todo!()
+        let port = self.block();
+
+        port.pcntr1().read().podr(self._pin() as _)
     }
 
     /// Is the output pin set as low?
     #[inline]
     fn is_set_low(&self) -> bool {
-        todo!()
+        !self.is_set_high()
     }
 
     /// What level output is set to
@@ -77,6 +87,28 @@ pub(crate) trait SealedPin {
         match self.is_set_high() {
             true => self.set_low(),
             false => self.set_high(),
+        }
+    }
+
+    /// Get the GPIO register block for this pin.
+    #[inline]
+    fn block(&self) -> crate::pac::port0::Port0 {
+        match self._port() {
+            // Safe because PORT1 only adds registers, no changes or removals.  Also we know that this is a valid pointer.
+            1 => unsafe { crate::pac::port0::Port0::from_ptr(crate::pac::PORT1.as_ptr()) },
+            // Safe because PORT1 only adds registers, no changes or removals.  Also we know that this is a valid pointer.
+            2 => unsafe { crate::pac::port0::Port0::from_ptr(crate::pac::PORT2.as_ptr()) },
+            // Safe because PORT1 only adds registers, no changes or removals.  Also we know that this is a valid pointer.
+            3 => unsafe { crate::pac::port0::Port0::from_ptr(crate::pac::PORT3.as_ptr()) },
+            // Safe because PORT1 only adds registers, no changes or removals.  Also we know that this is a valid pointer.
+            4 => unsafe { crate::pac::port0::Port0::from_ptr(crate::pac::PORT4.as_ptr()) },
+            0 => crate::pac::PORT0,
+            5 => crate::pac::PORT5,
+            6 => crate::pac::PORT6,
+            7 => crate::pac::PORT7,
+            8 => crate::pac::PORT8,
+            9 => crate::pac::PORT9,
+            _ => unreachable!(),
         }
     }
 }
@@ -118,6 +150,13 @@ impl AnyPin {
 
     fn _port(&self) -> u16 {
         self.pin_port / 100
+    }
+
+    /// Get the GPIO register block for this pin.
+    #[cfg(feature = "unstable-pac")]
+    #[inline]
+    pub fn block(&self) -> crate::pac::port0::Port0 {
+        SealedPin::block(self)
     }
 }
 
