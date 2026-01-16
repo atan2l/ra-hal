@@ -572,7 +572,7 @@ dependencies = [
 
 [[package]]
 name = "ra4m1-ctpac"
-version = "0.1.8-dev"
+version = "0.1.9-dev"
 dependencies = [
  "cortex-m",
  "cortex-m-rt",
