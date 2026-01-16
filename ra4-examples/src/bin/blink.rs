@@ -11,7 +11,7 @@ use embassy_time::Timer;
 use panic_probe as _;
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
-use ra4_hal::{ofs0, ofs1, print_clock_config};
+use ra4_hal::{gpio::Flex, ofs0, ofs1, print_clock_config};
 
 /// Option Function Select Register 0
 /// Accepts either:
@@ -40,12 +40,58 @@ pub static SEC_MPU: [u32; 13] = [
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
-    let _p = ra4_hal::init();
+    let p = ra4_hal::init();
 
     print_clock_config();
 
+    // static const int pin_zero_index = 28;
+    // static const uint8_t pins[][2] = {
+
+    //   { 7, 3 }, // 0
+    // { BSP_IO_PORT_02_PIN_05,    P205   }, /* (35) D35  */
+    // { BSP_IO_PORT_00_PIN_11,    P011   }, /* (30) D30  */
+    // { BSP_IO_PORT_00_PIN_12,    P012   }, /* (31) D31  */
+    // { BSP_IO_PORT_00_PIN_13,    P013   }, /* (32) D32  */
+    // let pfs = pac::PFS;
+    // let port0 = pac::PORT0;
+    // let port2 = pac::PORT2;
+
+    // port2.pcntr1().write(|w| {
+    //     w.set_pdr(5, true);
+    //     w.set_podr(5, true);
+    // });
+    // port0.pcntr1().write(|w| {
+    //     w.set_pdr(12, true);
+    //     w.set_pdr(13, true);
+    //     // w.set_pdr(pac::port0::vals::Pcntr1Pdr::from_bits(1 << 12 | 1 << 13));
+    //     // w.set_pdr(pac::port0::vals::Pcntr1Pdr::from_bits(1 << 11));
+    //     // w.set_podr(pac::port0::vals::Pcntr1Podr::from_bits(1 << 12));
+    // });
+
+    let mut pin0 = Flex::new(p.P205);
+    let mut pin1 = Flex::new(p.P012);
+    let mut pin2 = Flex::new(p.P013);
+
+    pin0.set_as_output();
+    pin1.set_as_output();
+    pin2.set_as_output();
+
+    pin0.set_high();
+    pin1.set_low();
+    pin2.set_low();
+
+    let mut state = false;
+
     loop {
-        error!("Here");
-        Timer::after_millis(500).await;
+        if state {
+            pin1.set_as_output();
+            pin2.set_as_input();
+        } else {
+            pin2.set_as_output();
+            pin1.set_as_input();
+        }
+
+        state = !state;
+        Timer::after_millis(333).await;
     }
 }
