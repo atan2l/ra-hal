@@ -6,15 +6,15 @@ transforms:
     fieldset: port[01]::regs::Pcntr1
     fields:
       -
-        name: podr
-        bit_offset: 16
+        name: pdr
+        bit_offset: 0
         bit_size: 1
         array:
           len: 16
           stride: 1
       -
-        name: pdr
-        bit_offset: 0
+        name: podr
+        bit_offset: 16
         bit_size: 1
         array:
           len: 16
@@ -44,3 +44,26 @@ transforms:
         array:
           len: 16
           stride: 1
+  - !DeleteFields
+    fieldset: port[01]::regs::Pcntr3
+    from: (porr|posr)
+  - !AddFields
+    fieldset: port[01]::regs::Pcntr3
+    fields:
+      -
+        name: posr
+        description: Pmn Output Set (high)
+        bit_offset: 0
+        bit_size: 1
+        array:
+          len: 16
+          stride: 1
+      -
+        name: porr
+        descrription: Pmn Output Reset (low)
+        bit_offset: 16
+        bit_size: 1
+        array:
+          len: 16
+          stride: 1
+ 

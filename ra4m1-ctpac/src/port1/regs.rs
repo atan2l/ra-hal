@@ -350,29 +350,35 @@ impl defmt::Format for Pcntr2 {
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Pcntr3(pub u32);
 impl Pcntr3 {
-    #[doc = "Pmn Output Set"]
+    #[doc = "Pmn Output Set (high)"]
     #[must_use]
     #[inline(always)]
-    pub const fn posr(&self) -> super::vals::Pcntr3Posr {
-        let val = (self.0 >> 0usize) & 0xffff;
-        super::vals::Pcntr3Posr::from_bits(val as u16)
+    pub const fn posr(&self, n: usize) -> bool {
+        assert!(n < 16usize);
+        let offs = 0usize + n * 1usize;
+        let val = (self.0 >> offs) & 0x01;
+        val != 0
     }
-    #[doc = "Pmn Output Set"]
+    #[doc = "Pmn Output Set (high)"]
     #[inline(always)]
-    pub const fn set_posr(&mut self, val: super::vals::Pcntr3Posr) {
-        self.0 = (self.0 & !(0xffff << 0usize)) | (((val.to_bits() as u32) & 0xffff) << 0usize);
+    pub const fn set_posr(&mut self, n: usize, val: bool) {
+        assert!(n < 16usize);
+        let offs = 0usize + n * 1usize;
+        self.0 = (self.0 & !(0x01 << offs)) | (((val as u32) & 0x01) << offs);
     }
-    #[doc = "Pmn Output Reset"]
     #[must_use]
     #[inline(always)]
-    pub const fn porr(&self) -> super::vals::Pcntr3Porr {
-        let val = (self.0 >> 16usize) & 0xffff;
-        super::vals::Pcntr3Porr::from_bits(val as u16)
+    pub const fn porr(&self, n: usize) -> bool {
+        assert!(n < 16usize);
+        let offs = 16usize + n * 1usize;
+        let val = (self.0 >> offs) & 0x01;
+        val != 0
     }
-    #[doc = "Pmn Output Reset"]
     #[inline(always)]
-    pub const fn set_porr(&mut self, val: super::vals::Pcntr3Porr) {
-        self.0 = (self.0 & !(0xffff << 16usize)) | (((val.to_bits() as u32) & 0xffff) << 16usize);
+    pub const fn set_porr(&mut self, n: usize, val: bool) {
+        assert!(n < 16usize);
+        let offs = 16usize + n * 1usize;
+        self.0 = (self.0 & !(0x01 << offs)) | (((val as u32) & 0x01) << offs);
     }
 }
 impl Default for Pcntr3 {
@@ -384,8 +390,38 @@ impl Default for Pcntr3 {
 impl core::fmt::Debug for Pcntr3 {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("Pcntr3")
-            .field("posr", &self.posr())
-            .field("porr", &self.porr())
+            .field("posr[0]", &self.posr(0usize))
+            .field("posr[1]", &self.posr(1usize))
+            .field("posr[2]", &self.posr(2usize))
+            .field("posr[3]", &self.posr(3usize))
+            .field("posr[4]", &self.posr(4usize))
+            .field("posr[5]", &self.posr(5usize))
+            .field("posr[6]", &self.posr(6usize))
+            .field("posr[7]", &self.posr(7usize))
+            .field("posr[8]", &self.posr(8usize))
+            .field("posr[9]", &self.posr(9usize))
+            .field("posr[10]", &self.posr(10usize))
+            .field("posr[11]", &self.posr(11usize))
+            .field("posr[12]", &self.posr(12usize))
+            .field("posr[13]", &self.posr(13usize))
+            .field("posr[14]", &self.posr(14usize))
+            .field("posr[15]", &self.posr(15usize))
+            .field("porr[0]", &self.porr(0usize))
+            .field("porr[1]", &self.porr(1usize))
+            .field("porr[2]", &self.porr(2usize))
+            .field("porr[3]", &self.porr(3usize))
+            .field("porr[4]", &self.porr(4usize))
+            .field("porr[5]", &self.porr(5usize))
+            .field("porr[6]", &self.porr(6usize))
+            .field("porr[7]", &self.porr(7usize))
+            .field("porr[8]", &self.porr(8usize))
+            .field("porr[9]", &self.porr(9usize))
+            .field("porr[10]", &self.porr(10usize))
+            .field("porr[11]", &self.porr(11usize))
+            .field("porr[12]", &self.porr(12usize))
+            .field("porr[13]", &self.porr(13usize))
+            .field("porr[14]", &self.porr(14usize))
+            .field("porr[15]", &self.porr(15usize))
             .finish()
     }
 }
@@ -394,9 +430,39 @@ impl defmt::Format for Pcntr3 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Pcntr3 {{ posr: {:?}, porr: {:?} }}",
-            self.posr(),
-            self.porr()
+            "Pcntr3 {{ posr[0]: {=bool:?}, posr[1]: {=bool:?}, posr[2]: {=bool:?}, posr[3]: {=bool:?}, posr[4]: {=bool:?}, posr[5]: {=bool:?}, posr[6]: {=bool:?}, posr[7]: {=bool:?}, posr[8]: {=bool:?}, posr[9]: {=bool:?}, posr[10]: {=bool:?}, posr[11]: {=bool:?}, posr[12]: {=bool:?}, posr[13]: {=bool:?}, posr[14]: {=bool:?}, posr[15]: {=bool:?}, porr[0]: {=bool:?}, porr[1]: {=bool:?}, porr[2]: {=bool:?}, porr[3]: {=bool:?}, porr[4]: {=bool:?}, porr[5]: {=bool:?}, porr[6]: {=bool:?}, porr[7]: {=bool:?}, porr[8]: {=bool:?}, porr[9]: {=bool:?}, porr[10]: {=bool:?}, porr[11]: {=bool:?}, porr[12]: {=bool:?}, porr[13]: {=bool:?}, porr[14]: {=bool:?}, porr[15]: {=bool:?} }}",
+            self.posr(0usize),
+            self.posr(1usize),
+            self.posr(2usize),
+            self.posr(3usize),
+            self.posr(4usize),
+            self.posr(5usize),
+            self.posr(6usize),
+            self.posr(7usize),
+            self.posr(8usize),
+            self.posr(9usize),
+            self.posr(10usize),
+            self.posr(11usize),
+            self.posr(12usize),
+            self.posr(13usize),
+            self.posr(14usize),
+            self.posr(15usize),
+            self.porr(0usize),
+            self.porr(1usize),
+            self.porr(2usize),
+            self.porr(3usize),
+            self.porr(4usize),
+            self.porr(5usize),
+            self.porr(6usize),
+            self.porr(7usize),
+            self.porr(8usize),
+            self.porr(9usize),
+            self.porr(10usize),
+            self.porr(11usize),
+            self.porr(12usize),
+            self.porr(13usize),
+            self.porr(14usize),
+            self.porr(15usize)
         )
     }
 }
