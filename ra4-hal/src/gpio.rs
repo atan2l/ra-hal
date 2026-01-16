@@ -16,6 +16,13 @@ pub struct AnyPin {
     pin_port: u16,
 }
 
+/// GPIO flexible pin.
+///
+/// This pin can either be a input, output, or attached to a peripheral.
+pub struct Flex<'d> {
+    pub(crate) pin: Peri<'d, AnyPin>,
+}
+
 pub(crate) trait SealedPin {
     fn pin_port(&self) -> u16;
 
@@ -90,6 +97,26 @@ pub(crate) trait SealedPin {
         }
     }
 
+    #[inline]
+    fn set_as_output(&self) {
+        let port = self.block();
+        let pin = self._pin() as _;
+
+        port.pcntr1().modify(|w| {
+            w.set_pdr(pin, true);
+        });
+    }
+
+    #[inline]
+    fn set_as_input(&self) {
+        let port = self.block();
+        let pin = self._pin() as _;
+
+        port.pcntr1().modify(|w| {
+            w.set_pdr(pin, false);
+        });
+    }
+
     /// Get the GPIO register block for this pin.
     #[inline]
     fn block(&self) -> crate::pac::port0::Port0 {
@@ -157,6 +184,68 @@ impl AnyPin {
     #[inline]
     pub fn block(&self) -> crate::pac::port0::Port0 {
         SealedPin::block(self)
+    }
+}
+
+impl<'d> Flex<'d> {
+    /// Create `Flex` from pin.
+    #[inline]
+    pub fn new(pin: Peri<'d, impl Pin>) -> Self {
+        let s = Self { pin: pin.into() };
+        trace!("Flex: port={}, pin={}", s.pin._port(), s.pin._pin());
+        s
+    }
+
+    /// Set the output as high.
+    #[inline]
+    pub fn set_high(&mut self) {
+        self.pin.set_high();
+    }
+
+    /// Set the output as low.
+    #[inline]
+    pub fn set_low(&mut self) {
+        self.pin.set_low();
+    }
+
+    /// Set the output level.
+    #[inline]
+    pub fn set_level(&mut self, level: Level) {
+        self.pin.set_level(level)
+    }
+
+    /// Is the output pin set as high?
+    #[inline]
+    pub fn is_set_high(&mut self) -> bool {
+        self.pin.is_set_high()
+    }
+
+    /// Is the output pin set as low?
+    #[inline]
+    pub fn is_set_low(&mut self) -> bool {
+        self.pin.is_set_low()
+    }
+
+    /// What level output is set to
+    #[inline]
+    pub fn get_output_level(&mut self) -> Level {
+        self.pin.get_output_level()
+    }
+
+    /// Toggle pin output
+    #[inline]
+    pub fn toggle(&mut self) {
+        self.pin.toggle();
+    }
+
+    #[inline(never)]
+    pub fn set_as_output(&mut self) {
+        self.pin.set_as_output();
+    }
+
+    #[inline(never)]
+    pub fn set_as_input(&mut self) {
+        self.pin.set_as_input();
     }
 }
 
