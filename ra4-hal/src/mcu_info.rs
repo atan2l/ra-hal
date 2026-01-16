@@ -80,10 +80,10 @@ impl McuInfo {
                 "MCU: {} rev {:02X}, uid={:08x}-{:08x}-{:08x}-{:08x}",
                 self.part_number(),
                 self.revision(),
-                (self.uid() >> 96 & 0xFFFFFFFF),
-                (self.uid() >> 64 & 0xFFFFFFFF),
-                (self.uid() >> 32 & 0xFFFFFFFF),
-                (self.uid() >> 0 & 0xFFFFFFFF),
+                (self.uid() >> 96) & 0xFFFFFFFF,
+                (self.uid() >> 64) & 0xFFFFFFFF,
+                (self.uid() >> 32) & 0xFFFFFFFF,
+                self.uid() & 0xFFFFFFFF,
             );
             warn!("PN too short to identify");
         } else {
@@ -92,10 +92,10 @@ impl McuInfo {
                 self.part_number(),
                 self.revision(),
                 self.flash_size().unwrap_or(0),
-                (self.uid() >> 96 & 0xFFFFFFFF),
-                (self.uid() >> 64 & 0xFFFFFFFF),
-                (self.uid() >> 32 & 0xFFFFFFFF),
-                (self.uid() >> 0 & 0xFFFFFFFF),
+                (self.uid() >> 96) & 0xFFFFFFFF,
+                (self.uid() >> 64) & 0xFFFFFFFF,
+                (self.uid() >> 32) & 0xFFFFFFFF,
+                self.uid() & 0xFFFFFFFF,
             );
         }
     }

@@ -2,7 +2,7 @@ use core::marker::PhantomData;
 
 use cortex_m::asm;
 use embassy_hal_internal::{Peri, PeripheralType};
-use ra4m1_ctpac::adc14::vals::{Adcs, Adprc, Diagval};
+use ra4m1_ctpac::adc14::vals::{Adcs, Adprc};
 
 use crate::{
     adc::channel::{AdcChannel, Temperature, Vref},

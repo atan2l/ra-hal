@@ -30,7 +30,8 @@ pub static OFS0: u32 = ofs0!(ArduinoCore);
 #[unsafe(link_section = ".ofs1")]
 pub static OFS1: u32 = ofs1!(ArduinoCore);
 
-// There are reasons for this.
+/// Configures the Security MPU.  See the reference manual for more details.
+/// Setting all bits to 1 would also work.  Setting all bits to 0 is a good way to brick your board.
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".sec_mpu")]
 pub static SEC_MPU: [u32; 13] = [
