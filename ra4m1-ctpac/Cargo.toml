@@ -16,8 +16,8 @@ cortex-m-rt = { workspace = true }
 critical-section = { workspace = true }
 
 [features]
-defmt = ["dep:defmt"]
-rt = ["cortex-m-rt/device"]
+defmt = [ "dep:defmt" ]
+rt = [ "cortex-m-rt/device" ]
 
 [package.metadata.docs.rs]
 default-target = "thumbv7em-none-eabihf"
