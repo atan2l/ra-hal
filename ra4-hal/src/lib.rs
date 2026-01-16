@@ -8,15 +8,19 @@ pub mod gpio;
 pub mod mcu_info;
 pub mod ofs0;
 pub mod ofs1;
+pub mod rtc;
 pub mod sce5;
 #[cfg(feature = "time-driver")]
 pub mod time_driver;
 pub mod uart;
 pub mod write_protect;
 
-use cortex_m::asm;
+// Re-export
+pub use chrono;
 #[cfg(feature = "unstable-pac")]
 pub use ra4m1_ctpac as pac;
+
+use cortex_m::asm;
 #[cfg(not(feature = "unstable-pac"))]
 pub(crate) use ra4m1_ctpac as pac;
 use ra4m1_ctpac::{
