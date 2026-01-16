@@ -4,6 +4,7 @@ pub mod fmt;
 
 pub mod adc;
 pub mod crc;
+pub mod gpio;
 pub mod mcu_info;
 pub mod ofs0;
 pub mod ofs1;
