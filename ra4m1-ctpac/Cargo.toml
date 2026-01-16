@@ -5,6 +5,7 @@ authors = ["Alex Zepeda <srht@inferiorhumanorgans.com>"]
 edition = "2024"
 rust-version = "1.91"
 description = "Peripheral Access Crate (PAC) for the Renesas RA4M1."
+categories = [ "embedded", "hardware-support", "no-std", "asynchronous" ]
 homepage = "https://sr.ht/~az1/ra4m1-rs/"
 license = "LGPL-3.0-or-later"
 
