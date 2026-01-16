@@ -15,6 +15,7 @@ pub(crate) trait SealedAdcChannel: AdcInputPin {
 
         trace!("ADC14: enable_channel({})", Self::CHANNEL);
 
+        #[cfg(feature = "invariants")]
         assert!(Self::CHANNEL <= 14 || (Self::CHANNEL >= 16 && Self::CHANNEL < 25));
 
         if Self::CHANNEL <= 14 {
@@ -43,6 +44,7 @@ pub(crate) trait SealedAdcChannel: AdcInputPin {
 
         trace!("ADC14: disable_channel({})", Self::CHANNEL);
 
+        #[cfg(feature = "invariants")]
         assert!(Self::CHANNEL <= 14 || (Self::CHANNEL >= 16 && Self::CHANNEL < 25));
 
         if Self::CHANNEL <= 14 {
@@ -61,6 +63,7 @@ pub(crate) trait SealedAdcChannel: AdcInputPin {
 
         trace!("ADC14: read_one({})", Self::CHANNEL);
 
+        #[cfg(feature = "invariants")]
         assert!(Self::CHANNEL <= 14 || (Self::CHANNEL >= 16 && Self::CHANNEL < 25));
 
         // TODO: Merge these in the chiptool IR as it's continuous memory with channel 15 being a gap

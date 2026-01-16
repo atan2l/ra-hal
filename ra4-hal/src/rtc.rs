@@ -172,6 +172,16 @@ impl<'d, I: Instance> Rtc<'d, I> {
         let minute = date_time.minute();
         let second = date_time.second();
 
+        #[cfg(feature = "invariants")]
+        {
+            assert!(year < u16::MAX as u32);
+            assert!(month < u8::MAX as u32);
+            assert!(day < u8::MAX as u32);
+            assert!(hour < u8::MAX as u32);
+            assert!(minute < u8::MAX as u32);
+            assert!(second < u8::MAX as u32);
+        }
+
         self.set_time_ymd_hms(
             year as u16,
             month as u8,

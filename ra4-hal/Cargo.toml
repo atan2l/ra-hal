@@ -29,7 +29,7 @@ chrono = { version = "^0.4", default-features = false, optional = true }
 paste = "1"
 
 [features]
-default = [ "time-driver", "rt", "diag", "uno_r4", "chrono" ]
+default = [ "time-driver", "rt", "diag", "uno_r4", "chrono", "invariants" ]
 
 # Enable the `rt` feature of the PAC.
 # With `rt` enabled the PAC provides interrupt vectors instead of letting [`cortex-m-rt`](https://docs.rs/cortex-m-rt) do that.
@@ -49,6 +49,9 @@ uno_r4 = [ "_64pin" ]
 _48pin = [ ]
 _64pin = [ ]
 _100pin = [ ]
+
+# Extra runtime assertions.
+invariants = [ ]
 
 [package.metadata.docs.rs]
 default-target = "thumbv7em-none-eabihf"

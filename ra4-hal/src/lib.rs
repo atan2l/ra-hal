@@ -99,7 +99,8 @@ pub fn init() -> Peripherals {
             debug!("Reset reason: {}", reset_cause);
         }
 
-        // sanity check
+        // Sanity check.  The manual states that this should be fixed.
+        #[cfg(feature = "invariants")]
         assert_eq!(
             ExpectedBase::RA4M1.to_bits(),
             fmifrt_base.base().read().base()

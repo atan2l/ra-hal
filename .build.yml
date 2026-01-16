@@ -27,6 +27,10 @@ tasks:
       source $HOME/.cargo/env
       cd $HOME/ra4m1-rs
       cargo build --quiet --package ra4-examples --no-default-features
+  - build-no-invariant: |
+      source $HOME/.cargo/env
+      cd $HOME/ra4m1-rs
+      cargo build --quiet --package ra4-hal --no-default-features --features time-driver,rt,diag,uno_r4,chrono
   - doc: |
       source $HOME/.cargo/env
       cd ra4m1-rs
