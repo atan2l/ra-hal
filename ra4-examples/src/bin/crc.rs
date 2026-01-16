@@ -65,7 +65,6 @@ async fn main(_spawner: Spawner) {
         polynomial: Polynomial::Crc16,
         endian: Endian::Big,
         seed: 0x800d,
-        ..Default::default()
     });
     let output = crc.feed_bytes(data);
     assert_eq!(output, 0x9ecf);
