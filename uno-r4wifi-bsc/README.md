@@ -1,6 +1,6 @@
 # `uno-r4wifi-bsc`
 
-Board support crate for the Arduino Uno R4 WiFi.  Currently just a little driver for the onboard LED matrix.  E.g.
+Board support crate for the Arduino [Uno R4 WiFi](https://docs.arduino.cc/hardware/uno-r4-wifi/).  Currently just a little driver for the onboard LED matrix.  E.g.
 
 ```rust
 #[embassy_executor::main]
@@ -10,8 +10,8 @@ async fn main(_spawner: Spawner) {
     // This will claim ownership of the pins we need to prevent accidental misuse.
     let matrix = led_matrix_init!(p);
 
-    // The async version of set_pixel adds a small delay at the end
-    // to slow things down enough to prevent side effects.
+    // The async version of set_pixel adds a small delay at the end to slow things
+    // down enough to prevent side effects.
     matrix.set_pixel(1, true).await;
 }
 ```
