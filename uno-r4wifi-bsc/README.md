@@ -17,3 +17,10 @@ async fn main(_spawner: Spawner) {
 ```
 
 Note that as the LEDs are multiplexed you'll have to invoke this in a loop to keep multiple pixels "on".
+
+## Support
+
+|            | Peripheral  | Notes                              |
+| ---------- | ------------| ---------------------------------- |
+| ⬜⬜⬜⬜⬜ | WiFi        | Pending `UART` support in the HAL. |
+| ⬛⬛⬜⬜⬜ | LED Matrix  | TODO: Render complete frames.      |
