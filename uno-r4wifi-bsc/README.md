@@ -10,8 +10,8 @@ async fn main(_spawner: Spawner) {
     // This will claim ownership of the pins we need to prevent accidental misuse.
     let matrix = led_matrix_init!(p);
 
-	  // The async version of set_pixel adds a small delay at the end
-		// to slow things down enough to prevent side effects.
+    // The async version of set_pixel adds a small delay at the end
+    // to slow things down enough to prevent side effects.
     matrix.set_pixel(1, true).await;
 }
 ```
