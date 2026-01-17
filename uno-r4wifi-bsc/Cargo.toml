@@ -1,0 +1,27 @@
+[package]
+name = "uno-r4wifi-bsc"
+version = "0.1.0-dev"
+edition = "2024"
+rust-version = "1.91"
+description = "Board specific features for the Arduno Uno R4 WiFi."
+homepage = "https://sr.ht/~az1/ra4m1-rs/"
+license = "LGPL-3.0-or-later"
+
+[dependencies]
+## Core dependencies
+cortex-m = { workspace = true }
+cortex-m-rt = { workspace = true }
+defmt = { workspace = true, optional = true }
+critical-section = { workspace = true }
+
+embassy-time = { workspace = true }
+embassy-hal-internal = { workspace = true }
+
+## Board stuff
+ra4-hal = { path = "../ra4-hal", features = [ "unstable-pac" ] }
+
+[features]
+
+default = [ "defmt" ]
+
+defmt = [ "dep:defmt", "embassy-time/defmt", "embassy-time/defmt-timestamp-uptime", "ra4-hal/defmt" ]
