@@ -142,6 +142,11 @@ impl<'d> LedMatrix {
     }
 
     pub async fn set_pixel(&self, idx: u8, state: bool) {
+        self.blocking_set_pixel(idx, state);
+        Timer::after_micros(350).await;
+    }
+
+    pub fn blocking_set_pixel(&self, idx: u8, state: bool) {
         let port0 = ra4_hal::pac::PORT0;
         let port2 = ra4_hal::pac::PORT2;
 
@@ -169,8 +174,6 @@ impl<'d> LedMatrix {
             low.set_as_output();
             low.set_low();
         }
-
-        Timer::after_micros(350).await;
     }
 }
 
