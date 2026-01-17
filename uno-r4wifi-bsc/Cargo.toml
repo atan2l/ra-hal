@@ -22,6 +22,6 @@ ra4-hal = { path = "../ra4-hal", features = [ "unstable-pac" ] }
 
 [features]
 
-default = [ "defmt" ]
+default = [ ]
 
 defmt = [ "dep:defmt", "embassy-time/defmt", "embassy-time/defmt-timestamp-uptime", "ra4-hal/defmt" ]
