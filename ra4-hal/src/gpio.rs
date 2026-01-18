@@ -1,4 +1,7 @@
+use crate::{pac, write_protect::WriteProtect};
+
 use embassy_hal_internal::{Peri, PeripheralType, impl_peripheral};
+use ra4m1_ctpac::pfs::vals::{PortDirection, PortFunction, PortMode};
 
 /// Digital input or output level.
 #[derive(Debug, Eq, PartialEq, Copy, Clone)]
@@ -99,20 +102,78 @@ pub(crate) trait SealedPin {
     #[inline]
     fn set_as_output(&self) {
         let port = self.block();
+        // let port_n = self._port();
         let pin = self._pin() as _;
 
         port.pcntr1().modify(|w| {
             w.set_pdr(pin, true);
         });
+
+        // let pfs = pac::PFS;
+        // // warn!("PFS PIN: {}/{}", port_n, pin);
+
+        // pfs.protected_write(|| match port_n {
+        //     0 => pfs.port0pfs(pin).modify(|w| {
+        //         w.set_pdr(PortDirection::Output);
+        //     }),
+        //     2 => pfs.port2pfs(pin).modify(|w| {
+        //         w.set_pdr(PortDirection::Output);
+        //     }),
+        //     2 => todo!(),
+        //     _ => unimplemented!(),
+        // });
     }
 
     #[inline]
     fn set_as_input(&self) {
         let port = self.block();
+        // let port_n = self._port();
         let pin = self._pin() as _;
+        // warn!("PFS PIN: {}/{}", port_n, pin);
 
         port.pcntr1().modify(|w| {
             w.set_pdr(pin, false);
+        });
+
+        // let pfs = pac::PFS;
+
+        // pfs.protected_write(|| match port_n {
+        //     0 => pfs.port0pfs(pin).modify(|w| {
+        //         w.set_pdr(PortDirection::Input);
+        //     }),
+        //     2 => pfs.port2pfs(pin).modify(|w| {
+        //         w.set_pdr(PortDirection::Input);
+        //     }),
+        //     2 => todo!(),
+        //     _ => unimplemented!(),
+        // });
+    }
+
+    fn set_peripheral_func(&self, index: u8) {
+        let port_num = self._port();
+        let pin = self._pin() as _;
+
+        let pfs = crate::pac::PFS;
+
+        pfs.protected_write(|| match port_num {
+            5 => {
+                info!("Port5, Pin{}, pf={}", pin, index);
+                let pfs_reg = pfs.port5pfs(pin);
+                pfs_reg.modify(|w| {
+                    w.set_pmr(PortMode::Peripheral);
+                });
+                pfs_reg.modify(|w| {
+                    // w.set_pmr(PortMode::Peripheral);
+                    w.set_psel(PortFunction::from_bits(index));
+                });
+
+                pfs_reg.modify(|w| {
+                    w.set_asel(false);
+                    // w.set_dscr(val);
+                });
+                info!("PFS={}", pfs_reg.read());
+            }
+            _ => todo!(),
         });
     }
 
@@ -245,6 +306,11 @@ impl<'d> Flex<'d> {
     #[inline(never)]
     pub fn set_as_input(&mut self) {
         self.pin.set_as_input();
+    }
+
+    /// Sets the pin into peripheral mode and enables peripheral func `index`
+    pub fn set_peripheral_func(&mut self, index: u8) {
+        self.pin.set_peripheral_func(index);
     }
 }
 
