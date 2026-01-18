@@ -17,7 +17,7 @@ impl Pfs {
     #[doc = "PORT0 Pin Function Control Register"]
     #[inline(always)]
     pub const fn port0pfs(self, n: usize) -> crate::common::Reg<regs::Port0Pfs, crate::common::RW> {
-        assert!(n < 15usize);
+        assert!(n < 16usize);
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0usize + n * 4usize) as _) }
     }
     #[doc = "PORT1 Pin Function Control Register"]
@@ -59,7 +59,7 @@ impl Pfs {
     #[doc = "PORT2 Pin Function Control Register"]
     #[inline(always)]
     pub const fn port2pfs(self, n: usize) -> crate::common::Reg<regs::Port0Pfs, crate::common::RW> {
-        assert!(n < 6usize);
+        assert!(n < 16usize);
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x80usize + n * 4usize) as _) }
     }
     #[doc = "P201 Pin Function Control Register"]
