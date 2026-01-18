@@ -16,6 +16,22 @@ transforms:
               array: { len: 15, stride: 4 }
               # Doesn't seem to work with serde?
               # indexes: "0,1,2,3,4,5,6,7,8,10,11,12,13,14,15"
+          - !BlockItem
+              name: port2pfs
+              description: PORT2 Pin Function Control Register
+              byte_offset: 0x80
+              bit_size: 32
+              fieldset: pfs::regs::Port0Pfs
+              array: { len: 6, stride: 4 }
+              # indexes: "0,1,2,3,4,5,6,12,13,14,15
+              # P201 also has EOF, EOR (event link)
+          - !BlockItem
+              name: port5pfs
+              description: PORT5 Pin Function Control Register
+              byte_offset: 0x140
+              bit_size: 32
+              fieldset: pfs::regs::Port0Pfs
+              array: { len: 6, stride: 4 }
   - !Add
       ir:
         !IR
