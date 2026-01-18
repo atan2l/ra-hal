@@ -11,6 +11,43 @@ pub trait WriteProtect {
         F: Fn();
 }
 
+impl WriteProtect for crate::pac::pfs::Pfs {
+    fn is_protected(&self) -> bool {
+        let pmisc = crate::pac::PMISC;
+        !pmisc.pwpr().read().pfswe()
+    }
+
+    fn protected_write<F>(&self, func: F)
+    where
+        F: Fn(),
+    {
+        // § 19.2.6
+
+        let protected = self.is_protected();
+        let pmisc = crate::pac::PMISC;
+
+        if protected {
+            trace!("PFS WriteProt: {}", pmisc.pwpr().read());
+
+            pmisc.pwpr().write(|w| {
+                w.set_b0wi(false);
+                w.set_pfswe(true);
+            });
+        }
+
+        func();
+
+        if protected {
+            pmisc.pwpr().write(|w| {
+                w.set_b0wi(false);
+                w.set_pfswe(false);
+            });
+
+            trace!("PFS WriteProt: {}", pmisc.pwpr().read());
+        }
+    }
+}
+
 impl WriteProtect for crate::pac::system::System {
     fn protected_write<F>(&self, func: F)
     where
