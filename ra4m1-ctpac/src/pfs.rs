@@ -14,20 +14,11 @@ impl Pfs {
     pub const fn as_ptr(&self) -> *mut () {
         self.ptr as _
     }
-    #[doc = "P00%s Pin Function Control Register"]
+    #[doc = "PORT0 Pin Function Control Register"]
     #[inline(always)]
-    pub const fn p000pfs(self) -> crate::common::Reg<regs::P000pfs, crate::common::RW> {
-        unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0usize) as _) }
-    }
-    #[doc = "P00%s Pin Function Control Register"]
-    #[inline(always)]
-    pub const fn p000pfs_ha(self) -> crate::common::Reg<regs::P000pfsHa, crate::common::RW> {
-        unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x02usize) as _) }
-    }
-    #[doc = "P00%s Pin Function Control Register"]
-    #[inline(always)]
-    pub const fn p000pfs_by(self) -> crate::common::Reg<regs::P000pfsBy, crate::common::RW> {
-        unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x03usize) as _) }
+    pub const fn port0pfs(self, n: usize) -> crate::common::Reg<regs::Port0Pfs, crate::common::RW> {
+        assert!(n < 15usize);
+        unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0usize + n * 4usize) as _) }
     }
     #[doc = "P108 Pin Function Control Register"]
     #[inline(always)]
@@ -91,3 +82,4 @@ impl Pfs {
     }
 }
 pub mod regs;
+pub mod vals;
