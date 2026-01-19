@@ -154,9 +154,9 @@ pub const SSIE0: ssie0::Ssie0 = unsafe { ssie0::Ssie0::from_ptr(0x4004_e000usize
 #[doc = "CAN0 Module"]
 pub const CAN0: can0::Can0 = unsafe { can0::Can0::from_ptr(0x4005_0000usize as _) };
 #[doc = "Inter-Integrated Circuit 0"]
-pub const IIC0: iic0::Iic0 = unsafe { iic0::Iic0::from_ptr(0x4005_3000usize as _) };
+pub const IIC0: iic::Iic = unsafe { iic::Iic::from_ptr(0x4005_3000usize as _) };
 #[doc = "Inter-Integrated Circuit 1"]
-pub const IIC1: iic1::Iic1 = unsafe { iic1::Iic1::from_ptr(0x4005_3100usize as _) };
+pub const IIC1: iic::Iic = unsafe { iic::Iic::from_ptr(0x4005_3100usize as _) };
 #[doc = "Data Operation Circuit"]
 pub const DOC: doc::Doc = unsafe { doc::Doc::from_ptr(0x4005_4100usize as _) };
 #[doc = "14bit A/D Converter"]
@@ -249,8 +249,8 @@ pub mod gpt16;
 pub mod gpt32;
 pub mod gpt_ops;
 pub mod icu;
+pub mod iic;
 pub mod iic0;
-pub mod iic1;
 pub mod iwdt;
 pub mod kint;
 pub mod mmpu;

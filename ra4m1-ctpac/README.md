@@ -9,6 +9,12 @@ This is primarily intended to be used by an upcoming RA4M1 HAL crate, however a 
 
 In the consumer space the Renesas RA4M1 is most commonly found in the Arduino "R4" boards like the Uno R4 Minima and Nano R4.
 
+## Usage
+
+If you plan to use this PAC directly **read the user manual first**.
+
+Note that `IIC1` has been collapsed onto `IIC0`.  The only hardware difference is that `IIC1` lacks the wake-up knobs.  They're present in the PAC for `IIC1`.  Don't use them.
+
 ## Updating
 
 To update the Rust code run the `generate.sh` script from this directory.

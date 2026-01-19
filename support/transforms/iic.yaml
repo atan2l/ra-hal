@@ -1,0 +1,13 @@
+# NOTE: Check the manual for the actual differenes between IIC0 and IIC1.
+# They are *not* identical.
+transforms:
+  - !DeleteRegisters
+      block: iic1::Iic1
+      from: .+
+  - !DeleteFieldsets
+      from: iic1::regs::.+
+  - !DeleteEnums
+      from: iic1::vals::.+
+  - !MergeBlocks
+      from: iic[01]::Iic[01]
+      to: iic::Iic
