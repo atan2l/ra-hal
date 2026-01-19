@@ -43,6 +43,19 @@ impl SealedInstance for crate::peripherals::IIC0 {
     }
 }
 
+#[allow(private_bounds)]
+impl<'d, I: SealedInstance> ClockPin<'d, I> {
+    /// Takes a pin and configures it to be used as I2C clock line.
+    pub fn new(pin: Peri<'d, impl ClockPinSealed<I>>) -> Self {
+        pin.set_peripheral_func(PeripheralFunction::I2c);
+
+        Self {
+            pin: pin.into(),
+            _phantom_i: PhantomData,
+        }
+    }
+}
+
 macro_rules! clock_pin_impl {
     ($iic:ident, $pin:ident) => {
         impl crate::i2c::ClockPinSealed<crate::peripherals::$iic> for crate::peripherals::$pin {}
@@ -51,7 +64,7 @@ macro_rules! clock_pin_impl {
 
 #[allow(private_bounds)]
 impl<'d, I: SealedInstance> DataPin<'d, I> {
-    /// Takes a pin and configures it to be used by a PWM channel
+    /// Takes a pin and configures it to be used as I2C data line.
     pub fn new(pin: Peri<'d, impl DataPinSealed<I>>) -> Self {
         pin.set_peripheral_func(PeripheralFunction::I2c);
 
