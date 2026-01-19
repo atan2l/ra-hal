@@ -51,7 +51,7 @@ _64pin = [ ]
 _100pin = [ ]
 
 # Extra runtime assertions.
-invariants = [ ]
+invariants = [ "ra4m1-ctpac/invariants" ]
 
 [package.metadata.docs.rs]
 default-target = "thumbv7em-none-eabihf"
