@@ -1,3 +1,16 @@
+# port0 indexes: "0,1,2,3,4,5,6,7,8,10,11,12,13,14,15"
+# port1 indexes: "0-15"
+# P108, P109, P100 have event link
+# port2 indexes: "0,1,2,3,4,5,6,12,13,14,15"
+# P201 has event link
+# port3 indexes: "0-7"
+# P300 has event link
+# port4 indexes: "0-8"
+# P408 has event link
+# port6 indexes: "0,1,2,3,8,9,10"
+# port7 indexes: "8"
+# port8 indexes: "8, 9"
+
 transforms:
   - !DeleteRegisters
     block: pfs::Pfs
@@ -8,81 +21,12 @@ transforms:
       block: pfs::Pfs
       registers:
           - !BlockItem
-              name: port0pfs
+              name: pin_inner
               description: PORT0 Pin Function Control Register
-              byte_offset: 0x000
+              byte_offset: 0
               bit_size: 32
-              fieldset: pfs::regs::Port0Pfs
-              array: { len: 16, stride: 4 }
-              # Doesn't seem to work with serde?
-              # indexes: "0,1,2,3,4,5,6,7,8,10,11,12,13,14,15"
-          - !BlockItem
-              name: port1pfs
-              description: PORT1 Pin Function Control Register
-              byte_offset: 0x040
-              bit_size: 32
-              fieldset: pfs::regs::Port0Pfs
-              array: { len: 16, stride: 4 }
-              # indexes: "0-15"
-              # P108, P109, P100 have event link
-          - !BlockItem
-              name: port2pfs
-              description: PORT2 Pin Function Control Register
-              byte_offset: 0x080
-              bit_size: 32
-              fieldset: pfs::regs::Port0Pfs
-              array: { len: 16, stride: 4 }
-              # indexes: "0,1,2,3,4,5,6,12,13,14,15"
-              # P201 has event link
-          - !BlockItem
-              name: port3pfs
-              description: PORT3 Pin Function Control Register
-              byte_offset: 0x0C0
-              bit_size: 32
-              fieldset: pfs::regs::Port0Pfs
-              array: { len: 8, stride: 4 }
-              # indexes: "0-7"
-              # P300 has event link
-          - !BlockItem
-              name: port4pfs
-              description: PORT4 Pin Function Control Register
-              byte_offset: 0x100
-              bit_size: 32
-              fieldset: pfs::regs::Port0Pfs
-              array: { len: 9, stride: 4 }
-              # indexes: "0-8"
-              # P408 has event link
-          - !BlockItem
-              name: port5pfs
-              description: PORT5 Pin Function Control Register
-              byte_offset: 0x140
-              bit_size: 32
-              fieldset: pfs::regs::Port0Pfs
-              array: { len: 6, stride: 4 }
-          - !BlockItem
-              name: port6pfs
-              description: PORT6 Pin Function Control Register
-              byte_offset: 0x180
-              bit_size: 32
-              fieldset: pfs::regs::Port0Pfs
-              array: { len: 11, stride: 4 }
-              # indexes: "0,1,2,3,8,9,10"
-          - !BlockItem
-              name: port7pfs
-              description: PORT7 Pin Function Control Register
-              byte_offset: 0x1C0
-              bit_size: 32
-              fieldset: pfs::regs::Port0Pfs
-              array: { len: 9, stride: 4 }
-              # indexes: "8"
-          - !BlockItem
-              name: port8pfs
-              description: PORT8 Pin Function Control Register
-              byte_offset: 0x200
-              bit_size: 32
-              fieldset: pfs::regs::Port0Pfs
-              array: { len: 10, stride: 4 }
-              # indexes: "8, 9"
+              fieldset: pfs::regs::PmnPfs
+              array: { len: 144, stride: 4 }
   - !Add
       ir:
         !IR
@@ -187,7 +131,7 @@ transforms:
                   - !EnumVariant
                     name: Pf19
                     value: 0b10011
-            fieldset/pfs::regs::Port0Pfs:
+            fieldset/pfs::regs::PmnPfs:
                 !Fieldset
                     bit_size: 32
                     fields:

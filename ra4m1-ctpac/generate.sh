@@ -59,3 +59,13 @@ echo "*** Reformatting"
 rm -f lib.rs
 cargo fmt
 ${SED} -i -e '1i #![doc = include_str!("../README.md")]' src/lib.rs
+
+APPEND_TARGET="src/pfs.rs"
+
+if [ ! -f "${APPEND_TARGET}" ]; then
+    echo "${APPEND_TARGET} doesn't seem to exist. please update generate.rs"
+    exit 1
+fi
+
+echo >> "${APPEND_TARGET}"
+cat "${SUPPORT_DIR}/pfs_accessor.rs" >> ${APPEND_TARGET}

@@ -16,15 +16,9 @@ impl Pfs {
     }
     #[doc = "PORT0 Pin Function Control Register"]
     #[inline(always)]
-    pub const fn port0pfs(self, n: usize) -> crate::common::Reg<regs::Port0Pfs, crate::common::RW> {
-        assert!(n < 16usize);
+    pub const fn pin_inner(self, n: usize) -> crate::common::Reg<regs::PmnPfs, crate::common::RW> {
+        assert!(n < 144usize);
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0usize + n * 4usize) as _) }
-    }
-    #[doc = "PORT1 Pin Function Control Register"]
-    #[inline(always)]
-    pub const fn port1pfs(self, n: usize) -> crate::common::Reg<regs::Port0Pfs, crate::common::RW> {
-        assert!(n < 16usize);
-        unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x40usize + n * 4usize) as _) }
     }
     #[doc = "P108 Pin Function Control Register"]
     #[inline(always)]
@@ -56,12 +50,6 @@ impl Pfs {
     pub const fn p109pfs_by(self) -> crate::common::Reg<regs::P109pfsBy, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x67usize) as _) }
     }
-    #[doc = "PORT2 Pin Function Control Register"]
-    #[inline(always)]
-    pub const fn port2pfs(self, n: usize) -> crate::common::Reg<regs::Port0Pfs, crate::common::RW> {
-        assert!(n < 16usize);
-        unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x80usize + n * 4usize) as _) }
-    }
     #[doc = "P201 Pin Function Control Register"]
     #[inline(always)]
     pub const fn p201pfs(self) -> crate::common::Reg<regs::P201pfs, crate::common::RW> {
@@ -76,20 +64,6 @@ impl Pfs {
     #[inline(always)]
     pub const fn p201pfs_by(self) -> crate::common::Reg<regs::P201pfsBy, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x87usize) as _) }
-    }
-    #[doc = "PORT3 Pin Function Control Register"]
-    #[inline(always)]
-    pub const fn port3pfs(self, n: usize) -> crate::common::Reg<regs::Port0Pfs, crate::common::RW> {
-        assert!(n < 8usize);
-        unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0xc0usize + n * 4usize) as _) }
-    }
-    #[doc = "PORT4 Pin Function Control Register"]
-    #[inline(always)]
-    pub const fn port4pfs(self, n: usize) -> crate::common::Reg<regs::Port0Pfs, crate::common::RW> {
-        assert!(n < 9usize);
-        unsafe {
-            crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0100usize + n * 4usize) as _)
-        }
     }
     #[doc = "P408 Pin Function Control Register"]
     #[inline(always)]
@@ -106,38 +80,48 @@ impl Pfs {
     pub const fn p408pfs_by(self) -> crate::common::Reg<regs::P408pfsBy, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0123usize) as _) }
     }
-    #[doc = "PORT5 Pin Function Control Register"]
-    #[inline(always)]
-    pub const fn port5pfs(self, n: usize) -> crate::common::Reg<regs::Port0Pfs, crate::common::RW> {
-        assert!(n < 6usize);
-        unsafe {
-            crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0140usize + n * 4usize) as _)
-        }
-    }
-    #[doc = "PORT6 Pin Function Control Register"]
-    #[inline(always)]
-    pub const fn port6pfs(self, n: usize) -> crate::common::Reg<regs::Port0Pfs, crate::common::RW> {
-        assert!(n < 11usize);
-        unsafe {
-            crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0180usize + n * 4usize) as _)
-        }
-    }
-    #[doc = "PORT7 Pin Function Control Register"]
-    #[inline(always)]
-    pub const fn port7pfs(self, n: usize) -> crate::common::Reg<regs::Port0Pfs, crate::common::RW> {
-        assert!(n < 9usize);
-        unsafe {
-            crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x01c0usize + n * 4usize) as _)
-        }
-    }
-    #[doc = "PORT8 Pin Function Control Register"]
-    #[inline(always)]
-    pub const fn port8pfs(self, n: usize) -> crate::common::Reg<regs::Port0Pfs, crate::common::RW> {
-        assert!(n < 10usize);
-        unsafe {
-            crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0200usize + n * 4usize) as _)
-        }
-    }
 }
 pub mod regs;
 pub mod vals;
+
+impl Pfs {
+    #[doc = "Pin Function Control Register"]
+    #[inline(always)]
+    pub const fn pin(
+        self,
+        port: usize,
+        pin: usize,
+    ) -> crate::common::Reg<regs::PmnPfs, crate::common::RW> {
+        assert!(port < 9);
+        assert!(pin < 16);
+
+        // port0 indexes: "0,1,2,3,4,5,6,7,8 10,11,12,13,14,15"
+        // port1 indexes: "0-15"
+        // P108, P109, P100 have event link
+        // port2 indexes: "0,1,2,3,4,5,6, 12,13,14,15"
+        // P201 has event link
+        // port3 indexes: "0-7"
+        // P300 has event link
+        // port4 indexes: "0-8"
+        // P408 has event link
+        // port6 indexes: "0,1,2,3,8,9,10"
+        // port7 indexes: "8"
+        // port8 indexes: "8, 9"
+
+        #[cfg(feature = "invariants")]
+        match port {
+            0 => assert!(pin <= 8 || (pin >= 10 && pin <= 15)),
+            1 => {}
+            2 => assert!(pin <= 6 || (pin >= 12 && pin <= 15)),
+            3 => assert!(pin <= 7),
+            4 => assert!(pin <= 8),
+            5 => {}
+            6 => assert!(pin <= 10),
+            7 => assert!(pin == 8),
+            8 => assert!(pin == 8 || pin == 9),
+            _ => unreachable!(),
+        }
+
+        self.pin_inner((port * 16) + pin)
+    }
+}

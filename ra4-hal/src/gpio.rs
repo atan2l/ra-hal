@@ -102,78 +102,69 @@ pub(crate) trait SealedPin {
     #[inline]
     fn set_as_output(&self) {
         let port = self.block();
-        // let port_n = self._port();
         let pin = self._pin() as _;
-
         port.pcntr1().modify(|w| {
             w.set_pdr(pin, true);
         });
 
-        // let pfs = pac::PFS;
-        // // warn!("PFS PIN: {}/{}", port_n, pin);
+        // let port_num = self._port() as _;
+        // let pin_num = self._pin() as _;
 
-        // pfs.protected_write(|| match port_n {
-        //     0 => pfs.port0pfs(pin).modify(|w| {
+        // let pfs = pac::PFS;
+
+        // pfs.protected_write(|| {
+        //     // info!("Port{}, Pin{}, Output", port_num, pin_num);
+        //     let pfs_reg = pfs.pin(port_num, pin_num);
+        //     pfs_reg.modify(|w| {
         //         w.set_pdr(PortDirection::Output);
-        //     }),
-        //     2 => pfs.port2pfs(pin).modify(|w| {
-        //         w.set_pdr(PortDirection::Output);
-        //     }),
-        //     2 => todo!(),
-        //     _ => unimplemented!(),
+        //     });
         // });
     }
 
     #[inline]
     fn set_as_input(&self) {
         let port = self.block();
-        // let port_n = self._port();
         let pin = self._pin() as _;
-        // warn!("PFS PIN: {}/{}", port_n, pin);
-
         port.pcntr1().modify(|w| {
             w.set_pdr(pin, false);
         });
 
+        // let port_num = self._port() as _;
+        // let pin_num = self._pin() as _;
+
         // let pfs = pac::PFS;
 
-        // pfs.protected_write(|| match port_n {
-        //     0 => pfs.port0pfs(pin).modify(|w| {
+        // pfs.protected_write(|| {
+        //     // info!("Port{}, Pin{}, Input", port_num, pin_num);
+        //     let pfs_reg = pfs.pin(port_num, pin_num);
+        //     pfs_reg.modify(|w| {
         //         w.set_pdr(PortDirection::Input);
-        //     }),
-        //     2 => pfs.port2pfs(pin).modify(|w| {
-        //         w.set_pdr(PortDirection::Input);
-        //     }),
-        //     2 => todo!(),
-        //     _ => unimplemented!(),
+        //     });
         // });
     }
 
-    fn set_peripheral_func(&self, index: u8) {
-        let port_num = self._port();
-        let pin = self._pin() as _;
+    fn set_peripheral_func(&self, pf_index: u8) {
+        let port_num = self._port() as _;
+        let pin_num = self._pin() as _;
 
         let pfs = crate::pac::PFS;
 
-        pfs.protected_write(|| match port_num {
-            5 => {
-                info!("Port5, Pin{}, pf={}", pin, index);
-                let pfs_reg = pfs.port5pfs(pin);
-                pfs_reg.modify(|w| {
-                    w.set_pmr(PortMode::Peripheral);
-                });
-                pfs_reg.modify(|w| {
-                    // w.set_pmr(PortMode::Peripheral);
-                    w.set_psel(PortFunction::from_bits(index));
-                });
+        pfs.protected_write(|| {
+            // info!("Port{}, Pin{}, pf={}", port_num, pin_num, pf_index);
+            let pfs_reg = pfs.pin(port_num, pin_num);
+            pfs_reg.modify(|w| {
+                w.set_pmr(PortMode::Peripheral);
+            });
+            pfs_reg.modify(|w| {
+                // w.set_pmr(PortMode::Peripheral);
+                w.set_psel(PortFunction::from_bits(pf_index));
+            });
 
-                pfs_reg.modify(|w| {
-                    w.set_asel(false);
-                    // w.set_dscr(val);
-                });
-                info!("PFS={}", pfs_reg.read());
-            }
-            _ => todo!(),
+            pfs_reg.modify(|w| {
+                w.set_asel(false);
+                // w.set_dscr(val);
+            });
+            info!("PFS={}", pfs_reg.read());
         });
     }
 

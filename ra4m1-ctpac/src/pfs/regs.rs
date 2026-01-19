@@ -2898,8 +2898,8 @@ impl defmt::Format for P408pfsHa {
 }
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Port0Pfs(pub u32);
-impl Port0Pfs {
+pub struct PmnPfs(pub u32);
+impl PmnPfs {
     #[doc = "Port Output Data"]
     #[must_use]
     #[inline(always)]
@@ -3019,15 +3019,15 @@ impl Port0Pfs {
         self.0 = (self.0 & !(0x0f << 24usize)) | (((val.to_bits() as u32) & 0x0f) << 24usize);
     }
 }
-impl Default for Port0Pfs {
+impl Default for PmnPfs {
     #[inline(always)]
-    fn default() -> Port0Pfs {
-        Port0Pfs(0)
+    fn default() -> PmnPfs {
+        PmnPfs(0)
     }
 }
-impl core::fmt::Debug for Port0Pfs {
+impl core::fmt::Debug for PmnPfs {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Port0Pfs")
+        f.debug_struct("PmnPfs")
             .field("podr", &self.podr())
             .field("pidr", &self.pidr())
             .field("pdr", &self.pdr())
@@ -3042,11 +3042,11 @@ impl core::fmt::Debug for Port0Pfs {
     }
 }
 #[cfg(feature = "defmt")]
-impl defmt::Format for Port0Pfs {
+impl defmt::Format for PmnPfs {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Port0Pfs {{ podr: {:?}, pidr: {:?}, pdr: {:?}, pcr: {=bool:?}, ncodr: {:?}, dscr: {:?}, isel: {=bool:?}, asel: {=bool:?}, pmr: {:?}, psel: {:?} }}",
+            "PmnPfs {{ podr: {:?}, pidr: {:?}, pdr: {:?}, pcr: {=bool:?}, ncodr: {:?}, dscr: {:?}, isel: {=bool:?}, asel: {=bool:?}, pmr: {:?}, psel: {:?} }}",
             self.podr(),
             self.pidr(),
             self.pdr(),
