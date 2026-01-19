@@ -5,6 +5,7 @@ pub mod fmt;
 pub mod adc;
 pub mod crc;
 pub mod gpio;
+pub mod i2c;
 pub mod mcu_info;
 pub mod ofs0;
 pub mod ofs1;
@@ -267,6 +268,8 @@ embassy_hal_internal::peripherals_definition!(
     GPT32_0,
     GPT32_1,
     ICU,
+    IIC0,
+    IIC1,
     RTC,
     SCE5,
     SCI0,
@@ -432,6 +435,8 @@ embassy_hal_internal::peripherals_struct!(
     GPT32_0,
     GPT32_1,
     ICU,
+    IIC0,
+    IIC1,
     RTC,
     SCE5,
     SCI0,
