@@ -250,7 +250,6 @@ pub mod gpt32;
 pub mod gpt_ops;
 pub mod icu;
 pub mod iic;
-pub mod iic0;
 pub mod iwdt;
 pub mod kint;
 pub mod mmpu;
