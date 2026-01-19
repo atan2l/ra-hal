@@ -88,48 +88,67 @@ transforms:
                 variants:
                   - !EnumVariant
                     name: HiZ
+                    description: Hi-Z / JTAG / SWD (0b00000)
                     value: 0b00000
                   - !EnumVariant
-                    name: Pf1
+                    name: Agt
+                    description: Low-Power Asynchronous General Purpose Timer (0b00001)
                     value: 0b00001
                   - !EnumVariant
-                    name: Pf2
+                    name: Gpt1
+                    description: General PWM Timer (0b00010)
                     value: 0b00010
                   - !EnumVariant
-                    name: Pf3
+                    name: Gpt2
+                    description: General PWM Timer (0b00011)
                     value: 0b00011
                   - !EnumVariant
-                    name: Pf4
+                    name: Sci1
+                    description: Serial Communications Interface (0b00100)
                     value: 0b00100
                   - !EnumVariant
-                    name: Pf5
+                    name: Sci2
+                    description: Serial Communications Interface (0b00101)
                     value: 0b00101
                   - !EnumVariant
-                    name: Pf6
+                    name: Spi
+                    description: Serial Peripheral Interface (0b00110)
                     value: 0b00110
                   - !EnumVariant
-                    name: Pf7
+                    name: I2c
+                    description: Inter-Integrated Circuit Bus Interface (0b00111)
                     value: 0b00111
                   - !EnumVariant
-                    name: Pf9
+                    name: Kint
+                    description: Key Interrupt Function (0b01000)
+                    value: 0b01000
+                  - !EnumVariant
+                    name: ClkCmpRtc
+                    description: CLKOUT / Analog Comparator / Real-Time Clock (0b01001)
                     value: 0b01001
                   - !EnumVariant
-                    name: Pf10
+                    name: CacAdc
+                    description: Clock Frequency Accuracy / ADC14 (0b01010)
                     value: 0b01010
                   - !EnumVariant
-                    name: Pf12
+                    name: Ctsu
+                    description: Capacitive Touch (0b01100)
                     value: 0b01100
                   - !EnumVariant
-                    name: Pf13
+                    name: Slcdc
+                    description: Segment LCD (0b01101)
                     value: 0b01101
                   - !EnumVariant
-                    name: Pf16
+                    name: Can
+                    description: Controller Area Network Bus (0b10000)
                     value: 0b10000
                   - !EnumVariant
-                    name: Pf18
+                    name: Ssie
+                    description: Serial Sound Interface Enhanced (0b10010)
                     value: 0b10010
                   - !EnumVariant
-                    name: Pf19
+                    name: UsbFs
+                    description: USB Full-Speed (0b10011)
                     value: 0b10011
             fieldset/pfs::regs::PmnPfs:
                 !Fieldset

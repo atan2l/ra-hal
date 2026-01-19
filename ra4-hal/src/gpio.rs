@@ -25,6 +25,44 @@ pub struct Flex<'d> {
     pub(crate) pin: Peri<'d, AnyPin>,
 }
 
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Copy, Clone)]
+#[repr(u8)]
+pub enum PeripheralFunction {
+    #[doc = "Hi-Z / JTAG / SWD (0b00000)"]
+    HiZ = 0x0,
+    #[doc = "Low-Power Asynchronous General Purpose Timer (0b00001)"]
+    Agt = 0x01,
+    #[doc = "General PWM Timer (0b00010)"]
+    Gpt1 = 0x02,
+    #[doc = "General PWM Timer (0b00011)"]
+    Gpt2 = 0x03,
+    #[doc = "Serial Communications Interface (0b00100)"]
+    Sci1 = 0x04,
+    #[doc = "Serial Communications Interface (0b00101)"]
+    Sci2 = 0x05,
+    #[doc = "Serial Peripheral Interface (0b00110)"]
+    Spi = 0x06,
+    #[doc = "Inter-Integrated Circuit Bus Interface (0b00111)"]
+    I2c = 0x07,
+    #[doc = "Key Interrupt Function (0b01000)"]
+    Kint = 0x08,
+    #[doc = "CLKOUT / Analog Comparator / Real-Time Clock (0b01001)"]
+    ClkCmpRtc = 0x09,
+    #[doc = "Clock Frequency Accuracy / ADC14 (0b01010)"]
+    CacAdc = 0x0a,
+    #[doc = "Capacitive Touch (0b01100)"]
+    Ctsu = 0x0c,
+    #[doc = "Segment LCD (0b01101)"]
+    Slcdc = 0x0d,
+    #[doc = "Controller Area Network Bus (0b10000)"]
+    Can = 0x10,
+    #[doc = "Serial Sound Interface Enhanced (0b10010)"]
+    Ssie = 0x12,
+    #[doc = "USB Full-Speed (0b10011)"]
+    UsbFs = 0x13,
+}
+
 pub(crate) trait SealedPin {
     fn pin_port(&self) -> u16;
 
@@ -143,7 +181,7 @@ pub(crate) trait SealedPin {
         // });
     }
 
-    fn set_peripheral_func(&self, pf_index: u8) {
+    fn set_peripheral_func(&self, func: PeripheralFunction) {
         let port_num = self._port() as _;
         let pin_num = self._pin() as _;
 
@@ -157,7 +195,7 @@ pub(crate) trait SealedPin {
             });
             pfs_reg.modify(|w| {
                 // w.set_pmr(PortMode::Peripheral);
-                w.set_psel(PortFunction::from_bits(pf_index));
+                w.set_psel(PortFunction::from_bits(func as u8));
             });
 
             pfs_reg.modify(|w| {
@@ -300,8 +338,8 @@ impl<'d> Flex<'d> {
     }
 
     /// Sets the pin into peripheral mode and enables peripheral func `index`
-    pub fn set_peripheral_func(&mut self, index: u8) {
-        self.pin.set_peripheral_func(index);
+    pub fn set_peripheral_func(&mut self, func: PeripheralFunction) {
+        self.pin.set_peripheral_func(func);
     }
 }
 
