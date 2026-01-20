@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
 use cortex_m::asm;
+use embassy_hal_internal::atomic_ring_buffer::RingBuffer;
 use embassy_hal_internal::{Peri, PeripheralType, interrupt::InterruptExt as _};
 use paste::paste;
 use ra4m1_ctpac::sci0::{
@@ -15,6 +16,8 @@ use crate::{
     interrupt::typelevel::Interrupt,
     pac,
 };
+
+static RX_BUFFER: RingBuffer = RingBuffer::new();
 
 #[allow(private_bounds)]
 pub struct Uart<'d, I: Instance> {
@@ -229,6 +232,13 @@ impl<'d, I: Instance> Uart<'d, I> {
         }
     }
 
+    pub fn init_buffers(rx_buffer: Option<&'d mut [u8]>) {
+        if let Some(rx_buffer) = rx_buffer {
+            let len = rx_buffer.len();
+            unsafe { RX_BUFFER.init(rx_buffer.as_mut_ptr(), len) };
+        }
+    }
+
     #[allow(private_bounds)]
     pub fn new(
         _peri: Peri<'d, I>,
@@ -381,18 +391,20 @@ impl<'d, I: Instance> Uart<'d, I> {
 
     #[inline(always)]
     pub fn blocking_read(&self, data: &mut [u8]) {
-        let sci = I::regs();
-
-        warn!("Uhh? {:02x}", sci.ssr().read());
+        let mut reader = unsafe { RX_BUFFER.reader() };
 
         for byte in data.iter_mut() {
-            while !sci.ssr().read().rdrf() {
-                asm::nop();
+            loop {
+                match reader.pop_one() {
+                    Some(rx) => {
+                        *byte = rx;
+                        break;
+                    }
+                    None => {
+                        asm::nop();
+                    }
+                }
             }
-            *byte = sci.rdr().read().rdr();
-            // if *byte == 0x0a {
-            //     return;
-            // }
         }
     }
 
@@ -428,9 +440,18 @@ impl IcuEventer for crate::interrupt::typelevel::IEL2 {
 #[interrupt]
 fn IEL2() {
     let icu = pac::ICU;
-    warn!("RXD");
+    // warn!("RXD");
 
     icu.ielsr(2).modify(|w| {
         w.set_ir(false);
+    });
+
+    let sci = crate::pac::SCI1;
+    let mut writer = unsafe { RX_BUFFER.writer() };
+    writer.push(|rx_buf| {
+        let byte = sci.rdr().read().rdr();
+        // warn!("RD: {:02x}", byte);
+        rx_buf[0] = byte;
+        1
     });
 }

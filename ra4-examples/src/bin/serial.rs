@@ -4,10 +4,10 @@
 #![no_main]
 #![warn(missing_docs)]
 
-use cortex_m::asm;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
+use embassy_time::Timer;
 use panic_probe as _;
 use ra4_hal::print_clock_config;
 #[allow(unused)]
@@ -45,9 +45,24 @@ async fn main(_spawner: Spawner) {
 
     print_clock_config();
 
-    let sci0 = ra4_hal::uart::Uart::new(p.SCI0);
+    let rx_buf = &mut [0u8; 128];
+
+    let mut sci = ra4_hal::uart::Uart::new(p.SCI1, p.P501, p.P502);
+    ra4_hal::uart::Uart::<ra4_hal::peripherals::SCI0>::init_buffers(Some(rx_buf));
+
+    sci.set_speed(115200);
+
+    let cmd = b"SOFTRESETWIFI";
+    sci.blocking_write(b"AT+");
+    sci.blocking_write(cmd);
+    sci.blocking_write(b"\r\n");
+
+    let mut buf = [0_u8; 64];
+    sci.blocking_read(&mut buf[0..cmd.len() + 5]);
+    let readable = str::from_utf8(&buf).unwrap();
+    error!("{:?}", readable);
 
     loop {
-        asm::nop();
+        Timer::after_millis(250 * 2).await;
     }
 }
