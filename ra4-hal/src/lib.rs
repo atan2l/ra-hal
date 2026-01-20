@@ -601,3 +601,47 @@ embassy_hal_internal::interrupt_mod!(
     IEL1,
     IEL2,
 );
+
+trait IcuEventer {
+    const ICU_INDEX: u8;
+    const ICU_MASK: InterruptEvent;
+
+    #[inline]
+    fn iel_disable() {
+        let icu = pac::ICU;
+
+        icu.ielsr(Self::ICU_INDEX as _).modify(|w| {
+            w.set_iels(ra4m1_ctpac::icu::vals::Iels::_0X000);
+        });
+    }
+
+    #[inline]
+    fn iel_enable() {
+        let icu = pac::ICU;
+
+        icu.ielsr(Self::ICU_INDEX as _).write(|w| {
+            w.set_iels(ra4m1_ctpac::icu::vals::Iels::from_bits(
+                Self::ICU_MASK as u8,
+            ));
+        });
+    }
+}
+
+#[allow(unused)]
+#[repr(u8)]
+enum InterruptEvent {
+    Gpt0CcmpA = 0x57,
+    Gpt0CcmpB = 0x58,
+    Gpt0CmpC = 0x59,
+    Gpt0CmpD = 0x5A,
+    Gpt0CmpE = 0x5B,
+    Gpt0CmpF = 0x5C,
+    Gpt0Ovf = 0x5D,
+    Gpt0Udf = 0x5E,
+
+    Sci1Rxi = 0x9E,
+    Sci1Txi = 0x9F,
+    Sci1Tei = 0xA0,
+    Sci1Eri = 0xA1,
+    Sci1Am = 0xA2,
+}

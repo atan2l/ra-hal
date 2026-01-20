@@ -2,7 +2,7 @@ use core::cell::Cell;
 use core::cell::RefCell;
 use core::sync::atomic::{AtomicU32, Ordering};
 
-use crate::interrupt::typelevel::Interrupt;
+use crate::{IcuEventer, InterruptEvent, interrupt, interrupt::typelevel::Interrupt, pac};
 use critical_section::{CriticalSection, Mutex};
 use embassy_hal_internal::interrupt::InterruptExt;
 use embassy_time_driver::Driver;
@@ -13,8 +13,6 @@ use ra4m1_ctpac::gpt32::{
 };
 use ra4m1_ctpac::icu::vals::Iels;
 
-use crate::interrupt;
-use crate::pac;
 use crate::peripherals::GPT32_0;
 use crate::write_protect::WriteProtect as _;
 
@@ -31,19 +29,15 @@ impl AlarmState {
         }
     }
 }
-trait IcuEventer {
-    const ICU_INDEX: u8;
-    const ICU_MASK: u8;
-}
 
 impl IcuEventer for crate::interrupt::typelevel::IEL0 {
     const ICU_INDEX: u8 = 0;
-    const ICU_MASK: u8 = 0x5D;
+    const ICU_MASK: InterruptEvent = InterruptEvent::Gpt0Ovf;
 }
 
 impl IcuEventer for crate::interrupt::typelevel::IEL1 {
     const ICU_INDEX: u8 = 1;
-    const ICU_MASK: u8 = 0x59;
+    const ICU_MASK: InterruptEvent = InterruptEvent::Gpt0CmpC;
 }
 
 trait Instance {
@@ -98,10 +92,7 @@ impl GptDriver {
                 OverflowInt::IRQ.enable();
             };
 
-            let icu = pac::ICU;
-            icu.ielsr(OverflowInt::ICU_INDEX as _).write(|w| {
-                w.set_iels(Iels::from_bits(OverflowInt::ICU_MASK));
-            });
+            OverflowInt::iel_enable();
         }
 
         let timer = GPT32_0::regs();
@@ -194,10 +185,7 @@ impl GptDriver {
         let t = self.now();
         if timestamp <= t {
             // Disarm the alarm and return `false` to indicate that.
-            icu.ielsr(AlarmInt::ICU_INDEX as _).modify(|w| {
-                w.set_iels(Iels::_0X000);
-            });
-
+            AlarmInt::iel_disable();
             alarm.timestamp.set(u64::MAX);
 
             return false;
@@ -214,9 +202,7 @@ impl GptDriver {
                     w.set_gtccrc(safe_timestamp);
                 });
                 // Enable the compare interrupt
-                icu.ielsr(AlarmInt::ICU_INDEX as _).write(|w| {
-                    w.set_iels(Iels::from_bits(AlarmInt::ICU_MASK));
-                });
+                AlarmInt::iel_enable();
             });
         } else {
             // TODO: UHhhhh
