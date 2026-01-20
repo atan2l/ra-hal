@@ -66,6 +66,7 @@ pub fn init() -> Peripherals {
 
     critical_section::with(|cs| {
         let system = pac::SYSTEM;
+        #[cfg(feature = "invariants")]
         let fmifrt_base = pac::FMIFRT_BASE;
 
         debug!("Starting board init");
