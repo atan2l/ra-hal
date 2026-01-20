@@ -24,10 +24,7 @@ pub use ra4m1_ctpac as pac;
 use cortex_m::asm;
 #[cfg(not(feature = "unstable-pac"))]
 pub(crate) use ra4m1_ctpac as pac;
-use ra4m1_ctpac::{
-    fmifrt_base::vals::ExpectedBase,
-    system::vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd},
-};
+use ra4m1_ctpac::system::vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd};
 
 use crate::{mcu_info::McuInfo, write_protect::WriteProtect as _};
 
@@ -104,7 +101,7 @@ pub fn init() -> Peripherals {
         // Sanity check.  The manual states that this should be fixed.
         #[cfg(feature = "invariants")]
         assert_eq!(
-            ExpectedBase::RA4M1.to_bits(),
+            pac::fmifrt_base::vals::ExpectedBase::RA4M1.to_bits(),
             fmifrt_base.base().read().base()
         );
 
