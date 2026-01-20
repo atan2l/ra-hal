@@ -197,6 +197,7 @@ pub(crate) trait SealedPin {
         info!("Port{}, Pin{}, pf={}", port_num, pin_num, pfunc);
 
         // Le sigh.  Write protection gets re-enabled after each write.
+        // Or is it reset after each read?
         pfs.protected_write(|| {
             pfs_reg.write(|w| {
                 w.set_pmr(PortMode::Peripheral);
