@@ -376,17 +376,17 @@ embassy_hal_internal::peripherals_definition!(
     #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P409,
     #[cfg(any(feature = "_64pin", feature = "_100pin"))]
-    P4010,
+    P410,
     #[cfg(any(feature = "_64pin", feature = "_100pin"))]
-    P4011,
+    P411,
     #[cfg(feature = "_100pin")]
-    P4012,
+    P412,
     #[cfg(feature = "_100pin")]
-    P4013,
+    P413,
     #[cfg(feature = "_100pin")]
-    P4014,
+    P414,
     #[cfg(feature = "_100pin")]
-    P4015,
+    P415,
 
     #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P500,
@@ -543,17 +543,17 @@ embassy_hal_internal::peripherals_struct!(
     #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P409,
     #[cfg(any(feature = "_64pin", feature = "_100pin"))]
-    P4010,
+    P410,
     #[cfg(any(feature = "_64pin", feature = "_100pin"))]
-    P4011,
+    P411,
     #[cfg(feature = "_100pin")]
-    P4012,
+    P412,
     #[cfg(feature = "_100pin")]
-    P4013,
+    P413,
     #[cfg(feature = "_100pin")]
-    P4014,
+    P414,
     #[cfg(feature = "_100pin")]
-    P4015,
+    P415,
 
     #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     P500,

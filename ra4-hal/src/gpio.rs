@@ -471,17 +471,17 @@ mod pin_impls {
     #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     pin_impl!(409);
     #[cfg(any(feature = "_64pin", feature = "_100pin"))]
-    pin_impl!(4010);
+    pin_impl!(410);
     #[cfg(any(feature = "_64pin", feature = "_100pin"))]
-    pin_impl!(4011);
+    pin_impl!(411);
     #[cfg(feature = "_100pin")]
-    pin_impl!(4012);
+    pin_impl!(412);
     #[cfg(feature = "_100pin")]
-    pin_impl!(4013);
+    pin_impl!(413);
     #[cfg(feature = "_100pin")]
-    pin_impl!(4014);
+    pin_impl!(414);
     #[cfg(feature = "_100pin")]
-    pin_impl!(4015);
+    pin_impl!(415);
 
     #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
     pin_impl!(500);
