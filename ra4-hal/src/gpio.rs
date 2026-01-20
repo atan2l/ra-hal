@@ -1,7 +1,7 @@
 use crate::{pac, write_protect::WriteProtect};
 
 use embassy_hal_internal::{Peri, PeripheralType, impl_peripheral};
-use ra4m1_ctpac::pfs::vals::{PortDirection, PortFunction, PortMode};
+use ra4m1_ctpac::pfs::vals::PortMode;
 
 /// Digital input or output level.
 #[derive(Debug, Eq, PartialEq, Copy, Clone)]
@@ -28,7 +28,7 @@ pub struct Flex<'d> {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Copy, Clone)]
 #[repr(u8)]
-pub enum PeripheralFunction {
+pub enum PortFunction {
     #[doc = "Hi-Z / JTAG / SWD (0b00000)"]
     HiZ = 0x0,
     #[doc = "Low-Power Asynchronous General Purpose Timer (0b00001)"]
@@ -61,6 +61,12 @@ pub enum PeripheralFunction {
     Ssie = 0x12,
     #[doc = "USB Full-Speed (0b10011)"]
     UsbFs = 0x13,
+}
+
+impl From<PortFunction> for pac::pfs::vals::PortFunction {
+    fn from(value: PortFunction) -> Self {
+        Self::from_bits(value as u8)
+    }
 }
 
 pub(crate) trait SealedPin {
@@ -181,29 +187,35 @@ pub(crate) trait SealedPin {
         // });
     }
 
-    fn set_peripheral_func(&self, func: PeripheralFunction) {
+    fn set_port_func(&self, pfunc: PortFunction) {
         let port_num = self._port() as _;
         let pin_num = self._pin() as _;
 
         let pfs = crate::pac::PFS;
 
+        let pfs_reg = pfs.pin(port_num, pin_num);
+        info!("Port{}, Pin{}, pf={}", port_num, pin_num, pfunc);
+
+        // Le sigh.  Write protection gets re-enabled after each write.
         pfs.protected_write(|| {
-            // info!("Port{}, Pin{}, pf={}", port_num, pin_num, pf_index);
-            let pfs_reg = pfs.pin(port_num, pin_num);
-            pfs_reg.modify(|w| {
+            pfs_reg.write(|w| {
                 w.set_pmr(PortMode::Peripheral);
             });
-            pfs_reg.modify(|w| {
-                // w.set_pmr(PortMode::Peripheral);
-                w.set_psel(PortFunction::from_bits(func as u8));
-            });
-
-            pfs_reg.modify(|w| {
-                w.set_asel(false);
-                // w.set_dscr(val);
-            });
-            info!("PFS={}", pfs_reg.read());
         });
+
+        pfs.protected_write(|| {
+            pfs_reg.write(|w| {
+                w.set_pmr(PortMode::Peripheral);
+                w.set_psel(pfunc.into());
+            });
+        });
+
+        assert_eq!(
+            pfs_reg.read().psel(),
+            pac::pfs::vals::PortFunction::from_bits(pfunc as u8)
+        );
+
+        info!("PFS={}", pfs_reg.read());
     }
 
     /// Get the GPIO register block for this pin.
@@ -338,8 +350,8 @@ impl<'d> Flex<'d> {
     }
 
     /// Sets the pin into peripheral mode and enables peripheral func `index`
-    pub fn set_peripheral_func(&mut self, func: PeripheralFunction) {
-        self.pin.set_peripheral_func(func);
+    pub fn set_peripheral_func(&mut self, func: PortFunction) {
+        self.pin.set_port_func(func);
     }
 }
 

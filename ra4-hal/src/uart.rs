@@ -9,8 +9,8 @@ use ra4m1_ctpac::sci0::{
 };
 
 use crate::{
-    gpio::{AnyPin, Flex, PeripheralFunction, Pin},
-    pac, peripherals,
+    gpio::{AnyPin, Pin},
+    pac,
 };
 
 #[allow(private_bounds)]
@@ -28,32 +28,34 @@ trait SealedInstance {
 }
 
 trait TxPinSealed<I: SealedInstance>: Pin + PeripheralType {
-    const PERIPHERAL_FUNC: crate::gpio::PeripheralFunction;
+    const PERIPHERAL_FUNC: crate::gpio::PortFunction;
 
     #[inline(always)]
-    fn pfunc(&self) -> crate::gpio::PeripheralFunction {
+    fn pfunc(&self) -> crate::gpio::PortFunction {
         Self::PERIPHERAL_FUNC
     }
 }
 
 trait RxPinSealed<I: SealedInstance>: Pin + PeripheralType {
-    const PERIPHERAL_FUNC: crate::gpio::PeripheralFunction;
+    const PERIPHERAL_FUNC: crate::gpio::PortFunction;
 
     #[inline(always)]
-    fn pfunc(&self) -> crate::gpio::PeripheralFunction {
+    fn pfunc(&self) -> crate::gpio::PortFunction {
         Self::PERIPHERAL_FUNC
     }
 }
 
 #[allow(private_bounds)]
 pub struct TxPin<'d, I: SealedInstance> {
-    pin: Peri<'d, AnyPin>,
+    // TODO: Should we remove this field?
+    _pin: Peri<'d, AnyPin>,
     _phantom_i: PhantomData<I>,
 }
 
 #[allow(private_bounds)]
 pub struct RxPin<'d, I: SealedInstance> {
-    pin: Peri<'d, AnyPin>,
+    // TODO: Should we remove this field?
+    _pin: Peri<'d, AnyPin>,
     _phantom_i: PhantomData<I>,
 }
 
@@ -61,10 +63,11 @@ pub struct RxPin<'d, I: SealedInstance> {
 impl<'d, I: SealedInstance> TxPin<'d, I> {
     /// Takes a pin and configures it to be used as an SCI TX line
     pub fn new(pin: Peri<'d, impl TxPinSealed<I>>) -> Self {
-        pin.set_peripheral_func(pin.pfunc());
+        debug!("TX: {}/{}", pin._port(), pin._pin());
+        pin.set_port_func(pin.pfunc());
 
         Self {
-            pin: pin.into(),
+            _pin: pin.into(),
             _phantom_i: PhantomData,
         }
     }
@@ -74,10 +77,11 @@ impl<'d, I: SealedInstance> TxPin<'d, I> {
 impl<'d, I: SealedInstance> RxPin<'d, I> {
     /// Takes a pin and configures it to be used as an SCI RX line
     pub fn new(pin: Peri<'d, impl RxPinSealed<I>>) -> Self {
-        pin.set_peripheral_func(pin.pfunc());
+        debug!("RX: {}/{}", pin._port(), pin._pin());
+        pin.set_port_func(pin.pfunc());
 
         Self {
-            pin: pin.into(),
+            _pin: pin.into(),
             _phantom_i: PhantomData,
         }
     }
@@ -86,8 +90,7 @@ impl<'d, I: SealedInstance> RxPin<'d, I> {
 macro_rules! tx_pin_impl {
     ($sci:ident, $pin:ident, $pfunc:ident) => {
         impl crate::uart::TxPinSealed<crate::peripherals::$sci> for crate::peripherals::$pin {
-            const PERIPHERAL_FUNC: crate::gpio::PeripheralFunction =
-                crate::gpio::PeripheralFunction::$pfunc;
+            const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
         }
     };
 }
@@ -95,8 +98,7 @@ macro_rules! tx_pin_impl {
 macro_rules! rx_pin_impl {
     ($sci:ident, $pin:ident, $pfunc:ident) => {
         impl crate::uart::RxPinSealed<crate::peripherals::$sci> for crate::peripherals::$pin {
-            const PERIPHERAL_FUNC: crate::gpio::PeripheralFunction =
-                crate::gpio::PeripheralFunction::$pfunc;
+            const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
         }
     };
 }
@@ -188,10 +190,11 @@ impl<'d, I: Instance> Uart<'d, I> {
         }
     }
 
+    #[allow(private_bounds)]
     pub fn new(
         _peri: Peri<'d, I>,
-        tx: Peri<'d, peripherals::P501>,
-        rx: Peri<'d, peripherals::P502>,
+        tx: Peri<'d, impl TxPinSealed<I>>,
+        rx: Peri<'d, impl RxPinSealed<I>>,
     ) -> Self {
         I::start();
 
@@ -243,16 +246,13 @@ impl<'d, I: Instance> Uart<'d, I> {
             w.set_mp(false);
             w.set_cm(false);
         });
-        sci.smr().modify(|w| {
-            w.set_cks(SmrCks::DIV_1);
-        });
 
         sci.semr().modify(|w| {
-            w.set_brme(true);
-            w.set_bgdm(true);
+            w.set_brme(false);
+            w.set_bgdm(false);
             w.set_abcs(false);
             w.set_abcse(false);
-            w.set_rxdesel(true);
+            w.set_rxdesel(false);
         });
 
         sci.sptr().write(|w| {
@@ -260,27 +260,32 @@ impl<'d, I: Instance> Uart<'d, I> {
             w.set_spb2io(false);
         });
 
+        // BigN = brr
+        // SmallN = clock divider (p719)
+        // SmallN=0, CLK/1
+        // SmallN=1, CLK/4
+        // SmallN=2, CLK/16
+        // SmallN=3, CLK/64
         // Baud=9600 SmallN=1 BigN=38 Error=0.16%
         // Baud=19200 SmallN=0 BigN=77 Error=0.16%
         // Baud=115200 SmallN=0 BigN=12 Error=0.16%
         sci.brr().write(|w| {
-            w.set_brr(22);
+            w.set_brr(38);
+        });
+        sci.smr().modify(|w| {
+            w.set_cks(SmrCks::from_bits(1));
         });
 
-        sci.mddr().write(|w| {
-            w.set_mddr(226);
-        });
-
-        // Move pins over to SCI1
-        let mut tx = Flex::new(tx);
-        let mut rx = Flex::new(rx);
-        tx.set_peripheral_func(PeripheralFunction::Sci2);
-        rx.set_peripheral_func(PeripheralFunction::Sci2);
+        // Move pins over to SCI
+        let tx = TxPin::new(tx);
+        let rx = RxPin::new(rx);
+        let _ = tx;
+        let _ = rx;
 
         sci.scr().modify(|w| {
             w.set_re(true);
             w.set_te(true);
-            w.set_rie(true);
+            w.set_rie(false);
         });
 
         warn!("SMR: {}", sci.smr().read());
