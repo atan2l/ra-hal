@@ -9,7 +9,7 @@ use defmt_rtt as _;
 use embassy_executor::Spawner;
 use embassy_time::Timer;
 use panic_probe as _;
-use ra4_hal::{bind_interrupts, peripherals, print_clock_config};
+use ra4_hal::{bind_interrupts, peripherals, print_clock_config, uart::Uart};
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
 use ra4_hal::{ofs0, ofs1};
@@ -43,6 +43,24 @@ bind_interrupts!(struct Irqs {
     IEL2 => ra4_hal::uart::RxInterruptHandler<peripherals::SCI1>;
 });
 
+fn query<I: ra4_hal::uart::Instance>(uart: &mut Uart<I>, cmd: &[u8]) {
+    uart.blocking_write(b"AT+");
+    uart.blocking_write(cmd);
+    uart.blocking_write(b"\r\n");
+
+    let mut buf = [0_u8; 64];
+
+    loop {
+        let line_len = uart.read_line(&mut buf);
+        let line = &buf[..line_len];
+        let line = str::from_utf8(line).unwrap();
+        info!("{}", line);
+        if line == "OK" || line == "ERROR" {
+            return;
+        }
+    }
+}
+
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let p = ra4_hal::init();
@@ -51,20 +69,17 @@ async fn main(_spawner: Spawner) {
 
     let rx_buf = &mut [0u8; 128];
 
-    let mut sci = ra4_hal::uart::Uart::new(p.SCI1, p.P501, p.P502, Irqs);
-    ra4_hal::uart::Uart::<ra4_hal::peripherals::SCI0>::init_buffers(Some(rx_buf));
+    let mut uart = Uart::new(p.SCI1, p.P501, p.P502, Irqs);
+    uart.init_buffers(Some(rx_buf));
 
-    sci.set_speed(115200);
+    uart.set_speed(115200);
 
-    let cmd = b"SOFTRESETWIFI";
-    sci.blocking_write(b"AT+");
-    sci.blocking_write(cmd);
-    sci.blocking_write(b"\r\n");
-
-    let mut buf = [0_u8; 64];
-    sci.blocking_read(&mut buf[0..cmd.len() + 5]);
-    let readable = str::from_utf8(&buf).unwrap();
-    error!("{:?}", readable);
+    query(&mut uart, b"SOFTRESETWIFI");
+    Timer::after_millis(125).await;
+    query(&mut uart, b"FWVERSION?");
+    query(&mut uart, b"GETSTATUS?");
+    query(&mut uart, b"WIFISCAN");
+    query(&mut uart, b"GETSTATUS?");
 
     loop {
         Timer::after_millis(250 * 2).await;

@@ -17,8 +17,6 @@ use crate::{
     interrupt, pac, peripherals,
 };
 
-static RX_BUFFER: RingBuffer = RingBuffer::new();
-
 #[allow(private_bounds)]
 pub struct Uart<'d, I: Instance> {
     _phantom: PhantomData<&'d I>,
@@ -33,6 +31,7 @@ pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
 
 trait SealedInstance {
     const RX_INTERRUPT_EVENT: InterruptEvent;
+    fn buffer() -> &'static RingBuffer;
     fn regs() -> pac::sci0::Sci0;
     fn start();
     fn stop();
@@ -121,6 +120,11 @@ macro_rules! instance_impl {
         paste! {
             impl SealedInstance for crate::peripherals::$periph {
                 const RX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$int;
+
+                fn buffer() -> &'static RingBuffer {
+                    static RX_BUFFER: RingBuffer = RingBuffer::new();
+                    &RX_BUFFER
+                }
 
                 fn regs() -> ra4m1_ctpac::sci0::Sci0 {
                     crate::pac::$periph
@@ -240,10 +244,10 @@ impl<'d, I: Instance> Uart<'d, I> {
         }
     }
 
-    pub fn init_buffers(rx_buffer: Option<&'d mut [u8]>) {
+    pub fn init_buffers(&self, rx_buffer: Option<&'d mut [u8]>) {
         if let Some(rx_buffer) = rx_buffer {
             let len = rx_buffer.len();
-            unsafe { RX_BUFFER.init(rx_buffer.as_mut_ptr(), len) };
+            unsafe { I::buffer().init(rx_buffer.as_mut_ptr(), len) };
         }
     }
 
@@ -269,8 +273,8 @@ impl<'d, I: Instance> Uart<'d, I> {
         });
 
         sci.fcr().modify(|w| {
-            // turn off FIFO for now
-            w.set_fm(false);
+            // Enable FIFO
+            w.set_fm(true);
         });
 
         sci.scr().modify(|w| {
@@ -399,9 +403,33 @@ impl<'d, I: Instance> Uart<'d, I> {
         Self::set_speed_from_entry(speed);
     }
 
+    pub fn read_line(&self, data: &mut [u8]) -> usize {
+        let mut crlf = false;
+        let mut count = 0;
+        for byte in data.iter_mut() {
+            let mut data = [0_u8; 1];
+            self.blocking_read(&mut data);
+            match data[0] {
+                0x0d => {
+                    crlf = true;
+                }
+                0x0a => {
+                    if crlf {
+                        break;
+                    }
+                }
+                valid => {
+                    *byte = valid;
+                    count += 1;
+                }
+            }
+        }
+        count
+    }
+
     #[inline(always)]
     pub fn blocking_read(&self, data: &mut [u8]) {
-        let mut reader = unsafe { RX_BUFFER.reader() };
+        let mut reader = unsafe { I::buffer().reader() };
 
         for byte in data.iter_mut() {
             loop {
@@ -422,12 +450,13 @@ impl<'d, I: Instance> Uart<'d, I> {
         let sci = I::regs();
 
         for byte in data.iter() {
-            while !sci.ssr().read().tdre() {
-                asm::nop();
-            }
-            info!("Writing: {:02x}", *byte as char);
-            sci.tdr().write_value(Tdr(*byte));
-            while !sci.ssr().read().tdre() {
+            sci.ftdrl().write(|w| {
+                w.set_tdatl(*byte);
+            });
+            sci.ssr_fifo().modify(|w| {
+                w.set_tdfe(false);
+            });
+            while !sci.ssr_fifo().read().tdfe() {
                 asm::nop();
             }
         }
@@ -442,18 +471,28 @@ impl<'d, I: Instance> Drop for Uart<'d, I> {
 
 impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for RxInterruptHandler<I> {
     unsafe fn on_interrupt() {
-        Int::iel_disable();
-
         let sci = I::regs();
-        let mut writer = unsafe { RX_BUFFER.writer() };
-        writer.push(|rx_buf| {
-            let byte = sci.rdr().read().rdr();
-            // warn!("RD: {:02x}", byte);
-            rx_buf[0] = byte;
-            1
-        });
+        let mut writer = unsafe { I::buffer().writer() };
+        let buf = writer.push_slice();
+
+        match buf.is_empty() {
+            false => {
+                let read_len = buf.len().min(sci.fdr().read().r() as _);
+                for i in 0..read_len {
+                    buf[i] = sci.frdrl().read().rdatl();
+                }
+                sci.ssr_fifo().modify(|w| {
+                    w.set_rdf(false);
+                    // If there isn't enough space in the static buffer are we dropping it on the floor when we reset dr?
+                    w.set_dr(false);
+                });
+                writer.push_done(read_len);
+            }
+            true => {
+                error!("RX Buffer is full");
+            }
+        }
 
         Int::iel_unpend();
-        Int::iel_enable(I::RX_INTERRUPT_EVENT);
     }
 }
