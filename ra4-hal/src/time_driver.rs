@@ -2,7 +2,7 @@ use core::cell::Cell;
 use core::cell::RefCell;
 use core::sync::atomic::{AtomicU32, Ordering};
 
-use crate::{IcuEventer, InterruptEvent, interrupt, interrupt::typelevel::Interrupt, pac};
+use crate::{interrupt, interrupt::typelevel::Interrupt, pac};
 use critical_section::{CriticalSection, Mutex};
 use embassy_hal_internal::interrupt::InterruptExt;
 use embassy_time_driver::Driver;
@@ -11,10 +11,12 @@ use ra4m1_ctpac::gpt32::{
     regs::{Gtdnsr, Gtupsr},
     vals::{Mode, Tpcs, Ud},
 };
-use ra4m1_ctpac::icu::vals::Iels;
 
-use crate::peripherals::GPT32_0;
-use crate::write_protect::WriteProtect as _;
+use crate::{
+    event_link::{IcuEventer, InterruptEvent},
+    peripherals::GPT32_0,
+    write_protect::WriteProtect as _,
+};
 
 struct AlarmState {
     timestamp: Cell<u64>,
@@ -30,19 +32,11 @@ impl AlarmState {
     }
 }
 
-impl IcuEventer for crate::interrupt::typelevel::IEL0 {
-    const ICU_INDEX: u8 = 0;
-    const ICU_MASK: InterruptEvent = InterruptEvent::Gpt0Ovf;
-}
-
-impl IcuEventer for crate::interrupt::typelevel::IEL1 {
-    const ICU_INDEX: u8 = 1;
-    const ICU_MASK: InterruptEvent = InterruptEvent::Gpt0CmpC;
-}
-
 trait Instance {
     type AlarmInterrupt: interrupt::typelevel::Interrupt;
     type OverflowInterrupt: interrupt::typelevel::Interrupt;
+    const ALARM_EVENT: InterruptEvent;
+    const OVERFLOW_EVENT: InterruptEvent;
 
     fn regs() -> pac::gpt32::Gpt32;
 }
@@ -50,6 +44,8 @@ trait Instance {
 impl Instance for crate::peripherals::GPT32_0 {
     type AlarmInterrupt = crate::interrupt::typelevel::IEL1;
     type OverflowInterrupt = crate::interrupt::typelevel::IEL0;
+    const ALARM_EVENT: InterruptEvent = InterruptEvent::Gpt0CmpC;
+    const OVERFLOW_EVENT: InterruptEvent = InterruptEvent::Gpt0Ovf;
 
     #[inline(always)]
     fn regs() -> crate::pac::gpt32::Gpt32 {
@@ -92,7 +88,7 @@ impl GptDriver {
                 OverflowInt::IRQ.enable();
             };
 
-            OverflowInt::iel_enable();
+            OverflowInt::iel_enable(<GPT32_0 as Instance>::OVERFLOW_EVENT);
         }
 
         let timer = GPT32_0::regs();
@@ -202,7 +198,7 @@ impl GptDriver {
                     w.set_gtccrc(safe_timestamp);
                 });
                 // Enable the compare interrupt
-                AlarmInt::iel_enable();
+                AlarmInt::iel_enable(<GPT32_0 as Instance>::ALARM_EVENT);
             });
         } else {
             // TODO: UHhhhh

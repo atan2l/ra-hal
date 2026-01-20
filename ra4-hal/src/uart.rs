@@ -1,20 +1,20 @@
 use core::marker::PhantomData;
 
 use cortex_m::asm;
-use embassy_hal_internal::atomic_ring_buffer::RingBuffer;
-use embassy_hal_internal::{Peri, PeripheralType, interrupt::InterruptExt as _};
+use embassy_hal_internal::{
+    Peri, PeripheralType, atomic_ring_buffer::RingBuffer, interrupt::InterruptExt as _,
+};
 use paste::paste;
 use ra4m1_ctpac::sci0::{
     regs::{Scr, Tdr},
     vals::{ScrCke, SmrCks, SmrPm, Stop},
 };
 
+use crate::interrupt::typelevel::{Handler as InterruptHandler, Interrupt};
 use crate::{
-    IcuEventer, InterruptEvent,
-    gpio::{AnyPin, Pin},
-    interrupt,
-    interrupt::typelevel::Interrupt,
-    pac,
+    event_link::{IcuEventer, InterruptEvent},
+    gpio::{AnyPin, Pin, PortFunction},
+    interrupt, pac, peripherals,
 };
 
 static RX_BUFFER: RingBuffer = RingBuffer::new();
@@ -24,8 +24,14 @@ pub struct Uart<'d, I: Instance> {
     _phantom: PhantomData<&'d I>,
 }
 
+pub struct RxInterruptHandler<I: Instance> {
+    _phantom: PhantomData<I>,
+}
+
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
+pub trait Instance: SealedInstance + PeripheralType + 'static + Send {
+    const RX_INTERRUPT_EVENT: InterruptEvent;
+}
 
 trait SealedInstance {
     fn regs() -> pac::sci0::Sci0;
@@ -34,19 +40,19 @@ trait SealedInstance {
 }
 
 trait TxPinSealed<I: SealedInstance>: Pin + PeripheralType {
-    const PERIPHERAL_FUNC: crate::gpio::PortFunction;
+    const PERIPHERAL_FUNC: PortFunction;
 
     #[inline(always)]
-    fn pfunc(&self) -> crate::gpio::PortFunction {
+    fn pfunc(&self) -> PortFunction {
         Self::PERIPHERAL_FUNC
     }
 }
 
 trait RxPinSealed<I: SealedInstance>: Pin + PeripheralType {
-    const PERIPHERAL_FUNC: crate::gpio::PortFunction;
+    const PERIPHERAL_FUNC: PortFunction;
 
     #[inline(always)]
-    fn pfunc(&self) -> crate::gpio::PortFunction {
+    fn pfunc(&self) -> PortFunction {
         Self::PERIPHERAL_FUNC
     }
 }
@@ -95,23 +101,26 @@ impl<'d, I: SealedInstance> RxPin<'d, I> {
 
 macro_rules! tx_pin_impl {
     ($sci:ident, $pin:ident, $pfunc:ident) => {
-        impl crate::uart::TxPinSealed<crate::peripherals::$sci> for crate::peripherals::$pin {
-            const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
+        impl TxPinSealed<crate::peripherals::$sci> for peripherals::$pin {
+            const PERIPHERAL_FUNC: PortFunction = PortFunction::$pfunc;
         }
     };
 }
 
 macro_rules! rx_pin_impl {
     ($sci:ident, $pin:ident, $pfunc:ident) => {
-        impl crate::uart::RxPinSealed<crate::peripherals::$sci> for crate::peripherals::$pin {
-            const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
+        impl RxPinSealed<crate::peripherals::$sci> for peripherals::$pin {
+            const PERIPHERAL_FUNC: PortFunction = PortFunction::$pfunc;
         }
     };
 }
 
 macro_rules! instance_impl {
-    ($periph:ident, $stop:ident) => {
-        impl Instance for crate::peripherals::$periph {}
+    ($periph:ident, $int:ident, $stop:ident) => {
+        impl Instance for peripherals::$periph {
+            const RX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$int;
+        }
+
         paste! {
             impl SealedInstance for crate::peripherals::$periph {
                 fn regs() -> ra4m1_ctpac::sci0::Sci0 {
@@ -165,8 +174,8 @@ rx_pin_impl!(SCI1, P502, Sci2);
 #[cfg(feature = "_100pin")]
 rx_pin_impl!(SCI1, P708, Sci2);
 
-instance_impl!(SCI0, mstpb31);
-instance_impl!(SCI1, mstpb30);
+instance_impl!(SCI0, Sci0Rxi, mstpb31);
+instance_impl!(SCI1, Sci1Rxi, mstpb30);
 
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 struct SpeedEntry {
@@ -240,10 +249,11 @@ impl<'d, I: Instance> Uart<'d, I> {
     }
 
     #[allow(private_bounds)]
-    pub fn new(
+    pub fn new<Int: Interrupt + IcuEventer>(
         _peri: Peri<'d, I>,
         tx: Peri<'d, impl TxPinSealed<I>>,
         rx: Peri<'d, impl RxPinSealed<I>>,
+        irq: impl interrupt::typelevel::Binding<Int, RxInterruptHandler<I>> + 'd,
     ) -> Self {
         I::start();
 
@@ -318,8 +328,9 @@ impl<'d, I: Instance> Uart<'d, I> {
         let _ = tx;
         let _ = rx;
 
-        unsafe { Sci1RxInterrupt::IRQ.enable() };
-        Sci1RxInterrupt::iel_enable();
+        let nvic_int = <Int as Interrupt>::IRQ;
+        unsafe { nvic_int.enable() };
+        Int::iel_enable(I::RX_INTERRUPT_EVENT);
 
         sci.scr().modify(|w| {
             w.set_re(true);
@@ -430,28 +441,20 @@ impl<'d, I: Instance> Drop for Uart<'d, I> {
     }
 }
 
-type Sci1RxInterrupt = crate::interrupt::typelevel::IEL2;
+impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for RxInterruptHandler<I> {
+    unsafe fn on_interrupt() {
+        Int::iel_disable();
 
-impl IcuEventer for crate::interrupt::typelevel::IEL2 {
-    const ICU_INDEX: u8 = 2;
-    const ICU_MASK: InterruptEvent = InterruptEvent::Sci1Rxi;
-}
+        let sci = I::regs();
+        let mut writer = unsafe { RX_BUFFER.writer() };
+        writer.push(|rx_buf| {
+            let byte = sci.rdr().read().rdr();
+            // warn!("RD: {:02x}", byte);
+            rx_buf[0] = byte;
+            1
+        });
 
-#[interrupt]
-fn IEL2() {
-    let icu = pac::ICU;
-    // warn!("RXD");
-
-    icu.ielsr(2).modify(|w| {
-        w.set_ir(false);
-    });
-
-    let sci = crate::pac::SCI1;
-    let mut writer = unsafe { RX_BUFFER.writer() };
-    writer.push(|rx_buf| {
-        let byte = sci.rdr().read().rdr();
-        // warn!("RD: {:02x}", byte);
-        rx_buf[0] = byte;
-        1
-    });
+        Int::iel_unpend();
+        Int::iel_enable(I::RX_INTERRUPT_EVENT);
+    }
 }

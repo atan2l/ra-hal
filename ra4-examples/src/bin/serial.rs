@@ -9,7 +9,7 @@ use defmt_rtt as _;
 use embassy_executor::Spawner;
 use embassy_time::Timer;
 use panic_probe as _;
-use ra4_hal::print_clock_config;
+use ra4_hal::{bind_interrupts, peripherals, print_clock_config};
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
 use ra4_hal::{ofs0, ofs1};
@@ -39,6 +39,10 @@ pub static SEC_MPU: [u32; 13] = [
     0x407ffffc, 0x407fffff, 0x400dfffc, 0x400dffff, 0xffffffff,
 ];
 
+bind_interrupts!(struct Irqs {
+    IEL2 => ra4_hal::uart::RxInterruptHandler<peripherals::SCI1>;
+});
+
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let p = ra4_hal::init();
@@ -47,7 +51,7 @@ async fn main(_spawner: Spawner) {
 
     let rx_buf = &mut [0u8; 128];
 
-    let mut sci = ra4_hal::uart::Uart::new(p.SCI1, p.P501, p.P502);
+    let mut sci = ra4_hal::uart::Uart::new(p.SCI1, p.P501, p.P502, Irqs);
     ra4_hal::uart::Uart::<ra4_hal::peripherals::SCI0>::init_buffers(Some(rx_buf));
 
     sci.set_speed(115200);
