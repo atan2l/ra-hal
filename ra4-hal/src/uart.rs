@@ -165,6 +165,42 @@ rx_pin_impl!(SCI1, P708, Sci2);
 instance_impl!(SCI0, mstpb31);
 instance_impl!(SCI1, mstpb30);
 
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+struct SpeedEntry {
+    baud_rate: u32,
+    small_n: u8,
+    big_n: u8,
+    modulation: u8,
+}
+
+const SPEED_ENTRIES: [SpeedEntry; 4] = [
+    //
+    SpeedEntry {
+        baud_rate: 300,
+        small_n: 3,
+        big_n: 77,
+        modulation: 0,
+    },
+    SpeedEntry {
+        baud_rate: 9600,
+        small_n: 1,
+        big_n: 38,
+        modulation: 0,
+    },
+    SpeedEntry {
+        baud_rate: 9600,
+        small_n: 0,
+        big_n: 140,
+        modulation: 231,
+    },
+    SpeedEntry {
+        baud_rate: 115200,
+        small_n: 0,
+        big_n: 12,
+        modulation: 0,
+    },
+];
+
 impl<'d, I: Instance> Uart<'d, I> {
     #[inline]
     fn set_data_bits(n: u8) {
@@ -263,21 +299,8 @@ impl<'d, I: Instance> Uart<'d, I> {
             w.set_spb2io(false);
         });
 
-        // BigN = brr
-        // SmallN = clock divider (p719)
-        // SmallN=0, CLK/1
-        // SmallN=1, CLK/4
-        // SmallN=2, CLK/16
-        // SmallN=3, CLK/64
-        // Baud=9600 SmallN=1 BigN=38 Error=0.16%
-        // Baud=19200 SmallN=0 BigN=77 Error=0.16%
-        // Baud=115200 SmallN=0 BigN=12 Error=0.16%
-        sci.brr().write(|w| {
-            w.set_brr(38);
-        });
-        sci.smr().modify(|w| {
-            w.set_cks(SmrCks::from_bits(1));
-        });
+        let speed = &SPEED_ENTRIES[0];
+        Self::set_speed_from_entry(speed);
 
         // Move pins over to SCI
         let tx = TxPin::new(tx);
@@ -306,32 +329,75 @@ impl<'d, I: Instance> Uart<'d, I> {
         }
     }
 
+    fn show_speed() {
+        let sci = I::regs();
+        let brr = sci.brr().read().brr();
+        let mddr = sci.mddr().read().mddr();
+        let brme = sci.semr().read().brme();
+        info!("Speed: BRR: {}, MDDR: {}, BRME: {}", brr, mddr, brme);
+    }
+
+    fn set_speed_from_entry(speed: &SpeedEntry) {
+        let sci = I::regs();
+
+        sci.scr().modify(|w| {
+            w.set_re(false);
+            w.set_te(false);
+        });
+        info!("{}", speed);
+        sci.brr().write(|w| {
+            w.set_brr(speed.big_n);
+        });
+        if speed.modulation != 0 {
+            sci.mddr().write(|w| {
+                w.set_mddr(speed.modulation);
+            });
+            sci.semr().modify(|w| {
+                w.set_brme(true);
+            });
+        } else {
+            sci.mddr().write(|w| {
+                w.set_mddr(0);
+            });
+            sci.semr().modify(|w| w.set_brme(false));
+        }
+        sci.smr().modify(|w| {
+            w.set_cks(SmrCks::from_bits(speed.small_n));
+        });
+        sci.scr().modify(|w| {
+            w.set_re(true);
+            w.set_te(true);
+        });
+        Self::show_speed();
+    }
+
+    pub fn set_speed(&mut self, baud_rate: u32) {
+        let speed = SPEED_ENTRIES
+            .iter()
+            .find(|e| e.baud_rate == baud_rate)
+            .unwrap();
+        Self::set_speed_from_entry(speed);
+    }
+
+    #[inline(always)]
     pub fn blocking_read(&self, data: &mut [u8]) {
         let sci = I::regs();
 
         warn!("Uhh? {:02x}", sci.ssr().read());
-        // sci.scr().modify(|w| {
-        //     w.set_te(false);
-        // });
 
         for byte in data.iter_mut() {
             while !sci.ssr().read().rdrf() {
-                // error!("waiting");
                 asm::nop();
             }
             *byte = sci.rdr().read().rdr();
+            // if *byte == 0x0a {
+            //     return;
+            // }
         }
-        // sci.scr().modify(|w| {
-        //     w.set_te(true);
-        // });
     }
 
     pub fn blocking_write(&mut self, data: &[u8]) {
         let sci = I::regs();
-
-        // sci.scr().modify(|w| {
-        //     w.set_te(true);
-        // });
 
         for byte in data.iter() {
             while !sci.ssr().read().tdre() {
@@ -343,10 +409,6 @@ impl<'d, I: Instance> Uart<'d, I> {
                 asm::nop();
             }
         }
-        // sci.scr().modify(|w| {
-        //     w.set_te(false);
-        //     w.set_re(true);
-        // });
     }
 }
 
