@@ -57,7 +57,7 @@ See examples for more details.
 | ⬛⬛⬜⬜⬜ | `PORT` I/O Ports                                   | SVD cleanup, PFS currently unusable                    |
 | ⬛⬛⬜⬜⬜ | `RTC` Real-Time Clock                              | In progress. Needs `CAC` for trimming.                 |
 | ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine                 | Undocumented                                           |
-| ⬛⬜⬜⬜⬜ | `SCI` Serial Communications Interface              | In progress                                            |
+| ⬛⬛⬜⬜⬜ | `SCI` Serial Communications Interface              | In progress                                            |
 
 ## TODO
 
