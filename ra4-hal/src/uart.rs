@@ -1,7 +1,7 @@
 use core::marker::PhantomData;
 
 use cortex_m::asm;
-use embassy_hal_internal::{Peri, PeripheralType};
+use embassy_hal_internal::{Peri, PeripheralType, interrupt::InterruptExt as _};
 use paste::paste;
 use ra4m1_ctpac::sci0::{
     regs::{Scr, Tdr},
@@ -9,7 +9,10 @@ use ra4m1_ctpac::sci0::{
 };
 
 use crate::{
+    IcuEventer, InterruptEvent,
     gpio::{AnyPin, Pin},
+    interrupt,
+    interrupt::typelevel::Interrupt,
     pac,
 };
 
@@ -282,10 +285,13 @@ impl<'d, I: Instance> Uart<'d, I> {
         let _ = tx;
         let _ = rx;
 
+        unsafe { Sci1RxInterrupt::IRQ.enable() };
+        Sci1RxInterrupt::iel_enable();
+
         sci.scr().modify(|w| {
             w.set_re(true);
             w.set_te(true);
-            w.set_rie(false);
+            w.set_rie(true);
         });
 
         warn!("SMR: {}", sci.smr().read());
@@ -348,4 +354,21 @@ impl<'d, I: Instance> Drop for Uart<'d, I> {
     fn drop(&mut self) {
         I::stop();
     }
+}
+
+type Sci1RxInterrupt = crate::interrupt::typelevel::IEL2;
+
+impl IcuEventer for crate::interrupt::typelevel::IEL2 {
+    const ICU_INDEX: u8 = 2;
+    const ICU_MASK: InterruptEvent = InterruptEvent::Sci1Rxi;
+}
+
+#[interrupt]
+fn IEL2() {
+    let icu = pac::ICU;
+    warn!("RXD");
+
+    icu.ielsr(2).modify(|w| {
+        w.set_ir(false);
+    });
 }
