@@ -29,11 +29,10 @@ pub struct RxInterruptHandler<I: Instance> {
 }
 
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance + PeripheralType + 'static + Send {
-    const RX_INTERRUPT_EVENT: InterruptEvent;
-}
+pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
 
 trait SealedInstance {
+    const RX_INTERRUPT_EVENT: InterruptEvent;
     fn regs() -> pac::sci0::Sci0;
     fn start();
     fn stop();
@@ -117,12 +116,12 @@ macro_rules! rx_pin_impl {
 
 macro_rules! instance_impl {
     ($periph:ident, $int:ident, $stop:ident) => {
-        impl Instance for peripherals::$periph {
-            const RX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$int;
-        }
+        impl Instance for peripherals::$periph {}
 
         paste! {
             impl SealedInstance for crate::peripherals::$periph {
+                const RX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$int;
+
                 fn regs() -> ra4m1_ctpac::sci0::Sci0 {
                     crate::pac::$periph
                 }

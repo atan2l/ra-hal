@@ -33,7 +33,7 @@ pub(crate) trait IcuEventer {
 
 #[allow(unused)]
 #[repr(u8)]
-pub enum InterruptEvent {
+pub(crate) enum InterruptEvent {
     Iic0Rxi = 0x35,
     Iic0Txi = 0x36,
     Iic0Tei = 0x37,
