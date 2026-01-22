@@ -9,7 +9,14 @@ use defmt_rtt as _;
 use embassy_executor::Spawner;
 use embassy_time::Timer;
 use panic_probe as _;
-use ra4_hal::{bind_interrupts, peripherals, print_clock_config, uart::Uart};
+use ra4_hal::{
+    bind_interrupts,
+    event_link::IcuEventer,
+    interrupt::typelevel::Interrupt,
+    peripherals::SCI1,
+    print_clock_config,
+    uart::{RxInterruptHandler, TeInterruptHandler, TxInterruptHandler, Uart},
+};
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
 use ra4_hal::{ofs0, ofs1};
@@ -40,10 +47,20 @@ pub static SEC_MPU: [u32; 13] = [
 ];
 
 bind_interrupts!(struct Irqs {
-    IEL2 => ra4_hal::uart::RxInterruptHandler<peripherals::SCI1>;
+    IEL2 => RxInterruptHandler<SCI1>;
+    IEL3 => TxInterruptHandler<SCI1>;
+    IEL4 => TeInterruptHandler<SCI1>;
 });
 
-fn query<I: ra4_hal::uart::Instance>(uart: &mut Uart<I>, cmd: &[u8]) {
+fn query<
+    I: ra4_hal::uart::Instance,
+    RxI: Interrupt + IcuEventer,
+    TxI: Interrupt + IcuEventer,
+    TeI: Interrupt + IcuEventer,
+>(
+    uart: &mut Uart<I, RxI, TxI, TeI>,
+    cmd: &[u8],
+) {
     uart.blocking_write(b"AT+");
     uart.blocking_write(cmd);
     uart.blocking_write(b"\r\n");
@@ -51,6 +68,7 @@ fn query<I: ra4_hal::uart::Instance>(uart: &mut Uart<I>, cmd: &[u8]) {
     let mut buf = [0_u8; 64];
 
     loop {
+        // warn!("Reading");
         let line_len = uart.read_line(&mut buf);
         let line = &buf[..line_len];
         let line = str::from_utf8(line).unwrap();
@@ -67,10 +85,11 @@ async fn main(_spawner: Spawner) {
 
     print_clock_config();
 
+    let tx_buf = &mut [0u8; 128];
     let rx_buf = &mut [0u8; 128];
 
     let mut uart = Uart::new(p.SCI1, p.P501, p.P502, Irqs);
-    uart.init_buffers(Some(rx_buf));
+    uart.init_buffers(tx_buf, rx_buf);
 
     uart.set_speed(115200);
 

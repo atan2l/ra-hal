@@ -7,7 +7,7 @@ use embassy_hal_internal::{
 use paste::paste;
 use ra4m1_ctpac::sci0::{
     regs::{Scr, Tdr},
-    vals::{ScrCke, SmrCks, SmrPm, Stop},
+    vals::{ScrCke, SmrCks, SmrPm, Stop, Ttrg},
 };
 
 use crate::interrupt::typelevel::{Handler as InterruptHandler, Interrupt};
@@ -18,11 +18,28 @@ use crate::{
 };
 
 #[allow(private_bounds)]
-pub struct Uart<'d, I: Instance> {
+pub struct Uart<
+    'd,
+    I: Instance,
+    RxInt: Interrupt + IcuEventer,
+    TxInt: Interrupt + IcuEventer,
+    TeInt: Interrupt + IcuEventer,
+> {
     _phantom: PhantomData<&'d I>,
+    _phantom_rx: PhantomData<&'d RxInt>,
+    _phantom_tx: PhantomData<&'d TxInt>,
+    _phantom_te: PhantomData<&'d TeInt>,
 }
 
 pub struct RxInterruptHandler<I: Instance> {
+    _phantom: PhantomData<I>,
+}
+
+pub struct TxInterruptHandler<I: Instance> {
+    _phantom: PhantomData<I>,
+}
+
+pub struct TeInterruptHandler<I: Instance> {
     _phantom: PhantomData<I>,
 }
 
@@ -30,11 +47,20 @@ pub struct RxInterruptHandler<I: Instance> {
 pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
 
 trait SealedInstance {
+    #[cfg(feature = "defmt")]
+    const PERIPHERAL: &'static str;
+    #[cfg(not(feature = "defmt"))]
+    const PERIPHERAL: () = ();
     const RX_INTERRUPT_EVENT: InterruptEvent;
-    fn buffer() -> &'static RingBuffer;
+    const TX_INTERRUPT_EVENT: InterruptEvent;
+    const TE_INTERRUPT_EVENT: InterruptEvent;
+
     fn regs() -> pac::sci0::Sci0;
     fn start();
     fn stop();
+
+    fn tx_buffer() -> &'static RingBuffer;
+    fn rx_buffer() -> &'static RingBuffer;
 }
 
 trait TxPinSealed<I: SealedInstance>: Pin + PeripheralType {
@@ -114,17 +140,16 @@ macro_rules! rx_pin_impl {
 }
 
 macro_rules! instance_impl {
-    ($periph:ident, $int:ident, $stop:ident) => {
+    ($periph:ident, $rx_int:ident, $tx_int:ident, $te_int:ident, $stop:ident) => {
         impl Instance for peripherals::$periph {}
 
         paste! {
             impl SealedInstance for crate::peripherals::$periph {
-                const RX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$int;
-
-                fn buffer() -> &'static RingBuffer {
-                    static RX_BUFFER: RingBuffer = RingBuffer::new();
-                    &RX_BUFFER
-                }
+                #[cfg(feature = "defmt")]
+                const PERIPHERAL: &'static str = concat!(stringify!($periph), ": ");
+                const RX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$rx_int;
+                const TX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$tx_int;
+                const TE_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$te_int;
 
                 fn regs() -> ra4m1_ctpac::sci0::Sci0 {
                     crate::pac::$periph
@@ -144,6 +169,17 @@ macro_rules! instance_impl {
                     pac::MSTP.mstpcrb().write(|w| {
                         w.[< set_ $stop >](true);
                     });
+                }
+
+                fn tx_buffer() -> &'static RingBuffer {
+                    static TX_BUF: RingBuffer = RingBuffer::new();
+                    &TX_BUF
+
+                }
+
+                fn rx_buffer() -> &'static RingBuffer {
+                    static RX_BUF: RingBuffer = RingBuffer::new();
+                    &RX_BUF
                 }
             }
         }
@@ -177,8 +213,8 @@ rx_pin_impl!(SCI1, P502, Sci2);
 #[cfg(feature = "_100pin")]
 rx_pin_impl!(SCI1, P708, Sci2);
 
-instance_impl!(SCI0, Sci0Rxi, mstpb31);
-instance_impl!(SCI1, Sci1Rxi, mstpb30);
+instance_impl!(SCI0, Sci0Rxi, Sci0Txi, Sci0Tei, mstpb31);
+instance_impl!(SCI1, Sci1Rxi, Sci1Txi, Sci1Tei, mstpb30);
 
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 struct SpeedEntry {
@@ -216,7 +252,14 @@ const SPEED_ENTRIES: [SpeedEntry; 4] = [
     },
 ];
 
-impl<'d, I: Instance> Uart<'d, I> {
+impl<
+    'd,
+    I: Instance,
+    RxInt: Interrupt + IcuEventer,
+    TxInt: Interrupt + IcuEventer,
+    TeInt: Interrupt + IcuEventer,
+> Uart<'d, I, RxInt, TxInt, TeInt>
+{
     #[inline]
     fn set_data_bits(n: u8) {
         let sci = I::regs();
@@ -230,7 +273,7 @@ impl<'d, I: Instance> Uart<'d, I> {
             }
             8 => {
                 // 8 Data bits
-                info!("Setting 8 data bits");
+                info!("{}Setting 8 data bits", I::PERIPHERAL);
                 sci.scmr().modify(|w| w.set_chr1(true));
                 sci.smr().modify(|w| w.set_chr(false));
             }
@@ -244,19 +287,23 @@ impl<'d, I: Instance> Uart<'d, I> {
         }
     }
 
-    pub fn init_buffers(&self, rx_buffer: Option<&'d mut [u8]>) {
-        if let Some(rx_buffer) = rx_buffer {
-            let len = rx_buffer.len();
-            unsafe { I::buffer().init(rx_buffer.as_mut_ptr(), len) };
-        }
+    pub fn init_buffers(&self, tx_buffer: &'d mut [u8], rx_buffer: &'d mut [u8]) {
+        let tx_len = tx_buffer.len();
+        unsafe { I::tx_buffer().init(tx_buffer.as_mut_ptr(), tx_len) };
+
+        let rx_len = rx_buffer.len();
+        unsafe { I::rx_buffer().init(rx_buffer.as_mut_ptr(), rx_len) };
     }
 
     #[allow(private_bounds)]
-    pub fn new<Int: Interrupt + IcuEventer>(
+    pub fn new(
         _peri: Peri<'d, I>,
         tx: Peri<'d, impl TxPinSealed<I>>,
         rx: Peri<'d, impl RxPinSealed<I>>,
-        irq: impl interrupt::typelevel::Binding<Int, RxInterruptHandler<I>> + 'd,
+        _irq: impl interrupt::typelevel::Binding<RxInt, RxInterruptHandler<I>>
+        + interrupt::typelevel::Binding<TxInt, TxInterruptHandler<I>>
+        + interrupt::typelevel::Binding<TeInt, TeInterruptHandler<I>>
+        + 'd,
     ) -> Self {
         I::start();
 
@@ -275,6 +322,8 @@ impl<'d, I: Instance> Uart<'d, I> {
         sci.fcr().modify(|w| {
             // Enable FIFO
             w.set_fm(true);
+            // TODO: Is this the value we want?
+            w.set_ttrg(Ttrg::from_bits(16));
         });
 
         sci.scr().modify(|w| {
@@ -331,25 +380,37 @@ impl<'d, I: Instance> Uart<'d, I> {
         let _ = tx;
         let _ = rx;
 
-        let nvic_int = <Int as Interrupt>::IRQ;
-        unsafe { nvic_int.enable() };
-        Int::iel_enable(I::RX_INTERRUPT_EVENT);
+        // Enable in NVIC. We can largely ignore the NVIC after this as
+        // all of the peripheral interrupts are going to be managed by
+        // the ICU and/or ELC.
+        unsafe { <RxInt as Interrupt>::IRQ.enable() };
+        unsafe { <TxInt as Interrupt>::IRQ.enable() };
+        unsafe { <TeInt as Interrupt>::IRQ.enable() };
+        // Enable in ICU
+        RxInt::iel_enable(I::RX_INTERRUPT_EVENT);
+        TxInt::iel_enable(I::TX_INTERRUPT_EVENT);
+        TeInt::iel_enable(I::TE_INTERRUPT_EVENT);
 
+        // We can leave the receiver on, but not the transmitter as enabling
+        // the transmitter in combination with the TX interrupt is what kicks
+        // off the whole transmit procedure.
         sci.scr().modify(|w| {
             w.set_re(true);
-            w.set_te(true);
             w.set_rie(true);
         });
 
-        warn!("SMR: {}", sci.smr().read());
-        warn!("SCR: {}", sci.scr().read());
-        warn!("SSR: {}", sci.ssr().read());
-        warn!("SEMR: {}", sci.semr().read());
-        warn!("BRR: {}", sci.brr().read());
-        warn!("FCR: {}", sci.fcr().read());
+        trace!("SMR: {}", sci.smr().read());
+        trace!("SCR: {}", sci.scr().read());
+        trace!("SSR: {}", sci.ssr().read());
+        trace!("SEMR: {}", sci.semr().read());
+        trace!("BRR: {}", sci.brr().read());
+        trace!("FCR: {}", sci.fcr().read());
 
         Self {
             _phantom: PhantomData,
+            _phantom_rx: PhantomData,
+            _phantom_tx: PhantomData,
+            _phantom_te: PhantomData,
         }
     }
 
@@ -358,7 +419,13 @@ impl<'d, I: Instance> Uart<'d, I> {
         let brr = sci.brr().read().brr();
         let mddr = sci.mddr().read().mddr();
         let brme = sci.semr().read().brme();
-        info!("Speed: BRR: {}, MDDR: {}, BRME: {}", brr, mddr, brme);
+        debug!(
+            "{}Speed: BRR: {}, MDDR: {}, BRME: {}",
+            I::PERIPHERAL,
+            brr,
+            mddr,
+            brme
+        );
     }
 
     fn set_speed_from_entry(speed: &SpeedEntry) {
@@ -368,7 +435,7 @@ impl<'d, I: Instance> Uart<'d, I> {
             w.set_re(false);
             w.set_te(false);
         });
-        info!("{}", speed);
+        debug!("{}Applying {}", I::PERIPHERAL, speed);
         sci.brr().write(|w| {
             w.set_brr(speed.big_n);
         });
@@ -390,7 +457,6 @@ impl<'d, I: Instance> Uart<'d, I> {
         });
         sci.scr().modify(|w| {
             w.set_re(true);
-            w.set_te(true);
         });
         Self::show_speed();
     }
@@ -429,7 +495,7 @@ impl<'d, I: Instance> Uart<'d, I> {
 
     #[inline(always)]
     pub fn blocking_read(&self, data: &mut [u8]) {
-        let mut reader = unsafe { I::buffer().reader() };
+        let mut reader = unsafe { I::rx_buffer().reader() };
 
         for byte in data.iter_mut() {
             loop {
@@ -449,30 +515,44 @@ impl<'d, I: Instance> Uart<'d, I> {
     pub fn blocking_write(&mut self, data: &[u8]) {
         let sci = I::regs();
 
-        for byte in data.iter() {
-            sci.ftdrl().write(|w| {
-                w.set_tdatl(*byte);
-            });
-            sci.ssr_fifo().modify(|w| {
-                w.set_tdfe(false);
-            });
-            while !sci.ssr_fifo().read().tdfe() {
-                asm::nop();
+        let mut written: usize = 0;
+        let mut tx_writer = unsafe { I::tx_buffer().writer() };
+
+        while written != data.len() {
+            let out_slice = tx_writer.push_slice();
+            if !out_slice.is_empty() {
+                let n = out_slice.len().min(data.len() - written);
+                out_slice[..n].copy_from_slice(&data[written..written + n]);
+                written += n;
+                tx_writer.push_done(n);
             }
+        }
+
+        if !sci.scr().read().te() {
+            sci.scr().modify(|w| {
+                w.set_te(true);
+                w.set_tie(true);
+            });
+        }
+
+        while sci.scr().read().te() {
+            asm::nop()
         }
     }
 }
 
-impl<'d, I: Instance> Drop for Uart<'d, I> {
-    fn drop(&mut self) {
-        I::stop();
-    }
-}
+// impl<'d, I: Instance> Drop for Uart<'d, I> {
+//     fn drop(&mut self) {
+//         I::stop();
+//     }
+// }
 
 impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for RxInterruptHandler<I> {
     unsafe fn on_interrupt() {
+        trace!("RxI");
+
         let sci = I::regs();
-        let mut writer = unsafe { I::buffer().writer() };
+        let mut writer = unsafe { I::rx_buffer().writer() };
         let buf = writer.push_slice();
 
         match buf.is_empty() {
@@ -494,5 +574,67 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for RxInter
         }
 
         Int::iel_unpend();
+    }
+}
+
+impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TxInterruptHandler<I> {
+    unsafe fn on_interrupt() {
+        trace!("TxI");
+        Int::iel_unpend();
+
+        let sci = I::regs();
+        let mut tx_reader = unsafe { I::tx_buffer().reader() };
+
+        let out_buf = tx_reader.pop_slice();
+
+        if out_buf.is_empty() {
+            sci.scr().modify(|w| {
+                w.set_tie(false);
+                w.set_teie(true);
+            });
+            return;
+        }
+
+        let out_len = out_buf.len();
+        let fifo_available = usize::from(16 - sci.fdr().read().t());
+
+        if out_len > fifo_available {
+            for byte in out_buf[0..fifo_available].iter() {
+                sci.ftdrl().write(|w| {
+                    w.set_tdatl(*byte);
+                });
+            }
+            tx_reader.pop_done(fifo_available);
+        } else {
+            for byte in out_buf[0..out_len - 1].iter() {
+                sci.ftdrl().write(|w| {
+                    w.set_tdatl(*byte);
+                });
+            }
+            sci.ftdrl().write(|w| {
+                w.set_tdatl(out_buf[out_len - 1]);
+            });
+
+            // Should we clear TDFE per Fig 28.14?
+
+            sci.scr().modify(|w| {
+                w.set_tie(false);
+                w.set_teie(true);
+            });
+
+            tx_reader.pop_done(out_len);
+        }
+    }
+}
+impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TeInterruptHandler<I> {
+    unsafe fn on_interrupt() {
+        trace!("TeI");
+        Int::iel_unpend();
+        let sci = I::regs();
+        sci.scr().modify(|w| {
+            w.set_te(false);
+            w.set_tie(false);
+            w.set_teie(false);
+        });
     }
 }

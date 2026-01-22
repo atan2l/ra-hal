@@ -1,33 +1,84 @@
 use crate::pac;
 
-pub(crate) trait IcuEventer {
+pub trait IcuEventer {
     const ICU_INDEX: u8;
 
     #[inline]
     fn iel_disable() {
         let icu = pac::ICU;
+        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
+        trace!("IEL{}: disable", Self::ICU_INDEX);
 
-        icu.ielsr(Self::ICU_INDEX as _).modify(|w| {
+        ielsr.modify(|w| {
             w.set_iels(ra4m1_ctpac::icu::vals::Iels::_0X000);
         });
+        // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
+    }
+
+    #[inline]
+    fn iel_set_dtc(enabled: bool) {
+        let icu = pac::ICU;
+        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
+        trace!("IEL{}: dtc={}", Self::ICU_INDEX, enabled);
+
+        ielsr.modify(|w| {
+            w.set_dtce(enabled);
+        });
+        // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
     }
 
     #[inline]
     fn iel_unpend() {
         let icu = pac::ICU;
+        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
+        trace!("IEL{}: unpend", Self::ICU_INDEX);
 
-        icu.ielsr(Self::ICU_INDEX as _).modify(|w| {
+        ielsr.modify(|w| {
             w.set_ir(false);
         });
+        // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
+    }
+    #[inline]
+    fn iel_pend() {
+        let icu = pac::ICU;
+        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
+        trace!("IEL{}: pend", Self::ICU_INDEX);
+
+        ielsr.modify(|w| {
+            w.set_ir(true);
+        });
+        // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
+    }
+
+    fn iel_status() {
+        let icu = pac::ICU;
+        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
+        let status = ielsr.read();
+        trace!(
+            "IEL{}: ir={}, dtce={}",
+            Self::ICU_INDEX,
+            status.ir(),
+            status.dtce()
+        );
+    }
+
+    fn iel_is_dtc() -> bool {
+        let icu = pac::ICU;
+        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
+        let status = ielsr.read();
+        status.dtce()
     }
 
     #[inline]
     fn iel_enable(mask: InterruptEvent) {
         let icu = pac::ICU;
+        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
+        trace!("IEL{}: enable", Self::ICU_INDEX);
 
-        icu.ielsr(Self::ICU_INDEX as _).write(|w| {
+        ielsr.modify(|w| {
             w.set_iels(ra4m1_ctpac::icu::vals::Iels::from_bits(mask as u8));
         });
+        // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
     }
 }
 
