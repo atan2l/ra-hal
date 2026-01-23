@@ -652,22 +652,17 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TxInter
 
         if out_len > fifo_available {
             for byte in out_buf[0..fifo_available].iter() {
-                sci.ftdrl().write(|w| {
-                    w.set_tdatl(*byte);
-                });
+                sci.ftdrl().write_value(Ftdrl(*byte));
             }
+
             tx_reader.pop_done(fifo_available);
         } else {
             for byte in out_buf[0..out_len - 1].iter() {
-                sci.ftdrl().write(|w| {
-                    w.set_tdatl(*byte);
-                });
+                sci.ftdrl().write_value(Ftdrl(*byte));
+                // Should we clear TDFE per Fig 28.14?
             }
-            sci.ftdrl().write(|w| {
-                w.set_tdatl(out_buf[out_len - 1]);
-            });
 
-            // Should we clear TDFE per Fig 28.14?
+            sci.ftdrl().write_value(Ftdrl(out_buf[out_len - 1]));
 
             sci.scr().modify(|w| {
                 w.set_tie(false);
