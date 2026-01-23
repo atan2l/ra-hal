@@ -570,6 +570,18 @@ impl Spdcr {
     pub const fn set_reserved_3(&mut self, val: u8) {
         self.0 = (self.0 & !(0x03 << 6usize)) | (((val as u8) & 0x03) << 6usize);
     }
+    #[doc = "SPI Byte Access Specification (TN-RA*-A0033A/E)"]
+    #[must_use]
+    #[inline(always)]
+    pub const fn spbyt(&self) -> bool {
+        let val = (self.0 >> 6usize) & 0x01;
+        val != 0
+    }
+    #[doc = "SPI Byte Access Specification (TN-RA*-A0033A/E)"]
+    #[inline(always)]
+    pub const fn set_spbyt(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
+    }
 }
 impl Default for Spdcr {
     #[inline(always)]
@@ -585,6 +597,7 @@ impl core::fmt::Debug for Spdcr {
             .field("sprdtd", &self.sprdtd())
             .field("splw", &self.splw())
             .field("reserved_3", &self.reserved_3())
+            .field("spbyt", &self.spbyt())
             .finish()
     }
 }
@@ -593,12 +606,13 @@ impl defmt::Format for Spdcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Spdcr {{ reserved: {=u8:?}, reserved_2: {=u8:?}, sprdtd: {=bool:?}, splw: {=bool:?}, reserved_3: {=u8:?} }}",
+            "Spdcr {{ reserved: {=u8:?}, reserved_2: {=u8:?}, sprdtd: {=bool:?}, splw: {=bool:?}, reserved_3: {=u8:?}, spbyt: {=bool:?} }}",
             self.reserved(),
             self.reserved_2(),
             self.sprdtd(),
             self.splw(),
-            self.reserved_3()
+            self.reserved_3(),
+            self.spbyt()
         )
     }
 }

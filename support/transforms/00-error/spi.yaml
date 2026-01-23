@@ -1,4 +1,12 @@
 transforms:
+  - !AddFields
+      fieldset: spi::regs::Spdcr
+      fields:
+        - !Field
+          name: spbyt
+          description: SPI Byte Access Specification (TN-RA*-A0033A/E)
+          bit_offset: 6
+          bit_size: 1
   - !AddRegisters
       block: spi::Spi
       registers:
