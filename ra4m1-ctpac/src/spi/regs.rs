@@ -602,6 +602,60 @@ impl defmt::Format for Spdcr {
         )
     }
 }
+#[repr(transparent)]
+#[derive(Copy, Clone, Eq, PartialEq)]
+pub struct Spdcr2(pub u8);
+impl Spdcr2 {
+    #[doc = "Byte Swap Operating Mode Select"]
+    #[must_use]
+    #[inline(always)]
+    pub const fn bysw(&self) -> super::vals::Bysw {
+        let val = (self.0 >> 0usize) & 0x01;
+        super::vals::Bysw::from_bits(val as u8)
+    }
+    #[doc = "Byte Swap Operating Mode Select"]
+    #[inline(always)]
+    pub const fn set_bysw(&mut self, val: super::vals::Bysw) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val.to_bits() as u8) & 0x01) << 0usize);
+    }
+    #[doc = "Serial data invert bit"]
+    #[must_use]
+    #[inline(always)]
+    pub const fn sinv(&self) -> bool {
+        let val = (self.0 >> 1usize) & 0x01;
+        val != 0
+    }
+    #[doc = "Serial data invert bit"]
+    #[inline(always)]
+    pub const fn set_sinv(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
+    }
+}
+impl Default for Spdcr2 {
+    #[inline(always)]
+    fn default() -> Spdcr2 {
+        Spdcr2(0)
+    }
+}
+impl core::fmt::Debug for Spdcr2 {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+        f.debug_struct("Spdcr2")
+            .field("bysw", &self.bysw())
+            .field("sinv", &self.sinv())
+            .finish()
+    }
+}
+#[cfg(feature = "defmt")]
+impl defmt::Format for Spdcr2 {
+    fn format(&self, f: defmt::Formatter) {
+        defmt::write!(
+            f,
+            "Spdcr2 {{ bysw: {:?}, sinv: {=bool:?} }}",
+            self.bysw(),
+            self.sinv()
+        )
+    }
+}
 #[doc = "SPI Data Register"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]

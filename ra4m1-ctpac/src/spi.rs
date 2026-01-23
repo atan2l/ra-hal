@@ -79,6 +79,11 @@ impl Spi {
     pub const fn spcmd0(self) -> crate::common::Reg<regs::Spcmd0, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x10usize) as _) }
     }
+    #[doc = "SPI Data Control Register 2"]
+    #[inline(always)]
+    pub const fn spdcr2(self) -> crate::common::Reg<regs::Spdcr2, crate::common::RW> {
+        unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x20usize) as _) }
+    }
 }
 pub mod regs;
 pub mod vals;

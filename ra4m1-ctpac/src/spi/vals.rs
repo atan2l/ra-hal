@@ -36,6 +36,35 @@ impl From<Brdv> for u8 {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum Bysw {
+    LittleEndian = 0x0,
+    BigEndian = 0x01,
+}
+impl Bysw {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> Bysw {
+        unsafe { core::mem::transmute(val & 0x01) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for Bysw {
+    #[inline(always)]
+    fn from(val: u8) -> Bysw {
+        Bysw::from_bits(val)
+    }
+}
+impl From<Bysw> for u8 {
+    #[inline(always)]
+    fn from(val: Bysw) -> u8 {
+        Bysw::to_bits(val)
+    }
+}
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Sckdl {
     #[doc = "1 RSPCK"]
     _000 = 0x0,
