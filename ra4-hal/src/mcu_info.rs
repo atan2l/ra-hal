@@ -1,6 +1,4 @@
 //! `FMIFRT` Factory MCU Information Flash Root Table
-//!
-//! This is all read only so we don't care all that much about ownership of the peripheral.
 
 use core::mem::transmute;
 
@@ -8,7 +6,8 @@ use cfg_if::cfg_if;
 
 use crate::pac;
 
-/// Contains information about the MCU that was programmed at the factory.
+/// Contains information about the MCU that was programmed at the factory including UID and MCU configuration.
+/// As the registers are all read-only we don't care about ownership of the peripheral.
 pub struct McuInfo {
     uid: u128,
     part_number: [u8; 16],
@@ -18,30 +17,41 @@ pub struct McuInfo {
 impl McuInfo {
     const PN_LEN: usize = 13;
 
-    /// Returns the part number as a string.
+    /// # Returns
+    ///
+    /// The part number as a string.
     pub fn part_number(&self) -> &str {
         core::str::from_utf8(&self.part_number).unwrap().trim()
     }
 
-    /// Returns the unique 128-bit identifier associated with the MCU.
+    /// # Returns
+    ///
+    /// The unique 128-bit identifier associated with the MCU.
     #[inline]
     pub fn uid(&self) -> u128 {
         self.uid
     }
 
-    /// Returns the revision of the MCU.  Higher values are newer.
+    /// # Returns
+    ///
+    /// The revision of the MCU.  Higher values are newer.
     #[inline]
     pub fn revision(&self) -> u8 {
         self.rev
     }
 
-    /// Returns `true` if the part number was log enough to be parsed.
-    /// If `false` is returned neither `flash_size` nor `pin_count` will work.
+    /// # Returns
+    ///
+    /// - `true` if the part number was log enough to be parsed.
+    /// - `false` otherwise.  In this case neither `flash_size` nor `pin_count` will work.
     pub fn ok(&self) -> bool {
         self.part_number().len() >= Self::PN_LEN
     }
 
-    /// Returns the amount of on-die flash memory in kilobytes or `None` if this cannot be determined.
+    /// # Returns
+    ///
+    /// - The amount of on-die flash memory in kilobytes.
+    /// - `None` if this cannot be determined.
     pub fn flash_size(&self) -> Option<u16> {
         match self.part_number[8] {
             b'9' => Some(128),
@@ -54,7 +64,10 @@ impl McuInfo {
         }
     }
 
-    /// Returns the number of pins attached to the MCU, `None` if this cannot be determined.
+    /// # Returns
+    ///
+    /// - The number of pins attached to the MCU.
+    /// - `None` if this cannot be determined.
     pub fn pin_count(&self) -> Option<u8> {
         match &self.part_number[11..=12] {
             b"FB" | b"BM" => Some(144),
@@ -72,7 +85,7 @@ impl McuInfo {
         }
     }
 
-    /// Writes MCU information to the logger
+    /// Writes MCU information to the logger in human readable form.
     #[cfg(feature = "defmt")]
     pub fn print_info(&self) {
         if !self.ok() {
@@ -100,7 +113,14 @@ impl McuInfo {
         }
     }
 
-    pub fn validate_pin_count(&self) {
+    /// Compares the pin count as calculated from the part number to the pin count configured via Cargo features.
+    /// Logs a warning if there is a mismatch.
+    ///
+    /// # Returns
+    ///
+    /// - `true` counts match.
+    /// - `false` counts do not match or actual count could not be determined.
+    pub fn validate_pin_count(&self) -> bool {
         match self.pin_count() {
             Some(actual) => {
                 cfg_if! {
@@ -121,12 +141,20 @@ impl McuInfo {
                         configured, actual
                     );
                 }
+                configured == actual
             }
-            None => warn!("Couldn't determine appropriate pin count"),
+            None => {
+                warn!("Couldn't determine appropriate pin count");
+                false
+            }
         }
     }
 
-    /// Loads MCU information from `FMIFRT`.
+    /// Reads MCU information from `FMIFRT`.
+    ///
+    /// # Returns
+    ///
+    /// A struct populated with the available configuration information.
     pub fn info() -> Self {
         let fmifrt = pac::FMIFRT;
 
