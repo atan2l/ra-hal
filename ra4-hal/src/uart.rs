@@ -338,9 +338,9 @@ impl<
         unsafe { <TxInt as Interrupt>::IRQ.enable() };
         unsafe { <TeInt as Interrupt>::IRQ.enable() };
         // Enable in ICU
-        RxInt::iel_enable(I::RX_INTERRUPT_EVENT);
-        TxInt::iel_enable(I::TX_INTERRUPT_EVENT);
-        TeInt::iel_enable(I::TE_INTERRUPT_EVENT);
+        RxInt::icu_enable(I::RX_INTERRUPT_EVENT);
+        TxInt::icu_enable(I::TX_INTERRUPT_EVENT);
+        TeInt::icu_enable(I::TE_INTERRUPT_EVENT);
 
         // We can leave the receiver on, but not the transmitter as enabling
         // the transmitter in combination with the TX interrupt is what kicks
@@ -542,14 +542,14 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for RxInter
             }
         }
 
-        Int::iel_unpend();
+        Int::icu_unpend();
     }
 }
 
 impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TxInterruptHandler<I> {
     unsafe fn on_interrupt() {
         trace!("TxI");
-        Int::iel_unpend();
+        Int::icu_unpend();
 
         let sci = I::regs();
         let mut tx_reader = unsafe { I::tx_buffer().reader() };
@@ -593,7 +593,7 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TxInter
 impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TeInterruptHandler<I> {
     unsafe fn on_interrupt() {
         trace!("TeI");
-        Int::iel_unpend();
+        Int::icu_unpend();
         let sci = I::regs();
         sci.scr().modify(|w| {
             w.set_te(false);

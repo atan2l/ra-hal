@@ -92,7 +92,7 @@ impl GptDriver {
                 OverflowInt::IRQ.enable();
             };
 
-            OverflowInt::iel_enable(<GPT32_0 as Instance>::OVERFLOW_EVENT);
+            OverflowInt::icu_enable(<GPT32_0 as Instance>::OVERFLOW_EVENT);
         }
 
         let timer = GPT32_0::regs();
@@ -185,7 +185,7 @@ impl GptDriver {
         let t = self.now();
         if timestamp <= t {
             // Disarm the alarm and return `false` to indicate that.
-            AlarmInt::iel_disable();
+            AlarmInt::icu_disable();
             alarm.timestamp.set(u64::MAX);
 
             return false;
@@ -202,7 +202,7 @@ impl GptDriver {
                     w.set_gtccrc(safe_timestamp);
                 });
                 // Enable the compare interrupt
-                AlarmInt::iel_enable(<GPT32_0 as Instance>::ALARM_EVENT);
+                AlarmInt::icu_enable(<GPT32_0 as Instance>::ALARM_EVENT);
             });
         } else {
             // TODO: UHhhhh

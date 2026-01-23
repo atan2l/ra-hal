@@ -14,7 +14,7 @@ pub trait IcuEventer {
 
     /// Disables the interrupt in the `ICU`.  Does not modify its status in the `NVIC`.
     #[inline]
-    fn iel_disable() {
+    fn icu_disable() {
         let icu = pac::ICU;
         let ielsr = icu.ielsr(Self::ICU_INDEX as _);
         trace!("IEL{}: disable", Self::ICU_INDEX);
@@ -27,7 +27,7 @@ pub trait IcuEventer {
 
     /// Enables the interrupt in the `ICU`.  Does not modify its status in the `NVIC`.
     #[inline]
-    fn iel_enable(mask: InterruptEvent) {
+    fn icu_enable(mask: InterruptEvent) {
         let icu = pac::ICU;
         let ielsr = icu.ielsr(Self::ICU_INDEX as _);
         trace!("IEL{}: enable", Self::ICU_INDEX);
@@ -46,7 +46,7 @@ pub trait IcuEventer {
     /// * `true` interrupt will trigger `DTC` activation for vector `n` where `n` is the index of this interrupt.
     /// * `false` interrupt will not trigger `DTC` activation.
     #[inline]
-    fn iel_set_dtc(enabled: bool) {
+    fn set_dtc(enabled: bool) {
         let icu = pac::ICU;
         let ielsr = icu.ielsr(Self::ICU_INDEX as _);
         trace!("IEL{}: dtc={}", Self::ICU_INDEX, enabled);
@@ -62,7 +62,7 @@ pub trait IcuEventer {
     /// - `true` if the interrupt is configured for `DTC` activation (`IELSRn.DTCE` bit is set).
     /// - `false` otherwise
     #[inline]
-    fn iel_is_dtc() -> bool {
+    fn is_dtc() -> bool {
         let icu = pac::ICU;
         let ielsr = icu.ielsr(Self::ICU_INDEX as _);
         let status = ielsr.read();
@@ -70,7 +70,7 @@ pub trait IcuEventer {
     }
 
     #[inline]
-    fn iel_unpend() {
+    fn icu_unpend() {
         let icu = pac::ICU;
         let ielsr = icu.ielsr(Self::ICU_INDEX as _);
         trace!("IEL{}: unpend", Self::ICU_INDEX);
@@ -82,7 +82,7 @@ pub trait IcuEventer {
     }
 
     #[inline]
-    fn iel_pend() {
+    fn icu_pend() {
         let icu = pac::ICU;
         let ielsr = icu.ielsr(Self::ICU_INDEX as _);
         trace!("IEL{}: pend", Self::ICU_INDEX);
@@ -94,7 +94,7 @@ pub trait IcuEventer {
     }
 
     /// Logs information about how this interrupt is configured in the `ICU` at the `trace` level.
-    fn iel_status() {
+    fn icu_status() {
         let icu = pac::ICU;
         let ielsr = icu.ielsr(Self::ICU_INDEX as _);
         let status = ielsr.read();
