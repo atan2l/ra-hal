@@ -411,7 +411,8 @@ impl<
         Self::show_speed();
     }
 
-    /// Configures the `SCI` instance for a given baud rate.  Currently only works with `PCLKA` set to 48 MHz.
+    /// Configures the `SCI` instance for a given baud rate.  Currently only works with `PCLKA` set to 48 MHz.i
+    ///
     /// # Arguments
     /// * `baud_rate` - Desired baud rate.
     /// Currently only 300, 1200, 2400, 4800, 9600, 19200, 3840, and 115200 baud are supported.
@@ -428,6 +429,14 @@ impl<
         Self::set_speed_from_entry(speed);
     }
 
+    /// Reads data until the buffer is full or `b"\r\n"` is read.
+    ///
+    /// # Arguments
+    /// * `data` - Mutable slice to hold incoming data.
+    ///
+    /// # Returns
+    ///
+    /// Number of bytes read excluding the trailing newline which is not copied to `data`.
     pub fn read_line(&self, data: &mut [u8]) -> usize {
         let mut crlf = false;
         let mut count = 0;
