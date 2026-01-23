@@ -1,8 +1,18 @@
+//! Event Link Controller (`ELC`) and Interrupt Controller Unit (`ICU`) related shenanigans.
+//!
+//! On the `RA4M1` peripheral interrupts are not directly exposed by the `NVIC`.
+//! Instead the `NVIC` exposes 32 programmable interrupts via the `ICU`.
+//! Each `ICU` interrupt can be mapped to one of ≈100 interrupt sources as defined in [`InterruptEvent`].
+//! Each `ICU` interrupt can also be used to trigger a variety of different events including DMA transfers and power state changes.
+//! See §13, §18 of the reference manual for more information.
+
 use crate::pac;
 
+/// Trait that implements functions allowing inspection and manipulation of the interrupt's `ELC`/`ICU` status.
 pub trait IcuEventer {
     const ICU_INDEX: u8;
 
+    /// Disables the interrupt in the `ICU`.  Does not modify its status in the `NVIC`.
     #[inline]
     fn iel_disable() {
         let icu = pac::ICU;
@@ -15,6 +25,26 @@ pub trait IcuEventer {
         // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
     }
 
+    /// Enables the interrupt in the `ICU`.  Does not modify its status in the `NVIC`.
+    #[inline]
+    fn iel_enable(mask: InterruptEvent) {
+        let icu = pac::ICU;
+        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
+        trace!("IEL{}: enable", Self::ICU_INDEX);
+
+        ielsr.modify(|w| {
+            w.set_iels(ra4m1_ctpac::icu::vals::Iels::from_bits(mask as u8));
+        });
+        // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
+    }
+
+    /// Configures the Data Transfer Controller (`DTC`) activation bit.
+    ///
+    /// See §17 of the reference manual for more information.
+    ///
+    /// # Arguments
+    /// * `true` interrupt will trigger `DTC` activation for vector `n` where `n` is the index of this interrupt.
+    /// * `false` interrupt will not trigger `DTC` activation.
     #[inline]
     fn iel_set_dtc(enabled: bool) {
         let icu = pac::ICU;
@@ -25,6 +55,18 @@ pub trait IcuEventer {
             w.set_dtce(enabled);
         });
         // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
+    }
+
+    /// # Returns
+    ///
+    /// - `true` if the interrupt is configured for `DTC` activation (`IELSRn.DTCE` bit is set).
+    /// - `false` otherwise
+    #[inline]
+    fn iel_is_dtc() -> bool {
+        let icu = pac::ICU;
+        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
+        let status = ielsr.read();
+        status.dtce()
     }
 
     #[inline]
@@ -38,6 +80,7 @@ pub trait IcuEventer {
         });
         // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
     }
+
     #[inline]
     fn iel_pend() {
         let icu = pac::ICU;
@@ -50,6 +93,7 @@ pub trait IcuEventer {
         // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
     }
 
+    /// Logs information about how this interrupt is configured in the `ICU` at the `trace` level.
     fn iel_status() {
         let icu = pac::ICU;
         let ielsr = icu.ielsr(Self::ICU_INDEX as _);
@@ -61,30 +105,12 @@ pub trait IcuEventer {
             status.dtce()
         );
     }
-
-    fn iel_is_dtc() -> bool {
-        let icu = pac::ICU;
-        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
-        let status = ielsr.read();
-        status.dtce()
-    }
-
-    #[inline]
-    fn iel_enable(mask: InterruptEvent) {
-        let icu = pac::ICU;
-        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
-        trace!("IEL{}: enable", Self::ICU_INDEX);
-
-        ielsr.modify(|w| {
-            w.set_iels(ra4m1_ctpac::icu::vals::Iels::from_bits(mask as u8));
-        });
-        // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
-    }
 }
 
+/// `ELC`/`ICU` event numbers.  These correspond to Tables 13.4 and 18.3 in the reference manual.
 #[allow(unused)]
 #[repr(u8)]
-pub(crate) enum InterruptEvent {
+pub enum InterruptEvent {
     Iic0Rxi = 0x35,
     Iic0Txi = 0x36,
     Iic0Tei = 0x37,
