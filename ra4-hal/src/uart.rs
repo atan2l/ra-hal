@@ -277,6 +277,7 @@ impl<
         });
 
         sci.scr().modify(|w| {
+            // TODO: Give enum variants meaningful names.
             w.set_cke(ScrCke::_00);
         });
 
@@ -411,7 +412,7 @@ impl<
         Self::show_speed();
     }
 
-    /// Configures the `SCI` instance for a given baud rate.  Currently only works with `PCLKA` set to 48 MHz.i
+    /// Configures the `SCI` instance for a given baud rate.  Currently only works with `PCLKA` set to 48 MHz.
     ///
     /// # Arguments
     /// * `baud_rate` - Desired baud rate.
