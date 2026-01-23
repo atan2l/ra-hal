@@ -19,6 +19,16 @@ use crate::{
     interrupt, pac, peripherals,
 };
 
+/// Baud rate generator configuration for fixed speeds, rates that use "baud rate modulation" may achieve more precise timing.
+/// Derived from the formula listed in Table 28.19.
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+struct SpeedEntry {
+    baud_rate: u32,
+    small_n: u8,
+    big_n: u8,
+    modulation: u8,
+}
+
 /// UART driver.
 #[allow(private_bounds)]
 pub struct Uart<
@@ -47,6 +57,22 @@ pub struct TxInterruptHandler<I: Instance> {
 /// Interrupt handler that handles outgoing data (transmission end) for an `SCI` instance.
 pub struct TeInterruptHandler<I: Instance> {
     _phantom: PhantomData<I>,
+}
+
+/// An I/O pin being used for transmission by an `SCI` peripheral instance.
+#[allow(private_bounds)]
+pub struct TxPin<'d, I: SealedInstance> {
+    // TODO: Should we remove this field?
+    _pin: Peri<'d, AnyPin>,
+    _phantom_i: PhantomData<I>,
+}
+
+/// An I/O pin being used for reception by an `SCI` peripheral instance.
+#[allow(private_bounds)]
+pub struct RxPin<'d, I: SealedInstance> {
+    // TODO: Should we remove this field?
+    _pin: Peri<'d, AnyPin>,
+    _phantom_i: PhantomData<I>,
 }
 
 #[allow(private_bounds)]
@@ -88,153 +114,6 @@ trait RxPinSealed<I: SealedInstance>: Pin + PeripheralType {
     fn pfunc(&self) -> PortFunction {
         Self::PERIPHERAL_FUNC
     }
-}
-
-/// An I/O pin being used for transmission by an `SCI` peripheral instance.
-#[allow(private_bounds)]
-pub struct TxPin<'d, I: SealedInstance> {
-    // TODO: Should we remove this field?
-    _pin: Peri<'d, AnyPin>,
-    _phantom_i: PhantomData<I>,
-}
-
-/// An I/O pin being used for reception by an `SCI` peripheral instance.
-#[allow(private_bounds)]
-pub struct RxPin<'d, I: SealedInstance> {
-    // TODO: Should we remove this field?
-    _pin: Peri<'d, AnyPin>,
-    _phantom_i: PhantomData<I>,
-}
-
-#[allow(private_bounds)]
-impl<'d, I: SealedInstance> TxPin<'d, I> {
-    /// Takes ownership of a pin and configures it to be used as an `SCI` TX line.
-    pub fn new(pin: Peri<'d, impl TxPinSealed<I>>) -> Self {
-        debug!("TX: {}/{}", pin._port(), pin._pin());
-        pin.set_port_func(pin.pfunc());
-
-        Self {
-            _pin: pin.into(),
-            _phantom_i: PhantomData,
-        }
-    }
-}
-
-#[allow(private_bounds)]
-impl<'d, I: SealedInstance> RxPin<'d, I> {
-    /// Takes ownership of a pin and configures it to be used as an `SCI` RX line.
-    pub fn new(pin: Peri<'d, impl RxPinSealed<I>>) -> Self {
-        debug!("RX: {}/{}", pin._port(), pin._pin());
-        pin.set_port_func(pin.pfunc());
-
-        Self {
-            _pin: pin.into(),
-            _phantom_i: PhantomData,
-        }
-    }
-}
-
-macro_rules! tx_pin_impl {
-    ($sci:ident, $pin:ident, $pfunc:ident) => {
-        impl TxPinSealed<crate::peripherals::$sci> for peripherals::$pin {
-            const PERIPHERAL_FUNC: PortFunction = PortFunction::$pfunc;
-        }
-    };
-}
-
-macro_rules! rx_pin_impl {
-    ($sci:ident, $pin:ident, $pfunc:ident) => {
-        impl RxPinSealed<crate::peripherals::$sci> for peripherals::$pin {
-            const PERIPHERAL_FUNC: PortFunction = PortFunction::$pfunc;
-        }
-    };
-}
-
-macro_rules! instance_impl {
-    ($periph:ident, $rx_int:ident, $tx_int:ident, $te_int:ident, $stop:ident) => {
-        impl Instance for peripherals::$periph {}
-
-        paste! {
-            impl SealedInstance for crate::peripherals::$periph {
-                #[cfg(feature = "defmt")]
-                const PERIPHERAL: &'static str = concat!(stringify!($periph), ": ");
-                const RX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$rx_int;
-                const TX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$tx_int;
-                const TE_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$te_int;
-
-                fn regs() -> ra4m1_ctpac::sci0::Sci0 {
-                    crate::pac::$periph
-                }
-
-                fn start() {
-                    debug!("{}: stop=false", stringify!($periph));
-
-                    pac::MSTP.mstpcrb().write(|w| {
-                        w.[< set_ $stop >](false);
-                    });
-                }
-
-                fn stop() {
-                    debug!("{}: stop=true", stringify!($periph));
-
-                    pac::MSTP.mstpcrb().write(|w| {
-                        w.[< set_ $stop >](true);
-                    });
-                }
-
-                fn tx_buffer() -> &'static RingBuffer {
-                    static TX_BUF: RingBuffer = RingBuffer::new();
-                    &TX_BUF
-
-                }
-
-                fn rx_buffer() -> &'static RingBuffer {
-                    static RX_BUF: RingBuffer = RingBuffer::new();
-                    &RX_BUF
-                }
-            }
-        }
-    };
-}
-
-tx_pin_impl!(SCI0, P101, Sci1);
-tx_pin_impl!(SCI0, P205, Sci1);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-tx_pin_impl!(SCI0, P411, Sci1);
-
-tx_pin_impl!(SCI1, P213, Sci2);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-tx_pin_impl!(SCI1, P401, Sci2);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-tx_pin_impl!(SCI1, P501, Sci2);
-
-rx_pin_impl!(SCI0, P100, Sci1);
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-rx_pin_impl!(SCI0, P104, Sci1);
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-rx_pin_impl!(SCI0, P206, Sci1);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-rx_pin_impl!(SCI0, P410, Sci1);
-
-rx_pin_impl!(SCI1, P212, Sci2);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-rx_pin_impl!(SCI1, P402, Sci2);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-rx_pin_impl!(SCI1, P502, Sci2);
-#[cfg(feature = "_100pin")]
-rx_pin_impl!(SCI1, P708, Sci2);
-
-instance_impl!(SCI0, Sci0Rxi, Sci0Txi, Sci0Tei, mstpb31);
-instance_impl!(SCI1, Sci1Rxi, Sci1Txi, Sci1Tei, mstpb30);
-
-/// Baud rate generator configuration for fixed speeds, rates that use "baud rate modulation" may achieve more precise timing.
-/// Derived from the formula listed in Table 28.19.
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-struct SpeedEntry {
-    baud_rate: u32,
-    small_n: u8,
-    big_n: u8,
-    modulation: u8,
 }
 
 /// These are valid for 48 MHz `PCLKA` only.
@@ -294,6 +173,34 @@ const SPEED_ENTRIES: [SpeedEntry; 9] = [
         modulation: 0,
     },
 ];
+
+#[allow(private_bounds)]
+impl<'d, I: SealedInstance> TxPin<'d, I> {
+    /// Takes ownership of a pin and configures it to be used as an `SCI` TX line.
+    pub fn new(pin: Peri<'d, impl TxPinSealed<I>>) -> Self {
+        debug!("TX: {}/{}", pin._port(), pin._pin());
+        pin.set_port_func(pin.pfunc());
+
+        Self {
+            _pin: pin.into(),
+            _phantom_i: PhantomData,
+        }
+    }
+}
+
+#[allow(private_bounds)]
+impl<'d, I: SealedInstance> RxPin<'d, I> {
+    /// Takes ownership of a pin and configures it to be used as an `SCI` RX line.
+    pub fn new(pin: Peri<'d, impl RxPinSealed<I>>) -> Self {
+        debug!("RX: {}/{}", pin._port(), pin._pin());
+        pin.set_port_func(pin.pfunc());
+
+        Self {
+            _pin: pin.into(),
+            _phantom_i: PhantomData,
+        }
+    }
+}
 
 impl<
     'd,
@@ -685,3 +592,96 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TeInter
         });
     }
 }
+
+macro_rules! tx_pin_impl {
+    ($sci:ident, $pin:ident, $pfunc:ident) => {
+        impl TxPinSealed<crate::peripherals::$sci> for peripherals::$pin {
+            const PERIPHERAL_FUNC: PortFunction = PortFunction::$pfunc;
+        }
+    };
+}
+
+macro_rules! rx_pin_impl {
+    ($sci:ident, $pin:ident, $pfunc:ident) => {
+        impl RxPinSealed<crate::peripherals::$sci> for peripherals::$pin {
+            const PERIPHERAL_FUNC: PortFunction = PortFunction::$pfunc;
+        }
+    };
+}
+
+macro_rules! instance_impl {
+    ($periph:ident, $rx_int:ident, $tx_int:ident, $te_int:ident, $stop:ident) => {
+        impl Instance for peripherals::$periph {}
+
+        paste! {
+            impl SealedInstance for crate::peripherals::$periph {
+                #[cfg(feature = "defmt")]
+                const PERIPHERAL: &'static str = concat!(stringify!($periph), ": ");
+                const RX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$rx_int;
+                const TX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$tx_int;
+                const TE_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$te_int;
+
+                fn regs() -> ra4m1_ctpac::sci0::Sci0 {
+                    crate::pac::$periph
+                }
+
+                fn start() {
+                    debug!("{}: stop=false", stringify!($periph));
+
+                    pac::MSTP.mstpcrb().write(|w| {
+                        w.[< set_ $stop >](false);
+                    });
+                }
+
+                fn stop() {
+                    debug!("{}: stop=true", stringify!($periph));
+
+                    pac::MSTP.mstpcrb().write(|w| {
+                        w.[< set_ $stop >](true);
+                    });
+                }
+
+                fn tx_buffer() -> &'static RingBuffer {
+                    static TX_BUF: RingBuffer = RingBuffer::new();
+                    &TX_BUF
+
+                }
+
+                fn rx_buffer() -> &'static RingBuffer {
+                    static RX_BUF: RingBuffer = RingBuffer::new();
+                    &RX_BUF
+                }
+            }
+        }
+    };
+}
+
+tx_pin_impl!(SCI0, P101, Sci1);
+tx_pin_impl!(SCI0, P205, Sci1);
+#[cfg(any(feature = "_64pin", feature = "_100pin"))]
+tx_pin_impl!(SCI0, P411, Sci1);
+
+tx_pin_impl!(SCI1, P213, Sci2);
+#[cfg(any(feature = "_64pin", feature = "_100pin"))]
+tx_pin_impl!(SCI1, P401, Sci2);
+#[cfg(any(feature = "_64pin", feature = "_100pin"))]
+tx_pin_impl!(SCI1, P501, Sci2);
+
+rx_pin_impl!(SCI0, P100, Sci1);
+#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
+rx_pin_impl!(SCI0, P104, Sci1);
+#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
+rx_pin_impl!(SCI0, P206, Sci1);
+#[cfg(any(feature = "_64pin", feature = "_100pin"))]
+rx_pin_impl!(SCI0, P410, Sci1);
+
+rx_pin_impl!(SCI1, P212, Sci2);
+#[cfg(any(feature = "_64pin", feature = "_100pin"))]
+rx_pin_impl!(SCI1, P402, Sci2);
+#[cfg(any(feature = "_64pin", feature = "_100pin"))]
+rx_pin_impl!(SCI1, P502, Sci2);
+#[cfg(feature = "_100pin")]
+rx_pin_impl!(SCI1, P708, Sci2);
+
+instance_impl!(SCI0, Sci0Rxi, Sci0Txi, Sci0Tei, mstpb31);
+instance_impl!(SCI1, Sci1Rxi, Sci1Txi, Sci1Tei, mstpb30);
