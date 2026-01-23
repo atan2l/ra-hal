@@ -216,6 +216,8 @@ rx_pin_impl!(SCI1, P708, Sci2);
 instance_impl!(SCI0, Sci0Rxi, Sci0Txi, Sci0Tei, mstpb31);
 instance_impl!(SCI1, Sci1Rxi, Sci1Txi, Sci1Tei, mstpb30);
 
+/// Baud rate generator configuration for fixed speeds, rates that use "baud rate modulation" may achieve more precise timing.
+/// Derived from the formula listed in Table 28.19.
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 struct SpeedEntry {
     baud_rate: u32,
@@ -224,11 +226,29 @@ struct SpeedEntry {
     modulation: u8,
 }
 
-const SPEED_ENTRIES: [SpeedEntry; 4] = [
-    //
+/// These are valid for 48 MHz `PCLKA` only.
+const SPEED_ENTRIES: [SpeedEntry; 9] = [
     SpeedEntry {
         baud_rate: 300,
         small_n: 3,
+        big_n: 77,
+        modulation: 0,
+    },
+    SpeedEntry {
+        baud_rate: 1200,
+        small_n: 2,
+        big_n: 77,
+        modulation: 0,
+    },
+    SpeedEntry {
+        baud_rate: 2400,
+        small_n: 2,
+        big_n: 38,
+        modulation: 0,
+    },
+    SpeedEntry {
+        baud_rate: 4800,
+        small_n: 1,
         big_n: 77,
         modulation: 0,
     },
@@ -243,6 +263,18 @@ const SPEED_ENTRIES: [SpeedEntry; 4] = [
         small_n: 0,
         big_n: 140,
         modulation: 231,
+    },
+    SpeedEntry {
+        baud_rate: 19200,
+        small_n: 0,
+        big_n: 77,
+        modulation: 0,
+    },
+    SpeedEntry {
+        baud_rate: 38400,
+        small_n: 0,
+        big_n: 38,
+        modulation: 0,
     },
     SpeedEntry {
         baud_rate: 115200,
@@ -461,6 +493,15 @@ impl<
         Self::show_speed();
     }
 
+    /// Configures the `SCI` instance for a given baud rate.  Currently only works with `PCLKA` set to 48 MHz.
+    /// # Arguments
+    /// * `baud_rate` - Desired baud rate.
+    /// Currently only 300, 1200, 2400, 4800, 9600, 19200, 3840, and 115200 baud are supported.
+    ///
+    /// # TODO
+    /// * Support arbitrary baud rates
+    /// * Support arbitrary `PCLKA` rates
+    ///
     pub fn set_speed(&mut self, baud_rate: u32) {
         let speed = SPEED_ENTRIES
             .iter()
