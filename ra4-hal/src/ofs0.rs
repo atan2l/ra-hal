@@ -1,3 +1,5 @@
+//! `OFS0` Option Function Select Register 0
+
 pub const OFS0_H: u32 = 0xA0010000;
 pub const OFS0_L: u32 = 0x0000A001;
 

@@ -1,3 +1,5 @@
+//! `CRC` Cyclic Redundancy Check Calculator
+
 use embassy_hal_internal::Peri;
 use ra4m1_ctpac::crc::{
     regs::{Crcdir, CrcdirBy, Crcdor, CrcdorBy, CrcdorHa},

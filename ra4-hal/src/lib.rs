@@ -11,7 +11,7 @@ pub mod mcu_info;
 pub mod ofs0;
 pub mod ofs1;
 pub mod rtc;
-pub mod sce5;
+// pub mod sce5;
 #[cfg(feature = "time-driver")]
 pub mod time_driver;
 pub mod uart;

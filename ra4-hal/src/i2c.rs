@@ -1,3 +1,5 @@
+//! `IIC` I2C Bus Interface
+
 use core::marker::PhantomData;
 
 use crate::{

@@ -1,3 +1,5 @@
+//! `ADC14` 14-bit Analog-to-Digital Converter
+
 use core::marker::PhantomData;
 
 use cortex_m::asm;

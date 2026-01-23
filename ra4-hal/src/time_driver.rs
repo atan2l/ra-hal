@@ -1,3 +1,7 @@
+//! Driver for `embassy-time`.
+//!
+//! Currently hardcoded to take up `GPT32_0`, `IEL0`, and `IEL1`.
+
 use core::cell::Cell;
 use core::cell::RefCell;
 use core::sync::atomic::{AtomicU32, Ordering};
@@ -78,7 +82,7 @@ impl GptDriver {
         });
 
         // Enable the interrupts at the NVIC level,
-        // arm the overflow interrupt
+        // arm the overflow interrupt in the ICU.
         {
             type AlarmInt = <GPT32_0 as Instance>::AlarmInterrupt;
             type OverflowInt = <GPT32_0 as Instance>::OverflowInterrupt;

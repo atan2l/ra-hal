@@ -1,3 +1,5 @@
+//! `RTC` Realtime Clock
+
 use core::marker::PhantomData;
 
 use chrono::{Datelike, NaiveDate, NaiveDateTime, NaiveTime, Timelike};
