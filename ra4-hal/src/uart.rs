@@ -1,3 +1,5 @@
+//! `UART` Universal Asynchronous Receiver-Transmitter implemented using the `SCI` peripheral.
+
 use core::marker::PhantomData;
 
 use cortex_m::asm;
@@ -6,7 +8,7 @@ use embassy_hal_internal::{
 };
 use paste::paste;
 use ra4m1_ctpac::sci0::{
-    regs::{Scr, Tdr},
+    regs::{Ftdrl, Scr},
     vals::{ScrCke, SmrCks, SmrPm, Stop, Ttrg},
 };
 
@@ -17,6 +19,7 @@ use crate::{
     interrupt, pac, peripherals,
 };
 
+/// UART driver.
 #[allow(private_bounds)]
 pub struct Uart<
     'd,
@@ -31,14 +34,17 @@ pub struct Uart<
     _phantom_te: PhantomData<&'d TeInt>,
 }
 
+/// Interrupt handler that handles incoming data for an `SCI` instance.
 pub struct RxInterruptHandler<I: Instance> {
     _phantom: PhantomData<I>,
 }
 
+/// Interrupt handler that handles outgoing data (tx buffer empty) for an `SCI` instance.
 pub struct TxInterruptHandler<I: Instance> {
     _phantom: PhantomData<I>,
 }
 
+/// Interrupt handler that handles outgoing data (transmission end) for an `SCI` instance.
 pub struct TeInterruptHandler<I: Instance> {
     _phantom: PhantomData<I>,
 }
@@ -81,6 +87,7 @@ trait RxPinSealed<I: SealedInstance>: Pin + PeripheralType {
     }
 }
 
+/// An I/O pin being used for transmission by an `SCI` peripheral instance.
 #[allow(private_bounds)]
 pub struct TxPin<'d, I: SealedInstance> {
     // TODO: Should we remove this field?
@@ -88,6 +95,7 @@ pub struct TxPin<'d, I: SealedInstance> {
     _phantom_i: PhantomData<I>,
 }
 
+/// An I/O pin being used for reception by an `SCI` peripheral instance.
 #[allow(private_bounds)]
 pub struct RxPin<'d, I: SealedInstance> {
     // TODO: Should we remove this field?
@@ -97,7 +105,7 @@ pub struct RxPin<'d, I: SealedInstance> {
 
 #[allow(private_bounds)]
 impl<'d, I: SealedInstance> TxPin<'d, I> {
-    /// Takes a pin and configures it to be used as an SCI TX line
+    /// Takes ownership of a pin and configures it to be used as an `SCI` TX line.
     pub fn new(pin: Peri<'d, impl TxPinSealed<I>>) -> Self {
         debug!("TX: {}/{}", pin._port(), pin._pin());
         pin.set_port_func(pin.pfunc());
@@ -111,7 +119,7 @@ impl<'d, I: SealedInstance> TxPin<'d, I> {
 
 #[allow(private_bounds)]
 impl<'d, I: SealedInstance> RxPin<'d, I> {
-    /// Takes a pin and configures it to be used as an SCI RX line
+    /// Takes ownership of a pin and configures it to be used as an `SCI` RX line.
     pub fn new(pin: Peri<'d, impl RxPinSealed<I>>) -> Self {
         debug!("RX: {}/{}", pin._port(), pin._pin());
         pin.set_port_func(pin.pfunc());
