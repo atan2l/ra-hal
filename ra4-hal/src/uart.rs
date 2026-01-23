@@ -61,6 +61,9 @@ trait SealedInstance {
     const TX_INTERRUPT_EVENT: InterruptEvent;
     const TE_INTERRUPT_EVENT: InterruptEvent;
 
+    /// `SCI0` and `SCI1` have 16-byte FIFO buffers for RX and TX ops per Table 28.1.
+    const FIFO_DEPTH: u8 = 16;
+
     fn regs() -> pac::sci0::Sci0;
     fn start();
     fn stop();
@@ -363,7 +366,7 @@ impl<
             // Enable FIFO
             w.set_fm(true);
             // TODO: Is this the value we want?
-            w.set_ttrg(Ttrg::from_bits(16));
+            w.set_ttrg(Ttrg::from_bits(I::FIFO_DEPTH));
         });
 
         sci.scr().modify(|w| {
@@ -645,7 +648,7 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TxInter
         }
 
         let out_len = out_buf.len();
-        let fifo_available = usize::from(16 - sci.fdr().read().t());
+        let fifo_available = usize::from(I::FIFO_DEPTH - sci.fdr().read().t());
 
         if out_len > fifo_available {
             for byte in out_buf[0..fifo_available].iter() {
