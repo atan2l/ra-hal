@@ -107,10 +107,56 @@ pub trait IcuEventer {
     }
 }
 
-/// `ELC`/`ICU` event numbers.  These correspond to Tables 13.4 and 18.3 in the reference manual.
+/// `ELC` event signal numbers.  These correspond to Table 18.3 in the reference manual. Used in `ELC.ELSRn.ELS`.
+#[allow(unused)]
+#[repr(u8)]
+pub enum EventSignal {
+    PortIrq0 = 0x01,
+    PortIrq1 = 0x02,
+    PortIrq2 = 0x03,
+    PortIrq3 = 0x04,
+    PortIrq4 = 0x05,
+    PortIrq5 = 0x06,
+    PortIrq6 = 0x07,
+    PortIrq7 = 0x08,
+    PortIrq8 = 0x09,
+    PortIrq9 = 0x0a,
+    PortIrq10 = 0x0b,
+    PortIrq11 = 0x0c,
+    PortIrq12 = 0x0d,
+    PortIrq13 = 0x0e,
+    PortIrq14 = 0x0f,
+    PortIrq15 = 0x10,
+}
+
+/// `ICU` event numbers.  These correspond to Table 13.4 in the reference manual. Used in `IELSRn` to generate `NVIC` interrupts and start `DTC` transfers and in `DELSRn` to trigger `DMAC` transfers.
 #[allow(unused)]
 #[repr(u8)]
 pub enum InterruptEvent {
+    PortIrq0 = 0x01,
+    PortIrq1 = 0x02,
+    PortIrq2 = 0x03,
+    PortIrq3 = 0x04,
+    PortIrq4 = 0x05,
+    PortIrq5 = 0x06,
+    PortIrq6 = 0x07,
+    PortIrq7 = 0x08,
+    PortIrq8 = 0x09,
+    PortIrq9 = 0x0a,
+    PortIrq10 = 0x0b,
+    PortIrq11 = 0x0c,
+    PortIrq12 = 0x0d,
+    PortIrq13 = 0x0e,
+    PortIrq14 = 0x0f,
+    PortIrq15 = 0x10,
+
+    Dmac0Int = 0x11,
+    Dmac1Int = 0x12,
+    Dmac2Int = 0x13,
+    Dmac3Int = 0x14,
+
+    DtcComplete = 0x15,
+
     Iic0Rxi = 0x35,
     Iic0Txi = 0x36,
     Iic0Tei = 0x37,
