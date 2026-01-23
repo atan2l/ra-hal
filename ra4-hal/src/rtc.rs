@@ -174,7 +174,7 @@ impl<'d, I: Instance> Rtc<'d, I> {
         let minute = date_time.minute();
         let second = date_time.second();
 
-        #[cfg(feature = "invariants")]
+        #[cfg(feature = "strict-assert")]
         {
             assert!(year < u16::MAX as u32);
             assert!(month < u8::MAX as u32);

@@ -37,6 +37,6 @@ heapless = { version = "0.9.2" }
 vergen-gitcl = { version = "1.0.8" }
 
 [features]
-default = [ "defmt", "invariants" ]
+default = [ "defmt", "strict-assert" ]
 defmt = [ "dep:defmt", "dep:defmt-rtt", "panic-probe/print-defmt", "embassy-executor/defmt", "embassy-time/defmt", "embassy-time/defmt-timestamp-uptime", "ra4-hal/defmt", "uno-r4wifi-bsc/defmt" ]
-invariants = [ "ra4-hal/invariants" ]
+strict-assert = [ "ra4-hal/strict-assert" ]

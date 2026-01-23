@@ -108,7 +108,7 @@ impl Pfs {
         // port7 indexes: "8"
         // port8 indexes: "8, 9"
 
-        #[cfg(feature = "invariants")]
+        #[cfg(feature = "strict-assert")]
         match port {
             0 => assert!(pin <= 8 || (pin >= 10 && pin <= 15)),
             1 => {}

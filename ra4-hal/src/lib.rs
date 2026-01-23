@@ -64,7 +64,7 @@ pub fn init() -> Peripherals {
 
     critical_section::with(|cs| {
         let system = pac::SYSTEM;
-        #[cfg(feature = "invariants")]
+        #[cfg(feature = "strict-assert")]
         let fmifrt_base = pac::FMIFRT_BASE;
 
         debug!("Starting board init");
@@ -100,7 +100,7 @@ pub fn init() -> Peripherals {
         }
 
         // Sanity check.  The manual states that this should be fixed.
-        #[cfg(feature = "invariants")]
+        #[cfg(feature = "strict-assert")]
         assert_eq!(
             pac::fmifrt_base::vals::ExpectedBase::RA4M1.to_bits(),
             fmifrt_base.base().read().base()
