@@ -1,11 +1,11 @@
 #[doc = "Serial Peripheral Interface 0"]
 #[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Spi0 {
+pub struct Spi {
     ptr: *mut u8,
 }
-unsafe impl Send for Spi0 {}
-unsafe impl Sync for Spi0 {}
-impl Spi0 {
+unsafe impl Send for Spi {}
+unsafe impl Sync for Spi {}
+impl Spi {
     #[inline(always)]
     pub const unsafe fn from_ptr(ptr: *mut ()) -> Self {
         Self { ptr: ptr as _ }

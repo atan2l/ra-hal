@@ -172,9 +172,9 @@ pub const SCI2: sci2::Sci2 = unsafe { sci2::Sci2::from_ptr(0x4007_0040usize as _
 #[doc = "Serial Communication Interface 9"]
 pub const SCI9: sci2::Sci2 = unsafe { sci2::Sci2::from_ptr(0x4007_0120usize as _) };
 #[doc = "Serial Peripheral Interface 0"]
-pub const SPI0: spi0::Spi0 = unsafe { spi0::Spi0::from_ptr(0x4007_2000usize as _) };
+pub const SPI0: spi::Spi = unsafe { spi::Spi::from_ptr(0x4007_2000usize as _) };
 #[doc = "Serial Peripheral Interface 1"]
-pub const SPI1: spi1::Spi1 = unsafe { spi1::Spi1::from_ptr(0x4007_2100usize as _) };
+pub const SPI1: spi::Spi = unsafe { spi::Spi::from_ptr(0x4007_2100usize as _) };
 #[doc = "CRC Calculator"]
 pub const CRC: crc::Crc = unsafe { crc::Crc::from_ptr(0x4007_4000usize as _) };
 #[doc = "General PWM Timer 0 (32-bit)"]
@@ -265,8 +265,7 @@ pub mod sci0;
 pub mod sci2;
 pub mod slcdc;
 pub mod smpu;
-pub mod spi0;
-pub mod spi1;
+pub mod spi;
 pub mod spmon;
 pub mod sram;
 pub mod ssie0;
