@@ -1,11 +1,12 @@
 //! `UART` Universal Asynchronous Receiver-Transmitter implemented using the `SCI` peripheral.
 
-use core::marker::PhantomData;
+use core::{future::poll_fn, marker::PhantomData, task::Poll};
 
 use cortex_m::asm;
 use embassy_hal_internal::{
     Peri, PeripheralType, atomic_ring_buffer::RingBuffer, interrupt::InterruptExt as _,
 };
+use embassy_sync::waitqueue::AtomicWaker;
 use paste::paste;
 use ra4m1_ctpac::sci0::{
     regs::{Ftdrl, Scr},
@@ -18,6 +19,8 @@ use crate::{
     gpio::{AnyPin, Pin, PortFunction},
     interrupt, pac, peripherals,
 };
+
+pub mod io;
 
 /// Baud rate generator configuration for fixed speeds, rates that use "baud rate modulation" may achieve more precise timing.
 /// Derived from the formula listed in Table 28.19.
@@ -75,6 +78,19 @@ pub struct RxPin<'d, I: SealedInstance> {
     _phantom_i: PhantomData<I>,
 }
 
+/// Serial error
+#[derive(Debug, Eq, PartialEq, Copy, Clone)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[non_exhaustive]
+pub enum UartError {
+    /// Framing error
+    Framing,
+    /// RX buffer overrun
+    Overrun,
+    /// Parity check error
+    Parity,
+}
+
 #[allow(private_bounds)]
 pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
 
@@ -96,6 +112,12 @@ trait SealedInstance {
 
     fn tx_buffer() -> &'static RingBuffer;
     fn rx_buffer() -> &'static RingBuffer;
+
+    /// Waker for Transmit End events
+    fn te_waker() -> &'static AtomicWaker;
+
+    /// Waker for Receive events
+    fn rx_waker() -> &'static AtomicWaker;
 }
 
 trait TxPinSealed<I: SealedInstance>: Pin + PeripheralType {
@@ -462,6 +484,68 @@ impl<
         count
     }
 
+    fn read_ready(&mut self) -> Result<bool, UartError> {
+        Ok(!I::rx_buffer().is_empty())
+    }
+
+    /// # Returns
+    ///
+    /// The amount of data in our RX [`RingBuffer`].
+    pub fn depth(&self) -> usize {
+        I::rx_buffer().available()
+    }
+
+    /// Clears out the contents of the RX [`RingBuffer`].
+    pub fn drain(&mut self) {
+        let mut reader = unsafe { I::rx_buffer().reader() };
+        loop {
+            let (_, len) = reader.pop_buf();
+            reader.pop_done(len);
+            if len == 0 {
+                break;
+            }
+        }
+    }
+
+    /// Reads data from the UART.
+    ///
+    /// # Returns
+    ///
+    /// Returns when there is data in the RX [`RingBuffer`].
+    /// `buf` is not guaranteed to be full and the length of its contents is returned.
+    #[inline(always)]
+    pub async fn read(&self, buf: &mut [u8]) -> Result<usize, UartError> {
+        poll_fn(|cx| {
+            let mut buf_pos = 0;
+            let mut reader = unsafe { I::rx_buffer().reader() };
+            let mut data = reader.pop_slice();
+
+            while !data.is_empty() && buf_pos < buf.len() {
+                let data_len = data.len().min(buf.len() - buf_pos);
+                buf[buf_pos..buf_pos + data_len].copy_from_slice(&data[..data_len]);
+                buf_pos += data_len;
+
+                let pending = I::rx_buffer().is_full();
+                reader.pop_done(data_len);
+
+                if pending {
+                    RxInt::icu_pend();
+                }
+
+                data = reader.pop_slice();
+            }
+
+            if buf_pos != 0 {
+                Poll::Ready(Ok(buf_pos))
+            } else {
+                I::rx_waker().register(cx.waker());
+                Poll::Pending
+            }
+        })
+        .await
+    }
+
+    /// Blocking read on the UART blocks until `buf` is full.
     #[inline(always)]
     pub fn blocking_read(&self, data: &mut [u8]) {
         let mut reader = unsafe { I::rx_buffer().reader() };
@@ -494,18 +578,20 @@ impl<
                 out_slice[..n].copy_from_slice(&data[written..written + n]);
                 written += n;
                 tx_writer.push_done(n);
+            } else {
+                TxInt::icu_pend();
+            }
+
+            if !sci.scr().read().te() {
+                sci.scr().modify(|w| {
+                    w.set_te(true);
+                    w.set_tie(true);
+                });
             }
         }
 
-        if !sci.scr().read().te() {
-            sci.scr().modify(|w| {
-                w.set_te(true);
-                w.set_tie(true);
-            });
-        }
-
-        while sci.scr().read().te() {
-            asm::nop()
+        while !sci.ssr_fifo().read().tend() {
+            asm::nop();
         }
     }
 }
@@ -526,23 +612,44 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for RxInter
 
         match buf.is_empty() {
             false => {
-                let read_len = buf.len().min(sci.fdr().read().r() as _);
+                let fifo_len = sci.fdr().read().r() as _;
+                let read_len = buf.len().min(fifo_len);
+
                 for i in 0..read_len {
                     buf[i] = sci.frdrl().read().rdatl();
                 }
+                writer.push_done(read_len);
+
                 sci.ssr_fifo().modify(|w| {
                     w.set_rdf(false);
                     // If there isn't enough space in the static buffer are we dropping it on the floor when we reset dr?
                     w.set_dr(false);
                 });
-                writer.push_done(read_len);
+
+                Int::icu_unpend();
+
+                I::rx_waker().wake();
+
+                if read_len != fifo_len {
+                    warn!("{}RX Buffer full, FIFO drain={}", I::PERIPHERAL, read_len);
+                }
             }
             true => {
-                error!("RX Buffer is full");
+                let fifo_free = I::FIFO_DEPTH - sci.fdr().read().r() as u8;
+
+                warn!("{}RX Buffer full, FIFO cap={}", I::PERIPHERAL, fifo_free);
+
+                Int::icu_unpend();
+
+                I::rx_waker().wake();
+
+                if sci.ssr_fifo().read().orer() {
+                    error!("{}Overrun, dropping 1", I::PERIPHERAL);
+                    sci.ssr_fifo().modify(|w| w.set_orer(false));
+                    Int::icu_unpend();
+                }
             }
         }
-
-        Int::icu_unpend();
     }
 }
 
@@ -594,12 +701,28 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TeInter
     unsafe fn on_interrupt() {
         trace!("TeI");
         Int::icu_unpend();
+
         let sci = I::regs();
-        sci.scr().modify(|w| {
-            w.set_te(false);
-            w.set_tie(false);
-            w.set_teie(false);
-        });
+
+        if I::tx_buffer().is_empty() {
+            while !sci.ssr_fifo().read().tend() {
+                asm::nop();
+            }
+
+            sci.scr().modify(|w| {
+                w.set_te(false);
+                w.set_tie(false);
+                w.set_teie(false);
+            });
+
+            I::te_waker().wake();
+        } else {
+            sci.scr().modify(|w| {
+                w.set_te(true);
+                w.set_tie(true);
+                w.set_teie(false);
+            });
+        }
     }
 }
 
@@ -660,6 +783,17 @@ macro_rules! instance_impl {
                 fn rx_buffer() -> &'static RingBuffer {
                     static RX_BUF: RingBuffer = RingBuffer::new();
                     &RX_BUF
+                }
+
+                fn te_waker() -> &'static AtomicWaker{
+                    static TE_WAKER: AtomicWaker = AtomicWaker::new();
+                    &TE_WAKER
+                }
+
+                fn rx_waker() -> &'static AtomicWaker{
+                    static RX_WAKER: AtomicWaker = AtomicWaker::new();
+                    &RX_WAKER
+
                 }
             }
         }
