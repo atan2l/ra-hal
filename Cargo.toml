@@ -21,7 +21,8 @@ embassy-hal-internal = { version = "0.4.0", features = ["cortex-m", "prio-bits-4
 embassy-sync = { version = "0.7.2" }
 embassy-time = { version = "0.5.0" }
 embedded-io = { version = "0.6.1" }
-embedded-io-async = { version = "0.6.0" }
+embedded-io-async = { version = "0.6.1" }
+embedded-serial= { version = "0.5.0" }
 
 [profile.release]
 opt-level = "z"

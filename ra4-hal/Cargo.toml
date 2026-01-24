@@ -23,6 +23,7 @@ embassy-usb-driver = { version = "0.2.0", optional = true }
 embassy-sync = { workspace = true }
 embedded-io = { workspace = true }
 embedded-io-async = { workspace = true }
+embedded-serial = { workspace = true }
 
 ra4m1-ctpac = { path = "../ra4m1-ctpac" }
 

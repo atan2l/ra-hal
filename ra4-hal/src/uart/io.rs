@@ -43,3 +43,25 @@ impl<'d, I: Instance> embedded_io_async::ReadReady for Uart<'d, I> {
         Self::read_ready(self)
     }
 }
+
+impl<'d, I: Instance> embedded_serial::MutBlockingTx for Uart<'d, I> {
+    type Error = ();
+
+    // TODO: Change… "optimize" this so we only wait for data to leave the ring buffer.
+    fn putc(&mut self, ch: u8) -> Result<(), Self::Error> {
+        Self::blocking_write(self, &[ch]);
+        Ok(())
+    }
+}
+
+impl<'d, I: Instance> embedded_serial::MutBlockingRx for Uart<'d, I> {
+    type Error = ();
+
+    fn getc(&mut self) -> Result<u8, Self::Error> {
+        let mut ch = [0_u8];
+
+        Self::blocking_read(self, &mut ch);
+
+        Ok(ch[0])
+    }
+}
