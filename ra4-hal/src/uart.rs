@@ -22,8 +22,6 @@ use crate::{
     pac, peripherals,
 };
 
-mod io;
-
 /// Baud rate generator configuration for fixed speeds, rates that use "baud rate modulation" may achieve more precise timing.
 /// Derived from the formula listed in Table 28.19.
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
@@ -36,7 +34,7 @@ struct SpeedEntry {
 
 /// UART driver.
 #[allow(private_bounds)]
-pub struct Uart<'d, I: Instance> {
+pub struct BufferedUart<'d, I: Instance> {
     _phantom: PhantomData<&'d I>,
     rx_int: Interrupt,
     tx_int: Interrupt,
@@ -222,7 +220,7 @@ impl<'d, I: SealedInstance> RxPin<'d, I> {
     }
 }
 
-impl<'d, I: Instance> Uart<'d, I> {
+impl<'d, I: Instance> BufferedUart<'d, I> {
     #[inline]
     fn set_data_bits(n: u8) {
         let sci = I::regs();
@@ -771,6 +769,70 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for TeInterruptHandl
                 w.set_teie(false);
             });
         }
+    }
+}
+
+impl<'d, I: Instance> embedded_io_async::ErrorType for BufferedUart<'d, I> {
+    type Error = UartError;
+}
+
+impl<'d, I: Instance> embedded_io_async::Read for BufferedUart<'d, I> {
+    async fn read(&mut self, buf: &mut [u8]) -> Result<usize, Self::Error> {
+        Self::read(self, buf).await
+    }
+}
+
+impl<'d, I: Instance> embedded_io_async::Write for BufferedUart<'d, I> {
+    async fn write(&mut self, buf: &[u8]) -> Result<usize, Self::Error> {
+        Self::write(self, buf).await
+    }
+}
+
+impl embedded_io::Error for UartError {
+    fn kind(&self) -> embedded_io::ErrorKind {
+        embedded_io::ErrorKind::Other
+    }
+}
+
+impl core::fmt::Display for UartError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        let message = match self {
+            Self::Framing => "Framing Error",
+            Self::Overrun => "RX Buffer Overrun",
+            Self::Parity => "Parity Check Error",
+        };
+
+        write!(f, "{}", message)
+    }
+}
+
+impl core::error::Error for UartError {}
+
+impl<'d, I: Instance> embedded_io_async::ReadReady for BufferedUart<'d, I> {
+    fn read_ready(&mut self) -> Result<bool, Self::Error> {
+        Self::read_ready(self)
+    }
+}
+
+impl<'d, I: Instance> embedded_serial::MutBlockingTx for BufferedUart<'d, I> {
+    type Error = ();
+
+    // TODO: Change… "optimize" this so we only wait for data to leave the ring buffer.
+    fn putc(&mut self, ch: u8) -> Result<(), Self::Error> {
+        Self::blocking_write(self, &[ch]);
+        Ok(())
+    }
+}
+
+impl<'d, I: Instance> embedded_serial::MutBlockingRx for BufferedUart<'d, I> {
+    type Error = ();
+
+    fn getc(&mut self) -> Result<u8, Self::Error> {
+        let mut ch = [0_u8];
+
+        Self::blocking_read(self, &mut ch);
+
+        Ok(ch[0])
     }
 }
 

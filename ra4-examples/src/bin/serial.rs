@@ -18,7 +18,7 @@ use ra4_hal::{
     bind_interrupts,
     peripherals::SCI1,
     print_clock_config,
-    uart::{RxInterruptHandler, TeInterruptHandler, TxInterruptHandler, Uart},
+    uart::{BufferedUart, RxInterruptHandler, TeInterruptHandler, TxInterruptHandler},
 };
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
@@ -55,7 +55,7 @@ bind_interrupts!(struct Irqs {
     IEL4 => TeInterruptHandler<SCI1>;
 });
 
-fn query<I: ra4_hal::uart::Instance>(uart: &mut Uart<I>, cmd: &[u8]) {
+fn query<I: ra4_hal::uart::Instance>(uart: &mut BufferedUart<I>, cmd: &[u8]) {
     uart.blocking_write(b"AT+");
     uart.blocking_write(cmd);
     uart.blocking_write(b"\r\n");
@@ -83,7 +83,7 @@ async fn main(_spawner: Spawner) {
     let tx_buf = &mut [0u8; 8];
     let rx_buf = &mut [0u8; 8];
 
-    let mut uart = Uart::new(p.SCI1, p.P501, p.P502, Irqs);
+    let mut uart = BufferedUart::new(p.SCI1, p.P501, p.P502, Irqs);
     uart.init_buffers(tx_buf, rx_buf);
 
     // The ESP32 communicates at 115,200 baud with the default Arduino firmware
