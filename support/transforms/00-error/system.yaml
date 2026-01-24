@@ -1,7 +1,9 @@
 transforms:
+  # This is wrong
   - !DeleteEnumVariants
     enum: system::vals::Prkey
     from: _0X5A
+  # TN-RA*-A0083A/E
   - !AddRegisters
     block: system::System
     registers:
