@@ -1,6 +1,11 @@
 //! `OFS0` Option Function Select Register 0
+//!
+//! `OFS0` configures the after-reset behavior of the Independent Watchdog Timer (`IWDT`) and Watchdog Timer (`WDT`).
+//! See §6.2.1, §25.3.7 in the reference manual for more details.
 
+#[doc(hidden)]
 pub const OFS0_H: u32 = 0xA0010000;
+#[doc(hidden)]
 pub const OFS0_L: u32 = 0x0000A001;
 
 trait IwdtAutoStartMode {
@@ -347,6 +352,7 @@ impl WdtStopControl for WdtSleepStop {
     const OFS0: u32 = 1 << 30;
 }
 
+#[doc(hidden)]
 #[allow(private_bounds)]
 pub const fn ofs0<
     IWDTSTRT: IwdtAutoStartMode,
@@ -382,6 +388,40 @@ pub const fn ofs0<
         | WDTSTPCTL::OFS0
 }
 
+/// Generates a value to configure `OFS0`.
+///
+/// This macro, along with [`ofs1!`](crate::ofs0!), needs to be invoked once per application.
+/// Typical usage:
+/// ```rust,ignore
+/// #[unsafe(no_mangle)]
+/// #[unsafe(link_section = ".ofs0")]
+/// pub static OFS0: u32 = ofs0!(ArduinoCore);
+/// ```
+///
+/// It can also be invoked with each configuration item explicitly specified, e.g.:
+///
+/// ```rust,ignore
+/// #[unsafe(no_mangle)]
+/// #[unsafe(link_section = ".ofs0")]
+/// pub static OFS0: u32 = ofs0!(
+///   IwdtAutoStartOff,
+///   IwdtTimeout2048,
+///   IwdtClockRatio128,
+///   IwdtWindowEndNone,
+///   IwdtWindowStartNone,
+///   IwdtReset,
+///   IwdtSleepStop,
+///   WdtAutoStartOff,
+///   WdtTimeout16384,
+///   WdtClockRatio128,
+///   WdtWindowEndNone,
+///   WdtWindowStartNone,
+///   WdtReset,
+///   WdtSleepStop
+/// );
+/// ```
+///
+/// See the [module](module@crate::ofs0) docs for the available values.
 #[macro_export]
 macro_rules! ofs0 {
     (ArduinoCore) => {
