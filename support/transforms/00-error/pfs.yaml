@@ -14,9 +14,9 @@
 transforms:
   - !DeleteRegisters
     block: pfs::Pfs
-    from: (p000pfs|p000pfs(_ha|_by))
-  - !Delete
-    from: pfs::regs::P000pfs
+    from: p(000|10[89]|201|408)pfs(_ha|_by)?
+  - !DeleteFieldsets
+    from: pfs::regs::P(000|10[89]|201|408)pfs(Ha|By)?
   - !AddRegisters
       block: pfs::Pfs
       registers:
