@@ -116,6 +116,8 @@ trait SealedInstance {
     /// Waker for Transmit End events
     fn te_waker() -> &'static AtomicWaker;
 
+    fn tx_waker() -> &'static AtomicWaker;
+
     /// Waker for Receive events
     fn rx_waker() -> &'static AtomicWaker;
 }
@@ -545,6 +547,59 @@ impl<
         .await
     }
 
+    async fn write(&mut self, buf: &[u8]) -> Result<usize, UartError> {
+        let sci = I::regs();
+
+        let mut written: usize = 0;
+        let mut writer = unsafe { I::tx_buffer().writer() };
+
+        poll_fn(|cx| {
+            if written < buf.len() {
+                I::tx_waker().register(cx.waker());
+
+                if I::tx_buffer().is_full() {
+                    trace!("{}TX buffer full in async write", I::PERIPHERAL);
+                    return Poll::Pending;
+                }
+
+                let out = writer.push_slice();
+                let chunk_len = out.len().min(buf.len().saturating_sub(written));
+                out[..chunk_len].copy_from_slice(&buf[written..(written + chunk_len)]);
+                written += chunk_len;
+
+                writer.push_done(chunk_len);
+
+                if !sci.scr().read().te() {
+                    sci.scr().modify(|w| {
+                        w.set_te(true);
+                        w.set_tie(true);
+                    });
+                }
+
+                if written < buf.len() {
+                    return Poll::Pending;
+                }
+
+                // If there's nothing else wait on the Transmit End interrupt
+                I::te_waker().register(cx.waker());
+
+                if !sci.ssr_fifo().read().tend() {
+                    return Poll::Pending;
+                }
+            } else {
+                I::te_waker().register(cx.waker());
+
+                // If we're still waiting for the FIFO to write everything to the wire
+                if !sci.ssr_fifo().read().tend() {
+                    return Poll::Pending;
+                }
+            }
+
+            return Poll::Ready(Ok(written));
+        })
+        .await
+    }
+
     /// Blocking read on the UART blocks until `buf` is full.
     #[inline(always)]
     pub fn blocking_read(&self, data: &mut [u8]) {
@@ -626,12 +681,12 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for RxInter
                     w.set_dr(false);
                 });
 
-                Int::icu_unpend();
-
                 I::rx_waker().wake();
 
                 if read_len != fifo_len {
-                    warn!("{}RX Buffer full, FIFO drain={}", I::PERIPHERAL, read_len);
+                    trace!("{}RX Buffer full, FIFO drain={}", I::PERIPHERAL, read_len);
+                } else {
+                    Int::icu_unpend();
                 }
             }
             true => {
@@ -668,6 +723,7 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TxInter
                 w.set_tie(false);
                 w.set_teie(true);
             });
+
             return;
         }
 
@@ -695,6 +751,8 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TxInter
 
             tx_reader.pop_done(out_len);
         }
+
+        I::tx_waker().wake();
     }
 }
 impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TeInterruptHandler<I> {
@@ -788,6 +846,11 @@ macro_rules! instance_impl {
                 fn te_waker() -> &'static AtomicWaker{
                     static TE_WAKER: AtomicWaker = AtomicWaker::new();
                     &TE_WAKER
+                }
+
+                fn tx_waker() -> &'static AtomicWaker{
+                    static TX_WAKER: AtomicWaker = AtomicWaker::new();
+                    &TX_WAKER
                 }
 
                 fn rx_waker() -> &'static AtomicWaker{
