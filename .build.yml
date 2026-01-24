@@ -6,31 +6,30 @@ sources:
 tasks:
   - env-setup: |
       echo 'export THE_PROJECT=ra4m1-rs' >> ~/.buildenv
-      echo 'if [ -f "$HOME/.cargo/env" ]; then source $HOME/.cargo/env; fi' >> ~/.buildenv
   - cross-setup: |
       sudo dpkg --add-architecture arm64
       sudo apt-get update
       sudo apt-get install -y gcc-12-aarch64-linux-gnu libc6-dev-arm64-cross libudev-dev:arm64
-  - rust-setup: |
+  - install-rustup: |
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none
-      tail -n +2 ~/.cargo/env >> ~/.buildenv
-      source ~/.cargo/env
-      cd "${HOME}/${THE_PROJECT}"
+      cat ~/.cargo/env >> ~/.buildenv
+  - install-rust: |
+      cd "~/${THE_PROJECT}"
       rustup show active-toolchain
       rustup component add clippy
   - build: |
-      cd "${HOME}/${THE_PROJECT}"
+      cd "~/${THE_PROJECT}"
       cargo build --quiet
   - build-no-defmt: |
-      cd "${HOME}/${THE_PROJECT}"
+      cd "~/${THE_PROJECT}"
       cargo build --quiet --package ra4-examples --no-default-features
   - build-no-invariant: |
-      cd "${HOME}/${THE_PROJECT}"
+      cd "~/${THE_PROJECT}"
       cargo build --quiet --package ra4-hal --no-default-features --features time-driver,rt,diag,uno_r4,chrono
   - doc: |
-      cd "${HOME}/${THE_PROJECT}"
+      cd "~/${THE_PROJECT}"
       cargo haldoc
   - clippy: |
-      cd "${HOME}/${THE_PROJECT}"
+      cd "~/${THE_PROJECT}"
       cargo clip
 
