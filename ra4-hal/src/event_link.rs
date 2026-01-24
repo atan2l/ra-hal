@@ -140,6 +140,49 @@ pub enum InterruptEvent {
 
     DtcComplete = 0x15,
 
+    SnoozeCancel = 0x17,
+
+    FcuFrdyi = 0x18,
+
+    Lvd1 = 0x19,
+    Lvd2 = 0x1A,
+
+    VbattLvd = 0x1B,
+
+    MoscStop = 0x1C,
+
+    SnoozeRequest = 0x1D,
+
+    Agt0Agti = 0x1E,
+    Agt0AgtCmAi = 0x1F,
+    Agt0AgtCmBi = 0x20,
+
+    Agt1Agti = 0x21,
+    Agt1AgtCmAi = 0x22,
+    Agt1AgtCmBi = 0x23,
+
+    IwdtNmi = 0x24,
+    WdtNmi = 0x25,
+
+    RtcAlarm = 0x26,
+    RtcPrd = 0x27,
+    RtcCup = 0x28,
+
+    AdcAdi = 0x29,
+    AdcGbadi = 0x2A,
+    AdcCmpAi = 0x2B,
+    AdcCmpBi = 0x2C,
+    AdcWcmpM = 0x2D,
+    AdcWcmpUm = 0x2E,
+
+    AcmpLp0 = 0x2F,
+    AcmpLp1 = 0x30,
+
+    UsbfsD0Fifo = 0x31,
+    UsbfsD1Fifo = 0x32,
+    UsbfsUsbi = 0x33,
+    UsbfsUsbr = 0x34,
+
     Iic0Rxi = 0x35,
     Iic0Txi = 0x36,
     Iic0Tei = 0x37,
@@ -151,7 +194,17 @@ pub enum InterruptEvent {
     Iic1Tei = 0x3C,
     Iic1Eei = 0x3D,
 
+    SseiSsiTxi = 0x3E,
+    SseiSsiRxi = 0x3F,
+    SseiSsif = 0x41,
+
+    CtsuWr = 0x42,
+    CtsuRd = 0x43,
+    CtsuFn = 0x44,
+
     Kint = 0x45,
+
+    DocDopci = 0x46,
 
     CacFerri = 0x47,
     CacMendi = 0x48,
@@ -163,6 +216,17 @@ pub enum InterruptEvent {
     Can0Rxm = 0x4D,
     Can0Txm = 0x4E,
 
+    IoportGroup1 = 0x4F,
+    IoportGroup2 = 0x50,
+    IoportGroup3 = 0x51,
+    IoportGroup4 = 0x52,
+
+    ElcSwevt0 = 0x53,
+    ElcSwevt1 = 0x54,
+
+    PoegGroup0 = 0x55,
+    PoegGroup1 = 0x56,
+
     Gpt0CcmpA = 0x57,
     Gpt0CcmpB = 0x58,
     Gpt0CmpC = 0x59,
@@ -171,6 +235,69 @@ pub enum InterruptEvent {
     Gpt0CmpF = 0x5C,
     Gpt0Ovf = 0x5D,
     Gpt0Udf = 0x5E,
+
+    Gpt1CcmpA = 0x5F,
+    Gpt1CcmpB = 0x60,
+    Gpt1CmpC = 0x61,
+    Gpt1CmpD = 0x62,
+    Gpt1CmpE = 0x63,
+    Gpt1CmpF = 0x64,
+    Gpt1Ovf = 0x65,
+    Gpt1Udf = 0x66,
+
+    Gpt2CcmpA = 0x67,
+    Gpt2CcmpB = 0x68,
+    Gpt2CmpC = 0x69,
+    Gpt2CmpD = 0x6A,
+    Gpt2CmpE = 0x6B,
+    Gpt2CmpF = 0x6C,
+    Gpt2Ovf = 0x6D,
+    Gpt2Udf = 0x6E,
+
+    Gpt3CcmpA = 0x6F,
+    Gpt3CcmpB = 0x70,
+    Gpt3CmpC = 0x71,
+    Gpt3CmpD = 0x72,
+    Gpt3CmpE = 0x73,
+    Gpt3CmpF = 0x74,
+    Gpt3Ovf = 0x75,
+    Gpt3Udf = 0x76,
+
+    Gpt4CcmpA = 0x77,
+    Gpt4CcmpB = 0x78,
+    Gpt4CmpC = 0x79,
+    Gpt4CmpD = 0x7A,
+    Gpt4CmpE = 0x7B,
+    Gpt4CmpF = 0x7C,
+    Gpt4Ovf = 0x7D,
+    Gpt4Udf = 0x7E,
+
+    Gpt5CcmpA = 0x7F,
+    Gpt5CcmpB = 0x80,
+    Gpt5CmpC = 0x81,
+    Gpt5CmpD = 0x82,
+    Gpt5CmpE = 0x83,
+    Gpt5CmpF = 0x84,
+    Gpt5Ovf = 0x85,
+    Gpt5Udf = 0x86,
+
+    Gpt6CcmpA = 0x87,
+    Gpt6CcmpB = 0x88,
+    Gpt6CmpC = 0x89,
+    Gpt6CmpD = 0x8A,
+    Gpt6CmpE = 0x8B,
+    Gpt6CmpF = 0x8C,
+    Gpt6Ovf = 0x8D,
+    Gpt6Udf = 0x8E,
+
+    Gpt7CcmpA = 0x8F,
+    Gpt7CcmpB = 0x90,
+    Gpt7CmpC = 0x91,
+    Gpt7CmpD = 0x92,
+    Gpt7CmpE = 0x93,
+    Gpt7CmpF = 0x94,
+    Gpt7Ovf = 0x95,
+    Gpt7Udf = 0x96,
 
     GptUvwEdge = 0x97,
 
