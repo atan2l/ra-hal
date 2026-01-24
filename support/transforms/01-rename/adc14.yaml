@@ -1,32 +1,32 @@
 transforms:
   - !RenamePeripherals
-      from: ADC140
-      to: ADC14
+    from: ADC140
+    to: ADC14
   - !Rename
-      from: adc140::(.+)
-      to: adc14::${1}
-      type: All
+    from: adc140::(.+)
+    to: adc14::${1}
+    type: All
   - !Rename
-      from: adc14::Adc140
-      to: adc14::Adc14
-      type: Block
+    from: adc14::Adc140
+    to: adc14::Adc14
+    type: Block
   - !MakeFieldArray
-      fieldsets: adc14::regs::(Adansa[01])
-      from: (ansa)\d+
-      to: ${1}
+    fieldsets: adc14::regs::(Adansa[01])
+    from: (ansa)\d+
+    to: ${1}
   - !RenameEnumVariants
-      enum: adc14::vals::Adcs
-      from: _00
-      to: Single
+    enum: adc14::vals::Adcs
+    from: _00
+    to: Single
   - !RenameEnumVariants
-      enum: adc14::vals::Adcs
-      from: _01
-      to: Group
+    enum: adc14::vals::Adcs
+    from: _01
+    to: Group
   - !RenameEnumVariants
-      enum: adc14::vals::Adcs
-      from: _10
-      to: Continuous
+    enum: adc14::vals::Adcs
+    from: _10
+    to: Continuous
   - !RenameEnumVariants
-      enum: adc14::vals::Adcs
-      from: _11
-      to: Prohibited
+    enum: adc14::vals::Adcs
+    from: _11
+    to: Prohibited

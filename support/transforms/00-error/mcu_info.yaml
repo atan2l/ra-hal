@@ -15,13 +15,12 @@ transforms:
       # > § 44.4.4 Factory MCU Information Flash Root Table (FMIFRT)
       # > The base address of the RA4M1 MCU is 0x0100_3C00.
       # Why this couldn't just go into the freaking SVD is entirely beyond me.
-      enum/fmifrt_base::vals::ExpectedBase:
-        !Enum
-          bit_size: 24
-          variants:
-            - !EnumVariant
-              name: RA4M1
-              value: 0x01003C00
+      enum/fmifrt_base::vals::ExpectedBase: !Enum
+        bit_size: 24
+        variants:
+          - !EnumVariant
+            name: RA4M1
+            value: 0x01003C00
       block/fmifrt_base::FmifrtBase:
         items:
           - name: base
@@ -30,9 +29,9 @@ transforms:
             fieldset: fmifrt_base::regs::Base
       fieldset/fmifrt_base::regs::Base:
         fields:
-        - name: base
-          bit_offset: 0
-          bit_size: 32
+          - name: base
+            bit_offset: 0
+            bit_size: 32
       block/fmifrt::Fmifrt:
         items:
           - name: uidr
@@ -51,16 +50,16 @@ transforms:
             fieldset: fmifrt::regs::McuVersion
       fieldset/fmifrt::regs::Uid:
         fields:
-        - name: uid
-          bit_offset: 0
-          bit_size: 32
+          - name: uid
+            bit_offset: 0
+            bit_size: 32
       fieldset/fmifrt::regs::PartNumber:
         fields:
-        - name: pn
-          bit_offset: 0
-          bit_size: 32
+          - name: pn
+            bit_offset: 0
+            bit_size: 32
       fieldset/fmifrt::regs::McuVersion:
         fields:
-        - name: mcuver
-          bit_offset: 0
-          bit_size: 8
+          - name: mcuver
+            bit_offset: 0
+            bit_size: 8

@@ -1,61 +1,61 @@
 transforms:
   - !RenamePeripherals
-      from: GPT(16|32)(\d)
-      to: GPT${1}_${2}
+    from: GPT(16|32)(\d)
+    to: GPT${1}_${2}
   - !Rename
-      from: gpt320::(.+)
-      to: gpt32::${1}
-      type: All
+    from: gpt320::(.+)
+    to: gpt32::${1}
+    type: All
   - !Rename
-      from: gpt32::Gpt320
-      to: gpt32::Gpt32
-      type: Block
+    from: gpt32::Gpt320
+    to: gpt32::Gpt32
+    type: Block
   - !Rename
-      from: gpt162::(.+)
-      to: gpt16::${1}
-      type: All
+    from: gpt162::(.+)
+    to: gpt16::${1}
+    type: All
   - !Rename
-      from: gpt16::Gpt162
-      to: gpt16::Gpt16
-      type: Block
+    from: gpt16::Gpt162
+    to: gpt16::Gpt16
+    type: Block
   - !RenameEnumVariants
-      enum: gpt32::vals::Ud
-      from: _0
-      to: Down
+    enum: gpt32::vals::Ud
+    from: _0
+    to: Down
   - !RenameEnumVariants
-      enum: gpt32::vals::Ud
-      from: _1
-      to: Up
+    enum: gpt32::vals::Ud
+    from: _1
+    to: Up
   - !Rename
-      from: gpt32::vals::Md
-      to: gpt32::vals::Mode
+    from: gpt32::vals::Md
+    to: gpt32::vals::Mode
   - !RenameEnumVariants
-      enum: gpt32::vals::Mode
-      from: _000
-      to: SawWavePwm
+    enum: gpt32::vals::Mode
+    from: _000
+    to: SawWavePwm
   - !RenameEnumVariants
-      enum: gpt32::vals::Mode
-      from: _001
-      to: SawWaveOneShot
+    enum: gpt32::vals::Mode
+    from: _001
+    to: SawWaveOneShot
   - !RenameEnumVariants
-      enum: gpt32::vals::Mode
-      from: _001
-      to: SawWaveOneShot
+    enum: gpt32::vals::Mode
+    from: _001
+    to: SawWaveOneShot
   - !RenameEnumVariants
-      enum: gpt32::vals::Mode
-      from: _100
-      to: TrianglePwm1
+    enum: gpt32::vals::Mode
+    from: _100
+    to: TrianglePwm1
   - !RenameEnumVariants
-      enum: gpt32::vals::Mode
-      from: _101
-      to: TrianglePwm2
+    enum: gpt32::vals::Mode
+    from: _101
+    to: TrianglePwm2
   - !RenameEnumVariants
-      enum: gpt32::vals::Mode
-      from: _110
-      to: TrianglePwm3
+    enum: gpt32::vals::Mode
+    from: _110
+    to: TrianglePwm3
   - !DeleteEnums
-      from: gpt32::vals::(Cst)
+    from: gpt32::vals::(Cst)
   - !MakeFieldArray
-      fieldsets: gpt32::regs::(Gtstr|Gtstp|Gtclr)
-      from: (cstrt|cstop|cclr)\d+
-      to: ${1}
+    fieldsets: gpt32::regs::(Gtstr|Gtstp|Gtclr)
+    from: (cstrt|cstop|cclr)\d+
+    to: ${1}

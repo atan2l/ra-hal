@@ -1,33 +1,33 @@
 transforms:
   - !RenameEnumVariants
-      enum: sci0::vals::Stop
-      from: _0
-      to: Stop1
+    enum: sci0::vals::Stop
+    from: _0
+    to: Stop1
   - !RenameEnumVariants
-      enum: sci0::vals::Stop
-      from: _1
-      to: Stop2
+    enum: sci0::vals::Stop
+    from: _1
+    to: Stop2
   - !RenameEnumVariants
-      enum: sci0::vals::(.+)Pm
-      from: _0
-      to: Even
+    enum: sci0::vals::(.+)Pm
+    from: _0
+    to: Even
   - !RenameEnumVariants
-      enum: sci0::vals::(.+)Pm
-      from: _1
-      to: Odd
+    enum: sci0::vals::(.+)Pm
+    from: _1
+    to: Odd
   - !RenameEnumVariants
-      enum: sci0::vals::SmrCks
-      from: _00
-      to: DIV_1
+    enum: sci0::vals::SmrCks
+    from: _00
+    to: DIV_1
   - !RenameEnumVariants
-      enum: sci0::vals::SmrCks
-      from: _01
-      to: DIV_4
+    enum: sci0::vals::SmrCks
+    from: _01
+    to: DIV_4
   - !RenameEnumVariants
-      enum: sci0::vals::SmrCks
-      from: _10
-      to: DIV_16
+    enum: sci0::vals::SmrCks
+    from: _10
+    to: DIV_16
   - !RenameEnumVariants
-      enum: sci0::vals::SmrCks
-      from: _11
-      to: DIV_64
+    enum: sci0::vals::SmrCks
+    from: _11
+    to: DIV_64

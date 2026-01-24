@@ -2,12 +2,12 @@
 # They are *not* identical.
 transforms:
   - !MergeBlocks
-      from: iic[01]::Iic[01]
-      to: iic::Iic
+    from: iic[01]::Iic[01]
+    to: iic::Iic
   - !Rename
-      from: iic0::(.+)
-      to: iic::${1}
-      type: All
+    from: iic0::(.+)
+    to: iic::${1}
+    type: All
   - !Delete
-      from: iic1::(.+)
-      type: All
+    from: iic1::(.+)
+    type: All

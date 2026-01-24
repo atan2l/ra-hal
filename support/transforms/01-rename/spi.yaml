@@ -3,12 +3,12 @@
 # and in SPI1 there is 1, 4-byte reserved field.
 transforms:
   - !MergeBlocks
-      from: spi[01]::Spi[01]
-      to: spi::Spi
+    from: spi[01]::Spi[01]
+    to: spi::Spi
   - !Rename
-      from: spi0::(.+)
-      to: spi::${1}
-      type: All
+    from: spi0::(.+)
+    to: spi::${1}
+    type: All
   - !Delete
-      from: spi1::(.+)
-      type: All
+    from: spi1::(.+)
+    type: All

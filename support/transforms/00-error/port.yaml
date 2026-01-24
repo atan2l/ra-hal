@@ -5,15 +5,13 @@ transforms:
   - !AddFields
     fieldset: port[01]::regs::Pcntr1
     fields:
-      -
-        name: pdr
+      - name: pdr
         bit_offset: 0
         bit_size: 1
         array:
           len: 16
           stride: 1
-      -
-        name: podr
+      - name: podr
         bit_offset: 16
         bit_size: 1
         array:
@@ -25,8 +23,7 @@ transforms:
   - !AddFields
     fieldset: port[01]::regs::Pcntr2
     fields:
-      -
-        name: pidr
+      - name: pidr
         description: Pmn Input Data
         bit_offset: 0
         bit_size: 1
@@ -36,8 +33,7 @@ transforms:
   - !AddFields
     fieldset: port1::regs::Pcntr2
     fields:
-      -
-        name: eidr
+      - name: eidr
         description: Pmn Event Input Data
         bit_offset: 16
         bit_size: 1
@@ -50,20 +46,17 @@ transforms:
   - !AddFields
     fieldset: port[01]::regs::Pcntr3
     fields:
-      -
-        name: posr
+      - name: posr
         description: Pmn Output Set (high)
         bit_offset: 0
         bit_size: 1
         array:
           len: 16
           stride: 1
-      -
-        name: porr
+      - name: porr
         description: Pmn Output Reset (low)
         bit_offset: 16
         bit_size: 1
         array:
           len: 16
           stride: 1
- 

@@ -1,37 +1,37 @@
 transforms:
   - !RenameEnumVariants
-      enum: rtc::vals::Rcksel
-      from: _0
-      to: SubClock
+    enum: rtc::vals::Rcksel
+    from: _0
+    to: SubClock
   - !RenameEnumVariants
-      enum: rtc::vals::Rcksel
-      from: _1
-      to: Loco
+    enum: rtc::vals::Rcksel
+    from: _1
+    to: Loco
   - !RenameEnumVariants
-      enum: rtc::vals::RwkcntDayw
-      from: _000
-      to: Sunday
+    enum: rtc::vals::RwkcntDayw
+    from: _000
+    to: Sunday
   - !RenameEnumVariants
-      enum: rtc::vals::RwkcntDayw
-      from: _001
-      to: Monday
+    enum: rtc::vals::RwkcntDayw
+    from: _001
+    to: Monday
   - !RenameEnumVariants
-      enum: rtc::vals::RwkcntDayw
-      from: _010
-      to: Tuesday
+    enum: rtc::vals::RwkcntDayw
+    from: _010
+    to: Tuesday
   - !RenameEnumVariants
-      enum: rtc::vals::RwkcntDayw
-      from: _011
-      to: Wednesday
+    enum: rtc::vals::RwkcntDayw
+    from: _011
+    to: Wednesday
   - !RenameEnumVariants
-      enum: rtc::vals::RwkcntDayw
-      from: _100
-      to: Thursday
+    enum: rtc::vals::RwkcntDayw
+    from: _100
+    to: Thursday
   - !RenameEnumVariants
-      enum: rtc::vals::RwkcntDayw
-      from: _101
-      to: Friday
+    enum: rtc::vals::RwkcntDayw
+    from: _101
+    to: Friday
   - !RenameEnumVariants
-      enum: rtc::vals::RwkcntDayw
-      from: _110
-      to: Saturday
+    enum: rtc::vals::RwkcntDayw
+    from: _110
+    to: Saturday
