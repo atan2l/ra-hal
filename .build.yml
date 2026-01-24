@@ -6,13 +6,13 @@ sources:
 tasks:
   - env-setup: |
       echo 'export THE_PROJECT=ra4m1-rs' >> ~/.buildenv
+      echo 'if [ -f "${HOME}/.cargo/env" ]; then soure "${HOME}/.cargo/env"; fi'
   - cross-setup: |
       sudo dpkg --add-architecture arm64
       sudo apt-get update
       sudo apt-get install -y gcc-12-aarch64-linux-gnu libc6-dev-arm64-cross libudev-dev:arm64
   - install-rustup: |
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none
-      cat ~/.cargo/env >> ~/.buildenv
   - install-rust: |
       cd "${HOME}/${THE_PROJECT}"
       rustup show active-toolchain
