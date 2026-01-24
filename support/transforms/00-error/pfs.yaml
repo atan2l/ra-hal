@@ -1,4 +1,4 @@
-# port0 indexes: "0,1,2,3,4,5,6,7,8,10,11,12,13,14,15"
+# port0 indexes: "0,1,2,3,4,5,6,7,8 10,11,12,13,14,15"
 # port1 indexes: "0-15"
 # P108, P109, P100 have event link
 # port2 indexes: "0,1,2,3,4,5,6,12,13,14,15"
@@ -7,10 +7,11 @@
 # P300 has event link
 # port4 indexes: "0-8"
 # P408 has event link
+# port5 indexes: "0-5"
 # port6 indexes: "0,1,2,3,8,9,10"
 # port7 indexes: "8"
-# port8 indexes: "8, 9"
-
+# port8 indexes: "8,9"
+# port9 indexes: "14,15"
 transforms:
   - !DeleteRegisters
     block: pfs::Pfs
@@ -21,12 +22,12 @@ transforms:
     block: pfs::Pfs
     registers:
       - !BlockItem
-        name: pin_inner
-        description: PORT0 Pin Function Control Register
+        name: pin_raw
+        description: PORT0–9 Pin Function Control Register
         byte_offset: 0
         bit_size: 32
         fieldset: pfs::regs::PmnPfs
-        array: { len: 144, stride: 4 }
+        array: { len: 160, stride: 4 }
   - !Add
     ir: !IR
       enum/pfs::vals::PortLevel: !Enum
