@@ -632,7 +632,23 @@ embassy_hal_internal::interrupt_mod!(
     IEL31,
 );
 
-// developer note: this macro can't be in `embassy-hal-internal` due to the use of `$crate`.
+// NOTE: this macro can't be in `embassy-hal-internal` due to the use of `$crate`.
+/// Macro to bind interrupts to handlers.
+///
+/// For example
+///
+/// ```rust,ignore
+/// use ra4_hal::{bind_interrupts, peripherals::SCI1, uart};
+///
+/// bind_interrupts!(struct Irqs {
+///     IEL2 => uart::RxInterruptHandler<SCI1>;
+///     IEL3 => uart::TxInterruptHandler<SCI1>;
+///     IEL4 => uart::TeInterruptHandler<SCI1>;
+/// });
+///```
+///
+/// Any interrupt `IEL2..IEL31` can be assigned to any one handler.
+/// Note that `IEL0` and `IEL1` are used by the [time driver](crate::time_driver) and are unavailable for general use.
 #[macro_export]
 macro_rules! bind_interrupts {
     ($(#[$outer:meta])* $vis:vis struct $name:ident {

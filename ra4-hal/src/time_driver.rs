@@ -1,4 +1,4 @@
-//! Driver for `embassy-time`.
+//! Driver for [`embassy-time`](https://docs.embassy.dev/embassy-time).
 //!
 //! Currently hardcoded to take up `GPT32_0`, `IEL0`, and `IEL1`.
 

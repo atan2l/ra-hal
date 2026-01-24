@@ -1,5 +1,6 @@
 #![macro_use]
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! maybe_log {
     ($level:ident, $s:literal $(, $x:expr)* $(,)?) => {
@@ -12,6 +13,7 @@ macro_rules! maybe_log {
     };
 }
 
+/// Expands to `defmt::assert_eq!` if the `defmt` feature is enabled, uses core impl otherwise.
 #[macro_export]
 #[collapse_debuginfo(yes)]
 macro_rules! assert_eq {
@@ -25,6 +27,7 @@ macro_rules! assert_eq {
     };
 }
 
+/// Log at the `trace` level if the `defmat` feature is enabled. No-op otherwise.
 #[macro_export]
 #[collapse_debuginfo(yes)]
 macro_rules! trace {
@@ -35,6 +38,7 @@ macro_rules! trace {
     };
 }
 
+/// Log at the `debug` level if the `defmat` feature is enabled. No-op otherwise.
 #[macro_export]
 #[collapse_debuginfo(yes)]
 macro_rules! debug {
@@ -45,6 +49,7 @@ macro_rules! debug {
     };
 }
 
+/// Log at the `info` level if the `defmat` feature is enabled. No-op otherwise.
 #[macro_export]
 #[collapse_debuginfo(yes)]
 macro_rules! info {
@@ -55,6 +60,7 @@ macro_rules! info {
     };
 }
 
+/// Log at the `warn` level if the `defmat` feature is enabled. No-op otherwise.
 #[macro_export]
 #[collapse_debuginfo(yes)]
 macro_rules! warn {
@@ -65,6 +71,7 @@ macro_rules! warn {
     };
 }
 
+/// Log at the `error` level if the `defmat` feature is enabled. No-op otherwise.
 #[macro_export]
 #[collapse_debuginfo(yes)]
 macro_rules! error {
