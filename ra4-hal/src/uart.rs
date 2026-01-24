@@ -32,13 +32,12 @@ struct SpeedEntry {
     modulation: u8,
 }
 
-/// UART driver.
+/// UART driver, backed by a [`RingBuffer`] and 16-byte on-device FIFO buffer.
 #[allow(private_bounds)]
 pub struct BufferedUart<'d, I: Instance> {
     _phantom: PhantomData<&'d I>,
     rx_int: Interrupt,
     tx_int: Interrupt,
-    // te_int: Interrupt,
 }
 
 /// Interrupt handler that handles incoming data for an `SCI` instance.
@@ -93,6 +92,7 @@ trait SealedInstance {
     const PERIPHERAL: &'static str;
     #[cfg(not(feature = "defmt"))]
     const PERIPHERAL: () = ();
+
     const RX_INTERRUPT_EVENT: InterruptEvent;
     const TX_INTERRUPT_EVENT: InterruptEvent;
     const TE_INTERRUPT_EVENT: InterruptEvent;
@@ -101,18 +101,34 @@ trait SealedInstance {
     const FIFO_DEPTH: u8 = 16;
 
     fn regs() -> pac::sci0::Sci0;
+
+    /// Turns the `SCI` module on.
+    /// In Renesas speak it turns off "module stop" for the `SCI` instance.
+    /// See §10 of the reference manual.
     fn start();
+
+    /// Turns the `SCI` module off.
+    /// In Renesas speak it turns on "module stop" for the `SCI` instance.
+    /// See §10 of the reference manual.
     fn stop();
 
+    /// # Returns
+    ///
+    /// Static reference to the statically allocated [`RingBuffer`] for transmit operations.
     fn tx_buffer() -> &'static RingBuffer;
+
+    /// # Returns
+    ///
+    /// Static reference to the statically allocated [`RingBuffer`] for receive operations.
     fn rx_buffer() -> &'static RingBuffer;
 
-    /// Waker for Transmit End events
+    /// Waker for "transmit end" events.
     fn te_waker() -> &'static AtomicWaker;
 
+    /// Waker for transmit buffer empty events.
     fn tx_waker() -> &'static AtomicWaker;
 
-    /// Waker for Receive events
+    /// Waker for receive events.
     fn rx_waker() -> &'static AtomicWaker;
 }
 
@@ -342,20 +358,19 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         let _ = tx;
         let _ = rx;
 
-        // Enable in NVIC. We can largely ignore the NVIC after this as
-        // all of the peripheral interrupts are going to be managed by
-        // the ICU and/or ELC.
+        // Enable interrupts in NVIC. We can largely ignore the NVIC after this as all of the
+        // peripheral interrupts are going to be managed by the ICU and/or ELC.
         unsafe { RxInt::IRQ.enable() };
         unsafe { TxInt::IRQ.enable() };
         unsafe { TeInt::IRQ.enable() };
+
         // Enable in ICU
         RxInt::IRQ.icu_enable(I::RX_INTERRUPT_EVENT);
         TxInt::IRQ.icu_enable(I::TX_INTERRUPT_EVENT);
         TeInt::IRQ.icu_enable(I::TE_INTERRUPT_EVENT);
 
-        // We can leave the receiver on, but not the transmitter as enabling
-        // the transmitter in combination with the TX interrupt is what kicks
-        // off the whole transmit procedure.
+        // We can leave the receiver on, but not the transmitter as enabling the transmitter in
+        // combination with the TX interrupt is what kicks off the whole transmit procedure.
         sci.scr().modify(|w| {
             w.set_re(true);
             w.set_rie(true);
@@ -372,15 +387,19 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
             _phantom: PhantomData,
             rx_int: RxInt::IRQ,
             tx_int: TxInt::IRQ,
-            // te_int: TeInt::IRQ,
         }
     }
 
     fn show_speed() {
         let sci = I::regs();
+
+        // Baud rate divisor
         let brr = sci.brr().read().brr();
+        // Modulation duty-cycle
         let mddr = sci.mddr().read().mddr();
+        // Modulation en/disabled
         let brme = sci.semr().read().brme();
+
         debug!(
             "{}Speed: BRR: {}, MDDR: {}, BRME: {}",
             I::PERIPHERAL,
@@ -432,7 +451,6 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
     /// # TODO
     /// * Support arbitrary baud rates
     /// * Support arbitrary `PCLKA` rates
-    ///
     pub fn set_speed(&mut self, baud_rate: u32) {
         let speed = SPEED_ENTRIES
             .iter()
@@ -639,11 +657,11 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
     }
 }
 
-// impl<'d, I: Instance> Drop for Uart<'d, I> {
-//     fn drop(&mut self) {
-//         I::stop();
-//     }
-// }
+impl<'d, I: Instance> Drop for BufferedUart<'d, I> {
+    fn drop(&mut self) {
+        I::stop();
+    }
+}
 
 impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for RxInterruptHandler<I> {
     unsafe fn on_interrupt() {

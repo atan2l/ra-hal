@@ -25,6 +25,7 @@ pub struct Flex<'d> {
     pub(crate) pin: Peri<'d, AnyPin>,
 }
 
+// Should this just export the type from the PAC?
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Copy, Clone)]
 #[repr(u8)]
@@ -61,12 +62,6 @@ pub enum PortFunction {
     Ssie = 0x12,
     #[doc = "USB Full-Speed (0b10011)"]
     UsbFs = 0x13,
-}
-
-impl From<PortFunction> for pac::pfs::vals::PortFunction {
-    fn from(value: PortFunction) -> Self {
-        Self::from_bits(value as u8)
-    }
 }
 
 pub(crate) trait SealedPin {
@@ -151,11 +146,14 @@ pub(crate) trait SealedPin {
             w.set_pdr(pin, true);
         });
 
-        // let port_num = self._port() as _;
-        // let pin_num = self._pin() as _;
+        // It's possible to configure direction via PFS registers too.
+        // Keeping this in the comments as an example, but it seems
+        // overkill for toggling the direction of one pin.
 
         // let pfs = pac::PFS;
-
+        // let port_num = self._port() as _;
+        // let pin_num = self._pin() as _;
+        //
         // pfs.protected_write(|| {
         //     // info!("Port{}, Pin{}, Output", port_num, pin_num);
         //     let pfs_reg = pfs.pin(port_num, pin_num);
@@ -172,19 +170,6 @@ pub(crate) trait SealedPin {
         port.pcntr1().modify(|w| {
             w.set_pdr(pin, false);
         });
-
-        // let port_num = self._port() as _;
-        // let pin_num = self._pin() as _;
-
-        // let pfs = pac::PFS;
-
-        // pfs.protected_write(|| {
-        //     // info!("Port{}, Pin{}, Input", port_num, pin_num);
-        //     let pfs_reg = pfs.pin(port_num, pin_num);
-        //     pfs_reg.modify(|w| {
-        //         w.set_pdr(PortDirection::Input);
-        //     });
-        // });
     }
 
     fn set_port_func(&self, pfunc: PortFunction) {
@@ -223,19 +208,24 @@ pub(crate) trait SealedPin {
     #[inline]
     fn block(&self) -> crate::pac::port0::Port0 {
         match self._port() {
-            // Safe because PORT1 only adds registers, no changes or removals.  Also we know that this is a valid pointer.
-            1 => unsafe { crate::pac::port0::Port0::from_ptr(crate::pac::PORT1.as_ptr()) },
-            // Safe because PORT1 only adds registers, no changes or removals.  Also we know that this is a valid pointer.
-            2 => unsafe { crate::pac::port0::Port0::from_ptr(crate::pac::PORT2.as_ptr()) },
-            // Safe because PORT1 only adds registers, no changes or removals.  Also we know that this is a valid pointer.
-            3 => unsafe { crate::pac::port0::Port0::from_ptr(crate::pac::PORT3.as_ptr()) },
-            // Safe because PORT1 only adds registers, no changes or removals.  Also we know that this is a valid pointer.
-            4 => unsafe { crate::pac::port0::Port0::from_ptr(crate::pac::PORT4.as_ptr()) },
             0 => crate::pac::PORT0,
+            // Safe because PORT1 only adds registers, no changes or removals compared to PORT0.  Also we know that this is a valid pointer.
+            1 => unsafe { crate::pac::port0::Port0::from_ptr(crate::pac::PORT1.as_ptr()) },
+            // Safe because PORT1 only adds registers, no changes or removals compared to PORT0.  Also we know that this is a valid pointer.
+            2 => unsafe { crate::pac::port0::Port0::from_ptr(crate::pac::PORT2.as_ptr()) },
+            // Safe because PORT1 only adds registers, no changes or removals compared to PORT0.  Also we know that this is a valid pointer.
+            3 => unsafe { crate::pac::port0::Port0::from_ptr(crate::pac::PORT3.as_ptr()) },
+            // Safe because PORT1 only adds registers, no changes or removals.  compared to PORT0. Also we know that this is a valid pointer.
+            4 => unsafe { crate::pac::port0::Port0::from_ptr(crate::pac::PORT4.as_ptr()) },
+            // Safe because the pins have identical features to those of PORT0.
             5 => crate::pac::PORT5,
+            // Safe because the pins have identical features to those of PORT0.
             6 => crate::pac::PORT6,
+            // Safe because the pins have identical features to those of PORT0.
             7 => crate::pac::PORT7,
+            // Safe because the pins have identical features to those of PORT0.
             8 => crate::pac::PORT8,
+            // Safe because the pins have identical features to those of PORT0.
             9 => crate::pac::PORT9,
             _ => unreachable!(),
         }
@@ -257,7 +247,11 @@ pub trait Pin: PeripheralType + Into<AnyPin> + SealedPin + Sized + 'static {
     }
 }
 
-impl_peripheral!(AnyPin);
+impl From<PortFunction> for pac::pfs::vals::PortFunction {
+    fn from(value: PortFunction) -> Self {
+        Self::from_bits(value as u8)
+    }
+}
 
 impl Pin for AnyPin {}
 
@@ -377,6 +371,8 @@ macro_rules! pin_impl {
         }
     };
 }
+
+impl_peripheral!(AnyPin);
 
 /// Move this into its own mod so we can quiet the Clippy lint only for the macro invocations.
 mod pin_impls {
