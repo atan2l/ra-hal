@@ -6,7 +6,7 @@ sources:
 tasks:
   - env-setup: |
       echo 'export THE_PROJECT=ra4m1-rs' >> ~/.buildenv
-      echo 'if [ -f "${HOME}/.cargo/env" ]; then soure "${HOME}/.cargo/env"; fi'
+      echo 'if [ -f "${HOME}/.cargo/env" ]; then source "${HOME}/.cargo/env"; fi' >> ~/.buildenv
   - cross-setup: |
       sudo dpkg --add-architecture arm64
       sudo apt-get update
