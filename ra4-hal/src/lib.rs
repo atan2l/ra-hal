@@ -1,5 +1,7 @@
 #![no_std]
 
+// This needs to come first so the macros are visible everywhere else.
+#[doc(hidden)]
 pub mod fmt;
 
 pub mod adc;
@@ -33,13 +35,13 @@ use crate::{mcu_info::McuInfo, write_protect::WriteProtect as _};
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[allow(unused)]
 pub enum ResetCause {
-    /// Power was turned don.
+    /// Power was turned on.
     PowerOn,
 
     /// Low voltage monitor 0, 1, or 2 tripped.
     LowVoltage,
 
-    /// Watchdog or independent watchdog
+    /// Watchdog or independent watchdog.
     Watchdog,
 
     /// Bus error, parity error, or ECC error.
@@ -51,7 +53,7 @@ pub enum ResetCause {
     /// Software reset requested.
     SoftwareReset,
 
-    /// Should never be here
+    /// Should never be here.
     Unknown,
 }
 
