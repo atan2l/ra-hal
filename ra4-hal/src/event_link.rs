@@ -8,34 +8,29 @@
 
 use crate::pac;
 
+use cortex_m::interrupt::InterruptNumber;
+
 /// Trait that implements functions allowing inspection and manipulation of the interrupt's `ELC`/`ICU` status.
-pub trait IcuEventer {
-    const ICU_INDEX: u8;
-
+/// Conveniently the `NVIC` only surfaces `ICU` interrupts so each IRQ to IELSR mapping is 1:1.
+pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
     /// Disables the interrupt in the `ICU`.  Does not modify its status in the `NVIC`.
-    #[inline]
-    fn icu_disable() {
+    #[inline(always)]
+    fn icu_disable(&self) {
         let icu = pac::ICU;
-        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
-        trace!("IEL{}: disable", Self::ICU_INDEX);
 
-        ielsr.modify(|w| {
+        icu.ielsr(self.number() as _).modify(|w| {
             w.set_iels(ra4m1_ctpac::icu::vals::Iels::_0X000);
         });
-        // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
     }
 
     /// Enables the interrupt in the `ICU`.  Does not modify its status in the `NVIC`.
-    #[inline]
-    fn icu_enable(mask: InterruptEvent) {
+    #[inline(always)]
+    fn icu_enable(&self, mask: InterruptEvent) {
         let icu = pac::ICU;
-        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
-        trace!("IEL{}: enable", Self::ICU_INDEX);
 
-        ielsr.modify(|w| {
+        icu.ielsr(self.number() as _).modify(|w| {
             w.set_iels(ra4m1_ctpac::icu::vals::Iels::from_bits(mask as u8));
         });
-        // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
     }
 
     /// Configures the Data Transfer Controller (`DTC`) activation bit.
@@ -45,67 +40,55 @@ pub trait IcuEventer {
     /// # Arguments
     /// * `true` interrupt will trigger `DTC` activation for vector `n` where `n` is the index of this interrupt.
     /// * `false` interrupt will not trigger `DTC` activation.
-    #[inline]
-    fn set_dtc(enabled: bool) {
+    #[inline(always)]
+    fn set_dtc(&self, enabled: bool) {
         let icu = pac::ICU;
-        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
-        trace!("IEL{}: dtc={}", Self::ICU_INDEX, enabled);
 
-        ielsr.modify(|w| {
+        icu.ielsr(self.number() as _).modify(|w| {
             w.set_dtce(enabled);
         });
-        // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
     }
 
     /// # Returns
     ///
     /// - `true` if the interrupt is configured for `DTC` activation (`IELSRn.DTCE` bit is set).
     /// - `false` otherwise
-    #[inline]
-    fn is_dtc() -> bool {
+    #[inline(always)]
+    fn is_dtc(&self) -> bool {
         let icu = pac::ICU;
-        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
-        let status = ielsr.read();
-        status.dtce()
+
+        icu.ielsr(self.number() as _).read().dtce()
     }
 
-    #[inline]
-    fn icu_unpend() {
+    #[inline(always)]
+    fn icu_unpend(&self) {
         let icu = pac::ICU;
-        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
-        trace!("IEL{}: unpend", Self::ICU_INDEX);
 
-        ielsr.modify(|w| {
+        icu.ielsr(self.number() as _).modify(|w| {
             w.set_ir(false);
         });
-        // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
     }
 
-    #[inline]
-    fn icu_pend() {
+    #[inline(always)]
+    fn icu_pend(&self) {
         let icu = pac::ICU;
-        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
-        trace!("IEL{}: pend", Self::ICU_INDEX);
 
-        ielsr.modify(|w| {
+        icu.ielsr(self.number() as _).modify(|w| {
             w.set_ir(true);
         });
-        // trace!("IEL{}: {}", Self::ICU_INDEX, ielsr.read());
     }
 
     /// Logs information about how this interrupt is configured in the `ICU` at the `trace` level.
-    fn icu_status() {
+    fn icu_status(&self) {
         let icu = pac::ICU;
-        let ielsr = icu.ielsr(Self::ICU_INDEX as _);
+        let number = self.number();
+        let ielsr = icu.ielsr(number as _);
         let status = ielsr.read();
-        trace!(
-            "IEL{}: ir={}, dtce={}",
-            Self::ICU_INDEX,
-            status.ir(),
-            status.dtce()
-        );
+        trace!("IEL{}: ir={}, dtce={}", number, status.ir(), status.dtce());
     }
 }
+
+unsafe impl<T: InterruptNumber + Copy> IcuInterrupt for T {}
 
 /// `ELC` event signal numbers.  These correspond to Table 18.3 in the reference manual. Used in `ELC.ELSRn.ELS`.
 #[allow(unused)]
@@ -228,46 +211,3 @@ pub enum InterruptEvent {
     Spi1SpEi = 0xB5,
     Spi1SpTend = 0xB6,
 }
-
-macro_rules! add_iel_index {
-    ($index:literal) => {
-        paste::paste! {
-            impl IcuEventer for crate::interrupt::typelevel::[< IEL $index >] {
-                const ICU_INDEX: u8 = $index;
-            }
-        }
-    };
-}
-
-add_iel_index!(0);
-add_iel_index!(1);
-add_iel_index!(2);
-add_iel_index!(3);
-add_iel_index!(4);
-add_iel_index!(5);
-add_iel_index!(6);
-add_iel_index!(7);
-add_iel_index!(8);
-add_iel_index!(9);
-add_iel_index!(10);
-add_iel_index!(11);
-add_iel_index!(12);
-add_iel_index!(13);
-add_iel_index!(14);
-add_iel_index!(15);
-add_iel_index!(16);
-add_iel_index!(17);
-add_iel_index!(18);
-add_iel_index!(19);
-add_iel_index!(20);
-add_iel_index!(21);
-add_iel_index!(22);
-add_iel_index!(23);
-add_iel_index!(24);
-add_iel_index!(25);
-add_iel_index!(26);
-add_iel_index!(27);
-add_iel_index!(28);
-add_iel_index!(29);
-add_iel_index!(30);
-add_iel_index!(31);

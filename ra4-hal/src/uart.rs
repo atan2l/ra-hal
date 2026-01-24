@@ -13,14 +13,16 @@ use ra4m1_ctpac::sci0::{
     vals::{ScrCke, SmrCks, SmrPm, Stop, Ttrg},
 };
 
-use crate::interrupt::typelevel::{Handler as InterruptHandler, Interrupt};
+use crate::interrupt::typelevel::{Handler as InterruptHandler, Interrupt as InterruptType};
 use crate::{
-    event_link::{IcuEventer, InterruptEvent},
+    event_link::{IcuInterrupt, InterruptEvent},
     gpio::{AnyPin, Pin, PortFunction},
-    interrupt, pac, peripherals,
+    interrupt,
+    interrupt::Interrupt,
+    pac, peripherals,
 };
 
-pub mod io;
+mod io;
 
 /// Baud rate generator configuration for fixed speeds, rates that use "baud rate modulation" may achieve more precise timing.
 /// Derived from the formula listed in Table 28.19.
@@ -34,17 +36,11 @@ struct SpeedEntry {
 
 /// UART driver.
 #[allow(private_bounds)]
-pub struct Uart<
-    'd,
-    I: Instance,
-    RxInt: Interrupt + IcuEventer,
-    TxInt: Interrupt + IcuEventer,
-    TeInt: Interrupt + IcuEventer,
-> {
+pub struct Uart<'d, I: Instance> {
     _phantom: PhantomData<&'d I>,
-    _phantom_rx: PhantomData<&'d RxInt>,
-    _phantom_tx: PhantomData<&'d TxInt>,
-    _phantom_te: PhantomData<&'d TeInt>,
+    rx_int: Interrupt,
+    tx_int: Interrupt,
+    // te_int: Interrupt,
 }
 
 /// Interrupt handler that handles incoming data for an `SCI` instance.
@@ -226,14 +222,7 @@ impl<'d, I: SealedInstance> RxPin<'d, I> {
     }
 }
 
-impl<
-    'd,
-    I: Instance,
-    RxInt: Interrupt + IcuEventer,
-    TxInt: Interrupt + IcuEventer,
-    TeInt: Interrupt + IcuEventer,
-> Uart<'d, I, RxInt, TxInt, TeInt>
-{
+impl<'d, I: Instance> Uart<'d, I> {
     #[inline]
     fn set_data_bits(n: u8) {
         let sci = I::regs();
@@ -270,7 +259,7 @@ impl<
     }
 
     #[allow(private_bounds)]
-    pub fn new(
+    pub fn new<RxInt: InterruptType, TxInt: InterruptType, TeInt: InterruptType>(
         _peri: Peri<'d, I>,
         tx: Peri<'d, impl TxPinSealed<I>>,
         rx: Peri<'d, impl RxPinSealed<I>>,
@@ -358,13 +347,13 @@ impl<
         // Enable in NVIC. We can largely ignore the NVIC after this as
         // all of the peripheral interrupts are going to be managed by
         // the ICU and/or ELC.
-        unsafe { <RxInt as Interrupt>::IRQ.enable() };
-        unsafe { <TxInt as Interrupt>::IRQ.enable() };
-        unsafe { <TeInt as Interrupt>::IRQ.enable() };
+        unsafe { RxInt::IRQ.enable() };
+        unsafe { TxInt::IRQ.enable() };
+        unsafe { TeInt::IRQ.enable() };
         // Enable in ICU
-        RxInt::icu_enable(I::RX_INTERRUPT_EVENT);
-        TxInt::icu_enable(I::TX_INTERRUPT_EVENT);
-        TeInt::icu_enable(I::TE_INTERRUPT_EVENT);
+        RxInt::IRQ.icu_enable(I::RX_INTERRUPT_EVENT);
+        TxInt::IRQ.icu_enable(I::TX_INTERRUPT_EVENT);
+        TeInt::IRQ.icu_enable(I::TE_INTERRUPT_EVENT);
 
         // We can leave the receiver on, but not the transmitter as enabling
         // the transmitter in combination with the TX interrupt is what kicks
@@ -383,9 +372,9 @@ impl<
 
         Self {
             _phantom: PhantomData,
-            _phantom_rx: PhantomData,
-            _phantom_tx: PhantomData,
-            _phantom_te: PhantomData,
+            rx_int: RxInt::IRQ,
+            tx_int: TxInt::IRQ,
+            // te_int: TeInt::IRQ,
         }
     }
 
@@ -451,6 +440,7 @@ impl<
             .iter()
             .find(|e| e.baud_rate == baud_rate)
             .unwrap();
+
         Self::set_speed_from_entry(speed);
     }
 
@@ -531,7 +521,7 @@ impl<
                 reader.pop_done(data_len);
 
                 if pending {
-                    RxInt::icu_pend();
+                    self.rx_int.icu_pend();
                 }
 
                 data = reader.pop_slice();
@@ -634,7 +624,7 @@ impl<
                 written += n;
                 tx_writer.push_done(n);
             } else {
-                TxInt::icu_pend();
+                self.tx_int.icu_pend();
             }
 
             if !sci.scr().read().te() {
@@ -657,7 +647,7 @@ impl<
 //     }
 // }
 
-impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for RxInterruptHandler<I> {
+impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for RxInterruptHandler<I> {
     unsafe fn on_interrupt() {
         trace!("RxI");
 
@@ -686,7 +676,7 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for RxInter
                 if read_len != fifo_len {
                     trace!("{}RX Buffer full, FIFO drain={}", I::PERIPHERAL, read_len);
                 } else {
-                    Int::icu_unpend();
+                    Int::IRQ.icu_unpend();
                 }
             }
             true => {
@@ -694,24 +684,24 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for RxInter
 
                 warn!("{}RX Buffer full, FIFO cap={}", I::PERIPHERAL, fifo_free);
 
-                Int::icu_unpend();
+                Int::IRQ.icu_unpend();
 
                 I::rx_waker().wake();
 
                 if sci.ssr_fifo().read().orer() {
                     error!("{}Overrun, dropping 1", I::PERIPHERAL);
                     sci.ssr_fifo().modify(|w| w.set_orer(false));
-                    Int::icu_unpend();
+                    Int::IRQ.icu_unpend();
                 }
             }
         }
     }
 }
 
-impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TxInterruptHandler<I> {
+impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for TxInterruptHandler<I> {
     unsafe fn on_interrupt() {
         trace!("TxI");
-        Int::icu_unpend();
+        Int::IRQ.icu_unpend();
 
         let sci = I::regs();
         let mut tx_reader = unsafe { I::tx_buffer().reader() };
@@ -755,10 +745,10 @@ impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TxInter
         I::tx_waker().wake();
     }
 }
-impl<I: Instance, Int: Interrupt + IcuEventer> InterruptHandler<Int> for TeInterruptHandler<I> {
+impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for TeInterruptHandler<I> {
     unsafe fn on_interrupt() {
         trace!("TeI");
-        Int::icu_unpend();
+        Int::IRQ.icu_unpend();
 
         let sci = I::regs();
 

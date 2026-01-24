@@ -16,8 +16,6 @@ use embedded_io_async::{Read, Write};
 use panic_probe as _;
 use ra4_hal::{
     bind_interrupts,
-    event_link::IcuEventer,
-    interrupt::typelevel::Interrupt,
     peripherals::SCI1,
     print_clock_config,
     uart::{RxInterruptHandler, TeInterruptHandler, TxInterruptHandler, Uart},
@@ -57,15 +55,7 @@ bind_interrupts!(struct Irqs {
     IEL4 => TeInterruptHandler<SCI1>;
 });
 
-fn query<
-    I: ra4_hal::uart::Instance,
-    RxI: Interrupt + IcuEventer,
-    TxI: Interrupt + IcuEventer,
-    TeI: Interrupt + IcuEventer,
->(
-    uart: &mut Uart<I, RxI, TxI, TeI>,
-    cmd: &[u8],
-) {
+fn query<I: ra4_hal::uart::Instance>(uart: &mut Uart<I>, cmd: &[u8]) {
     uart.blocking_write(b"AT+");
     uart.blocking_write(cmd);
     uart.blocking_write(b"\r\n");

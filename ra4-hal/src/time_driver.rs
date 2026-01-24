@@ -17,7 +17,7 @@ use ra4m1_ctpac::gpt32::{
 };
 
 use crate::{
-    event_link::{IcuEventer, InterruptEvent},
+    event_link::{IcuInterrupt, InterruptEvent},
     peripherals::GPT32_0,
     write_protect::WriteProtect as _,
 };
@@ -92,7 +92,7 @@ impl GptDriver {
                 OverflowInt::IRQ.enable();
             };
 
-            OverflowInt::icu_enable(<GPT32_0 as Instance>::OVERFLOW_EVENT);
+            OverflowInt::IRQ.icu_enable(<GPT32_0 as Instance>::OVERFLOW_EVENT);
         }
 
         let timer = GPT32_0::regs();
@@ -177,7 +177,6 @@ impl GptDriver {
         type AlarmInt = <GPT32_0 as Instance>::AlarmInterrupt;
 
         let timer = GPT32_0::regs();
-        let icu = pac::ICU;
 
         let alarm = self.alarms.borrow(*cs);
         alarm.timestamp.set(timestamp);
@@ -185,7 +184,7 @@ impl GptDriver {
         let t = self.now();
         if timestamp <= t {
             // Disarm the alarm and return `false` to indicate that.
-            AlarmInt::icu_disable();
+            AlarmInt::IRQ.icu_disable();
             alarm.timestamp.set(u64::MAX);
 
             return false;
@@ -202,7 +201,7 @@ impl GptDriver {
                     w.set_gtccrc(safe_timestamp);
                 });
                 // Enable the compare interrupt
-                AlarmInt::icu_enable(<GPT32_0 as Instance>::ALARM_EVENT);
+                AlarmInt::IRQ.icu_enable(<GPT32_0 as Instance>::ALARM_EVENT);
             });
         } else {
             // TODO: UHhhhh
