@@ -14,7 +14,7 @@ tasks:
   - rust-setup: |
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none
       tail -n +2 ~/.cargo/env >> ~/.buildenv
-      . ~/.cargo/env
+      source ~/.cargo/env
       cd "${HOME}/${THE_PROJECT}"
       rustup show active-toolchain
       rustup component add clippy
