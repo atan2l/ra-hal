@@ -14,22 +14,22 @@ tasks:
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none
       cat ~/.cargo/env >> ~/.buildenv
   - install-rust: |
-      cd "~/${THE_PROJECT}"
+      cd "${HOME}/${THE_PROJECT}"
       rustup show active-toolchain
       rustup component add clippy
   - build: |
-      cd "~/${THE_PROJECT}"
+      cd "${HOME}/${THE_PROJECT}"
       cargo build --quiet
   - build-no-defmt: |
-      cd "~/${THE_PROJECT}"
+      cd "${HOME}/${THE_PROJECT}"
       cargo build --quiet --package ra4-examples --no-default-features
   - build-no-invariant: |
-      cd "~/${THE_PROJECT}"
+      cd "${HOME}/${THE_PROJECT}"
       cargo build --quiet --package ra4-hal --no-default-features --features time-driver,rt,diag,uno_r4,chrono
   - doc: |
-      cd "~/${THE_PROJECT}"
+      cd "${HOME}/${THE_PROJECT}"
       cargo haldoc
   - clippy: |
-      cd "~/${THE_PROJECT}"
+      cd "${HOME}/${THE_PROJECT}"
       cargo clip
 
