@@ -12,6 +12,9 @@ tasks:
       sudo apt-get update
       sudo apt-get install -y gcc-12-aarch64-linux-gnu libc6-dev-arm64-cross libudev-dev:arm64
   - rust-setup: |
+      cat ~/.buildenv
+      echo
+      echo
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none
       cd "${HOME}/${THE_PROJECT}"
       rustup show active-toolchain
