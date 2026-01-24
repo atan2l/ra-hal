@@ -2,6 +2,7 @@ transforms:
   - !AddPeripherals
     devices: .*
     peripherals:
+      # This is left in to be used as an additional sanity check in the HAL.
       - name: FMIFRT_BASE
         base_address: 0x407FB19C
         block: fmifrt_base::FmifrtBase
