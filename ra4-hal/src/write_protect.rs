@@ -2,10 +2,14 @@
 
 use ra4m1_ctpac::system::vals::Prc0;
 
+// TODO: Implement this at the register level
 /// Encapsulates access so that write protection is always re-enabled after a write operation.
 pub trait WriteProtect {
+    /// # Returns
+    /// * `true` if this peripheral is currently write protected.
     fn is_protected(&self) -> bool;
 
+    /// Disables write protection for a peripheral for the duration of the closure.
     fn protected_write<F>(&self, func: F)
     where
         F: Fn();

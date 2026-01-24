@@ -90,8 +90,10 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
 
 unsafe impl<T: InterruptNumber + Copy> IcuInterrupt for T {}
 
-/// `ELC` event signal numbers.  These correspond to Table 18.3 in the reference manual. Used in `ELC.ELSRn.ELS`.
-#[allow(unused)]
+/// `ELC` event signal numbers.
+/// These correspond to Table 18.3 in the reference manual.
+/// Used in `ELC.ELSRn.ELS`.
+#[allow(unused, missing_docs)]
 #[repr(u8)]
 pub enum EventSignal {
     PortIrq0 = 0x01,
@@ -112,8 +114,10 @@ pub enum EventSignal {
     PortIrq15 = 0x10,
 }
 
-/// `ICU` event numbers.  These correspond to Table 13.4 in the reference manual. Used in `IELSRn` to generate `NVIC` interrupts and start `DTC` transfers and in `DELSRn` to trigger `DMAC` transfers.
-#[allow(unused)]
+/// `ICU` event numbers.
+/// These correspond to Table 13.4 in the reference manual.
+/// Used in `IELSRn` to generate `NVIC` interrupts and start `DTC` transfers and in `DELSRn` to trigger `DMAC` transfers.
+#[allow(unused, missing_docs)]
 #[repr(u8)]
 pub enum InterruptEvent {
     PortIrq0 = 0x01,

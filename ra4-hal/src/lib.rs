@@ -1,4 +1,7 @@
+//! `ra4-hal`
+
 #![no_std]
+#![warn(missing_docs)]
 
 // This needs to come first so the macros are visible everywhere else.
 #[doc(hidden)]
@@ -57,6 +60,13 @@ pub enum ResetCause {
     Unknown,
 }
 
+/// Initializes the MCU.
+///
+/// Currently limited to setting up the clocks and the time driver.
+///
+/// # Returns
+///
+/// The available peripherals.
 pub fn init() -> Peripherals {
     // #define BSP_CLOCK_CFG_MAIN_OSC_WAIT (9)
     // #define BSP_LOCO_HZ                 (32768)
