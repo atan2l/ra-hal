@@ -1,3 +1,5 @@
+//! `PORT` General Purpose Input/Output
+
 use crate::{pac, write_protect::WriteProtect};
 
 use embassy_hal_internal::{Peri, PeripheralType, impl_peripheral};
@@ -26,6 +28,9 @@ pub struct Flex<'d> {
 }
 
 // Should this just export the type from the PAC?
+/// Additional, non-GPIO, functions that can be assigned to a pin.
+/// Not every function applies to every pin.
+/// See Tables 19.5–19.17 in the reference manual for details.
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Copy, Clone)]
 #[repr(u8)]
@@ -344,7 +349,7 @@ impl<'d> Flex<'d> {
         self.pin.set_as_input();
     }
 
-    /// Sets the pin into peripheral mode and enables peripheral func `index`
+    /// Sets the pin into peripheral mode and selects port function `func`.
     pub fn set_peripheral_func(&mut self, func: PortFunction) {
         self.pin.set_port_func(func);
     }
