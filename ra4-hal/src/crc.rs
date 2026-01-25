@@ -8,6 +8,7 @@ use ra4m1_ctpac::crc::{
 
 use crate::{pac, peripherals::CRC};
 
+/// Polynomial to use for CRC calculation.
 #[derive(Default)]
 pub enum Polynomial {
     /// This will panic
@@ -15,21 +16,31 @@ pub enum Polynomial {
 
     Crc8,
 
+    /// CRC-16, polynomial = `0x8005`
     #[default]
     Crc16,
 
+    /// CRC-16/CCIT, polynomial = `0x1021`
     CrcCcit,
 
+    /// CRC-32, polynomial = `0x04C11DB7`
     Crc32,
 
+    /// CRC-32C, polynomial = `0x1EDC6F41`
     Crc32C,
 }
 
+/// CRC Configuration
 #[derive(Default)]
 pub struct Config {
+    #[allow(missing_docs)]
     pub polynomial: Polynomial,
+    /// Calculate CRC by shifting right if true.
+    /// CRC Calculation Switching in Renesas-speak, §32.2.1.
     pub reverse: bool,
+    /// Initial output value.
     pub seed: u32,
+    /// Apply a bitwise NOT operation to the result if true.
     pub reflect_output: bool,
 }
 
