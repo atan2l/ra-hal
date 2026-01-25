@@ -472,7 +472,7 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
 
     /// # Returns
     ///
-    /// The amount of data in our RX [`RingBuffer`].
+    /// The amount of data in the RX [`RingBuffer`].
     pub fn depth(&self) -> usize {
         I::rx_buffer().available()
     }
@@ -580,7 +580,7 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         .await
     }
 
-    /// Blocking read on the UART blocks until `buf` is full.
+    /// Reads data from the UART, blocks until `data` is full.
     #[inline(always)]
     pub fn blocking_read(&self, data: &mut [u8]) {
         let mut reader = unsafe { I::rx_buffer().reader() };
@@ -600,6 +600,7 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         }
     }
 
+    /// Writes `data` to the UART, blocking until the last byte has been sent out on the wire.
     pub fn blocking_write(&mut self, data: &[u8]) {
         let sci = I::regs();
 
