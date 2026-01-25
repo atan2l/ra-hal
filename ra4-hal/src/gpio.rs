@@ -137,7 +137,7 @@ pub(crate) trait SealedPin {
         let pfs_reg = pfs.pin(port_num, pin_num);
 
         pfs.protected_write(|| {
-            pfs_reg.write(|w| match drive_capacity {
+            pfs_reg.modify(|w| match drive_capacity {
                 DriveCapacity::Low => w.set_dscr(PortDrive::Low),
                 DriveCapacity::Middle => w.set_dscr(PortDrive::Middle),
             })
@@ -228,16 +228,16 @@ pub(crate) trait SealedPin {
         let pfs_reg = pfs.pin(port_num, pin_num);
         debug!("Port{}, Pin{}, pf={}", port_num, pin_num, port_func);
 
-        // Le sigh.  Write protection gets re-enabled after each write.
-        // Or is it reset after each read?
+        // The quick design guide suggests that first setting the pin to GPIO ensure the peripheral doesn't get any spurious input
         pfs.protected_write(|| {
-            pfs_reg.write(|w| {
-                w.set_pmr(PortMode::Peripheral);
+            pfs_reg.modify(|w| {
+                w.set_pmr(PortMode::Gpio);
             });
         });
 
+        // Le sigh.  Write protection gets re-enabled after each write.
         pfs.protected_write(|| {
-            pfs_reg.write(|w| {
+            pfs_reg.modify(|w| {
                 w.set_pmr(PortMode::Peripheral);
                 w.set_psel(port_func.into());
             });
@@ -246,7 +246,8 @@ pub(crate) trait SealedPin {
         #[cfg(feature = "strict-assert")]
         assert_eq!(
             pfs_reg.read().psel(),
-            pac::pfs::vals::PortFunction::from_bits(port_func as u8)
+            pac::pfs::vals::PortFunction::from_bits(port_func as u8),
+            "PSEL was ignored"
         );
 
         info!("PFS={}", pfs_reg.read());
