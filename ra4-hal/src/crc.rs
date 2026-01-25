@@ -33,12 +33,22 @@ pub struct Config {
     pub reflect_output: bool,
 }
 
+/// `CRC` driver.
 pub struct Crc<'d> {
     _peri: Peri<'d, CRC>,
     config: Config,
 }
 
 impl<'d> Crc<'d> {
+    /// Consumes the `CRC` peripheral and returns a driver initialized with the provided values.
+    ///
+    /// # Arguments
+    /// * `peri` The [`CRC`] peripheral.
+    /// * `config` Algorithm configuration.
+    ///
+    /// # Returns
+    ///
+    /// A `CRC` driver.
     pub fn new(peri: Peri<'d, CRC>, config: Config) -> Self {
         debug!("CRC: stop=false");
 
@@ -57,12 +67,16 @@ impl<'d> Crc<'d> {
         instance
     }
 
-    /// Note: this will reset the state
+    /// Applies a new algorithm configuration and resets the state.
+    ///
+    /// # Arguments
+    /// * `config` Algorithm configuration to apply.
     pub fn set_config(&mut self, config: Config) {
         self.config = config;
         self.reset();
     }
 
+    /// Applies the current configuration and initializes the output buffer with the selected seed.
     pub fn reset(&mut self) {
         let crc = crate::pac::CRC;
 
@@ -101,8 +115,17 @@ impl<'d> Crc<'d> {
         }
     }
 
+    /// Computes a CRC value for given input.
+    ///
+    /// # Arguments
+    /// * `bytes` Input data
+    ///
     /// Note: CRC-32 / CRC-32C require 32-bit input values.
-    /// If provided input is not a multiple of `4` bytes the function will panic.
+    /// If a 32-bit polynomial is selected and the provided input is not a multiple of `4` bytes the function will panic.
+    ///
+    /// # Returns
+    ///
+    /// The computed CRC.
     pub fn feed_bytes(&mut self, bytes: &[u8]) -> u32 {
         let crc = crate::pac::CRC;
 
