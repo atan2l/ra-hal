@@ -66,7 +66,7 @@ pub enum ResetCause {
 ///
 /// # Returns
 ///
-/// The available peripherals.
+/// The available peripherals as a [`Peripherals`] struct.
 pub fn init() -> Peripherals {
     // #define BSP_CLOCK_CFG_MAIN_OSC_WAIT (9)
     // #define BSP_LOCO_HZ                 (32768)

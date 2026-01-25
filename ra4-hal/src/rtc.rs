@@ -8,16 +8,16 @@ use embassy_hal_internal::{Peri, PeripheralType};
 use embassy_time::Timer;
 use ra4m1_ctpac::rtc::vals::{Rcksel, RwkcntDayw};
 
-use crate::{pac, peripherals};
+use crate::{pac, peripherals, write_protect::WriteProtect as _};
 
+/// Realtime clock driver.
 pub struct Rtc<'d, I: Instance> {
     _phantom: PhantomData<&'d I>,
 }
 
+/// Realtime clock instance.
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance + PeripheralType + 'static + Send {
-    // unsafe fn steal() -> Peri<'static, Self>;
-}
+pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
 
 trait SealedInstance {
     fn regs() -> pac::rtc::Rtc;
@@ -32,6 +32,13 @@ impl SealedInstance for peripherals::RTC {
 }
 
 impl<'d, I: Instance> Rtc<'d, I> {
+    /// # Arguments
+    /// * `_rtc` A peripheral that implements [`Instance`].
+    /// The `RA4M1` only has one realtime clock available as [`RTC`](peripherals::RTC).
+    ///
+    /// # Returns
+    ///
+    /// An RTC driver.
     pub async fn new(_rtc: Peri<'d, I>) -> Self {
         let system = pac::SYSTEM;
         if system.lococr().read().lcstp() {
@@ -71,8 +78,21 @@ impl<'d, I: Instance> Rtc<'d, I> {
 
         // §24.2.20
         rtc.rfrl().write(|w| {
-            w.set_rfc(0xFF);
+            w.set_rfc(0xFF - 16);
         });
+
+        let system = pac::SYSTEM;
+        system.protected_write(|| {
+            system.locoutcr().write(|w| {
+                w.set_locoutrm((-128_i8) as u8);
+            });
+        });
+
+        info!(
+            "Trim: act={:08b}, expect={:08b}",
+            system.locoutcr().read().locoutrm(),
+            0b1111_1110
+        );
 
         rtc.rcr4().modify(|w| {
             w.set_rcksel(Rcksel::Loco);
@@ -86,8 +106,8 @@ impl<'d, I: Instance> Rtc<'d, I> {
 
         rtc.rcr2().modify(|w| {
             w.set_cntmd(false);
-            w.set_aadje(true);
-            w.set_aadjp(true);
+            // w.set_aadje(true);
+            // w.set_aadjp(true);
         });
         while rtc.rcr2().read().cntmd() != false {
             asm::nop();
@@ -142,6 +162,7 @@ impl<'d, I: Instance> Rtc<'d, I> {
         instance
     }
 
+    /// Starts the `RTC` peripheral.
     pub fn start(&mut self) {
         let rtc = I::regs();
 
@@ -154,6 +175,7 @@ impl<'d, I: Instance> Rtc<'d, I> {
         }
     }
 
+    /// Stops the `RTC` peripheral.
     pub fn stop(&mut self) {
         let rtc = I::regs();
 
@@ -166,6 +188,7 @@ impl<'d, I: Instance> Rtc<'d, I> {
         }
     }
 
+    /// Sets the current datetime from values contained in a [`NaiveDateTime`].
     pub fn set_time(&mut self, date_time: NaiveDateTime) {
         let year = date_time.year_ce().1;
         let month = date_time.month();
@@ -194,6 +217,15 @@ impl<'d, I: Instance> Rtc<'d, I> {
         );
     }
 
+    /// Sets the current datetime based on individual components.
+    ///
+    /// # Arguments
+    /// * `year`  The `RA4M1` clock stores the year as two digits internally. The century component is discarded by this function.
+    /// * `month` The month, `1..=12`
+    /// * `day` The day, `1..=31` as appropriate.
+    /// * `hour` The hour of day, `0..=23`.
+    /// * `minute`  The minute, `0..=59`.
+    /// * `second` The second, `0..=59`.
     pub fn set_time_ymd_hms(
         &mut self,
         year: u16,
@@ -239,6 +271,9 @@ impl<'d, I: Instance> Rtc<'d, I> {
         self.start();
     }
 
+    /// # Returns
+    ///
+    /// The current datetime
     pub fn now(&self) -> NaiveDateTime {
         let rtc = I::regs();
 
