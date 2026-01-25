@@ -177,14 +177,14 @@ pub(crate) trait SealedPin {
         });
     }
 
-    fn set_port_func(&self, pfunc: PortFunction) {
+    fn set_port_func(&self, port_func: PortFunction) {
         let port_num = self._port() as _;
         let pin_num = self._pin() as _;
 
         let pfs = crate::pac::PFS;
 
         let pfs_reg = pfs.pin(port_num, pin_num);
-        info!("Port{}, Pin{}, pf={}", port_num, pin_num, pfunc);
+        info!("Port{}, Pin{}, pf={}", port_num, pin_num, port_func);
 
         // Le sigh.  Write protection gets re-enabled after each write.
         // Or is it reset after each read?
@@ -197,13 +197,13 @@ pub(crate) trait SealedPin {
         pfs.protected_write(|| {
             pfs_reg.write(|w| {
                 w.set_pmr(PortMode::Peripheral);
-                w.set_psel(pfunc.into());
+                w.set_psel(port_func.into());
             });
         });
 
         assert_eq!(
             pfs_reg.read().psel(),
-            pac::pfs::vals::PortFunction::from_bits(pfunc as u8)
+            pac::pfs::vals::PortFunction::from_bits(port_func as u8)
         );
 
         info!("PFS={}", pfs_reg.read());
@@ -237,9 +237,10 @@ pub(crate) trait SealedPin {
     }
 }
 
+/// Peripheral that can be used as a GPIO pin.
 #[allow(private_bounds)]
 pub trait Pin: PeripheralType + Into<AnyPin> + SealedPin + Sized + 'static {
-    /// Number of the pin within the port (0..31)
+    /// Number of the pin within the port, typically 0..16
     #[inline]
     fn pin(&self) -> u8 {
         self._pin()
@@ -339,11 +340,13 @@ impl<'d> Flex<'d> {
         self.pin.toggle();
     }
 
+    /// Places pin in output mode.
     #[inline(never)]
     pub fn set_as_output(&mut self) {
         self.pin.set_as_output();
     }
 
+    /// Places pin into input mode.
     #[inline(never)]
     pub fn set_as_input(&mut self) {
         self.pin.set_as_input();
