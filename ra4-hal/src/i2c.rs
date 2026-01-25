@@ -1,4 +1,4 @@
-//! `IIC` I2C Bus Interface
+//! I2C Bus Interface (`IIC`)
 
 use core::marker::PhantomData;
 

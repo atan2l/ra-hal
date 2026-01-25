@@ -1,4 +1,4 @@
-//! `RTC` Realtime Clock
+//! Realtime Clock (`RTC`)
 
 use core::marker::PhantomData;
 

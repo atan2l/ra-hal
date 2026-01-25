@@ -1,4 +1,4 @@
-//! `OFS1` Option Function Select Register 1
+//! Option Function Select Register 1 (`OFS1`)
 //!
 //! `OFS1` configures the after-reset behavior of the Low Voltage Detection (`LVDAS`) and High-Speed On-Chip Oscillator (`HOCO`).
 //! See §5.3.2, §6.2.2, §7, §8.2.9, and §8.2.10 in the reference manual for more details.

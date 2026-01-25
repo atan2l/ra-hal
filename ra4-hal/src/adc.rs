@@ -1,4 +1,4 @@
-//! `ADC14` 14-bit Analog-to-Digital Converter
+//! 14-bit Analog-to-Digital Converter (`ADC14`)
 
 use core::marker::PhantomData;
 

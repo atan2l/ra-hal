@@ -1,4 +1,4 @@
-//! `OFS0` Option Function Select Register 0
+//! Option Function Select Register 0 (`OFS0`)
 //!
 //! `OFS0` configures the after-reset behavior of the Independent Watchdog Timer (`IWDT`) and Watchdog Timer (`WDT`).
 //! See §6.2.1, §25.3.7 in the reference manual for more details.

@@ -1,4 +1,4 @@
-//! `PORT` General Purpose Input/Output
+//! General Purpose Input/Output (`PORT`)
 
 // TODO: Ensure PFS register access is correct and not clobbering other bits nor getting discarded by write-protection
 

@@ -1,4 +1,4 @@
-//! `CRC` Cyclic Redundancy Check Calculator
+//! Cyclic Redundancy Check Calculator (`CRC`)
 
 use embassy_hal_internal::Peri;
 use ra4m1_ctpac::crc::{

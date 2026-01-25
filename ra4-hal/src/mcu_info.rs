@@ -1,4 +1,4 @@
-//! `FMIFRT` Factory MCU Information Flash Root Table
+//! Factory MCU Information Flash Root Table (`FMIFRT`)
 
 use core::mem::transmute;
 
