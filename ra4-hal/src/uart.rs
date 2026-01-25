@@ -1,4 +1,6 @@
 //! `UART` Universal Asynchronous Receiver-Transmitter implemented using the `SCI` peripheral.
+//!
+//! Note: the implementations for `SCI2` and `SCI9` are currently non-operational pending support for non-FIFO SCI instances.
 
 use core::{future::poll_fn, marker::PhantomData, task::Poll};
 
