@@ -83,8 +83,7 @@ async fn main(_spawner: Spawner) {
     let tx_buf = &mut [0u8; 8];
     let rx_buf = &mut [0u8; 8];
 
-    let mut uart = BufferedUart::new(p.SCI1, p.P501, p.P502, Irqs);
-    uart.init_buffers(tx_buf, rx_buf);
+    let mut uart = BufferedUart::new(p.SCI1, p.P501, tx_buf, p.P502, rx_buf, Irqs);
 
     // The ESP32 communicates at 115,200 baud with the default Arduino firmware
     uart.set_speed(115200);

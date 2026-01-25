@@ -237,20 +237,15 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         rx.set_port_func(rx.pfunc());
     }
 
-    pub fn init_buffers(&self, tx_buffer: &'d mut [u8], rx_buffer: &'d mut [u8]) {
-        let tx_len = tx_buffer.len();
-        unsafe { I::tx_buffer().init(tx_buffer.as_mut_ptr(), tx_len) };
-
-        let rx_len = rx_buffer.len();
-        unsafe { I::rx_buffer().init(rx_buffer.as_mut_ptr(), rx_len) };
-    }
-
+    /// Configures a new UART and returns the driver.
     #[allow(private_bounds)]
     pub fn new<RxInt: InterruptType, TxInt: InterruptType, TeInt: InterruptType>(
         _peri: Peri<'d, I>,
-        tx: Peri<'d, impl TxPin<I>>,
-        rx: Peri<'d, impl RxPin<I>>,
-        _irq: impl interrupt::typelevel::Binding<RxInt, RxInterruptHandler<I>>
+        tx_pin: Peri<'d, impl TxPin<I>>,
+        tx_buffer: &'d mut [u8],
+        rx_pin: Peri<'d, impl RxPin<I>>,
+        rx_buffer: &'d mut [u8],
+        _irqs: impl interrupt::typelevel::Binding<RxInt, RxInterruptHandler<I>>
         + interrupt::typelevel::Binding<TxInt, TxInterruptHandler<I>>
         + interrupt::typelevel::Binding<TeInt, TeInterruptHandler<I>>
         + 'd,
@@ -326,7 +321,13 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         Self::set_speed_from_entry(speed);
 
         // Move pins over to SCI
-        Self::configure_pins(tx, rx);
+        Self::configure_pins(tx_pin, rx_pin);
+
+        let tx_len = tx_buffer.len();
+        unsafe { I::tx_buffer().init(tx_buffer.as_mut_ptr(), tx_len) };
+
+        let rx_len = rx_buffer.len();
+        unsafe { I::rx_buffer().init(rx_buffer.as_mut_ptr(), rx_len) };
 
         // Enable interrupts in NVIC. We can largely ignore the NVIC after this as all of the
         // peripheral interrupts are going to be managed by the ICU and/or ELC.
