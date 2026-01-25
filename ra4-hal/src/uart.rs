@@ -921,6 +921,19 @@ tx_pin_impl!(SCI1, P401, Sci2);
 #[cfg(any(feature = "_64pin", feature = "_100pin"))]
 tx_pin_impl!(SCI1, P501, Sci2);
 
+tx_pin_impl!(SCI2, P102, Sci2);
+tx_pin_impl!(SCI2, P112, Sci1);
+#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
+tx_pin_impl!(SCI2, P302, Sci1);
+
+tx_pin_impl!(SCI9, P109, Sci2);
+#[cfg(feature = "_100pin")]
+tx_pin_impl!(SCI9, P203, Sci2);
+#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
+tx_pin_impl!(SCI9, P409, Sci2);
+#[cfg(feature = "_100pin")]
+tx_pin_impl!(SCI9, P602, Sci2);
+
 rx_pin_impl!(SCI0, P100, Sci1);
 #[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
 rx_pin_impl!(SCI0, P104, Sci1);
@@ -937,5 +950,15 @@ rx_pin_impl!(SCI1, P502, Sci2);
 #[cfg(feature = "_100pin")]
 rx_pin_impl!(SCI1, P708, Sci2);
 
+rx_pin_impl!(SCI2, P301, Sci1);
+
+rx_pin_impl!(SCI9, P110, Sci2);
+#[cfg(feature = "_100pin")]
+rx_pin_impl!(SCI9, P202, Sci2);
+#[cfg(feature = "_100pin")]
+rx_pin_impl!(SCI9, P601, Sci2);
+
 instance_impl!(SCI0, Sci0Rxi, Sci0Txi, Sci0Tei, mstpb31);
 instance_impl!(SCI1, Sci1Rxi, Sci1Txi, Sci1Tei, mstpb30);
+instance_impl!(SCI2, Sci2Rxi, Sci2Txi, Sci2Tei, mstpb29);
+instance_impl!(SCI9, Sci9Rxi, Sci9Txi, Sci9Tei, mstpb22);
