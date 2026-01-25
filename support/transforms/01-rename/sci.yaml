@@ -1,33 +1,44 @@
+# Note that SCI0 and SCI1 have 16-byte FIFOs, SCI2 and SCI9 do not.
 transforms:
+  - !MergeBlocks
+    from: sci[0129]::Sci[0129]
+    to: sci::Sci
+  - !Rename
+    from: sci0::(.+)
+    to: sci::${1}
+    type: All
+  - !Delete
+    from: sci[129]::(.+)
+    type: All
   - !RenameEnumVariants
-    enum: sci0::vals::Stop
+    enum: sci::vals::Stop
     from: _0
     to: Stop1
   - !RenameEnumVariants
-    enum: sci0::vals::Stop
+    enum: sci::vals::Stop
     from: _1
     to: Stop2
   - !RenameEnumVariants
-    enum: sci0::vals::(.+)Pm
+    enum: sci::vals::(.+)Pm
     from: _0
     to: Even
   - !RenameEnumVariants
-    enum: sci0::vals::(.+)Pm
+    enum: sci::vals::(.+)Pm
     from: _1
     to: Odd
   - !RenameEnumVariants
-    enum: sci0::vals::SmrCks
+    enum: sci::vals::SmrCks
     from: _00
     to: DIV_1
   - !RenameEnumVariants
-    enum: sci0::vals::SmrCks
+    enum: sci::vals::SmrCks
     from: _01
     to: DIV_4
   - !RenameEnumVariants
-    enum: sci0::vals::SmrCks
+    enum: sci::vals::SmrCks
     from: _10
     to: DIV_16
   - !RenameEnumVariants
-    enum: sci0::vals::SmrCks
+    enum: sci::vals::SmrCks
     from: _11
     to: DIV_64

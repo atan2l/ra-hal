@@ -8,7 +8,7 @@ use embassy_hal_internal::{
 };
 use embassy_sync::waitqueue::AtomicWaker;
 use paste::paste;
-use ra4m1_ctpac::sci0::{
+use ra4m1_ctpac::sci::{
     regs::{Ftdrl, Scr},
     vals::{ScrCke, SmrCks, SmrPm, Stop, Ttrg},
 };
@@ -87,7 +87,7 @@ trait SealedInstance {
     /// `SCI0` and `SCI1` have 16-byte FIFO buffers for RX and TX ops per Table 28.1.
     const FIFO_DEPTH: u8 = 16;
 
-    fn regs() -> pac::sci0::Sci0;
+    fn regs() -> pac::sci::Sci;
 
     /// Turns the `SCI` module on.
     /// In Renesas speak it turns off "module stop" for the `SCI` instance.
@@ -859,7 +859,7 @@ macro_rules! instance_impl {
                 const TX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$tx_int;
                 const TE_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$te_int;
 
-                fn regs() -> ra4m1_ctpac::sci0::Sci0 {
+                fn regs() -> ra4m1_ctpac::sci::Sci {
                     crate::pac::$periph
                 }
 

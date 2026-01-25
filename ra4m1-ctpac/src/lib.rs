@@ -164,13 +164,13 @@ pub const ADC14: adc14::Adc14 = unsafe { adc14::Adc14::from_ptr(0x4005_c000usize
 #[doc = "12-bit D/A converter"]
 pub const DAC12: dac12::Dac12 = unsafe { dac12::Dac12::from_ptr(0x4005_e000usize as _) };
 #[doc = "Serial Communication Interface 0"]
-pub const SCI0: sci0::Sci0 = unsafe { sci0::Sci0::from_ptr(0x4007_0000usize as _) };
+pub const SCI0: sci::Sci = unsafe { sci::Sci::from_ptr(0x4007_0000usize as _) };
 #[doc = "Serial Communication Interface 1"]
-pub const SCI1: sci0::Sci0 = unsafe { sci0::Sci0::from_ptr(0x4007_0020usize as _) };
+pub const SCI1: sci::Sci = unsafe { sci::Sci::from_ptr(0x4007_0020usize as _) };
 #[doc = "Serial Communication Interface 2"]
-pub const SCI2: sci2::Sci2 = unsafe { sci2::Sci2::from_ptr(0x4007_0040usize as _) };
+pub const SCI2: sci::Sci = unsafe { sci::Sci::from_ptr(0x4007_0040usize as _) };
 #[doc = "Serial Communication Interface 9"]
-pub const SCI9: sci2::Sci2 = unsafe { sci2::Sci2::from_ptr(0x4007_0120usize as _) };
+pub const SCI9: sci::Sci = unsafe { sci::Sci::from_ptr(0x4007_0120usize as _) };
 #[doc = "Serial Peripheral Interface 0"]
 pub const SPI0: spi::Spi = unsafe { spi::Spi::from_ptr(0x4007_2000usize as _) };
 #[doc = "Serial Peripheral Interface 1"]
@@ -261,8 +261,7 @@ pub mod poeg;
 pub mod port0;
 pub mod port1;
 pub mod rtc;
-pub mod sci0;
-pub mod sci2;
+pub mod sci;
 pub mod slcdc;
 pub mod smpu;
 pub mod spi;

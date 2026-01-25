@@ -1,11 +1,11 @@
 #[doc = "Serial Communication Interface 0"]
 #[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Sci0 {
+pub struct Sci {
     ptr: *mut u8,
 }
-unsafe impl Send for Sci0 {}
-unsafe impl Sync for Sci0 {}
-impl Sci0 {
+unsafe impl Send for Sci {}
+unsafe impl Sync for Sci {}
+impl Sci {
     #[inline(always)]
     pub const unsafe fn from_ptr(ptr: *mut ()) -> Self {
         Self { ptr: ptr as _ }
