@@ -3,11 +3,11 @@ secrets:
   -  f317af3f-6c5f-49d4-8602-78651225c9d2
 sources:
   - git@git.sr.ht:~az1/ra4m1-rs
+environment:
+    THE_PROJECT: ra4m1-rs
 tasks:
   - env-setup: |
-      echo 'export THE_PROJECT=ra4m1-rs' >> ~/.buildenv
-      echo 'if [ -f "${HOME}/.cargo/env" ]; then source "${HOME}/.cargo/env"; fi' >> ~/.buildenv
-      echo 'if [ -f "${HOME}/.cargo/env" ]; then export PWD="${HOME}/${THE_PROJECT}"; fi' >> ~/.buildenv
+      echo 'if [ -f "${HOME}/.cargo/env" ]; then source "${HOME}/.cargo/env" && cd "${HOME}/${THE_PROJECT}"; fi' >> ~/.buildenv
   - cross-setup: |
       sudo dpkg --add-architecture arm64
       sudo apt-get update
