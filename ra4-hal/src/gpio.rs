@@ -3,7 +3,7 @@
 use crate::{pac, write_protect::WriteProtect};
 
 use embassy_hal_internal::{Peri, PeripheralType, impl_peripheral};
-use ra4m1_ctpac::pfs::vals::PortMode;
+use ra4m1_ctpac::pfs::vals::{PortDrive, PortMode};
 
 /// Digital input or output level.
 #[derive(Debug, Eq, PartialEq, Copy, Clone)]
@@ -15,6 +15,20 @@ pub enum Level {
     High,
 }
 
+/// Output drive capacity
+///
+/// For the `RA4M1` the maximum output of all pins is 60 mA, and each pin configured for max 4.0 mA or max 8.0 mA.
+/// Cortex-M33 devices have different limits.
+/// See the RA4 Quick Design Guide R01AN5988EU0103, §10.2.3 for more information.
+#[derive(Debug, Eq, PartialEq, Copy, Clone)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum DriveCapacity {
+    /// Low drive, max output 4.0 mA.
+    Low,
+    /// Medium drive, max output 8.0 mA.
+    Middle,
+}
+
 /// Type-erased GPIO pin
 pub struct AnyPin {
     pin_port: u16,
@@ -24,7 +38,15 @@ pub struct AnyPin {
 ///
 /// This pin can either be a input, output, or attached to a peripheral.
 pub struct Flex<'d> {
-    pub(crate) pin: Peri<'d, AnyPin>,
+    pin: Peri<'d, AnyPin>,
+}
+
+pub struct Input<'d> {
+    pin: Flex<'d>,
+}
+
+pub struct Output<'d> {
+    pin: Flex<'d>,
 }
 
 // Should this just export the type from the PAC?
@@ -99,6 +121,21 @@ pub(crate) trait SealedPin {
 
         port.pcntr3().write(|w| {
             w.set_porr(self._pin() as _, true);
+        });
+    }
+
+    #[inline]
+    fn set_drive_capacity(&self, drive_capacity: DriveCapacity) {
+        let pfs = pac::PFS;
+        let port_num = self._port() as _;
+        let pin_num = self._pin() as _;
+        let pfs_reg = pfs.pin(port_num, pin_num);
+
+        pfs.protected_write(|| {
+            pfs_reg.write(|w| match drive_capacity {
+                DriveCapacity::Low => w.set_dscr(PortDrive::Low),
+                DriveCapacity::Middle => w.set_dscr(PortDrive::Middle),
+            })
         });
     }
 
@@ -240,7 +277,9 @@ pub(crate) trait SealedPin {
 /// Peripheral that can be used as a GPIO pin.
 #[allow(private_bounds)]
 pub trait Pin: PeripheralType + Into<AnyPin> + SealedPin + Sized + 'static {
-    /// Number of the pin within the port, typically 0..16
+    /// Number of the pin within the port, typically 0..16.
+    ///
+    /// Consult the reference manual tables 19.5–19.17 for more details.
     #[inline]
     fn pin(&self) -> u8 {
         self._pin()
@@ -289,6 +328,40 @@ impl AnyPin {
     }
 }
 
+impl<'d> Output<'d> {
+    /// Create GPIO output driver for a [Pin] with the provided [Level] and [DriveCapacity] configuration.
+    #[inline]
+    pub fn new(
+        pin: Peri<'d, impl Pin>,
+        initial_output: Level,
+        drive_capacity: DriveCapacity,
+    ) -> Self {
+        let mut pin = Flex::new(pin);
+        pin.set_as_output();
+        pin.set_level(initial_output);
+        pin.set_drive_capacity(drive_capacity);
+        Self { pin }
+    }
+
+    /// Set the output as high.
+    #[inline]
+    pub fn set_high(&mut self) {
+        self.pin.set_high();
+    }
+
+    /// Set the output as low.
+    #[inline]
+    pub fn set_low(&mut self) {
+        self.pin.set_low();
+    }
+
+    /// Set the output level.
+    #[inline]
+    pub fn set_level(&mut self, level: Level) {
+        self.pin.set_level(level)
+    }
+}
+
 impl<'d> Flex<'d> {
     /// Create `Flex` from pin.
     #[inline]
@@ -308,6 +381,11 @@ impl<'d> Flex<'d> {
     #[inline]
     pub fn set_low(&mut self) {
         self.pin.set_low();
+    }
+
+    #[inline]
+    pub fn set_drive_capacity(&mut self, drive_capacity: DriveCapacity) {
+        self.pin.set_drive_capacity(drive_capacity)
     }
 
     /// Set the output level.
