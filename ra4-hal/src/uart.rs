@@ -16,7 +16,7 @@ use ra4m1_ctpac::sci0::{
 use crate::interrupt::typelevel::{Handler as InterruptHandler, Interrupt as InterruptType};
 use crate::{
     event_link::{IcuInterrupt, InterruptEvent},
-    gpio::{AnyPin, Pin, PortFunction},
+    gpio::{Pin, PortFunction},
     interrupt,
     interrupt::Interrupt,
     pac, peripherals,
@@ -53,22 +53,6 @@ pub struct TxInterruptHandler<I: Instance> {
 /// Interrupt handler that handles outgoing data (transmission end) for an `SCI` instance.
 pub struct TeInterruptHandler<I: Instance> {
     _phantom: PhantomData<I>,
-}
-
-/// An I/O pin being used for transmission by an `SCI` peripheral instance.
-#[allow(private_bounds)]
-pub struct TxPin<'d, I: SealedInstance> {
-    // TODO: Should we remove this field?
-    _pin: Peri<'d, AnyPin>,
-    _phantom_i: PhantomData<I>,
-}
-
-/// An I/O pin being used for reception by an `SCI` peripheral instance.
-#[allow(private_bounds)]
-pub struct RxPin<'d, I: SealedInstance> {
-    // TODO: Should we remove this field?
-    _pin: Peri<'d, AnyPin>,
-    _phantom_i: PhantomData<I>,
 }
 
 /// Serial error
@@ -131,6 +115,15 @@ trait SealedInstance {
     /// Waker for receive events.
     fn rx_waker() -> &'static AtomicWaker;
 }
+
+/// A pin can be used for transmission.
+#[allow(private_bounds)]
+pub trait TxPin<I: Instance>: TxPinSealed<I> {}
+// impl<I: Instance, T: TxPinSealed<I>> UartTxPin<I> for T {}
+
+/// A pin can be used for reception.
+#[allow(private_bounds)]
+pub trait RxPin<I: Instance>: RxPinSealed<I> {}
 
 trait TxPinSealed<I: SealedInstance>: Pin + PeripheralType {
     const PERIPHERAL_FUNC: PortFunction;
@@ -208,34 +201,6 @@ const SPEED_ENTRIES: [SpeedEntry; 9] = [
     },
 ];
 
-#[allow(private_bounds)]
-impl<'d, I: SealedInstance> TxPin<'d, I> {
-    /// Takes ownership of a pin and configures it to be used as an `SCI` TX line.
-    pub fn new(pin: Peri<'d, impl TxPinSealed<I>>) -> Self {
-        debug!("TX: {}/{}", pin._port(), pin._pin());
-        pin.set_port_func(pin.pfunc());
-
-        Self {
-            _pin: pin.into(),
-            _phantom_i: PhantomData,
-        }
-    }
-}
-
-#[allow(private_bounds)]
-impl<'d, I: SealedInstance> RxPin<'d, I> {
-    /// Takes ownership of a pin and configures it to be used as an `SCI` RX line.
-    pub fn new(pin: Peri<'d, impl RxPinSealed<I>>) -> Self {
-        debug!("RX: {}/{}", pin._port(), pin._pin());
-        pin.set_port_func(pin.pfunc());
-
-        Self {
-            _pin: pin.into(),
-            _phantom_i: PhantomData,
-        }
-    }
-}
-
 impl<'d, I: Instance> BufferedUart<'d, I> {
     #[inline]
     fn set_data_bits(n: u8) {
@@ -264,6 +229,14 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         }
     }
 
+    fn configure_pins(tx: Peri<'d, impl TxPin<I>>, rx: Peri<'d, impl RxPin<I>>) {
+        debug!("TX: {}/{}", tx._port(), tx._pin());
+        tx.set_port_func(tx.pfunc());
+
+        debug!("RX: {}/{}", rx._port(), rx._pin());
+        rx.set_port_func(rx.pfunc());
+    }
+
     pub fn init_buffers(&self, tx_buffer: &'d mut [u8], rx_buffer: &'d mut [u8]) {
         let tx_len = tx_buffer.len();
         unsafe { I::tx_buffer().init(tx_buffer.as_mut_ptr(), tx_len) };
@@ -275,8 +248,8 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
     #[allow(private_bounds)]
     pub fn new<RxInt: InterruptType, TxInt: InterruptType, TeInt: InterruptType>(
         _peri: Peri<'d, I>,
-        tx: Peri<'d, impl TxPinSealed<I>>,
-        rx: Peri<'d, impl RxPinSealed<I>>,
+        tx: Peri<'d, impl TxPin<I>>,
+        rx: Peri<'d, impl RxPin<I>>,
         _irq: impl interrupt::typelevel::Binding<RxInt, RxInterruptHandler<I>>
         + interrupt::typelevel::Binding<TxInt, TxInterruptHandler<I>>
         + interrupt::typelevel::Binding<TeInt, TeInterruptHandler<I>>
@@ -353,10 +326,7 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         Self::set_speed_from_entry(speed);
 
         // Move pins over to SCI
-        let tx = TxPin::new(tx);
-        let rx = RxPin::new(rx);
-        let _ = tx;
-        let _ = rx;
+        Self::configure_pins(tx, rx);
 
         // Enable interrupts in NVIC. We can largely ignore the NVIC after this as all of the
         // peripheral interrupts are going to be managed by the ICU and/or ELC.
@@ -856,6 +826,7 @@ impl<'d, I: Instance> embedded_serial::MutBlockingRx for BufferedUart<'d, I> {
 
 macro_rules! tx_pin_impl {
     ($sci:ident, $pin:ident, $pfunc:ident) => {
+        impl TxPin<crate::peripherals::$sci> for peripherals::$pin {}
         impl TxPinSealed<crate::peripherals::$sci> for peripherals::$pin {
             const PERIPHERAL_FUNC: PortFunction = PortFunction::$pfunc;
         }
@@ -864,6 +835,7 @@ macro_rules! tx_pin_impl {
 
 macro_rules! rx_pin_impl {
     ($sci:ident, $pin:ident, $pfunc:ident) => {
+        impl RxPin<crate::peripherals::$sci> for peripherals::$pin {}
         impl RxPinSealed<crate::peripherals::$sci> for peripherals::$pin {
             const PERIPHERAL_FUNC: PortFunction = PortFunction::$pfunc;
         }
