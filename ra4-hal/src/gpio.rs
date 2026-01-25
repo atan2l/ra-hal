@@ -1,5 +1,7 @@
 //! `PORT` General Purpose Input/Output
 
+// TODO: Ensure PFS register access is correct and not clobbering other bits nor getting discarded by write-protection
+
 use crate::{pac, write_protect::WriteProtect};
 
 use embassy_hal_internal::{Peri, PeripheralType, impl_peripheral};
@@ -19,7 +21,7 @@ pub enum Level {
 ///
 /// For the `RA4M1` the maximum output of all pins is 60 mA, and each pin configured for max 4.0 mA or max 8.0 mA.
 /// Cortex-M33 devices have different limits.
-/// See the RA4 Quick Design Guide R01AN5988EU0103, §10.2.3 for more information.
+/// See the RA4 Quick Design Guide R01AN5988, §10.2.3 for more information.
 #[derive(Debug, Eq, PartialEq, Copy, Clone)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum DriveCapacity {
@@ -36,23 +38,26 @@ pub struct AnyPin {
 
 /// GPIO flexible pin.
 ///
-/// This pin can either be a input, output, or attached to a peripheral.
+/// This pin can be configured for input, output, or attached to a peripheral.
 pub struct Flex<'d> {
     pin: Peri<'d, AnyPin>,
 }
 
+/// GPIO input driver
 pub struct Input<'d> {
     pin: Flex<'d>,
 }
 
+/// GPIO output driver
 pub struct Output<'d> {
     pin: Flex<'d>,
 }
 
 // Should this just export the type from the PAC?
 /// Additional, non-GPIO, functions that can be assigned to a pin.
+///
 /// Not every function applies to every pin.
-/// See Tables 19.5–19.17 in the reference manual for details.
+/// See tables 19.5–19.17 in the reference manual for details.
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Copy, Clone)]
 #[repr(u8)]
@@ -383,6 +388,9 @@ impl<'d> Flex<'d> {
         self.pin.set_low();
     }
 
+    /// Sets the output drive capacity of a pin.
+    ///
+    /// Note: be aware of the maximum permissible combined current output for all pins, see [`DriveCapacity`] for more information.
     #[inline]
     pub fn set_drive_capacity(&mut self, drive_capacity: DriveCapacity) {
         self.pin.set_drive_capacity(drive_capacity)
@@ -406,13 +414,13 @@ impl<'d> Flex<'d> {
         self.pin.is_set_low()
     }
 
-    /// What level output is set to
+    /// What level output is set to?
     #[inline]
     pub fn get_output_level(&mut self) -> Level {
         self.pin.get_output_level()
     }
 
-    /// Toggle pin output
+    /// Toggle pin output.
     #[inline]
     pub fn toggle(&mut self) {
         self.pin.toggle();
