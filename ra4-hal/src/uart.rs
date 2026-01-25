@@ -55,7 +55,7 @@ pub struct TeInterruptHandler<I: Instance> {
     _phantom: PhantomData<I>,
 }
 
-/// Serial error
+/// UART error
 #[derive(Debug, Eq, PartialEq, Copy, Clone)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[non_exhaustive]
@@ -68,6 +68,9 @@ pub enum UartError {
     Parity,
 }
 
+/// Buffered UART instance.
+///
+/// Note: On the `RA4M1` only `SCI0` and `SCI1` have FIFOs.
 #[allow(private_bounds)]
 pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
 
@@ -116,12 +119,12 @@ trait SealedInstance {
     fn rx_waker() -> &'static AtomicWaker;
 }
 
-/// A pin can be used for transmission.
+/// A pin that can be used for transmission.
 #[allow(private_bounds)]
 pub trait TxPin<I: Instance>: TxPinSealed<I> {}
 // impl<I: Instance, T: TxPinSealed<I>> UartTxPin<I> for T {}
 
-/// A pin can be used for reception.
+/// A pin that can be used for reception.
 #[allow(private_bounds)]
 pub trait RxPin<I: Instance>: RxPinSealed<I> {}
 
