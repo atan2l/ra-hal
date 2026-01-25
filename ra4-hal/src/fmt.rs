@@ -27,7 +27,7 @@ macro_rules! assert_eq {
     };
 }
 
-/// Log at the `trace` level if the `defmat` feature is enabled. No-op otherwise.
+/// Log at the `trace` level if the `defmt` feature is enabled. No-op otherwise.
 #[macro_export]
 #[collapse_debuginfo(yes)]
 macro_rules! trace {
@@ -38,7 +38,7 @@ macro_rules! trace {
     };
 }
 
-/// Log at the `debug` level if the `defmat` feature is enabled. No-op otherwise.
+/// Log at the `debug` level if the `defmt` feature is enabled. No-op otherwise.
 #[macro_export]
 #[collapse_debuginfo(yes)]
 macro_rules! debug {
@@ -49,7 +49,7 @@ macro_rules! debug {
     };
 }
 
-/// Log at the `info` level if the `defmat` feature is enabled. No-op otherwise.
+/// Log at the `info` level if the `defmt` feature is enabled. No-op otherwise.
 #[macro_export]
 #[collapse_debuginfo(yes)]
 macro_rules! info {
@@ -60,7 +60,7 @@ macro_rules! info {
     };
 }
 
-/// Log at the `warn` level if the `defmat` feature is enabled. No-op otherwise.
+/// Log at the `warn` level if the `defmt` feature is enabled. No-op otherwise.
 #[macro_export]
 #[collapse_debuginfo(yes)]
 macro_rules! warn {
@@ -71,7 +71,7 @@ macro_rules! warn {
     };
 }
 
-/// Log at the `error` level if the `defmat` feature is enabled. No-op otherwise.
+/// Log at the `error` level if the `defmt` feature is enabled. No-op otherwise.
 #[macro_export]
 #[collapse_debuginfo(yes)]
 macro_rules! error {
