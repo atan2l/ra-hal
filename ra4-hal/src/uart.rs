@@ -236,10 +236,10 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
 
     fn configure_pins(tx: Peri<'d, impl TxPin<I>>, rx: Peri<'d, impl RxPin<I>>) {
         debug!("TX: {}/{}", tx._port(), tx._pin());
-        tx.set_port_func(tx.pfunc());
+        tx.set_as_pf(tx.pfunc());
 
         debug!("RX: {}/{}", rx._port(), rx._pin());
-        rx.set_port_func(rx.pfunc());
+        rx.set_as_pf(rx.pfunc());
     }
 
     /// Configures a new UART and returns the driver.

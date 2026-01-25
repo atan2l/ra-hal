@@ -219,14 +219,14 @@ pub(crate) trait SealedPin {
         });
     }
 
-    fn set_port_func(&self, port_func: PortFunction) {
+    fn set_as_pf(&self, port_func: PortFunction) {
         let port_num = self._port() as _;
         let pin_num = self._pin() as _;
 
         let pfs = crate::pac::PFS;
 
         let pfs_reg = pfs.pin(port_num, pin_num);
-        info!("Port{}, Pin{}, pf={}", port_num, pin_num, port_func);
+        debug!("Port{}, Pin{}, pf={}", port_num, pin_num, port_func);
 
         // Le sigh.  Write protection gets re-enabled after each write.
         // Or is it reset after each read?
@@ -243,6 +243,7 @@ pub(crate) trait SealedPin {
             });
         });
 
+        #[cfg(feature = "strict-assert")]
         assert_eq!(
             pfs_reg.read().psel(),
             pac::pfs::vals::PortFunction::from_bits(port_func as u8)
@@ -365,6 +366,20 @@ impl<'d> Output<'d> {
     pub fn set_level(&mut self, level: Level) {
         self.pin.set_level(level)
     }
+
+    /// Sets the output drive capacity of a pin.
+    ///
+    /// Note: be aware of the maximum permissible combined current output for all pins, see [`DriveCapacity`] for more information.
+    #[inline]
+    pub fn set_drive_capacity(&mut self, drive_capacity: DriveCapacity) {
+        self.pin.set_drive_capacity(drive_capacity)
+    }
+
+    /// What level output is set to?
+    #[inline]
+    pub fn get_output_level(&mut self) -> Level {
+        self.pin.get_output_level()
+    }
 }
 
 impl<'d> Flex<'d> {
@@ -439,8 +454,8 @@ impl<'d> Flex<'d> {
     }
 
     /// Sets the pin into peripheral mode and selects port function `func`.
-    pub fn set_peripheral_func(&mut self, func: PortFunction) {
-        self.pin.set_port_func(func);
+    pub fn set_as_pf(&mut self, func: PortFunction) {
+        self.pin.set_as_pf(func);
     }
 }
 

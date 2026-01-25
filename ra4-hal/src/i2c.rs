@@ -49,7 +49,7 @@ impl SealedInstance for crate::peripherals::IIC0 {
 impl<'d, I: SealedInstance> ClockPin<'d, I> {
     /// Takes a pin and configures it to be used as I2C clock line.
     pub fn new(pin: Peri<'d, impl ClockPinSealed<I>>) -> Self {
-        pin.set_port_func(PortFunction::I2c);
+        pin.set_as_pf(PortFunction::I2c);
 
         Self {
             pin: pin.into(),
@@ -68,7 +68,7 @@ macro_rules! clock_pin_impl {
 impl<'d, I: SealedInstance> DataPin<'d, I> {
     /// Takes a pin and configures it to be used as I2C data line.
     pub fn new(pin: Peri<'d, impl DataPinSealed<I>>) -> Self {
-        pin.set_port_func(PortFunction::I2c);
+        pin.set_as_pf(PortFunction::I2c);
 
         Self {
             pin: pin.into(),
