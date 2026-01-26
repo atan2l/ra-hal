@@ -14,6 +14,7 @@ pub enum Polynomial {
     /// This will panic
     None,
 
+    /// CRC-8, polynomial = `0x07`
     Crc8,
 
     /// CRC-16, polynomial = `0x8005`

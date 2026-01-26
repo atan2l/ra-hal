@@ -45,8 +45,13 @@ pub enum Alignment {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Default)]
 pub struct AdcConfig {
+    #[allow(missing_docs)]
     pub resolution: Resolution,
+
+    /// If true the data registers are zeroed after being read (whether by CPU or DMA).
     pub clear_on_read: bool,
+
+    #[allow(missing_docs)]
     pub alignment: Alignment,
 }
 
@@ -67,6 +72,7 @@ impl SealedInstance for peripherals::ADC14 {
 impl Instance for peripherals::ADC14 {}
 
 impl<'d, I: Instance> Adc<'d, I> {
+    /// Creates a new `ADC14` driver.
     pub fn new(
         _adc: Peri<'d, I>,
         config: AdcConfig,
@@ -127,15 +133,17 @@ impl<'d, I: Instance> Adc<'d, I> {
         }
     }
 
-    /// Return the pseudo-channel struct for temperature measurement.  Nothing is configured here.
+    /// Returns the on-die [temperature measurement pseudo-channel](Temperature) without performing configuration.
     pub fn temperature_channel(&self) -> Temperature {
         Temperature {}
     }
 
+    /// Returns the [`Vref`] pseudo channel.
     pub fn vref_channel(&self) -> Vref {
         Vref {}
     }
 
+    /// Returns a single reading from an ADC channel.
     pub fn blocking_read(&self, channel: &impl AdcChannel) -> u16 {
         let adc = I::regs();
 
