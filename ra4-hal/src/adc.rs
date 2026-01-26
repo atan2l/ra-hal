@@ -6,13 +6,11 @@ use cortex_m::asm;
 use embassy_hal_internal::{Peri, PeripheralType};
 use ra4m1_ctpac::adc14::vals::{Adcs, Adprc};
 
-use crate::{
-    adc::channel::{AdcChannel, Temperature, Vref},
-    pac, peripherals,
-};
+use crate::{pac, peripherals};
 
-pub mod channel;
+pub use channel::{AdcChannel, Temperature, Vref};
 
+mod channel;
 
 /// `ADC14` driver.
 #[allow(private_bounds)]
