@@ -40,20 +40,24 @@ default = [ "time-driver", "rt", "diag", "uno_r4", "chrono", "strict-assert" ]
 ## See <https://docs.rs/cortex-m-rt/latest/cortex_m_rt/#device> for more info.
 rt = [ "ra4m1-ctpac/rt" ]
 
-## Enable dependency on chrono and expose methods that work with chrono structures.
+## Enable dependency on [`chrono`](https://docs.rs/chronno) and expose methods that work with chrono structures.
 chrono = [ "dep:chrono" ]
 
 ## Use [`defmt`](https://docs.rs/defmt/latest/defmt/) for logging.
 defmt = [ "dep:defmt", "ra4m1-ctpac/defmt", "embassy-time/defmt", "embassy-time/defmt-timestamp-uptime" ]
 
+## Log the reset reason during initialization. Only useful in conjunction with `defmt` feature.
 diag = [ ]
 
-## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/).
+## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver.
 time-driver = [ "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time-driver/tick-hz-48_000_000" ]
 
 ## Re-export the PAC at `ra4_hal::pac`.
 ## This is unstable because minor HAL updates may depend on major PAC updates.
 unstable-pac = [ ]
+
+## Extra runtime assertions.
+strict-assert = [ "ra4m1-ctpac/strict-assert" ]
 
 ### Board features
 
@@ -64,9 +68,6 @@ uno_r4 = [ "_64pin" ]
 _48pin = [ ]
 _64pin = [ ]
 _100pin = [ ]
-
-## Extra runtime assertions.
-strict-assert = [ "ra4m1-ctpac/strict-assert" ]
 
 [package.metadata.docs.rs]
 default-target = "thumbv7em-none-eabihf"
