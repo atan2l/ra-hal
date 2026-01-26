@@ -7,7 +7,7 @@
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
-use embassy_time::{Duration, Instant, Timer};
+use embassy_time::Timer;
 use panic_probe as _;
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
