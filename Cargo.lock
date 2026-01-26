@@ -578,6 +578,7 @@ dependencies = [
  "cortex-m-rt",
  "critical-section",
  "defmt",
+ "document-features",
  "embassy-hal-internal",
  "embassy-sync",
  "embassy-time",

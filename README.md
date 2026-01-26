@@ -1,7 +1,6 @@
 # `ra4m1-rs`
 
-This repository contains Rust crates that implement a variety of Hardware Abstraction Layer (HAL) traits to support the [Renesas RA4M1](https://www.renesas.com/en/products/ra4m1) microcontrollers.
-These traits provide both asynchronous and blocking interfaces that enable compatibility with software like [Embassy](https://embassy.dev).
+This repository contains Rust crates that provide Rust support for the [Renesas RA4M1](https://www.renesas.com/en/products/ra4m1) group of microcontrollers.
 
 ## Requirements
 
@@ -63,6 +62,7 @@ See examples for more details.
 
 * App template
 * Add another layer of macro goodness on top of the option setting registers
+* Add spell checking to the build manifest.  <https://github.com/blopker/codebook/issues/39>
 
 ## License
 

@@ -29,23 +29,35 @@ ra4m1-ctpac = { path = "../ra4m1-ctpac" }
 
 cfg-if = "1"
 chrono = { version = "^0.4", default-features = false, optional = true }
+document-features = { version = "0.2.12" }
 paste = "1"
 
 [features]
 default = [ "time-driver", "rt", "diag", "uno_r4", "chrono", "strict-assert" ]
 
-# Enable the `rt` feature of the PAC.
-# With `rt` enabled the PAC provides interrupt vectors instead of letting [`cortex-m-rt`](https://docs.rs/cortex-m-rt) do that.
-# See <https://docs.rs/cortex-m-rt/latest/cortex_m_rt/#device> for more info.
+## Enable the `rt` feature of the PAC.
+## With `rt` enabled the PAC provides interrupt vectors instead of letting [`cortex-m-rt`](https://docs.rs/cortex-m-rt) do that.
+## See <https://docs.rs/cortex-m-rt/latest/cortex_m_rt/#device> for more info.
 rt = [ "ra4m1-ctpac/rt" ]
 
+## Enable dependency on chrono and expose methods that work with chrono structures.
 chrono = [ "dep:chrono" ]
+
+## Use [`defmt`](https://docs.rs/defmt/latest/defmt/) for logging.
 defmt = [ "dep:defmt", "ra4m1-ctpac/defmt", "embassy-time/defmt", "embassy-time/defmt-timestamp-uptime" ]
+
 diag = [ ]
+
+## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/).
 time-driver = [ "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time-driver/tick-hz-48_000_000" ]
+
+## Re-export the PAC at `ra4_hal::pac`.
+## This is unstable because minor HAL updates may depend on major PAC updates.
 unstable-pac = [ ]
 
 ### Board features
+
+## Enable Arduino Uno R4 specific configuration knobs.
 uno_r4 = [ "_64pin" ]
 
 ### Internal use only
@@ -53,7 +65,7 @@ _48pin = [ ]
 _64pin = [ ]
 _100pin = [ ]
 
-# Extra runtime assertions.
+## Extra runtime assertions.
 strict-assert = [ "ra4m1-ctpac/strict-assert" ]
 
 [package.metadata.docs.rs]
