@@ -1,4 +1,7 @@
 //! I2C Bus Interface (`IIC`)
+#![allow(missing_docs)]
+#[warn(dead_code)]
+const WARNING: &str = "allow(missing_docs)";
 
 use core::marker::PhantomData;
 
