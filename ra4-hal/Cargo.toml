@@ -29,7 +29,7 @@ ra4m1-ctpac = { path = "../ra4m1-ctpac" }
 
 cfg-if = "1"
 chrono = { version = "^0.4", default-features = false, optional = true }
-document-features = { version = "0.2.12" }
+document-features = { workspace = true }
 paste = "1"
 
 [features]
