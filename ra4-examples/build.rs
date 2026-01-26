@@ -12,9 +12,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     #[cfg(feature = "defmt")]
     println!("cargo:rustc-link-arg-bins=-Tdefmt.x");
 
-    let gitcl = GitclBuilder::default().all().sha(true).build()?;
+    let builder = GitclBuilder::default().all().sha(true).build()?;
 
-    Emitter::default().add_instructions(&gitcl)?.emit()?;
+    Emitter::default().add_instructions(&builder)?.emit()?;
 
     Ok(())
 }

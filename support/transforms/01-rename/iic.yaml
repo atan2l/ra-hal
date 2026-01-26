@@ -1,4 +1,4 @@
-# NOTE: Check the manual for the actual differenes between IIC0 and IIC1.
+# NOTE: Check the manual for the actual differences between IIC0 and IIC1.
 # They are *not* identical.
 transforms:
   - !MergeBlocks

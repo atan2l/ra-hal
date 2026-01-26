@@ -1,4 +1,4 @@
-# The differences between SPI0 and SPI1 are that SPI0.SPDCR has 2,wwwwwww 2-byte reserved fields
+# The difference between SPI0 and SPI1 is that SPI0.SPDCR has 2, 2-byte reserved fields
 # while SPI1.SPDCR has is 1, 4-byte reserved field.
 transforms:
   - !MergeBlocks

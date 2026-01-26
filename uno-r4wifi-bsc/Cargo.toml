@@ -3,7 +3,7 @@ name = "uno-r4wifi-bsc"
 version = "0.1.0-dev"
 edition = "2024"
 rust-version = "1.91"
-description = "Board specific features for the Arduno Uno R4 WiFi."
+description = "Board specific features for the Arduino Uno R4 WiFi."
 homepage = "https://sr.ht/~az1/ra4m1-rs/"
 license = "LGPL-3.0-or-later"
 

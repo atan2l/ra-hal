@@ -204,7 +204,7 @@ impl GptDriver {
                 AlarmInt::IRQ.icu_enable(<GPT32_0 as Instance>::ALARM_EVENT);
             });
         } else {
-            // TODO: UHhhhh
+            // TODO: Uhhhhh
             // If alarm must trigger some time after the current period, too far in the future,
             // don't setup the alarm enable, gpreg2, yet. It will be setup later by `next_period`.
         }
