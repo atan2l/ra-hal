@@ -16,14 +16,14 @@ critical-section = { workspace = true }
 embedded-hal-1 = { package = "embedded-hal", version = "1.0" }
 
 embassy-hal-internal = { workspace = true }
+embedded-io = { workspace = true }
+embedded-io-async = { workspace = true }
+embedded-serial = { workspace = true }
+embassy-sync = { workspace = true }
 embassy-time = { workspace = true, optional = true }
 embassy-time-driver = { version = "0.2.1", optional = true }
 embassy-time-queue-utils = { version = "0.3.0", optional = true }
 embassy-usb-driver = { version = "0.2.0", optional = true }
-embassy-sync = { workspace = true }
-embedded-io = { workspace = true }
-embedded-io-async = { workspace = true }
-embedded-serial = { workspace = true }
 
 ra4m1-ctpac = { path = "../ra4m1-ctpac" }
 
