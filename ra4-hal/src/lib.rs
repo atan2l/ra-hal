@@ -27,6 +27,7 @@ pub mod uart;
 pub mod write_protect;
 
 // Re-export
+#[cfg(feature = "chrono")]
 pub use chrono;
 #[cfg(feature = "unstable-pac")]
 pub use ra4m1_ctpac as pac;
