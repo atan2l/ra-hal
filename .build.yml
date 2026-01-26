@@ -1,10 +1,10 @@
 image: debian/trixie
 secrets:
-  -  f317af3f-6c5f-49d4-8602-78651225c9d2
+  - f317af3f-6c5f-49d4-8602-78651225c9d2
 sources:
   - git@git.sr.ht:~az1/ra4m1-rs
 environment:
-    THE_PROJECT: ra4m1-rs
+  THE_PROJECT: ra4m1-rs
 tasks:
   - env-setup: |
       echo 'if [ -f "${HOME}/.cargo/env" ]; then source "${HOME}/.cargo/env" && cd "${HOME}/${THE_PROJECT}"; fi' >> ~/.buildenv
@@ -27,4 +27,6 @@ tasks:
       cargo haldoc
   - clippy: |
       cargo clip
-
+  - spell-check: |
+      cargo install spellcode-cli
+      spellcode-cli --exclude ra4m1-ctpac --exclude ignore --exclude tools --exclude support $(pwd)
