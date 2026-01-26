@@ -5,6 +5,9 @@ sources:
   - git@git.sr.ht:~az1/ra4m1-rs
 environment:
   THE_PROJECT: ra4m1-rs
+  SPELLCODE_ARTIFACT: https://s3.sr.ht/builds.sr.ht/artifacts/~az1/1664298/b5e6ccb939fcb2b4/spellcode-cli
+packages:
+  - curl
 tasks:
   - env-setup: |
       echo 'if [ -f "${HOME}/.cargo/env" ]; then source "${HOME}/.cargo/env" && cd "${HOME}/${THE_PROJECT}"; fi' >> ~/.buildenv
@@ -12,6 +15,9 @@ tasks:
       sudo dpkg --add-architecture arm64
       sudo apt-get update
       sudo apt-get install -y gcc-12-aarch64-linux-gnu libc6-dev-arm64-cross libudev-dev:arm64
+  - install-spellcheck: |
+      curl -LO "${SPELLCODE_ARTIFACT}"
+      chmod +x "${HOME}/spellcode-cli"
   - install-rustup: |
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none
   - install-rust: |
@@ -28,5 +34,4 @@ tasks:
   - clippy: |
       cargo clip
   - spell-check: |
-      cargo install spellcode-cli
-      spellcode-cli --exclude ra4m1-ctpac --exclude ignore --exclude tools --exclude support $(pwd)
+      "${HOME}/spellcode-cli" --exclude ra4m1-ctpac --exclude ignore --exclude tools --exclude support $(pwd)
