@@ -49,9 +49,6 @@ defmt = [ "dep:defmt", "ra4m1-ctpac/defmt", "embassy-time/defmt", "embassy-time/
 ## Log the reset reason during initialization. Only useful in conjunction with `defmt` feature.
 diag = [ ]
 
-## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver.
-time-driver = [ "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time-driver/tick-hz-48_000_000" ]
-
 ## Re-export the PAC at `ra4_hal::pac`.
 ## This is unstable because minor HAL updates may depend on major PAC updates.
 unstable-pac = [ ]
@@ -59,14 +56,28 @@ unstable-pac = [ ]
 ## Extra runtime assertions.
 strict-assert = [ "ra4m1-ctpac/strict-assert" ]
 
-### Board features
+#! ## Time features
+
+## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver.
+time-driver = [ "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time-driver/tick-hz-48_000_000" ]
+
+#! ## Board features
 
 ## Enable Arduino Uno R4 specific configuration knobs.
 uno_r4 = [ "_64pin" ]
 
-### Internal use only
+#! ## Chip configuration
+#! Don't enable these manually.
+#! Instead add or enable a board specific feature that depends on the correct pin count.
+#! If no pin feature is selected the crate defaults to a 40-pin configuration.
+
+## Enables pins and peripherals only available on 48-pin chips.
 _48pin = [ ]
+
+## Enables pins and peripherals only available on 64-pin chips.
 _64pin = [ ]
+
+## Enables pins and peripherals only available on 100-pin chips.
 _100pin = [ ]
 
 [package.metadata.docs.rs]
