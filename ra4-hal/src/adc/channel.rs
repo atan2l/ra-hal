@@ -1,6 +1,10 @@
+/// Pseudo-channel for the on-die temperature sensor.
 pub struct Temperature;
+
+/// Pseudo-channel for `Vref` measurement.
 pub struct Vref;
 
+/// `ADC14` channel instance.
 #[allow(private_bounds)]
 pub trait AdcChannel: SealedAdcChannel {}
 

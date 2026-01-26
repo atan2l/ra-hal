@@ -13,11 +13,14 @@ use crate::{
 
 pub mod channel;
 
+
+/// `ADC14` driver.
 #[allow(private_bounds)]
 pub struct Adc<'d, I: Instance> {
     _phantom: PhantomData<&'d I>,
 }
 
+/// ADC resolution.
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Default)]
 pub enum Resolution {
@@ -28,14 +31,19 @@ pub enum Resolution {
     High,
 }
 
+/// Alignment of readings within a 16-bit variable.
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Default)]
 pub enum Alignment {
+    /// Pad the value with trailing zeros.
     FlushLeft,
+
+    /// Pad the value with leading zeros.
     #[default]
     FlushRight,
 }
 
+/// `ADC14` configuration.
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Default)]
 pub struct AdcConfig {

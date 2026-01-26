@@ -51,7 +51,7 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
 
     /// # Returns
     ///
-    /// - `true` if the interrupt is configured for `DTC` activation (`IELSRn.DTCE` bit is set).
+    /// - `true` if the interrupt is configured for `DTC` activation.
     /// - `false` otherwise
     #[inline(always)]
     fn is_dtc(&self) -> bool {
@@ -60,6 +60,11 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
         icu.ielsr(self.number() as _).read().dtce()
     }
 
+    /// Clears the interrupt request flag in the `ICU`.
+    /// Does not modify the `NVIC`.
+    ///
+    /// Similar to [`InterruptExt::unpend`](trait@crate::interrupt::InterruptExt).
+    /// See also §13.2.6.
     #[inline(always)]
     fn icu_unpend(&self) {
         let icu = pac::ICU;
@@ -69,6 +74,11 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
         });
     }
 
+    /// Sets the interrupt request flag in the `ICU`.
+    /// Does not modify the `NVIC`.
+    ///
+    /// Similar to [`InterruptExt::pend`](trait@crate::interrupt::InterruptExt).
+    /// See also §13.2.6.
     #[inline(always)]
     fn icu_pend(&self) {
         let icu = pac::ICU;
