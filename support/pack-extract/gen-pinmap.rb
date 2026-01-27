@@ -68,11 +68,21 @@ def process_pin_map(name,data)
   end
 end
 
-Zip::File.open(pack) do |pack|
-  pack.each do |entry|
-    # puts entry.name
-    if entry.name =~ /\.mcu\/\.pinmapping\/PinCfgR7FA[A-Z0-9]\w+\.xml/
-      process_pin_map(entry.name, entry.get_input_stream.read)
+if File.stat(pack).directory?
+  Dir.foreach(pack) do |dirent|
+    entry = File.join(pack,dirent)
+    next unless File.stat(entry).file?
+    if dirent =~ /PinCfgR7FA[A-Z0-9]\w+\.xml/
+      process_pin_map(entry, File::read(entry))
+    end
+  end
+else
+  Zip::File.open(pack) do |pack|
+    pack.each do |entry|
+      # puts entry.name
+      if entry.name =~ /\.mcu\/\.pinmapping\/PinCfgR7FA[A-Z0-9]\w+\.xml/
+        process_pin_map(entry.name, entry.get_input_stream.read)
+      end
     end
   end
 end
