@@ -33,13 +33,27 @@ pub struct DataPin<'d, I: SealedInstance> {
 #[allow(private_bounds)]
 pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
 
-trait SealedInstance {
+pub(crate) trait SealedInstance {
     fn regs() -> pac::iic::Iic;
 }
 
-trait ClockPinSealed<I: SealedInstance>: Pin + PeripheralType {}
+pub(crate) trait ClockPinSealed<I: SealedInstance>: Pin + PeripheralType {
+    const PERIPHERAL_FUNC: PortFunction;
 
-trait DataPinSealed<I: SealedInstance>: Pin {}
+    #[inline(always)]
+    fn pfunc(&self) -> PortFunction {
+        Self::PERIPHERAL_FUNC
+    }
+}
+
+pub(crate) trait DataPinSealed<I: SealedInstance>: Pin {
+    const PERIPHERAL_FUNC: PortFunction;
+
+    #[inline(always)]
+    fn pfunc(&self) -> PortFunction {
+        Self::PERIPHERAL_FUNC
+    }
+}
 
 impl SealedInstance for crate::peripherals::IIC0 {
     #[inline(always)]
@@ -48,11 +62,17 @@ impl SealedInstance for crate::peripherals::IIC0 {
     }
 }
 
+impl SealedInstance for crate::peripherals::IIC1 {
+    #[inline(always)]
+    fn regs() -> pac::iic::Iic {
+        crate::pac::IIC1
+    }
+}
 #[allow(private_bounds)]
 impl<'d, I: SealedInstance> ClockPin<'d, I> {
     /// Takes a pin and configures it to be used as I2C clock line.
     pub fn new(pin: Peri<'d, impl ClockPinSealed<I>>) -> Self {
-        pin.set_as_pf(PortFunction::I2c);
+        pin.set_as_pf(pin.pfunc());
 
         Self {
             pin: pin.into(),
@@ -61,17 +81,28 @@ impl<'d, I: SealedInstance> ClockPin<'d, I> {
     }
 }
 
+impl<'d, I: SealedInstance> From<ClockPin<'d, I>> for AnyPin {
+    fn from(value: ClockPin<I>) -> Self {
+        *value.pin
+    }
+}
+
 macro_rules! clock_pin_impl {
-    ($iic:ident, $pin:ident) => {
-        impl crate::i2c::ClockPinSealed<crate::peripherals::$iic> for crate::peripherals::$pin {}
+    ($instance:ident, $pin:ident, $pfunc:ident) => {
+        impl crate::i2c::ClockPinSealed<crate::peripherals::$instance>
+            for crate::peripherals::$pin
+        {
+            const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
+        }
     };
 }
+pub(crate) use clock_pin_impl;
 
 #[allow(private_bounds)]
 impl<'d, I: SealedInstance> DataPin<'d, I> {
     /// Takes a pin and configures it to be used as I2C data line.
     pub fn new(pin: Peri<'d, impl DataPinSealed<I>>) -> Self {
-        pin.set_as_pf(PortFunction::I2c);
+        pin.set_as_pf(pin.pfunc());
 
         Self {
             pin: pin.into(),
@@ -87,16 +118,10 @@ impl<'d, I: SealedInstance> From<DataPin<'d, I>> for AnyPin {
 }
 
 macro_rules! data_pin_impl {
-    ($iic:ident, $pin:ident) => {
-        impl crate::i2c::DataPinSealed<crate::peripherals::$iic> for crate::peripherals::$pin {}
+    ($instance:ident, $pin:ident, $pfunc:ident) => {
+        impl crate::i2c::DataPinSealed<crate::peripherals::$instance> for crate::peripherals::$pin {
+            const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
+        }
     };
 }
-
-// data_pin_impl!(IIC1, P101);
-// data_pin_impl!(IIC1, P206);
-
-data_pin_impl!(IIC0, P401);
-data_pin_impl!(IIC0, P407);
-clock_pin_impl!(IIC0, P204);
-clock_pin_impl!(IIC0, P400);
-clock_pin_impl!(IIC0, P408);
+pub(crate) use data_pin_impl;

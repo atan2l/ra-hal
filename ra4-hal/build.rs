@@ -121,6 +121,39 @@ fn do_sci(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
     signals
 }
 
+fn do_i2c(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
+    let peripheral = format_ident!("{}", peripheral.to_uppercase());
+
+    let signals = signals
+        .iter()
+        .filter(|(signal, _)| signal.as_str() == "SDA" || signal.as_str() == "SCL")
+        .map(|(signal, pins)| {
+            let signal = match signal.as_str() {
+                "SDA" => format_ident!("data_pin_impl"),
+                "SCL" => format_ident!("clock_pin_impl"),
+                _ => unreachable!(),
+            };
+            pins.iter()
+                .map(|(pin, config)| {
+                    let pin = format_ident!("{}", pin);
+                    let conditions = pin_conditional(&config.pin_count);
+                    let pfunc = match config.pfunc.as_ref().unwrap().as_str() {
+                        "IOPORT_PERIPHERAL_IIC" => format_ident!("I2c"),
+                        _ => unreachable!(),
+                    };
+                    quote! {
+                        #conditions
+                        crate::i2c::#signal!(#peripheral, #pin, #pfunc);
+                    }
+                })
+                .collect::<Vec<_>>()
+        })
+        .flatten()
+        .collect::<Vec<_>>();
+
+    signals
+}
+
 fn inner_main() -> Result<(), Box<dyn std::error::Error>> {
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=support/pinmap.yaml");
@@ -131,13 +164,13 @@ fn inner_main() -> Result<(), Box<dyn std::error::Error>> {
     let pins = pin_map
         .iter()
         .filter_map(|(peripheral, signal)| {
-            if peripheral.starts_with("gpt") {
-                return Some(do_gpt(peripheral, signal));
-            } else if peripheral.starts_with("sci") {
-                return Some(do_sci(peripheral, signal));
+            let peripheral_kind = &peripheral[0..3.min(peripheral.len())];
+            match peripheral_kind {
+                "gpt" => Some(do_gpt(peripheral, signal)),
+                "sci" => Some(do_sci(peripheral, signal)),
+                "iic" => Some(do_i2c(peripheral, signal)),
+                _ => None,
             }
-
-            None
         })
         .flatten()
         .collect::<Vec<_>>();
