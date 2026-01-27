@@ -6,7 +6,11 @@ The end goal is to provide a safe, idiomatic Rust interface that surfaces most o
 
 ## Notes
 
-Get FSP packs from Renesas github
-https://github.com/renesas/fsp/releases/download/v6.3.1/FSP_Packs_v6.3.1.zip
+### Rebuilding the pinmap
 
-pushd support/packs; ./gen-pinmap.rb ~/arm/fsp-packs/internal/projectgen/ra/packs/Renesas.RA_mcu_ra4m1.6.3.1.pack  > ../pinmap.yaml; popd
+* Get FSP packs from Renesas github <https://github.com/renesas/fsp/releases/download/v6.3.1/FSP_Packs_v6.3.1.zip>
+* Run `gen-pinmap`:
+
+```
+pushd support/pack-extract; ./gen-pinmap.rb ~/arm/fsp-packs/internal/projectgen/ra/packs/Renesas.RA_mcu_ra4m1.6.3.1.pack  > ../pinmap.yaml; popd
+```
