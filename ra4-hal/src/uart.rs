@@ -577,7 +577,7 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
                 }
             }
 
-            return Poll::Ready(Ok(written));
+            Poll::Ready(Ok(written))
         })
         .await
     }
@@ -653,8 +653,8 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for RxInterruptHandl
                 let fifo_len = sci.fdr().read().r() as _;
                 let read_len = buf.len().min(fifo_len);
 
-                for i in 0..read_len {
-                    buf[i] = sci.frdrl().read().rdatl();
+                for out_byte in buf.iter_mut().take(read_len) {
+                    *out_byte = sci.frdrl().read().rdatl();
                 }
                 writer.push_done(read_len);
 

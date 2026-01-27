@@ -34,7 +34,7 @@ impl SealedInstance for peripherals::RTC {
 impl<'d, I: Instance> Rtc<'d, I> {
     /// # Arguments
     /// * `_rtc` A peripheral that implements [`Instance`].
-    /// The `RA4M1` only has one realtime clock available as [`RTC`](peripherals::RTC).
+    ///   The `RA4M1` only has one realtime clock available as [`RTC`](peripherals::RTC).
     ///
     /// # Returns
     ///
