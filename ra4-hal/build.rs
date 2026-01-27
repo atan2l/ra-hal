@@ -61,128 +61,127 @@ fn do_gpt(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
         }
     };
 
-    let signals = signals
+    signals
         .iter()
         .filter(|(signal, _)| signal.as_str() == "GTIOCA" || signal.as_str() == "GTIOCB")
-        .map(|(signal, pins)| {
+        .fold(vec![], |mut acc, (signal, pins)| {
             let channel = match signal.as_str() {
                 "GTIOCA" => format_ident!("ChanA"),
                 "GTIOCB" => format_ident!("ChanB"),
                 _ => unreachable!(),
             };
-            pins.iter()
-                .map(|(pin, config)| {
-                    let pin = format_ident!("{}", pin);
-                    let conditions = pin_conditional(&config.pin_count);
-                    quote! {
-                        #conditions
-                        crate::pwm::pwm_pin!(#peripheral, #channel, #pin, Gpt2);
-                    }
-                })
-                .collect::<Vec<_>>()
-        })
-        .flatten()
-        .collect::<Vec<_>>();
 
-    signals
+            for (pin, config) in pins.iter() {
+                let pin = format_ident!("{}", pin);
+
+                let conditions = pin_conditional(&config.pin_count);
+
+                acc.push(quote! {
+                    #conditions
+                    crate::pwm::pwm_pin!(#peripheral, #channel, #pin, Gpt2);
+                });
+            }
+
+            acc
+        })
 }
 
 fn do_sci(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
     let peripheral = format_ident!("{}", peripheral.to_uppercase());
 
-    let signals = signals
+    signals
         .iter()
         .filter(|(signal, _)| signal.as_str() == "TXD_MOSI" || signal.as_str() == "RXD_MISO")
-        .map(|(signal, pins)| {
+        .fold(vec![], |mut acc, (signal, pins)| {
             let signal = match signal.as_str() {
                 "TXD_MOSI" => format_ident!("tx_pin_impl"),
                 "RXD_MISO" => format_ident!("rx_pin_impl"),
                 _ => unreachable!(),
             };
-            pins.iter()
-                .map(|(pin, config)| {
-                    let pin = format_ident!("{}", pin);
-                    let conditions = pin_conditional(&config.pin_count);
-                    let pfunc = match config.pfunc.as_ref().unwrap().as_str() {
-                        "IOPORT_PERIPHERAL_SCI0_2_4_6_8" => format_ident!("Sci1"),
-                        "IOPORT_PERIPHERAL_SCI1_3_5_7_9" => format_ident!("Sci2"),
-                        _ => unreachable!(),
-                    };
-                    quote! {
-                        #conditions
-                        crate::uart::#signal!(#peripheral, #pin, #pfunc);
-                    }
-                })
-                .collect::<Vec<_>>()
-        })
-        .flatten()
-        .collect::<Vec<_>>();
 
-    signals
+            for (pin, config) in pins.iter() {
+                let pin = format_ident!("{}", pin);
+
+                let conditions = pin_conditional(&config.pin_count);
+
+                let pfunc = match config.pfunc.as_ref().unwrap().as_str() {
+                    "IOPORT_PERIPHERAL_SCI0_2_4_6_8" => format_ident!("Sci1"),
+                    "IOPORT_PERIPHERAL_SCI1_3_5_7_9" => format_ident!("Sci2"),
+                    _ => unreachable!(),
+                };
+
+                acc.push(quote! {
+                    #conditions
+                    crate::uart::#signal!(#peripheral, #pin, #pfunc);
+                });
+            }
+
+            acc
+        })
 }
 
 fn do_i2c(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
     let peripheral = format_ident!("{}", peripheral.to_uppercase());
 
-    let signals = signals
+    signals
         .iter()
         .filter(|(signal, _)| signal.as_str() == "SDA" || signal.as_str() == "SCL")
-        .map(|(signal, pins)| {
+        .fold(vec![], |mut acc, (signal, pins)| {
             let signal = match signal.as_str() {
                 "SDA" => format_ident!("data_pin_impl"),
                 "SCL" => format_ident!("clock_pin_impl"),
                 _ => unreachable!(),
             };
-            pins.iter()
-                .map(|(pin, config)| {
-                    let pin = format_ident!("{}", pin);
-                    let conditions = pin_conditional(&config.pin_count);
-                    let pfunc = match config.pfunc.as_ref().unwrap().as_str() {
-                        "IOPORT_PERIPHERAL_IIC" => format_ident!("I2c"),
-                        _ => unreachable!(),
-                    };
-                    quote! {
-                        #conditions
-                        crate::i2c::#signal!(#peripheral, #pin, #pfunc);
-                    }
-                })
-                .collect::<Vec<_>>()
-        })
-        .flatten()
-        .collect::<Vec<_>>();
 
-    signals
+            for (pin, config) in pins.iter() {
+                let pin = format_ident!("{}", pin);
+
+                let conditions = pin_conditional(&config.pin_count);
+
+                let pfunc = match config.pfunc.as_ref().unwrap().as_str() {
+                    "IOPORT_PERIPHERAL_IIC" => format_ident!("I2c"),
+                    _ => unreachable!(),
+                };
+
+                acc.push(quote! {
+                    #conditions
+                    crate::i2c::#signal!(#peripheral, #pin, #pfunc);
+                });
+            }
+
+            acc
+        })
 }
 
 fn do_adc(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
-    // Not really needed but why not
+    // Not really needed because the 'adc' instance doesn't define any signals we care about but why not
     if peripheral == "adc" {
         return vec![];
     }
 
-    let signals = signals
+    signals
         .iter()
         .filter(|(signal, _)| signal.starts_with("AN"))
-        .collect::<Vec<_>>()
-        .into_iter()
         .fold(vec![], |mut acc, (signal, pins)| {
             let channel = signal.strip_prefix("AN").unwrap().parse::<u8>().unwrap();
+
             for (pin, config) in pins.iter() {
                 let pin = format_ident!("{}", pin);
                 let conditions = pin_conditional(&config.pin_count);
+
                 acc.push(quote! {
                     #conditions
                     crate::adc::channel::input_pin_impl!(#pin);
                 });
+
                 acc.push(quote! {
                     #conditions
                     crate::adc::channel::chan_impl!(#channel, #pin);
                 });
             }
-            acc
-        });
 
-    signals
+            acc
+        })
 }
 
 fn inner_main() -> Result<(), Box<dyn std::error::Error>> {
