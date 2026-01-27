@@ -32,6 +32,15 @@ chrono = { version = "^0.4", default-features = false, optional = true }
 document-features = { workspace = true }
 paste = "1"
 
+[build-dependencies]
+prettyplease = "0.2.37"
+proc-macro2 = "1.0.106"
+quote = "1.0.44"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_derive = "1.0.228"
+serde_yaml = "0.9.34"
+syn = "2.0.114"
+
 [features]
 default = [ "time-driver", "rt", "diag", "uno_r4", "chrono", "strict-assert" ]
 

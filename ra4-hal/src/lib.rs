@@ -19,6 +19,7 @@ pub mod i2c;
 pub mod mcu_info;
 pub mod ofs0;
 pub mod ofs1;
+pub mod pwm;
 pub mod rtc;
 // pub mod sce5;
 #[cfg(feature = "time-driver")]
@@ -277,6 +278,12 @@ embassy_hal_internal::peripherals_definition!(
     CRC,
     GPT32_0,
     GPT32_1,
+    GPT16_2,
+    GPT16_3,
+    GPT16_4,
+    GPT16_5,
+    GPT16_6,
+    GPT16_7,
     ICU,
     IIC0,
     IIC1,
@@ -444,6 +451,12 @@ embassy_hal_internal::peripherals_struct!(
     CRC,
     GPT32_0,
     GPT32_1,
+    GPT16_2,
+    GPT16_3,
+    GPT16_4,
+    GPT16_5,
+    GPT16_6,
+    GPT16_7,
     ICU,
     IIC0,
     IIC1,
@@ -701,4 +714,8 @@ macro_rules! bind_interrupts {
     (@inner $($t:tt)*) => {
         $($t)*
     }
+}
+
+mod pin_trait_impl {
+    include!(concat!(env!("OUT_DIR"), "/pin_traits.rs"));
 }
