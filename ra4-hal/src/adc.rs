@@ -10,7 +10,7 @@ use crate::{pac, peripherals};
 
 pub use channel::{AdcChannel, Temperature, Vref};
 
-mod channel;
+pub(crate) mod channel;
 
 /// `ADC14` driver.
 #[allow(private_bounds)]

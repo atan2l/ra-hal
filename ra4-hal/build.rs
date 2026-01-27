@@ -154,6 +154,37 @@ fn do_i2c(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
     signals
 }
 
+fn do_adc(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
+    // Not really needed but why not
+    if peripheral == "adc" {
+        return vec![];
+    }
+
+    let signals = signals
+        .iter()
+        .filter(|(signal, _)| signal.starts_with("AN"))
+        .collect::<Vec<_>>()
+        .into_iter()
+        .fold(vec![], |mut acc, (signal, pins)| {
+            let channel = signal.strip_prefix("AN").unwrap().parse::<u8>().unwrap();
+            for (pin, config) in pins.iter() {
+                let pin = format_ident!("{}", pin);
+                let conditions = pin_conditional(&config.pin_count);
+                acc.push(quote! {
+                    #conditions
+                    crate::adc::channel::input_pin_impl!(#pin);
+                });
+                acc.push(quote! {
+                    #conditions
+                    crate::adc::channel::chan_impl!(#channel, #pin);
+                });
+            }
+            acc
+        });
+
+    signals
+}
+
 fn inner_main() -> Result<(), Box<dyn std::error::Error>> {
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=support/pinmap.yaml");
@@ -166,9 +197,10 @@ fn inner_main() -> Result<(), Box<dyn std::error::Error>> {
         .filter_map(|(peripheral, signal)| {
             let peripheral_kind = &peripheral[0..3.min(peripheral.len())];
             match peripheral_kind {
+                "adc" => Some(do_adc(peripheral, signal)),
                 "gpt" => Some(do_gpt(peripheral, signal)),
-                "sci" => Some(do_sci(peripheral, signal)),
                 "iic" => Some(do_i2c(peripheral, signal)),
+                "sci" => Some(do_sci(peripheral, signal)),
                 _ => None,
             }
         })
