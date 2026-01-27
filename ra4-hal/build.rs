@@ -5,9 +5,17 @@ use quote::{format_ident, quote};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
+struct PinDef {
+    pin_count: Vec<u8>,
+    pfunc: Option<String>,
+}
+
+type PinEntry = HashMap<String, HashMap<String, PinDef>>;
+
+#[derive(Debug, Deserialize)]
 struct PinMap {
     #[serde(flatten)]
-    the_map: HashMap<String, HashMap<String, HashMap<String, Vec<u8>>>>,
+    the_map: HashMap<String, PinEntry>,
 }
 
 fn main() {
@@ -43,10 +51,7 @@ fn pin_conditional(valid_for_pins: &[u8]) -> TokenStream {
 }
 
 /// Add the appropriate impls for a `GPT` timer
-fn do_gpt(
-    peripheral: &str,
-    signals: &HashMap<String, HashMap<String, Vec<u8>>>,
-) -> Vec<TokenStream> {
+fn do_gpt(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
     let peripheral = match peripheral {
         "gpt0" | "gpt1" => {
             format_ident!("{}", peripheral.replace("gpt", "GPT32_"))
@@ -68,10 +73,44 @@ fn do_gpt(
             pins.iter()
                 .map(|(pin, config)| {
                     let pin = format_ident!("{}", pin);
-                    let conditions = pin_conditional(config);
+                    let conditions = pin_conditional(&config.pin_count);
                     quote! {
                         #conditions
                         crate::pwm::pwm_pin!(#peripheral, #channel, #pin, Gpt2);
+                    }
+                })
+                .collect::<Vec<_>>()
+        })
+        .flatten()
+        .collect::<Vec<_>>();
+
+    signals
+}
+
+fn do_sci(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
+    let peripheral = format_ident!("{}", peripheral.to_uppercase());
+
+    let signals = signals
+        .iter()
+        .filter(|(signal, _)| signal.as_str() == "TXD_MOSI" || signal.as_str() == "RXD_MISO")
+        .map(|(signal, pins)| {
+            let signal = match signal.as_str() {
+                "TXD_MOSI" => format_ident!("tx_pin_impl"),
+                "RXD_MISO" => format_ident!("rx_pin_impl"),
+                _ => unreachable!(),
+            };
+            pins.iter()
+                .map(|(pin, config)| {
+                    let pin = format_ident!("{}", pin);
+                    let conditions = pin_conditional(&config.pin_count);
+                    let pfunc = match config.pfunc.as_ref().unwrap().as_str() {
+                        "IOPORT_PERIPHERAL_SCI0_2_4_6_8" => format_ident!("Sci1"),
+                        "IOPORT_PERIPHERAL_SCI1_3_5_7_9" => format_ident!("Sci2"),
+                        _ => unreachable!(),
+                    };
+                    quote! {
+                        #conditions
+                        crate::uart::#signal!(#peripheral, #pin, #pfunc);
                     }
                 })
                 .collect::<Vec<_>>()
@@ -94,6 +133,8 @@ fn inner_main() -> Result<(), Box<dyn std::error::Error>> {
         .filter_map(|(peripheral, signal)| {
             if peripheral.starts_with("gpt") {
                 return Some(do_gpt(peripheral, signal));
+            } else if peripheral.starts_with("sci") {
+                return Some(do_sci(peripheral, signal));
             }
 
             None

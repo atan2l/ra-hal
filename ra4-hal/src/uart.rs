@@ -76,7 +76,7 @@ pub enum UartError {
 #[allow(private_bounds)]
 pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
 
-trait SealedInstance {
+pub(crate) trait SealedInstance {
     #[cfg(feature = "defmt")]
     const PERIPHERAL: &'static str;
     #[cfg(not(feature = "defmt"))]
@@ -130,7 +130,7 @@ pub trait TxPin<I: Instance>: TxPinSealed<I> {}
 #[allow(private_bounds)]
 pub trait RxPin<I: Instance>: RxPinSealed<I> {}
 
-trait TxPinSealed<I: SealedInstance>: Pin + PeripheralType {
+pub(crate) trait TxPinSealed<I: SealedInstance>: Pin + PeripheralType {
     const PERIPHERAL_FUNC: PortFunction;
 
     #[inline(always)]
@@ -139,7 +139,7 @@ trait TxPinSealed<I: SealedInstance>: Pin + PeripheralType {
     }
 }
 
-trait RxPinSealed<I: SealedInstance>: Pin + PeripheralType {
+pub(crate) trait RxPinSealed<I: SealedInstance>: Pin + PeripheralType {
     const PERIPHERAL_FUNC: PortFunction;
 
     #[inline(always)]
@@ -833,21 +833,23 @@ impl<'d, I: Instance> embedded_serial::MutBlockingRx for BufferedUart<'d, I> {
 
 macro_rules! tx_pin_impl {
     ($sci:ident, $pin:ident, $pfunc:ident) => {
-        impl TxPin<crate::peripherals::$sci> for peripherals::$pin {}
-        impl TxPinSealed<crate::peripherals::$sci> for peripherals::$pin {
-            const PERIPHERAL_FUNC: PortFunction = PortFunction::$pfunc;
+        impl crate::uart::TxPin<crate::peripherals::$sci> for crate::peripherals::$pin {}
+        impl crate::uart::TxPinSealed<crate::peripherals::$sci> for crate::peripherals::$pin {
+            const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
         }
     };
 }
+pub(crate) use tx_pin_impl;
 
 macro_rules! rx_pin_impl {
     ($sci:ident, $pin:ident, $pfunc:ident) => {
-        impl RxPin<crate::peripherals::$sci> for peripherals::$pin {}
-        impl RxPinSealed<crate::peripherals::$sci> for peripherals::$pin {
-            const PERIPHERAL_FUNC: PortFunction = PortFunction::$pfunc;
+        impl crate::uart::RxPin<crate::peripherals::$sci> for crate::peripherals::$pin {}
+        impl crate::uart::RxPinSealed<crate::peripherals::$sci> for crate::peripherals::$pin {
+            const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
         }
     };
 }
+pub(crate) use rx_pin_impl;
 
 macro_rules! instance_impl {
     ($periph:ident, $rx_int:ident, $tx_int:ident, $te_int:ident, $stop:ident) => {
@@ -911,54 +913,6 @@ macro_rules! instance_impl {
         }
     };
 }
-
-tx_pin_impl!(SCI0, P101, Sci1);
-tx_pin_impl!(SCI0, P205, Sci1);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-tx_pin_impl!(SCI0, P411, Sci1);
-
-tx_pin_impl!(SCI1, P213, Sci2);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-tx_pin_impl!(SCI1, P401, Sci2);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-tx_pin_impl!(SCI1, P501, Sci2);
-
-tx_pin_impl!(SCI2, P102, Sci2);
-tx_pin_impl!(SCI2, P112, Sci1);
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-tx_pin_impl!(SCI2, P302, Sci1);
-
-tx_pin_impl!(SCI9, P109, Sci2);
-#[cfg(feature = "_100pin")]
-tx_pin_impl!(SCI9, P203, Sci2);
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-tx_pin_impl!(SCI9, P409, Sci2);
-#[cfg(feature = "_100pin")]
-tx_pin_impl!(SCI9, P602, Sci2);
-
-rx_pin_impl!(SCI0, P100, Sci1);
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-rx_pin_impl!(SCI0, P104, Sci1);
-#[cfg(any(feature = "_48pin", feature = "_64pin", feature = "_100pin"))]
-rx_pin_impl!(SCI0, P206, Sci1);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-rx_pin_impl!(SCI0, P410, Sci1);
-
-rx_pin_impl!(SCI1, P212, Sci2);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-rx_pin_impl!(SCI1, P402, Sci2);
-#[cfg(any(feature = "_64pin", feature = "_100pin"))]
-rx_pin_impl!(SCI1, P502, Sci2);
-#[cfg(feature = "_100pin")]
-rx_pin_impl!(SCI1, P708, Sci2);
-
-rx_pin_impl!(SCI2, P301, Sci1);
-
-rx_pin_impl!(SCI9, P110, Sci2);
-#[cfg(feature = "_100pin")]
-rx_pin_impl!(SCI9, P202, Sci2);
-#[cfg(feature = "_100pin")]
-rx_pin_impl!(SCI9, P601, Sci2);
 
 instance_impl!(SCI0, Sci0Rxi, Sci0Txi, Sci0Tei, mstpb31);
 instance_impl!(SCI1, Sci1Rxi, Sci1Txi, Sci1Tei, mstpb30);
