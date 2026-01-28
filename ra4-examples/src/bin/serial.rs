@@ -86,7 +86,7 @@ async fn main(_spawner: Spawner) {
     let mut uart = BufferedUart::new(p.SCI1, p.P501, tx_buf, p.P502, rx_buf, Irqs);
 
     // The ESP32 communicates at 115,200 baud with the default Arduino firmware
-    uart.set_speed(115200);
+    uart.set_baudrate(115200);
 
     // Try a command with multiple small blocking writes
     query(&mut uart, b"SOFTRESETWIFI");

@@ -34,6 +34,19 @@ struct SpeedEntry {
     modulation: u8,
 }
 
+/// Parity bit
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum Parity {
+    /// Even parity
+    Even,
+
+    /// Odd parity
+    Odd,
+
+    /// No parity bit
+    None,
+}
+
 /// UART driver, backed by a [`RingBuffer`] and 16-byte on-device FIFO buffer.
 #[allow(private_bounds)]
 pub struct BufferedUart<'d, I: Instance> {
@@ -323,7 +336,7 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         });
 
         let speed = &SPEED_ENTRIES[0];
-        Self::set_speed_from_entry(speed);
+        Self::set_baud_from_entry(speed);
 
         // Move pins over to SCI
         Self::configure_pins(tx_pin, rx_pin);
@@ -385,7 +398,7 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         );
     }
 
-    fn set_speed_from_entry(speed: &SpeedEntry) {
+    fn set_baud_from_entry(speed: &SpeedEntry) {
         let sci = I::regs();
 
         sci.scr().modify(|w| {
@@ -418,22 +431,54 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         Self::show_speed();
     }
 
-    /// Configures the `SCI` instance for a given baud rate.  Currently only works with `PCLKA` set to 48 MHz.
+    /// Sets baud rate for the `SCI` instance.
+    ///
+    /// Note:
+    /// * This will disable the transmitter and temporarily disable the receiver (§28.2.9 note 4).
+    /// * Currently only works with `PCLKA` set to 48 MHz.
     ///
     /// # Arguments
     /// * `baud_rate` - Desired baud rate.
-    /// Currently only 300, 1200, 2400, 4800, 9600, 19200, 3840, and 115200 baud are supported.
+    ///   Currently only 300, 1200, 2400, 4800, 9600, 19200, 3840, and 115200 baud are supported.
     ///
     /// # TODO
     /// * Support arbitrary baud rates
     /// * Support arbitrary `PCLKA` rates
-    pub fn set_speed(&mut self, baud_rate: u32) {
+    pub fn set_baudrate(&mut self, baud_rate: u32) {
         let speed = SPEED_ENTRIES
             .iter()
             .find(|e| e.baud_rate == baud_rate)
             .unwrap();
 
-        Self::set_speed_from_entry(speed);
+        Self::set_baud_from_entry(speed);
+    }
+
+    /// Sets baud rate for the `SCI` instance.
+    ///
+    /// Note: This will disable the transmitter and temporarily disable the receiver (§28.2.9 note 4).
+    pub fn set_parity(&mut self, parity: Parity) {
+        let sci = I::regs();
+
+        let (pe, pm) = match parity {
+            Parity::Even => (true, SmrPm::Even),
+            Parity::Odd => (true, SmrPm::Odd),
+            Parity::None => (false, SmrPm::Even),
+        };
+
+        sci.scr().modify(|w| {
+            w.set_re(false);
+            w.set_te(false);
+        });
+
+        sci.smr().modify(|w| {
+            w.set_pe(pe);
+            w.set_pm(pm);
+            w.set_stop(Stop::Stop1);
+        });
+
+        sci.scr().modify(|w| {
+            w.set_re(true);
+        });
     }
 
     /// Reads data until the buffer is full or `b"\r\n"` is read.
