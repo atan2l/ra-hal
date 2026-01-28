@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+spellcode-cli --exclude ra4m1-ctpac --exclude ignore --exclude tools --exclude support --exclude tools $(pwd)
