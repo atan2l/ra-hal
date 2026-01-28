@@ -283,7 +283,7 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
     ///
     /// Note:
     /// * 9 bit data is supported by the underlying hardware but not yet by this driver.
-    /// * Note This will disable the transmitter and temporarily disable the receiver (§28.2.9 note 4).
+    /// * This will disable the transmitter and temporarily disable the receiver (§28.2.9 note 4).
     #[inline]
     pub fn set_data_bits(&mut self, n: DataBits) {
         let sci = I::regs();
