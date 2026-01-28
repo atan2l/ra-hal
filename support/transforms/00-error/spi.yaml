@@ -1,10 +1,11 @@
+# TN-RA*-A0033A/E
 transforms:
   - !AddFields
     fieldset: spi::regs::Spdcr
     fields:
       - !Field
         name: spbyt
-        description: SPI Byte Access Specification (TN-RA*-A0033A/E)
+        description: SPI Byte Access Specification
         bit_offset: 6
         bit_size: 1
   - !AddRegisters
