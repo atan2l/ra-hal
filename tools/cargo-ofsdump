@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+cargo objdump --release --quiet ${@:2} -- --full-contents -j .ofs0 -j .ofs1 -j .sec_mpu

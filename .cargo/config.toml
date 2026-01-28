@@ -6,7 +6,6 @@ runner = "probe-rs run --chip R7FA4M1AB"
 dup = [ "tree", "-f", "{p} {f}", "-d" ]
 clip = [ "clippy", "--quiet", "--no-deps", "--workspace", "--exclude", "ra4m1-ctpac" ]
 haldoc = [ "doc", "--no-deps", "-p", "ra4-hal" ]
-ofsdump = [ "objdump", "--release", "--quiet", "--", "--full-contents", "-j", ".ofs0", "-j", ".ofs1", "-j", ".sec_mpu" ]
 
 [build]
 target = "thumbv7em-none-eabihf" # R7FA4M1AB is Cortex-M4F based

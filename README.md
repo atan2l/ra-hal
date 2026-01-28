@@ -28,7 +28,18 @@ Uno R4 WiFi = R7FA4M1AB3CFM#AA0 = 64 pin LQFP
 To read OFS values in binary (the default linker script should include these):
 
 ```
-cargo ofsdump
+$ cargo ofsdump --bin=blink
+
+blink:  file format elf32-littlearm
+Contents of section .ofs0:
+ 0400 fffffbff                             ....
+Contents of section .ofs1:
+ 0404 dfceffff                             ....
+Contents of section .sec_mpu:
+ 0408 fcffff00 ffffff00 fcffff00 ffffff00  ................
+ 0418 fcffff00 ffffff00 fcff0f20 ffff0f20  ........... ...
+ 0428 fcff7f40 ffff7f40 fcff0d40 ffff0d40  ...@...@...@...@
+ 0438 ffffffff                             ....
 ```
 
 To read the OFS values from a board connected to your computer:
