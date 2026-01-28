@@ -24,6 +24,53 @@ use crate::{
     pac, peripherals,
 };
 
+/// UART configuration
+#[non_exhaustive]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct Config {
+    /// Baud rate
+    pub baud_rate: u32,
+
+    /// Number of data bits.
+    /// Note: 9 bit data is not yet supported.
+    #[allow(missing_docs)]
+    pub data_bits: DataBits,
+
+    /// Parity type
+    #[allow(missing_docs)]
+    pub parity: Parity,
+
+    /// Number of stop bits.
+    #[allow(missing_docs)]
+    pub stop_bits: StopBits,
+}
+
+/// Number of stop bits
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum StopBits {
+    /// 1 stop bit
+    Stop1,
+
+    /// 2 stop bits
+    Stop2,
+}
+
+/// Word length.
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum DataBits {
+    /// 7 bits.
+    DataBits7,
+
+    /// 8 bits.
+    DataBits8,
+
+    /// 9 bits.
+    DataBits9,
+}
+
 /// Baud rate generator configuration for fixed speeds, rates that use "baud rate modulation" may achieve more precise timing.
 /// Derived from the formula listed in Table 28.19.
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
@@ -36,6 +83,7 @@ struct SpeedEntry {
 
 /// Parity bit
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Parity {
     /// Even parity
     Even,
@@ -147,8 +195,8 @@ pub(crate) trait TxPinSealed<I: SealedInstance>: Pin + PeripheralType {
     const PERIPHERAL_FUNC: PortFunction;
 
     #[inline(always)]
-    fn pfunc(&self) -> PortFunction {
-        Self::PERIPHERAL_FUNC
+    fn set_pfunc(&self) {
+        self.set_as_pf(Self::PERIPHERAL_FUNC);
     }
 }
 
@@ -156,8 +204,8 @@ pub(crate) trait RxPinSealed<I: SealedInstance>: Pin + PeripheralType {
     const PERIPHERAL_FUNC: PortFunction;
 
     #[inline(always)]
-    fn pfunc(&self) -> PortFunction {
-        Self::PERIPHERAL_FUNC
+    fn set_pfunc(&self) {
+        self.set_as_pf(Self::PERIPHERAL_FUNC);
     }
 }
 
@@ -219,46 +267,202 @@ const SPEED_ENTRIES: [SpeedEntry; 9] = [
     },
 ];
 
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            baud_rate: 9600,
+            data_bits: DataBits::DataBits8,
+            parity: Parity::None,
+            stop_bits: StopBits::Stop1,
+        }
+    }
+}
+
 impl<'d, I: Instance> BufferedUart<'d, I> {
+    /// Sets the number of bits in a byte.
+    ///
+    /// Note:
+    /// * 9 bit data is supported by the underlying hardware but not yet by this driver.
+    /// * Note This will disable the transmitter and temporarily disable the receiver (§28.2.9 note 4).
     #[inline]
-    fn set_data_bits(n: u8) {
+    pub fn set_data_bits(&mut self, n: DataBits) {
+        let sci = I::regs();
+
+        sci.scr().modify(|w| {
+            w.set_te(false);
+            w.set_re(false);
+        });
+
+        self.set_data_bits_inner(n);
+
+        sci.scr().modify(|w| w.set_re(true));
+    }
+
+    fn set_data_bits_inner(&mut self, n: DataBits) {
         let sci = I::regs();
 
         match n {
-            7 => {
-                // // 7 Data bits
-                // // Restrictions apply, page 704 note 3
+            DataBits::DataBits7 => {
+                // Restrictions apply, page 704 note 3
                 sci.scmr().modify(|w| w.set_chr1(true));
                 sci.smr().modify(|w| w.set_chr(true));
             }
-            8 => {
-                // 8 Data bits
-                info!("{}Setting 8 data bits", I::PERIPHERAL);
+            DataBits::DataBits8 => {
                 sci.scmr().modify(|w| w.set_chr1(true));
                 sci.smr().modify(|w| w.set_chr(false));
             }
-            9 => {
+            DataBits::DataBits9 => {
                 // // 9 Data bits
                 // sci.scmr().write(|w| w.set_chr1(false));
                 // sci.smr().write(|w| w.set_chr(false));
                 todo!()
             }
-            _ => unimplemented!(),
         }
     }
 
-    fn configure_pins(tx: Peri<'d, impl TxPin<I>>, rx: Peri<'d, impl RxPin<I>>) {
-        debug!("TX: {}/{}", tx._port(), tx._pin());
-        tx.set_as_pf(tx.pfunc());
+    /// Sets baud rate for the `SCI` instance.
+    ///
+    /// Note: This will disable the transmitter and temporarily disable the receiver (§28.2.9 note 4).
+    pub fn set_parity(&mut self, parity: Parity) {
+        let sci = I::regs();
 
-        debug!("RX: {}/{}", rx._port(), rx._pin());
-        rx.set_as_pf(rx.pfunc());
+        sci.scr().modify(|w| {
+            w.set_te(false);
+            w.set_re(false);
+        });
+
+        self.set_parity_inner(parity);
+
+        sci.scr().modify(|w| w.set_re(true));
+    }
+
+    fn set_parity_inner(&mut self, parity: Parity) {
+        let sci = I::regs();
+
+        let (pe, pm) = match parity {
+            Parity::Even => (true, SmrPm::Even),
+            Parity::Odd => (true, SmrPm::Odd),
+            Parity::None => (false, SmrPm::Even),
+        };
+
+        sci.smr().modify(|w| {
+            w.set_pe(pe);
+            w.set_pm(pm);
+        });
+    }
+
+    /// Set stop bit length.
+    ///
+    /// Note: This will disable the transmitter and temporarily disable the receiver (§28.2.9 note 4).
+    pub fn set_stop_bits(&mut self, stop_bits: StopBits) {
+        let sci = I::regs();
+
+        sci.scr().modify(|w| {
+            w.set_te(false);
+            w.set_re(false);
+        });
+
+        self.set_stop_bits_inner(stop_bits);
+
+        sci.scr().modify(|w| w.set_re(true));
+    }
+
+    fn set_stop_bits_inner(&mut self, stop_bits: StopBits) {
+        let sci = I::regs();
+
+        // Set it up for No Parity, 1 stop bit
+        sci.smr().modify(|w| {
+            match stop_bits {
+                StopBits::Stop1 => w.set_stop(Stop::Stop1),
+                StopBits::Stop2 => w.set_stop(Stop::Stop2),
+            };
+        });
+    }
+
+    /// Sets baud rate for the `SCI` instance.
+    ///
+    /// Note:
+    /// * This will disable the transmitter and temporarily disable the receiver (§28.2.9 note 4).
+    /// * Currently only works with `PCLKA` set to 48 MHz.
+    ///
+    /// # Arguments
+    /// * `baud_rate` - Desired baud rate.
+    ///   Currently only 300, 1200, 2400, 4800, 9600, 19200, 3840, and 115200 baud are supported.
+    ///
+    /// # TODO
+    /// * Support arbitrary baud rates
+    /// * Support arbitrary `PCLKA` rates
+    pub fn set_baudrate(&mut self, baud_rate: u32) {
+        let speed = SPEED_ENTRIES
+            .iter()
+            .find(|e| e.baud_rate == baud_rate)
+            .unwrap();
+
+        Self::set_baud_from_entry(speed);
+    }
+
+    fn set_baud_from_entry(speed: &SpeedEntry) {
+        let sci = I::regs();
+
+        sci.scr().modify(|w| {
+            w.set_re(false);
+            w.set_te(false);
+        });
+
+        sci.brr().write(|w| {
+            w.set_brr(speed.big_n);
+        });
+
+        if speed.modulation != 0 {
+            sci.mddr().write(|w| w.set_mddr(speed.modulation));
+            sci.semr().modify(|w| w.set_brme(true));
+        } else {
+            sci.mddr().write(|w| w.set_mddr(0));
+            sci.semr().modify(|w| w.set_brme(false));
+        }
+
+        sci.smr()
+            .modify(|w| w.set_cks(SmrCks::from_bits(speed.small_n)));
+
+        sci.scr().modify(|w| w.set_re(true));
     }
 
     /// Configures a new UART and returns the driver.
     #[allow(private_bounds)]
     pub fn new<RxInt: InterruptType, TxInt: InterruptType, TeInt: InterruptType>(
         _peri: Peri<'d, I>,
+        tx_pin: Peri<'d, impl TxPin<I>>,
+        tx_buffer: &'d mut [u8],
+        rx_pin: Peri<'d, impl RxPin<I>>,
+        rx_buffer: &'d mut [u8],
+        irqs: impl interrupt::typelevel::Binding<RxInt, RxInterruptHandler<I>>
+        + interrupt::typelevel::Binding<TxInt, TxInterruptHandler<I>>
+        + interrupt::typelevel::Binding<TeInt, TeInterruptHandler<I>>
+        + 'd,
+        config: Config,
+    ) -> Self {
+        let mut this = Self::new_inner(tx_pin, tx_buffer, rx_pin, rx_buffer, irqs);
+
+        this.set_data_bits_inner(config.data_bits);
+        this.set_parity_inner(config.parity);
+        this.set_stop_bits_inner(config.stop_bits);
+
+        let speed = &SPEED_ENTRIES[0];
+        Self::set_baud_from_entry(speed);
+
+        let sci = I::regs();
+
+        // We can leave the receiver on, but not the transmitter as enabling the transmitter in
+        // combination with the TX interrupt is what kicks off the whole transmit procedure.
+        sci.scr().modify(|w| {
+            w.set_re(true);
+            w.set_rie(true);
+        });
+
+        this
+    }
+
+    fn new_inner<RxInt: InterruptType, TxInt: InterruptType, TeInt: InterruptType>(
         tx_pin: Peri<'d, impl TxPin<I>>,
         tx_buffer: &'d mut [u8],
         rx_pin: Peri<'d, impl RxPin<I>>,
@@ -289,14 +493,10 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
             w.set_ttrg(Ttrg::from_bits(I::FIFO_DEPTH));
         });
 
-        sci.scr().modify(|w| {
-            // TODO: Give enum variants meaningful names.
-            w.set_cke(ScrCke::_00);
-        });
+        // TODO: Give enum variants meaningful names.
+        sci.scr().modify(|w| w.set_cke(ScrCke::_00));
 
-        sci.simr1().modify(|w| {
-            w.set_iicm(false);
-        });
+        sci.simr1().modify(|w| w.set_iicm(false));
 
         sci.spmr().modify(|w| {
             w.set_ckph(false);
@@ -304,18 +504,7 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         });
 
         // not-smart card mode
-        sci.scmr().modify(|w| {
-            w.set_smif(false);
-        });
-
-        Self::set_data_bits(8);
-
-        // Set it up for No Parity, 1 stop bit
-        sci.smr().modify(|w| {
-            w.set_pe(false);
-            w.set_pm(SmrPm::Even);
-            w.set_stop(Stop::Stop1);
-        });
+        sci.scmr().modify(|w| w.set_smif(false));
 
         sci.smr().modify(|w| {
             w.set_mp(false);
@@ -335,11 +524,12 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
             w.set_spb2io(false);
         });
 
-        let speed = &SPEED_ENTRIES[0];
-        Self::set_baud_from_entry(speed);
-
         // Move pins over to SCI
-        Self::configure_pins(tx_pin, rx_pin);
+        trace!("{}TX=p{}/{}", I::PERIPHERAL, tx_pin._port(), tx_pin._pin());
+        tx_pin.set_pfunc();
+
+        trace!("P{}RX=p{}/{}", I::PERIPHERAL, rx_pin._port(), rx_pin._pin());
+        rx_pin.set_pfunc();
 
         let tx_len = tx_buffer.len();
         unsafe { I::tx_buffer().init(tx_buffer.as_mut_ptr(), tx_len) };
@@ -358,127 +548,11 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         TxInt::IRQ.icu_enable(I::TX_INTERRUPT_EVENT);
         TeInt::IRQ.icu_enable(I::TE_INTERRUPT_EVENT);
 
-        // We can leave the receiver on, but not the transmitter as enabling the transmitter in
-        // combination with the TX interrupt is what kicks off the whole transmit procedure.
-        sci.scr().modify(|w| {
-            w.set_re(true);
-            w.set_rie(true);
-        });
-
-        trace!("SMR: {}", sci.smr().read());
-        trace!("SCR: {}", sci.scr().read());
-        trace!("SSR: {}", sci.ssr().read());
-        trace!("SEMR: {}", sci.semr().read());
-        trace!("BRR: {}", sci.brr().read());
-        trace!("FCR: {}", sci.fcr().read());
-
         Self {
             _phantom: PhantomData,
             rx_int: RxInt::IRQ,
             tx_int: TxInt::IRQ,
         }
-    }
-
-    fn show_speed() {
-        let sci = I::regs();
-
-        // Baud rate divisor
-        let brr = sci.brr().read().brr();
-        // Modulation duty-cycle
-        let mddr = sci.mddr().read().mddr();
-        // Modulation en/disabled
-        let brme = sci.semr().read().brme();
-
-        debug!(
-            "{}Speed: BRR: {}, MDDR: {}, BRME: {}",
-            I::PERIPHERAL,
-            brr,
-            mddr,
-            brme
-        );
-    }
-
-    fn set_baud_from_entry(speed: &SpeedEntry) {
-        let sci = I::regs();
-
-        sci.scr().modify(|w| {
-            w.set_re(false);
-            w.set_te(false);
-        });
-        debug!("{}Applying {}", I::PERIPHERAL, speed);
-        sci.brr().write(|w| {
-            w.set_brr(speed.big_n);
-        });
-        if speed.modulation != 0 {
-            sci.mddr().write(|w| {
-                w.set_mddr(speed.modulation);
-            });
-            sci.semr().modify(|w| {
-                w.set_brme(true);
-            });
-        } else {
-            sci.mddr().write(|w| {
-                w.set_mddr(0);
-            });
-            sci.semr().modify(|w| w.set_brme(false));
-        }
-        sci.smr().modify(|w| {
-            w.set_cks(SmrCks::from_bits(speed.small_n));
-        });
-        sci.scr().modify(|w| {
-            w.set_re(true);
-        });
-        Self::show_speed();
-    }
-
-    /// Sets baud rate for the `SCI` instance.
-    ///
-    /// Note:
-    /// * This will disable the transmitter and temporarily disable the receiver (§28.2.9 note 4).
-    /// * Currently only works with `PCLKA` set to 48 MHz.
-    ///
-    /// # Arguments
-    /// * `baud_rate` - Desired baud rate.
-    ///   Currently only 300, 1200, 2400, 4800, 9600, 19200, 3840, and 115200 baud are supported.
-    ///
-    /// # TODO
-    /// * Support arbitrary baud rates
-    /// * Support arbitrary `PCLKA` rates
-    pub fn set_baudrate(&mut self, baud_rate: u32) {
-        let speed = SPEED_ENTRIES
-            .iter()
-            .find(|e| e.baud_rate == baud_rate)
-            .unwrap();
-
-        Self::set_baud_from_entry(speed);
-    }
-
-    /// Sets baud rate for the `SCI` instance.
-    ///
-    /// Note: This will disable the transmitter and temporarily disable the receiver (§28.2.9 note 4).
-    pub fn set_parity(&mut self, parity: Parity) {
-        let sci = I::regs();
-
-        let (pe, pm) = match parity {
-            Parity::Even => (true, SmrPm::Even),
-            Parity::Odd => (true, SmrPm::Odd),
-            Parity::None => (false, SmrPm::Even),
-        };
-
-        sci.scr().modify(|w| {
-            w.set_re(false);
-            w.set_te(false);
-        });
-
-        sci.smr().modify(|w| {
-            w.set_pe(pe);
-            w.set_pm(pm);
-            w.set_stop(Stop::Stop1);
-        });
-
-        sci.scr().modify(|w| {
-            w.set_re(true);
-        });
     }
 
     /// Reads data until the buffer is full or `b"\r\n"` is read.

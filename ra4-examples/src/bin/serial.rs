@@ -18,7 +18,7 @@ use ra4_hal::{
     bind_interrupts,
     peripherals::SCI1,
     print_clock_config,
-    uart::{BufferedUart, RxInterruptHandler, TeInterruptHandler, TxInterruptHandler},
+    uart::{BufferedUart, Config, RxInterruptHandler, TeInterruptHandler, TxInterruptHandler},
 };
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
@@ -83,10 +83,11 @@ async fn main(_spawner: Spawner) {
     let tx_buf = &mut [0u8; 8];
     let rx_buf = &mut [0u8; 8];
 
-    let mut uart = BufferedUart::new(p.SCI1, p.P501, tx_buf, p.P502, rx_buf, Irqs);
-
+    let mut config = Config::default();
     // The ESP32 communicates at 115,200 baud with the default Arduino firmware
-    uart.set_baudrate(115200);
+    config.baud_rate = 115200;
+
+    let mut uart = BufferedUart::new(p.SCI1, p.P501, tx_buf, p.P502, rx_buf, Irqs, config);
 
     // Try a command with multiple small blocking writes
     query(&mut uart, b"SOFTRESETWIFI");
