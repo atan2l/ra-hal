@@ -392,22 +392,26 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
     /// # TODO
     /// * Support arbitrary baud rates
     /// * Support arbitrary `PCLKA` rates
-    pub fn set_baudrate(&mut self, baud_rate: u32) {
+    pub fn set_baud_rate(&mut self, baud_rate: u32) {
         let speed = SPEED_ENTRIES
             .iter()
             .find(|e| e.baud_rate == baud_rate)
             .unwrap();
 
-        Self::set_baud_from_entry(speed);
-    }
-
-    fn set_baud_from_entry(speed: &SpeedEntry) {
         let sci = I::regs();
 
         sci.scr().modify(|w| {
             w.set_re(false);
             w.set_te(false);
         });
+
+        Self::set_baud_from_entry(speed);
+
+        sci.scr().modify(|w| w.set_re(true));
+    }
+
+    fn set_baud_from_entry(speed: &SpeedEntry) {
+        let sci = I::regs();
 
         sci.brr().write(|w| {
             w.set_brr(speed.big_n);
@@ -447,7 +451,10 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         this.set_parity_inner(config.parity);
         this.set_stop_bits_inner(config.stop_bits);
 
-        let speed = &SPEED_ENTRIES[0];
+        let speed = SPEED_ENTRIES
+            .iter()
+            .find(|e| e.baud_rate == config.baud_rate)
+            .unwrap();
         Self::set_baud_from_entry(speed);
 
         let sci = I::regs();
