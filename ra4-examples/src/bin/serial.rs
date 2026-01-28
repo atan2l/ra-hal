@@ -16,8 +16,9 @@ use embedded_io_async::{Read, Write};
 use panic_probe as _;
 use ra4_hal::{
     bind_interrupts,
+    osm::sec_mpu::SecurityMpu,
     peripherals::SCI1,
-    print_clock_config,
+    print_clock_config, sec_mpu,
     uart::{BufferedUart, Config, RxInterruptHandler, TeInterruptHandler, TxInterruptHandler},
 };
 #[allow(unused)]
@@ -44,10 +45,7 @@ pub static OFS1: u32 = ofs1!(ArduinoCore);
 /// Setting all bits to 1 would also work.  Setting all bits to 0 is a good way to brick your board.
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".sec_mpu")]
-pub static SEC_MPU: [u32; 13] = [
-    0x00fffffc, 0x00ffffff, 0x00fffffc, 0x00ffffff, 0x00fffffc, 0x00ffffff, 0x200ffffc, 0x200fffff,
-    0x407ffffc, 0x407fffff, 0x400dfffc, 0x400dffff, 0xffffffff,
-];
+pub static SEC_MPU: SecurityMpu = sec_mpu!(Disabled);
 
 bind_interrupts!(struct Irqs {
     IEL2 => RxInterruptHandler<SCI1>;

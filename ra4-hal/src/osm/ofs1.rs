@@ -127,18 +127,18 @@ pub const fn ofs1<LVDAS: Lvdas, VDSEL: Vdsel, HOCOEN: HocoEnable, HOCOFR: HocoFr
 /// pub static OFS1: u32 = ofs1!(LvdasOff, Vdsel190, HocoOn, Hoco48Mhz);
 /// ```
 ///
-/// See the [module](module@crate::ofs1) docs for the available values.
+/// See the [module](module@crate::osm::ofs1) docs for the available values.
 #[macro_export]
 macro_rules! ofs1 {
     (ArduinoCore) => {
         ofs1!(LvdasOff, Vdsel190, HocoOn, Hoco48Mhz);
     };
     ($arg0:ident, $arg1:ident, $arg2:ident, $arg3:ident) => {
-        ra4_hal::ofs1::ofs1::<
-            ra4_hal::ofs1::$arg0,
-            ra4_hal::ofs1::$arg1,
-            ra4_hal::ofs1::$arg2,
-            ra4_hal::ofs1::$arg3,
+        $crate::osm::ofs1::ofs1::<
+            $crate::osm::ofs1::$arg0,
+            $crate::osm::ofs1::$arg1,
+            $crate::osm::ofs1::$arg2,
+            $crate::osm::ofs1::$arg3,
         >()
     };
 }

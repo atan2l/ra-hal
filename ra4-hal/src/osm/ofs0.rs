@@ -390,7 +390,7 @@ pub const fn ofs0<
 
 /// Generates a value to configure `OFS0`.
 ///
-/// This macro, along with [`ofs1!`](crate::ofs0!), needs to be invoked once per application.
+/// This macro, along with [`ofs1!`](crate::ofs1!), needs to be invoked once per application.
 /// Typical usage:
 /// ```rust,ignore
 /// #[unsafe(no_mangle)]
@@ -421,7 +421,7 @@ pub const fn ofs0<
 /// );
 /// ```
 ///
-/// See the [module](module@crate::ofs0) docs for the available values.
+/// See the [module](module@crate::osm::ofs0) docs for the available values.
 #[macro_export]
 macro_rules! ofs0 {
     (ArduinoCore) => {
@@ -446,21 +446,21 @@ macro_rules! ofs0 {
         $arg0:ident, $arg1:ident, $arg2:ident, $arg3:ident, $arg4:ident, $arg5:ident, $arg6:ident,
         $arg7:ident,$arg8:ident,$arg9:ident,$arg10:ident,$arg11:ident,$arg12:ident,$arg13:ident
     ) => {
-        ra4_hal::ofs0::ofs0::<
-            ra4_hal::ofs0::$arg0,
-            ra4_hal::ofs0::$arg1,
-            ra4_hal::ofs0::$arg2,
-            ra4_hal::ofs0::$arg3,
-            ra4_hal::ofs0::$arg4,
-            ra4_hal::ofs0::$arg5,
-            ra4_hal::ofs0::$arg6,
-            ra4_hal::ofs0::$arg7,
-            ra4_hal::ofs0::$arg8,
-            ra4_hal::ofs0::$arg9,
-            ra4_hal::ofs0::$arg10,
-            ra4_hal::ofs0::$arg11,
-            ra4_hal::ofs0::$arg12,
-            ra4_hal::ofs0::$arg13,
+        $crate::osm::ofs0::ofs0::<
+            $crate::osm::ofs0::$arg0,
+            $crate::osm::ofs0::$arg1,
+            $crate::osm::ofs0::$arg2,
+            $crate::osm::ofs0::$arg3,
+            $crate::osm::ofs0::$arg4,
+            $crate::osm::ofs0::$arg5,
+            $crate::osm::ofs0::$arg6,
+            $crate::osm::ofs0::$arg7,
+            $crate::osm::ofs0::$arg8,
+            $crate::osm::ofs0::$arg9,
+            $crate::osm::ofs0::$arg10,
+            $crate::osm::ofs0::$arg11,
+            $crate::osm::ofs0::$arg12,
+            $crate::osm::ofs0::$arg13,
         >()
     };
 }
