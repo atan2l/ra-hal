@@ -30,6 +30,24 @@ pub struct DataPin<'d, I: SealedInstance> {
     _phantom_i: PhantomData<I>,
 }
 
+// TODO: Oh come on.  Don't use a 32-bit value here.  Map it in a function.
+#[repr(u32)]
+#[derive(Debug, Default)]
+pub enum I2CSpeed {
+    /// 100 kHz
+    #[default]
+    Normal = 100_000,
+
+    /// 400 kHz
+    Fast = 400_000,
+
+    /// 1 MHz
+    FastPlus = 1_000_000,
+
+    /// 3.4 MHz
+    High = 3_400_000,
+}
+
 #[allow(private_bounds)]
 pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
 
@@ -68,6 +86,44 @@ impl SealedInstance for crate::peripherals::IIC1 {
         crate::pac::IIC1
     }
 }
+
+#[allow(private_bounds)]
+impl<'d, I: Instance> I2c<'d, I> {
+    pub fn new<C: ClockPinSealed<I>, D: DataPinSealed<I>>(
+        _iic: Peri<'d, I>,
+        clock_pin: Peri<'d, C>,
+        data_pin: Peri<'d, D>,
+        _speed: I2CSpeed,
+    ) -> Self {
+        let iic = I::regs();
+
+        iic.iccr1().write(|w| {
+            w.set_ice(false);
+        });
+
+        iic.iccr1().write(|w| {
+            w.set_iicrst(true);
+        });
+
+        iic.iccr1().write(|w| {
+            w.set_ice(true);
+        });
+
+        iic.iccr1().write(|w| {
+            w.set_iicrst(false);
+        });
+
+        // p826
+        // Do not assign the SCLn or SDAn pin to the IIC when setting up the pin function control. Slave address comparison is performed if the pins are assigned to the IIC.
+        let _clock_pin = ClockPin::new(clock_pin);
+        let _data_pin = DataPin::new(data_pin);
+
+        Self {
+            _phantom: PhantomData,
+        }
+    }
+}
+
 #[allow(private_bounds)]
 impl<'d, I: SealedInstance> ClockPin<'d, I> {
     /// Takes a pin and configures it to be used as I2C clock line.
