@@ -268,3 +268,7 @@ Dynamic relocations are not supported. If you are linking to C code compiled usi
 the 'cc' crate then modify your build script to compile the C code _without_
 the -fPIC flag. See the documentation of the `cc::Build.pic` method for details.");
 /* Do not exceed this mark in the error messages above                                    | */
+
+ASSERT(SIZEOF(.ofs0) == 4, ".ofs0 must be 4 bytes");
+ASSERT(SIZEOF(.ofs1) == 4, ".ofs1 must be 4 bytes");
+ASSERT(SIZEOF(.sec_mpu) == 52, ".sec_mpu must be 52 bytes");
