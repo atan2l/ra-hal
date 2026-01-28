@@ -11,6 +11,13 @@ members = [
 exclude = [
 ]
 
+[workspace.package]
+authors = ["Alex Zepeda <srht@inferiorhumanorgans.com>"]
+edition = "2024"
+rust-version = "1.91"
+license = "LGPL-3.0-or-later"
+homepage = "https://sr.ht/~az1/ra4m1-rs/"
+
 [workspace.dependencies]
 cortex-m = { version = "0.7.7", features = [ "inline-asm", "critical-section-single-core" ] }
 cortex-m-rt = { version = "0.7.3" }

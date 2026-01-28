@@ -1,10 +1,13 @@
 [package]
 name = "ra4-examples"
 version = "0.1.0-dev"
-edition = "2024"
-license = "GPL-3.0-or-later"
 description = "HAL examples for the Renesas RA4 family of MCUs."
+license = "GPL-3.0-or-later"
 publish = false
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+homepage.workspace = true
 
 [dependencies]
 ## Core dependencies
