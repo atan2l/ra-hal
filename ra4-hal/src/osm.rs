@@ -31,7 +31,7 @@
 //!
 //! Missing OSM settings will generate linker errors like this:
 //! ```
-//!  = note: rust-lld: error: .sec_mpu must be 52 bytesi
+//!  = note: rust-lld: error: .sec_mpu must be 52 bytes
 //! ```
 
 pub mod ofs0;
