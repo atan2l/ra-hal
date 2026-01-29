@@ -570,14 +570,14 @@ impl Spdcr {
     pub const fn set_reserved_3(&mut self, val: u8) {
         self.0 = (self.0 & !(0x03 << 6usize)) | (((val as u8) & 0x03) << 6usize);
     }
-    #[doc = "SPI Byte Access Specification (TN-RA*-A0033A/E)"]
+    #[doc = "SPI Byte Access Specification"]
     #[must_use]
     #[inline(always)]
     pub const fn spbyt(&self) -> bool {
         let val = (self.0 >> 6usize) & 0x01;
         val != 0
     }
-    #[doc = "SPI Byte Access Specification (TN-RA*-A0033A/E)"]
+    #[doc = "SPI Byte Access Specification"]
     #[inline(always)]
     pub const fn set_spbyt(&mut self, val: bool) {
         self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u8) & 0x01) << 6usize);
