@@ -19,43 +19,68 @@ transforms:
     to: gpt16::Gpt16
     type: Block
   - !RenameEnumVariants
-    enum: gpt32::vals::Ud
+    enum: gpt(16|32)::vals::Ud
     from: _0
     to: Down
   - !RenameEnumVariants
-    enum: gpt32::vals::Ud
+    enum: gpt(16|32)::vals::Ud
     from: _1
     to: Up
   - !Rename
-    from: gpt32::vals::Md
-    to: gpt32::vals::Mode
+    from: gpt(16|32)::vals::Md
+    to: gpt${1}::vals::Mode
   - !RenameEnumVariants
-    enum: gpt32::vals::Mode
+    enum: gpt(16|32)::vals::Mode
     from: _000
     to: SawWavePwm
   - !RenameEnumVariants
-    enum: gpt32::vals::Mode
+    enum: gpt(16|32)::vals::Mode
     from: _001
     to: SawWaveOneShot
   - !RenameEnumVariants
-    enum: gpt32::vals::Mode
+    enum: gpt(16|32)::vals::Mode
     from: _001
     to: SawWaveOneShot
   - !RenameEnumVariants
-    enum: gpt32::vals::Mode
+    enum: gpt(16|32)::vals::Mode
     from: _100
     to: TrianglePwm1
   - !RenameEnumVariants
-    enum: gpt32::vals::Mode
+    enum: gpt(16|32)::vals::Mode
     from: _101
     to: TrianglePwm2
   - !RenameEnumVariants
-    enum: gpt32::vals::Mode
+    enum: gpt(16|32)::vals::Mode
     from: _110
     to: TrianglePwm3
   - !DeleteEnums
-    from: gpt32::vals::(Cst)
+    from: gpt(16|32)::vals::(Cst)
   - !MakeFieldArray
-    fieldsets: gpt32::regs::(Gtstr|Gtstp|Gtclr)
+    fieldsets: gpt(16|32)::regs::(Gtstr|Gtstp|Gtclr)
     from: (cstrt|cstop|cclr)\d+
     to: ${1}
+  - !RenameEnumVariants
+    enum: gpt(16|32)::vals::Tpcs
+    from: _000
+    to: DIV_1
+  - !RenameEnumVariants
+    enum: gpt(16|32)::vals::Tpcs
+    from: _001
+    to: DIV_4
+  - !RenameEnumVariants
+    enum: gpt(16|32)::vals::Tpcs
+    from: _010
+    to: DIV_16
+  - !RenameEnumVariants
+    enum: gpt(16|32)::vals::Tpcs
+    from: _011
+    to: DIV_64
+  - !RenameEnumVariants
+    enum: gpt(16|32)::vals::Tpcs
+    from: _100
+    to: DIV_256
+  - !RenameEnumVariants
+    enum: gpt(16|32)::vals::Tpcs
+    from: _101
+    to: DIV_1024
+

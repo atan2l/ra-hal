@@ -651,17 +651,17 @@ impl From<Prkey> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Tpcs {
     #[doc = "PCLK/1"]
-    _000 = 0x0,
+    DIV_1 = 0x0,
     #[doc = "PCLK/4"]
-    _001 = 0x01,
+    DIV_4 = 0x01,
     #[doc = "PCLK/16"]
-    _010 = 0x02,
+    DIV_16 = 0x02,
     #[doc = "PCLK/64"]
-    _011 = 0x03,
+    DIV_64 = 0x03,
     #[doc = "PCLK/256"]
-    _100 = 0x04,
+    DIV_256 = 0x04,
     #[doc = "PCLK/1024"]
-    _101 = 0x05,
+    DIV_1024 = 0x05,
     _RESERVED_6 = 0x06,
     _RESERVED_7 = 0x07,
 }
