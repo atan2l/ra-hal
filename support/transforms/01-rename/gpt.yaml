@@ -1,86 +1,90 @@
+# 0..=1 are 32-bit, 2..=7 are 16-bit
+# Both have the same registers but the 16-bit timers will ignore the upper 16-bits of the numeric registers.
+# Differences in the SVD beteween GPT320 and GPT162 are down to the descriptions.
 transforms:
   - !RenamePeripherals
     from: GPT(16|32)(\d)
     to: GPT${1}_${2}
+  - !MergeBlocks
+    from: gpt(162|320)::Gpt(162|320)
+    to: gpt::Gpt
+    main: gpt320::Gpt320
   - !Rename
     from: gpt320::(.+)
-    to: gpt32::${1}
+    to: gpt::${1}
     type: All
-  - !Rename
-    from: gpt32::Gpt320
-    to: gpt32::Gpt32
-    type: Block
-  - !Rename
-    from: gpt162::(.+)
-    to: gpt16::${1}
+  - !Delete
+    from: gpt(162|320)::(.+)
     type: All
-  - !Rename
-    from: gpt16::Gpt162
-    to: gpt16::Gpt16
-    type: Block
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Ud
+    enum: gpt::vals::Ud
     from: _0
     to: Down
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Ud
+    enum: gpt::vals::Ud
     from: _1
     to: Up
   - !Rename
-    from: gpt(16|32)::vals::Md
-    to: gpt${1}::vals::Mode
+    from: gpt::vals::Md
+    to: gpt::vals::Mode
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Mode
+    enum: gpt::vals::Mode
     from: _000
     to: SawWavePwm
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Mode
+    enum: gpt::vals::Mode
     from: _001
     to: SawWaveOneShot
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Mode
+    enum: gpt::vals::Mode
     from: _001
     to: SawWaveOneShot
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Mode
+    enum: gpt::vals::Mode
     from: _100
     to: TrianglePwm1
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Mode
+    enum: gpt::vals::Mode
     from: _101
     to: TrianglePwm2
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Mode
+    enum: gpt::vals::Mode
     from: _110
     to: TrianglePwm3
   - !DeleteEnums
-    from: gpt(16|32)::vals::(Cst)
+    from: gpt::vals::(Cst)
   - !MakeFieldArray
-    fieldsets: gpt(16|32)::regs::(Gtstr|Gtstp|Gtclr)
+    fieldsets: gpt::regs::(Gtstr|Gtstp|Gtclr)
     from: (cstrt|cstop|cclr)\d+
     to: ${1}
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Tpcs
+    enum: gpt::vals::Tpcs
     from: _000
     to: DIV_1
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Tpcs
+    enum: gpt::vals::Tpcs
     from: _001
     to: DIV_4
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Tpcs
+    enum: gpt::vals::Tpcs
     from: _010
     to: DIV_16
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Tpcs
+    enum: gpt::vals::Tpcs
     from: _011
     to: DIV_64
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Tpcs
+    enum: gpt::vals::Tpcs
     from: _100
     to: DIV_256
   - !RenameEnumVariants
-    enum: gpt(16|32)::vals::Tpcs
+    enum: gpt::vals::Tpcs
     from: _101
     to: DIV_1024
-
+  - !RenameFields
+    fieldset: gpt::regs::(Gtccr)[abcdef]
+    from: gtccr[abcdef]
+    to: gtccr
+  - !MergeFieldsets
+    from: gpt::regs::(Gtccr)[abcdef]
+    to: gpt::regs::${1}

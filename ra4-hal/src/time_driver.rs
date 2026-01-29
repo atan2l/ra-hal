@@ -11,8 +11,8 @@ use critical_section::{CriticalSection, Mutex};
 use embassy_hal_internal::interrupt::InterruptExt;
 use embassy_time_driver::Driver;
 use embassy_time_queue_utils::Queue;
-use ra4m1_ctpac::gpt32::{
-    regs::{Gtdnsr, Gtupsr},
+use ra4m1_ctpac::gpt::{
+    regs::{Gtccr, Gtdnsr, Gtupsr},
     vals::{Mode, Tpcs, Ud},
 };
 
@@ -42,7 +42,7 @@ trait Instance {
     const ALARM_EVENT: InterruptEvent;
     const OVERFLOW_EVENT: InterruptEvent;
 
-    fn regs() -> pac::gpt32::Gpt32;
+    fn regs() -> pac::gpt::Gpt;
 }
 
 impl Instance for crate::peripherals::GPT32_0 {
@@ -52,7 +52,7 @@ impl Instance for crate::peripherals::GPT32_0 {
     const OVERFLOW_EVENT: InterruptEvent = InterruptEvent::Gpt0Ovf;
 
     #[inline(always)]
-    fn regs() -> crate::pac::gpt32::Gpt32 {
+    fn regs() -> crate::pac::gpt::Gpt {
         crate::pac::GPT32_0
     }
 }
@@ -117,7 +117,7 @@ impl GptDriver {
 
         // Since we're at 48 MHz just use the clock, undivided
         timer.gtcr().write(|w| {
-            w.set_tpcs(Tpcs::_000);
+            w.set_tpcs(Tpcs::DIV_1);
         });
         trace!("GTCR: {}", timer.gtcr().read());
 
@@ -197,9 +197,7 @@ impl GptDriver {
         if diff < u64::from(u32::MAX) {
             timer.protected_write(|| {
                 // Load the safe timestamp
-                timer.gtccrc().write(|w| {
-                    w.set_gtccrc(safe_timestamp);
-                });
+                timer.gtccrc().write_value(Gtccr(safe_timestamp));
                 // Enable the compare interrupt
                 AlarmInt::IRQ.icu_enable(<GPT32_0 as Instance>::ALARM_EVENT);
             });

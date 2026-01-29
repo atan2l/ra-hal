@@ -87,12 +87,12 @@ impl WriteProtect for crate::pac::system::System {
 }
 
 /// Note that write protection is disabled by default for timers.
-impl WriteProtect for crate::pac::gpt32::Gpt32 {
+impl WriteProtect for crate::pac::gpt::Gpt {
     fn protected_write<F>(&self, func: F)
     where
         F: Fn(),
     {
-        use ra4m1_ctpac::gpt32::vals::Prkey;
+        use ra4m1_ctpac::gpt::vals::Prkey;
 
         let protected = self.is_protected();
 
