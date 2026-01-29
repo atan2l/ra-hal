@@ -2,11 +2,20 @@
 //!
 //! `OFS0` configures the after-reset behavior of the Independent Watchdog Timer (`IWDT`) and Watchdog Timer (`WDT`).
 //! See §6.2.1, §25.3.7 in the reference manual for more details.
+//!
+//! Along with [`Ofs1`](struct@crate::osm::ofs1::Ofs1) and [`SecurityMpu`](struct@crate::osm::sec_mpu::SecurityMpu) the [`Ofs0`] struct must be instantiated exactly once and saved in a specific linker section.
+//! e.g.:
+//! ```rust,ignore
+//! #[unsafe(no_mangle)]
+//! #[unsafe(link_section = ".ofs0")]
+//! static OFS0: Ofs0 = Ofs0::ArduinoCore();
+//! ```
 
-#[doc(hidden)]
-pub const OFS0_H: u32 = 0xA0010000;
-#[doc(hidden)]
-pub const OFS0_L: u32 = 0x0000A001;
+const OFS0_H: u32 = 0xA0010000;
+const OFS0_L: u32 = 0x0000A001;
+
+/// Option Function Select Register 0
+pub struct Ofs0(#[allow(unused)] u32);
 
 trait IwdtAutoStartMode {
     const OFS0: u32;
@@ -352,80 +361,79 @@ impl WdtStopControl for WdtSleepStop {
     const OFS0: u32 = 1 << 30;
 }
 
-#[doc(hidden)]
-#[allow(private_bounds)]
-pub const fn ofs0<
-    IWDTSTRT: IwdtAutoStartMode,
-    IWDTTOPS: IwdtTimeoutPeriod,
-    IWDTCKS: IwdtClockRatio,
-    IWDTRPES: IwdtWindowEndPosition,
-    IWDTRPSS: IwdtWindowStartPosition,
-    IWDTRSTIRQS: IwdtResetOrInterrupt,
-    IWDTSTPCTL: IwdtStopControl,
-    WDTSTRT: WdtAutoStartMode,
-    WDTTOPS: WdtTimeoutPeriod,
-    WDTCKS: WdtClockRatio,
-    WDTRPES: WdtWindowEndPosition,
-    WDTRPSS: WdtWindowStartPosition,
-    WDTRSTIRQS: WdtResetOrInterrupt,
-    WDTSTPCTL: WdtStopControl,
->() -> u32 {
-    OFS0_H
-        | OFS0_L
-        | IWDTSTRT::OFS0
-        | IWDTTOPS::OFS0
-        | IWDTCKS::OFS0
-        | IWDTRPES::OFS0
-        | IWDTRPSS::OFS0
-        | IWDTRSTIRQS::OFS0
-        | IWDTSTPCTL::OFS0
-        | WDTSTRT::OFS0
-        | WDTTOPS::OFS0
-        | WDTCKS::OFS0
-        | WDTRPES::OFS0
-        | WDTRPSS::OFS0
-        | WDTRSTIRQS::OFS0
-        | WDTSTPCTL::OFS0
-}
+impl Ofs0 {
+    /// Generates a value to configure `OFS0` with explicit configuration settings.
+    ///
+    /// ```rust,ignore
+    /// #[unsafe(no_mangle)]
+    /// #[unsafe(link_section = ".ofs0")]
+    /// static OFS0: Ofs0 = Ofs0::new::<
+    ///   IwdtAutoStartOff,
+    ///   IwdtTimeout2048,
+    ///   IwdtClockRatio128,
+    ///   IwdtWindowEndNone,
+    ///   IwdtWindowStartNone,
+    ///   IwdtReset,
+    ///   IwdtSleepStop,
+    ///   WdtAutoStartOff,
+    ///   WdtTimeout16384,
+    ///   WdtClockRatio128,
+    ///   WdtWindowEndNone,
+    ///   WdtWindowStartNone,
+    ///   WdtReset,
+    ///   WdtSleepStop
+    /// >();
+    /// ```
+    ///
+    /// See the [module](module@crate::osm::ofs0) docs for the available values.
+    #[allow(private_bounds)]
+    pub const fn new<
+        IWDTSTRT: IwdtAutoStartMode,
+        IWDTTOPS: IwdtTimeoutPeriod,
+        IWDTCKS: IwdtClockRatio,
+        IWDTRPES: IwdtWindowEndPosition,
+        IWDTRPSS: IwdtWindowStartPosition,
+        IWDTRSTIRQS: IwdtResetOrInterrupt,
+        IWDTSTPCTL: IwdtStopControl,
+        WDTSTRT: WdtAutoStartMode,
+        WDTTOPS: WdtTimeoutPeriod,
+        WDTCKS: WdtClockRatio,
+        WDTRPES: WdtWindowEndPosition,
+        WDTRPSS: WdtWindowStartPosition,
+        WDTRSTIRQS: WdtResetOrInterrupt,
+        WDTSTPCTL: WdtStopControl,
+    >() -> Ofs0 {
+        Ofs0(
+            OFS0_H
+                | OFS0_L
+                | IWDTSTRT::OFS0
+                | IWDTTOPS::OFS0
+                | IWDTCKS::OFS0
+                | IWDTRPES::OFS0
+                | IWDTRPSS::OFS0
+                | IWDTRSTIRQS::OFS0
+                | IWDTSTPCTL::OFS0
+                | WDTSTRT::OFS0
+                | WDTTOPS::OFS0
+                | WDTCKS::OFS0
+                | WDTRPES::OFS0
+                | WDTRPSS::OFS0
+                | WDTRSTIRQS::OFS0
+                | WDTSTPCTL::OFS0,
+        )
+    }
 
-/// Generates a value to configure `OFS0`.
-///
-/// This macro, along with [`ofs1!`](crate::ofs1!), needs to be invoked once per application.
-/// Typical usage:
-/// ```rust,ignore
-/// #[unsafe(no_mangle)]
-/// #[unsafe(link_section = ".ofs0")]
-/// pub static OFS0: u32 = ofs0!(ArduinoCore);
-/// ```
-///
-/// It can also be invoked with each configuration item explicitly specified, e.g.:
-///
-/// ```rust,ignore
-/// #[unsafe(no_mangle)]
-/// #[unsafe(link_section = ".ofs0")]
-/// pub static OFS0: u32 = ofs0!(
-///   IwdtAutoStartOff,
-///   IwdtTimeout2048,
-///   IwdtClockRatio128,
-///   IwdtWindowEndNone,
-///   IwdtWindowStartNone,
-///   IwdtReset,
-///   IwdtSleepStop,
-///   WdtAutoStartOff,
-///   WdtTimeout16384,
-///   WdtClockRatio128,
-///   WdtWindowEndNone,
-///   WdtWindowStartNone,
-///   WdtReset,
-///   WdtSleepStop
-/// );
-/// ```
-///
-/// See the [module](module@crate::osm::ofs0) docs for the available values.
-#[macro_export]
-macro_rules! ofs0 {
-    (ArduinoCore) => {
-        ofs0!(
+    /// Generates a value to configure `OFS0` with the defaults ArduinoCore uses.
+    ///
+    /// Typical usage:
+    /// ```rust,ignore
+    /// #[unsafe(no_mangle)]
+    /// #[unsafe(link_section = ".ofs0")]
+    /// static OFS0: Ofs0 = Ofs0::ArduinoCore();
+    /// ```
+    #[allow(non_snake_case)]
+    pub const fn ArduinoCore() -> Self {
+        Self::new::<
             IwdtAutoStartOff,
             IwdtTimeout2048,
             IwdtClockRatio128,
@@ -439,28 +447,7 @@ macro_rules! ofs0 {
             WdtWindowEndNone,
             WdtWindowStartNone,
             WdtReset,
-            WdtSleepStop
-        )
-    };
-    (
-        $arg0:ident, $arg1:ident, $arg2:ident, $arg3:ident, $arg4:ident, $arg5:ident, $arg6:ident,
-        $arg7:ident,$arg8:ident,$arg9:ident,$arg10:ident,$arg11:ident,$arg12:ident,$arg13:ident
-    ) => {
-        $crate::osm::ofs0::ofs0::<
-            $crate::osm::ofs0::$arg0,
-            $crate::osm::ofs0::$arg1,
-            $crate::osm::ofs0::$arg2,
-            $crate::osm::ofs0::$arg3,
-            $crate::osm::ofs0::$arg4,
-            $crate::osm::ofs0::$arg5,
-            $crate::osm::ofs0::$arg6,
-            $crate::osm::ofs0::$arg7,
-            $crate::osm::ofs0::$arg8,
-            $crate::osm::ofs0::$arg9,
-            $crate::osm::ofs0::$arg10,
-            $crate::osm::ofs0::$arg11,
-            $crate::osm::ofs0::$arg12,
-            $crate::osm::ofs0::$arg13,
+            WdtSleepStop,
         >()
-    };
+    }
 }

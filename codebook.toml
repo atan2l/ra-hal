@@ -135,5 +135,6 @@ ignore_patterns = [
     "0x[0-9a-fA-F]{1,3}",
     "0x([0-9a-fA-F]{4}_?)+",
     'elf(32|64)-\w+',
+    'Ofs[01]',
 ]
 use_global = false

@@ -16,36 +16,28 @@ use embedded_io_async::{Read, Write};
 use panic_probe as _;
 use ra4_hal::{
     bind_interrupts,
-    osm::sec_mpu::SecurityMpu,
+    osm::{ofs0::Ofs0, ofs1::Ofs1, sec_mpu::SecurityMpu},
     peripherals::SCI1,
     print_clock_config, sec_mpu,
     uart::{BufferedUart, Config, RxInterruptHandler, TeInterruptHandler, TxInterruptHandler},
 };
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
-use ra4_hal::{ofs0, ofs1};
 
-/// Option Function Select Register 0
-/// Accepts either:
-/// - a series of configuration values
-/// - the literal `ArduinoCore` which emulates the Arduino defaults
+// Option Function Select Register 0 (required)
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".ofs0")]
-pub static OFS0: u32 = ofs0!(ArduinoCore);
+static OFS0: Ofs0 = Ofs0::ArduinoCore();
 
-/// Option Function Select Register 1
-/// Accepts either:
-/// - a series of configuration values
-/// - the literal `ArduinoCore` which emulates the Arduino defaults
+// Option Function Select Register 1 (required)
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".ofs1")]
-pub static OFS1: u32 = ofs1!(ArduinoCore);
+static OFS1: Ofs1 = Ofs1::ArduinoCore();
 
-/// Configures the Security MPU.  See the reference manual for more details.
-/// Setting all bits to 1 would also work.  Setting all bits to 0 is a good way to brick your board.
+// Security MPU (required)
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".sec_mpu")]
-pub static SEC_MPU: SecurityMpu = sec_mpu!(Disabled);
+static SEC_MPU: SecurityMpu = sec_mpu!(Disabled);
 
 bind_interrupts!(struct Irqs {
     IEL2 => RxInterruptHandler<SCI1>;

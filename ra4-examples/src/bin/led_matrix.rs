@@ -13,30 +13,26 @@ use embassy_time::{Duration, Instant};
 use panic_probe as _;
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
-use ra4_hal::{ofs0, ofs1, osm::sec_mpu::SecurityMpu, print_clock_config, sec_mpu};
+use ra4_hal::{
+    osm::{ofs0::Ofs0, ofs1::Ofs1, sec_mpu::SecurityMpu},
+    print_clock_config, sec_mpu,
+};
 use uno_r4wifi_bsc::led_matrix_init;
 
-/// Option Function Select Register 0
-/// Accepts either:
-/// - a series of configuration values
-/// - the literal `ArduinoCore` which emulates the Arduino defaults
+// Option Function Select Register 0 (required)
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".ofs0")]
-pub static OFS0: u32 = ofs0!(ArduinoCore);
+static OFS0: Ofs0 = Ofs0::ArduinoCore();
 
-/// Option Function Select Register 1
-/// Accepts either:
-/// - a series of configuration values
-/// - the literal `ArduinoCore` which emulates the Arduino defaults
+// Option Function Select Register 1 (required)
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".ofs1")]
-pub static OFS1: u32 = ofs1!(ArduinoCore);
+static OFS1: Ofs1 = Ofs1::ArduinoCore();
 
-/// Configures the Security MPU.  See the reference manual for more details.
-/// Setting all bits to 1 would also work.  Setting all bits to 0 is a good way to brick your board.
+// Security MPU (required)
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".sec_mpu")]
-pub static SEC_MPU: SecurityMpu = sec_mpu!(Disabled);
+static SEC_MPU: SecurityMpu = sec_mpu!(Disabled);
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
