@@ -4,7 +4,7 @@ use core::marker::PhantomData;
 
 use embassy_hal_internal::{Peri, PeripheralType};
 use paste::paste;
-use ra4m1_ctpac::gpt::vals::{Ccrb, Gtiob, Mode, Tpcs};
+use ra4m1_ctpac::gpt::vals::{Ccrb, Gtiob, Mode, Odty, Tpcs};
 
 use crate::{
     CLOCK_FREQUENCY,
@@ -58,21 +58,23 @@ impl<'d, I: Instance> Pwm<'d, I> {
         period
     }
 
-    #[inline(always)]
-    fn compare_at(&mut self, pct: f32) -> u32 {
+    #[inline]
+    pub fn set_duty_pct(&mut self, pct: f32) {
+        let pwm = I::regs();
         let pct = pct.clamp(0.0, 1.0);
         let period = Self::period();
         let cmp = (period * (1.0 - pct)) as u32;
-        cmp.clamp(1, period as u32 - 1)
-    }
 
-    #[inline]
-    pub fn set_duty_pct(&mut self, pct: f32) {
-        let cmp = self.compare_at(pct);
-        // This will center the peak
-        let pwm = I::regs();
-        pwm.gtccrb().write_value(cmp);
-        pwm.gtccre().write_value(cmp);
+        if cmp == 0 {
+            pwm.gtuddtyc().modify(|w| w.set_obdty(Odty::On));
+        } else if cmp >= period as u32 {
+            pwm.gtuddtyc().modify(|w| w.set_obdty(Odty::Off));
+        } else {
+            // This will center the peak
+            pwm.gtuddtyc().modify(|w| w.set_obdty(Odty::CompareMatch));
+            pwm.gtccrb().write_value(cmp);
+            pwm.gtccre().write_value(cmp);
+        }
     }
 
     #[inline]

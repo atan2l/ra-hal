@@ -3223,13 +3223,13 @@ impl Gtuddtyc {
     #[doc = "GTIOCA Output Duty Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn oadty(&self) -> super::vals::Oadty {
+    pub const fn oadty(&self) -> super::vals::Odty {
         let val = (self.0 >> 16usize) & 0x03;
-        super::vals::Oadty::from_bits(val as u8)
+        super::vals::Odty::from_bits(val as u8)
     }
     #[doc = "GTIOCA Output Duty Setting"]
     #[inline(always)]
-    pub const fn set_oadty(&mut self, val: super::vals::Oadty) {
+    pub const fn set_oadty(&mut self, val: super::vals::Odty) {
         self.0 = (self.0 & !(0x03 << 16usize)) | (((val.to_bits() as u32) & 0x03) << 16usize);
     }
     #[doc = "Forcible GTIOCA Output Duty Setting"]
@@ -3271,13 +3271,13 @@ impl Gtuddtyc {
     #[doc = "GTIOCB Output Duty Setting"]
     #[must_use]
     #[inline(always)]
-    pub const fn obdty(&self) -> super::vals::Obdty {
+    pub const fn obdty(&self) -> super::vals::Odty {
         let val = (self.0 >> 24usize) & 0x03;
-        super::vals::Obdty::from_bits(val as u8)
+        super::vals::Odty::from_bits(val as u8)
     }
     #[doc = "GTIOCB Output Duty Setting"]
     #[inline(always)]
-    pub const fn set_obdty(&mut self, val: super::vals::Obdty) {
+    pub const fn set_obdty(&mut self, val: super::vals::Odty) {
         self.0 = (self.0 & !(0x03 << 24usize)) | (((val.to_bits() as u32) & 0x03) << 24usize);
     }
     #[doc = "Forcible GTIOCB Output Duty Setting"]

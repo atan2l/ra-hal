@@ -465,41 +465,6 @@ impl From<Oadf> for u8 {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Oadty {
-    #[doc = "GTIOCA pin duty is depend on compare match"]
-    _00 = 0x0,
-    #[doc = "GTIOCA pin duty is depend on compare match"]
-    _01 = 0x01,
-    #[doc = "GTIOCA pin duty 0 percent"]
-    _10 = 0x02,
-    #[doc = "GTIOCA pin duty 100 percent"]
-    _11 = 0x03,
-}
-impl Oadty {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Oadty {
-        unsafe { core::mem::transmute(val & 0x03) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Oadty {
-    #[inline(always)]
-    fn from(val: u8) -> Oadty {
-        Oadty::from_bits(val)
-    }
-}
-impl From<Oadty> for u8 {
-    #[inline(always)]
-    fn from(val: Oadty) -> u8 {
-        Oadty::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Obdf {
     #[doc = "Output disable is prohibited."]
     _00 = 0x0,
@@ -535,19 +500,18 @@ impl From<Obdf> for u8 {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Obdty {
-    #[doc = "GTIOCB pin duty is depend on compare match"]
-    _00 = 0x0,
-    #[doc = "GTIOCB pin duty is depend on compare match"]
-    _01 = 0x01,
-    #[doc = "GTIOCB pin duty 0 percent"]
-    _10 = 0x02,
-    #[doc = "GTIOCB pin duty 100 percent"]
-    _11 = 0x03,
+pub enum Odty {
+    #[doc = "GTIOCA pin duty is depend on compare match"]
+    CompareMatch = 0x0,
+    _RESERVED_1 = 0x01,
+    #[doc = "GTIOCA pin duty 0 percent"]
+    Off = 0x02,
+    #[doc = "GTIOCA pin duty 100 percent"]
+    On = 0x03,
 }
-impl Obdty {
+impl Odty {
     #[inline(always)]
-    pub const fn from_bits(val: u8) -> Obdty {
+    pub const fn from_bits(val: u8) -> Odty {
         unsafe { core::mem::transmute(val & 0x03) }
     }
     #[inline(always)]
@@ -555,16 +519,16 @@ impl Obdty {
         unsafe { core::mem::transmute(self) }
     }
 }
-impl From<u8> for Obdty {
+impl From<u8> for Odty {
     #[inline(always)]
-    fn from(val: u8) -> Obdty {
-        Obdty::from_bits(val)
+    fn from(val: u8) -> Odty {
+        Odty::from_bits(val)
     }
 }
-impl From<Obdty> for u8 {
+impl From<Odty> for u8 {
     #[inline(always)]
-    fn from(val: Obdty) -> u8 {
-        Obdty::to_bits(val)
+    fn from(val: Odty) -> u8 {
+        Odty::to_bits(val)
     }
 }
 #[repr(u8)]

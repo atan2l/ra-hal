@@ -109,3 +109,22 @@ transforms:
   - !Delete
     from: gpt::regs::(Gtccr|Gtcnt|Gtpr)
     type: All
+  - !MergeEnums
+    from: gpt::vals::O[ab]dty
+    to: gpt::vals::Odty
+    main: gpt::vals::Oadty
+  - !RenameEnumVariants
+    enum: gpt::vals::Odty
+    from: _00
+    to: CompareMatch
+  - !RenameEnumVariants
+    enum: gpt::vals::Odty
+    from: _10
+    to: Off
+  - !RenameEnumVariants
+    enum: gpt::vals::Odty
+    from: _11
+    to: On
+  - !DeleteEnumVariants
+    enum: gpt::vals::Odty
+    from: _01
