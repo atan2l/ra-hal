@@ -63,9 +63,7 @@ impl<'d> Crc<'d> {
 
         let mstp = pac::MSTP;
 
-        mstp.mstpcrc().write(|w| {
-            w.set_mstpc1(false);
-        });
+        mstp.mstpcrc().write(|w| w.set_mstpc1(false));
 
         let mut instance = Self {
             _peri: peri,
@@ -196,8 +194,6 @@ impl<'d> Drop for Crc<'d> {
 
         let mstp = pac::MSTP;
 
-        mstp.mstpcrc().write(|w| {
-            w.set_mstpc1(true);
-        });
+        mstp.mstpcrc().write(|w| w.set_mstpc1(true));
     }
 }
