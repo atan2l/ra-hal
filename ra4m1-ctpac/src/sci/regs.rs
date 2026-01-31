@@ -913,78 +913,6 @@ impl defmt::Format for Lsr {
         )
     }
 }
-#[doc = "Receive Data Register"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Rdr(pub u8);
-impl Rdr {
-    #[doc = "RDR is an 8-bit register that stores receive data."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn rdr(&self) -> u8 {
-        let val = (self.0 >> 0usize) & 0xff;
-        val as u8
-    }
-    #[doc = "RDR is an 8-bit register that stores receive data."]
-    #[inline(always)]
-    pub const fn set_rdr(&mut self, val: u8) {
-        self.0 = (self.0 & !(0xff << 0usize)) | (((val as u8) & 0xff) << 0usize);
-    }
-}
-impl Default for Rdr {
-    #[inline(always)]
-    fn default() -> Rdr {
-        Rdr(0)
-    }
-}
-impl core::fmt::Debug for Rdr {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Rdr").field("rdr", &self.rdr()).finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Rdr {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Rdr {{ rdr: {=u8:?} }}", self.rdr())
-    }
-}
-#[doc = "Receive 9-bit Data Register"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Rdrhl(pub u16);
-impl Rdrhl {
-    #[doc = "RDRHL is an 16-bit register that stores receive data."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn rdrhl(&self) -> u16 {
-        let val = (self.0 >> 0usize) & 0xffff;
-        val as u16
-    }
-    #[doc = "RDRHL is an 16-bit register that stores receive data."]
-    #[inline(always)]
-    pub const fn set_rdrhl(&mut self, val: u16) {
-        self.0 = (self.0 & !(0xffff << 0usize)) | (((val as u16) & 0xffff) << 0usize);
-    }
-}
-impl Default for Rdrhl {
-    #[inline(always)]
-    fn default() -> Rdrhl {
-        Rdrhl(0)
-    }
-}
-impl core::fmt::Debug for Rdrhl {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Rdrhl")
-            .field("rdrhl", &self.rdrhl())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Rdrhl {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Rdrhl {{ rdrhl: {=u16:?} }}", self.rdrhl())
-    }
-}
 #[doc = "Smart Card Mode Register"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
@@ -2850,42 +2778,5 @@ impl core::fmt::Debug for Tdr {
 impl defmt::Format for Tdr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(f, "Tdr {{ tdr: {=u8:?} }}", self.tdr())
-    }
-}
-#[doc = "Transmit 9-bit Data Register"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Tdrhl(pub u16);
-impl Tdrhl {
-    #[doc = "TDRHL is a 16-bit register that stores transmit data."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn tdrhl(&self) -> u16 {
-        let val = (self.0 >> 0usize) & 0xffff;
-        val as u16
-    }
-    #[doc = "TDRHL is a 16-bit register that stores transmit data."]
-    #[inline(always)]
-    pub const fn set_tdrhl(&mut self, val: u16) {
-        self.0 = (self.0 & !(0xffff << 0usize)) | (((val as u16) & 0xffff) << 0usize);
-    }
-}
-impl Default for Tdrhl {
-    #[inline(always)]
-    fn default() -> Tdrhl {
-        Tdrhl(0)
-    }
-}
-impl core::fmt::Debug for Tdrhl {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Tdrhl")
-            .field("tdrhl", &self.tdrhl())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Tdrhl {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Tdrhl {{ tdrhl: {=u16:?} }}", self.tdrhl())
     }
 }

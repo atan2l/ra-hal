@@ -61,7 +61,7 @@ impl Sci {
     }
     #[doc = "Receive Data Register"]
     #[inline(always)]
-    pub const fn rdr(self) -> crate::common::Reg<regs::Rdr, crate::common::R> {
+    pub const fn rdr(self) -> crate::common::Reg<u8, crate::common::R> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x05usize) as _) }
     }
     #[doc = "Smart Card Mode Register"]
@@ -116,7 +116,7 @@ impl Sci {
     }
     #[doc = "Transmit 9-bit Data Register"]
     #[inline(always)]
-    pub const fn tdrhl(self) -> crate::common::Reg<regs::Tdrhl, crate::common::RW> {
+    pub const fn tdrhl(self) -> crate::common::Reg<u16, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0eusize) as _) }
     }
     #[doc = "Transmit FIFO Data Register L"]
@@ -136,7 +136,7 @@ impl Sci {
     }
     #[doc = "Receive 9-bit Data Register"]
     #[inline(always)]
-    pub const fn rdrhl(self) -> crate::common::Reg<regs::Rdrhl, crate::common::R> {
+    pub const fn rdrhl(self) -> crate::common::Reg<u16, crate::common::R> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x10usize) as _) }
     }
     #[doc = "Receive FIFO Data Register L"]
