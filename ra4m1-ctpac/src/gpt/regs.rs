@@ -95,43 +95,6 @@ impl defmt::Format for Gtber {
         )
     }
 }
-#[doc = "General PWM Timer Compare Capture Register A"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Gtccr(pub u32);
-impl Gtccr {
-    #[doc = "Compare Capture Register A"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn gtccr(&self) -> u32 {
-        let val = (self.0 >> 0usize) & 0xffff_ffff;
-        val as u32
-    }
-    #[doc = "Compare Capture Register A"]
-    #[inline(always)]
-    pub const fn set_gtccr(&mut self, val: u32) {
-        self.0 = (self.0 & !(0xffff_ffff << 0usize)) | (((val as u32) & 0xffff_ffff) << 0usize);
-    }
-}
-impl Default for Gtccr {
-    #[inline(always)]
-    fn default() -> Gtccr {
-        Gtccr(0)
-    }
-}
-impl core::fmt::Debug for Gtccr {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Gtccr")
-            .field("gtccr", &self.gtccr())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Gtccr {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Gtccr {{ gtccr: {=u32:?} }}", self.gtccr())
-    }
-}
 #[doc = "General PWM Timer Software Clear Register"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
@@ -203,43 +166,6 @@ impl defmt::Format for Gtclr {
             self.cclr(7usize),
             self.reserved()
         )
-    }
-}
-#[doc = "General PWM Timer Counter"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Gtcnt(pub u32);
-impl Gtcnt {
-    #[doc = "Counter"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn gtcnt(&self) -> u32 {
-        let val = (self.0 >> 0usize) & 0xffff_ffff;
-        val as u32
-    }
-    #[doc = "Counter"]
-    #[inline(always)]
-    pub const fn set_gtcnt(&mut self, val: u32) {
-        self.0 = (self.0 & !(0xffff_ffff << 0usize)) | (((val as u32) & 0xffff_ffff) << 0usize);
-    }
-}
-impl Default for Gtcnt {
-    #[inline(always)]
-    fn default() -> Gtcnt {
-        Gtcnt(0)
-    }
-}
-impl core::fmt::Debug for Gtcnt {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Gtcnt")
-            .field("gtcnt", &self.gtcnt())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Gtcnt {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Gtcnt {{ gtcnt: {=u32:?} }}", self.gtcnt())
     }
 }
 #[doc = "General PWM Timer Control Register"]
@@ -2182,41 +2108,6 @@ impl core::fmt::Debug for Gtpbr {
 impl defmt::Format for Gtpbr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(f, "Gtpbr {{ gtpbr: {=u32:?} }}", self.gtpbr())
-    }
-}
-#[doc = "General PWM Timer Cycle Setting Register"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Gtpr(pub u32);
-impl Gtpr {
-    #[doc = "Cycle Setting Register"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn gtpr(&self) -> u32 {
-        let val = (self.0 >> 0usize) & 0xffff_ffff;
-        val as u32
-    }
-    #[doc = "Cycle Setting Register"]
-    #[inline(always)]
-    pub const fn set_gtpr(&mut self, val: u32) {
-        self.0 = (self.0 & !(0xffff_ffff << 0usize)) | (((val as u32) & 0xffff_ffff) << 0usize);
-    }
-}
-impl Default for Gtpr {
-    #[inline(always)]
-    fn default() -> Gtpr {
-        Gtpr(0)
-    }
-}
-impl core::fmt::Debug for Gtpr {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Gtpr").field("gtpr", &self.gtpr()).finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Gtpr {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Gtpr {{ gtpr: {=u32:?} }}", self.gtpr())
     }
 }
 #[doc = "General PWM Timer Stop Source Select Register"]

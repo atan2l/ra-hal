@@ -94,16 +94,16 @@ impl<'d, I: Instance> Pwm<'d, I> {
             w.set_tpcs(Self::DIVIDER);
         });
 
-        pwm.gtpr().write_value(Gtpr(period as u32));
-        pwm.gtccrb().write_value(Gtccr(period as u32));
-        pwm.gtccre().write_value(Gtccr(period as u32));
-        pwm.gtcnt().write_value(Gtcnt(0));
+        pwm.gtpr().write_value(period as u32);
+        pwm.gtccrb().write_value(period as u32);
+        pwm.gtccre().write_value(period as u32);
+        pwm.gtcnt().write_value(0);
         pwm.gtior().modify(|w| {
             w.set_gtiob(Gtiob::_00111);
             w.set_obe(true);
         });
         pwm.gtber().modify(|w| {
-            w.set_ccrb(Ccrb::_00);
+            w.set_ccrb(Ccrb::SingleBuffer);
         });
 
         pin_b.set_pfunc();

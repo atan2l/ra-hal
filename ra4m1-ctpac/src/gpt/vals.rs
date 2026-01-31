@@ -36,13 +36,12 @@ impl From<Bd> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Ccra {
     #[doc = "Buffer operation is not performed"]
-    _00 = 0x0,
+    NoBuffer = 0x0,
     #[doc = "Single buffer operation (GTCCRA <--> GTCCRC)"]
-    _01 = 0x01,
+    SingleBuffer = 0x01,
     #[doc = "Double buffer operation (GTCCRA <--> GTCCRC <--> GTCCRD)"]
-    _10 = 0x02,
-    #[doc = "Double buffer operation (GTCCRA <--> GTCCRC <--> GTCCRD)"]
-    _11 = 0x03,
+    DoubleBuffer = 0x02,
+    _RESERVED_3 = 0x03,
 }
 impl Ccra {
     #[inline(always)]
@@ -71,13 +70,12 @@ impl From<Ccra> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Ccrb {
     #[doc = "Buffer operation is not performed"]
-    _00 = 0x0,
+    NoBuffer = 0x0,
     #[doc = "Single buffer operation (GTCCRB <--> GTCCRE)"]
-    _01 = 0x01,
+    SingleBuffer = 0x01,
     #[doc = "Double buffer operation (GTCCRB <--> GTCCRE <--> GTCCRF)"]
-    _10 = 0x02,
-    #[doc = "Double buffer operation (GTCCRB <--> GTCCRE <--> GTCCRF)"]
-    _11 = 0x03,
+    DoubleBuffer = 0x02,
+    _RESERVED_3 = 0x03,
 }
 impl Ccrb {
     #[inline(always)]

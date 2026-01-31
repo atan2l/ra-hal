@@ -101,42 +101,42 @@ impl Gpt {
     }
     #[doc = "General PWM Timer Counter"]
     #[inline(always)]
-    pub const fn gtcnt(self) -> crate::common::Reg<regs::Gtcnt, crate::common::RW> {
+    pub const fn gtcnt(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x48usize) as _) }
     }
     #[doc = "General PWM Timer Compare Capture Register A"]
     #[inline(always)]
-    pub const fn gtccra(self) -> crate::common::Reg<regs::Gtccr, crate::common::RW> {
+    pub const fn gtccra(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x4cusize) as _) }
     }
     #[doc = "General PWM Timer Compare Capture Register B"]
     #[inline(always)]
-    pub const fn gtccrb(self) -> crate::common::Reg<regs::Gtccr, crate::common::RW> {
+    pub const fn gtccrb(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x50usize) as _) }
     }
     #[doc = "General PWM Timer Compare Capture Register C"]
     #[inline(always)]
-    pub const fn gtccrc(self) -> crate::common::Reg<regs::Gtccr, crate::common::RW> {
+    pub const fn gtccrc(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x54usize) as _) }
     }
     #[doc = "General PWM Timer Compare Capture Register E"]
     #[inline(always)]
-    pub const fn gtccre(self) -> crate::common::Reg<regs::Gtccr, crate::common::RW> {
+    pub const fn gtccre(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x58usize) as _) }
     }
     #[doc = "General PWM Timer Compare Capture Register D"]
     #[inline(always)]
-    pub const fn gtccrd(self) -> crate::common::Reg<regs::Gtccr, crate::common::RW> {
+    pub const fn gtccrd(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x5cusize) as _) }
     }
     #[doc = "General PWM Timer Compare Capture Register F"]
     #[inline(always)]
-    pub const fn gtccrf(self) -> crate::common::Reg<regs::Gtccr, crate::common::RW> {
+    pub const fn gtccrf(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x60usize) as _) }
     }
     #[doc = "General PWM Timer Cycle Setting Register"]
     #[inline(always)]
-    pub const fn gtpr(self) -> crate::common::Reg<regs::Gtpr, crate::common::RW> {
+    pub const fn gtpr(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x64usize) as _) }
     }
     #[doc = "General PWM Timer Cycle Setting Buffer Register"]

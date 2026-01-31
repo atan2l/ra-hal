@@ -88,3 +88,24 @@ transforms:
   - !MergeFieldsets
     from: gpt::regs::(Gtccr)[abcdef]
     to: gpt::regs::${1}
+  # Leaving these as discrete types so we maintain meaningful comments
+  - !RenameEnumVariants
+    enum: gpt::vals::Ccr[ab]
+    from: _00
+    to: NoBuffer
+  - !RenameEnumVariants
+    enum: gpt::vals::Ccr[ab]
+    from: _01
+    to: SingleBuffer
+  - !RenameEnumVariants
+    enum: gpt::vals::Ccr[ab]
+    from: _10
+    to: DoubleBuffer
+  # Per the manual the lower bit is ignored for double buffer
+  - !DeleteEnumVariants
+    enum: gpt::vals::Ccr[ab]
+    from: _11
+  # These are just 32-bit (or 16-bit) integers
+  - !Delete
+    from: gpt::regs::(Gtccr|Gtcnt|Gtpr)
+    type: All
