@@ -8,7 +8,7 @@
 //! ```rust,ignore
 //! #[unsafe(no_mangle)]
 //! #[unsafe(link_section = ".ofs1")]
-//! pub static OFS1: Ofs1 = Ofs1::ArduinoCore();
+//! static OFS1: Ofs1 = Ofs1::arduino_core();
 //! ```
 
 // Reserved bits are to be written as 1.
@@ -118,7 +118,7 @@ impl Ofs1 {
     /// ```rust,ignore
     /// #[unsafe(no_mangle)]
     /// #[unsafe(link_section = ".ofs1")]
-    /// pub static OFS1: Ofs1 = Ofs1::new::<LvdasOff, Vdsel190, HocoOn, Hoco48Mhz>();
+    /// static OFS1: Ofs1 = Ofs1::new::<LvdasOff, Vdsel190, HocoOn, Hoco48Mhz>();
     /// ```
     ///
     /// See the [module](module@crate::osm::ofs1) docs for the available values.
@@ -134,7 +134,7 @@ impl Ofs1 {
     /// ```rust,ignore
     /// #[unsafe(no_mangle)]
     /// #[unsafe(link_section = ".ofs1")]
-    /// pub static OFS1: Ofs1 = Ofs1::ArduinoCore();
+    /// static OFS1: Ofs1 = Ofs1::arduino_core();
     /// ```
     pub const fn arduino_core() -> Self {
         Self::new::<LvdasOff, Vdsel190, HocoOn, Hoco48Mhz>()

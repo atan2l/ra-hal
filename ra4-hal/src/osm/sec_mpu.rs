@@ -6,6 +6,7 @@
 /// Address space of greater than 12 bytes is required between the last instruction of a non-secure
 /// program and the first instruction of a secure program.
 #[repr(C)]
+#[non_exhaustive]
 pub struct SecurityMpu {
     /// Code segment 0 (`SECMPUCS0`, `SECMPUCE0`)
     pub pc0: [u32; 2],

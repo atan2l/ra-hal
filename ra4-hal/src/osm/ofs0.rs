@@ -8,7 +8,7 @@
 //! ```rust,ignore
 //! #[unsafe(no_mangle)]
 //! #[unsafe(link_section = ".ofs0")]
-//! static OFS0: Ofs0 = Ofs0::ArduinoCore();
+//! static OFS0: Ofs0 = Ofs0::arduino_core();
 //! ```
 
 const OFS0_H: u32 = 0xA0010000;
@@ -429,7 +429,7 @@ impl Ofs0 {
     /// ```rust,ignore
     /// #[unsafe(no_mangle)]
     /// #[unsafe(link_section = ".ofs0")]
-    /// static OFS0: Ofs0 = Ofs0::ArduinoCore();
+    /// static OFS0: Ofs0 = Ofs0::arduino_core();
     /// ```
     pub const fn arduino_core() -> Self {
         Self::new::<
