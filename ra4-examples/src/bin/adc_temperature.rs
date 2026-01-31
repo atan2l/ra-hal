@@ -12,7 +12,7 @@ use panic_probe as _;
 use ra4_hal::{
     adc::{Adc, AdcConfig},
     osm::{ofs0::Ofs0, ofs1::Ofs1, sec_mpu::SecurityMpu},
-    print_clock_config, sec_mpu,
+    print_clock_config,
 };
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
@@ -20,17 +20,17 @@ use ra4_hal::{debug, error, info, trace, warn};
 // Option Function Select Register 0 (required)
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".ofs0")]
-static OFS0: Ofs0 = Ofs0::ArduinoCore();
+static OFS0: Ofs0 = Ofs0::arduino_core();
 
 // Option Function Select Register 1 (required)
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".ofs1")]
-static OFS1: Ofs1 = Ofs1::ArduinoCore();
+static OFS1: Ofs1 = Ofs1::arduino_core();
 
 // Security MPU (required)
 #[unsafe(no_mangle)]
 #[unsafe(link_section = ".sec_mpu")]
-static SEC_MPU: SecurityMpu = sec_mpu!(Disabled);
+static SEC_MPU: SecurityMpu = SecurityMpu::disabled();
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {

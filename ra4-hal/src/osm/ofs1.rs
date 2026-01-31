@@ -136,8 +136,7 @@ impl Ofs1 {
     /// #[unsafe(link_section = ".ofs1")]
     /// pub static OFS1: Ofs1 = Ofs1::ArduinoCore();
     /// ```
-    #[allow(non_snake_case)]
-    pub const fn ArduinoCore() -> Self {
+    pub const fn arduino_core() -> Self {
         Self::new::<LvdasOff, Vdsel190, HocoOn, Hoco48Mhz>()
     }
 }

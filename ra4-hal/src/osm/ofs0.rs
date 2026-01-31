@@ -431,8 +431,7 @@ impl Ofs0 {
     /// #[unsafe(link_section = ".ofs0")]
     /// static OFS0: Ofs0 = Ofs0::ArduinoCore();
     /// ```
-    #[allow(non_snake_case)]
-    pub const fn ArduinoCore() -> Self {
+    pub const fn arduino_core() -> Self {
         Self::new::<
             IwdtAutoStartOff,
             IwdtTimeout2048,
