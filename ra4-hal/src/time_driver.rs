@@ -12,7 +12,7 @@ use embassy_hal_internal::interrupt::InterruptExt;
 use embassy_time_driver::Driver;
 use embassy_time_queue_utils::Queue;
 use ra4m1_ctpac::gpt::{
-    regs::{Gtccr, Gtdnsr, Gtupsr},
+    regs::{Gtdnsr, Gtupsr},
     vals::{Mode, Tpcs, Ud},
 };
 
@@ -122,23 +122,15 @@ impl GptDriver {
         trace!("GTCR: {}", timer.gtcr().read());
 
         // Overflow at u32::MAX
-        timer.gtpr().write(|w| {
-            w.set_gtpr(u32::MAX);
-        });
+        timer.gtpr().write(|w| *w = u32::MAX);
         trace!("GTPR: {}", timer.gtpr().read());
 
-        timer.gtcnt().write(|w| {
-            w.set_gtcnt(0);
-        });
+        timer.gtcnt().write(|w| *w = 0);
         trace!("GTCNT: {}", timer.gtcnt().read());
 
         // This is faster??
-        timer.gtssr().write(|w| {
-            w.set_cstrt(true);
-        });
-        timer.gtstr().write(|w| {
-            w.set_cstrt(0, true);
-        });
+        timer.gtssr().write(|w| w.set_cstrt(true));
+        timer.gtstr().write(|w| w.set_cstrt(0, true));
     }
 
     fn interrupted_alarm(&'static self) {
@@ -197,7 +189,7 @@ impl GptDriver {
         if diff < u64::from(u32::MAX) {
             timer.protected_write(|| {
                 // Load the safe timestamp
-                timer.gtccrc().write_value(Gtccr(safe_timestamp));
+                timer.gtccrc().write_value(safe_timestamp);
                 // Enable the compare interrupt
                 AlarmInt::IRQ.icu_enable(<GPT32_0 as Instance>::ALARM_EVENT);
             });
@@ -216,7 +208,7 @@ impl Driver for GptDriver {
         let timer = GPT32_0::regs();
 
         let period = self.period.load(Ordering::Acquire);
-        let count = timer.gtcnt().read().gtcnt();
+        let count = timer.gtcnt().read();
         ((period as u64) << 32) + (count as u64)
     }
 

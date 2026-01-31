@@ -4,10 +4,7 @@ use core::marker::PhantomData;
 
 use embassy_hal_internal::{Peri, PeripheralType};
 use paste::paste;
-use ra4m1_ctpac::gpt::{
-    regs::{Gtccr, Gtcnt, Gtpr},
-    vals::{Ccrb, Gtiob, Mode, Tpcs},
-};
+use ra4m1_ctpac::gpt::vals::{Ccrb, Gtiob, Mode, Tpcs};
 
 use crate::{
     CLOCK_FREQUENCY,
@@ -74,8 +71,8 @@ impl<'d, I: Instance> Pwm<'d, I> {
         let cmp = self.compare_at(pct);
         // This will center the peak
         let pwm = I::regs();
-        pwm.gtccrb().write_value(Gtccr(cmp));
-        pwm.gtccre().write_value(Gtccr(cmp));
+        pwm.gtccrb().write_value(cmp);
+        pwm.gtccre().write_value(cmp);
     }
 
     #[inline]
