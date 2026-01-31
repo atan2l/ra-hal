@@ -1,10 +1,7 @@
 //! Cyclic Redundancy Check Calculator (`CRC`)
 
 use embassy_hal_internal::Peri;
-use ra4m1_ctpac::crc::{
-    regs::{Crcdir, CrcdirBy, Crcdor, CrcdorBy, CrcdorHa},
-    vals::Gps,
-};
+use ra4m1_ctpac::crc::vals::Gps;
 
 use crate::{pac, peripherals::CRC};
 
@@ -113,15 +110,14 @@ impl<'d> Crc<'d> {
             match self.config.polynomial {
                 Polynomial::None => unimplemented!(),
                 Polynomial::Crc8 => {
-                    crc.crcdor_by()
-                        .write_value(CrcdorBy((self.config.seed & 0xFF) as u8));
+                    crc.crcdor_by().write_value((self.config.seed & 0xFF) as u8);
                 }
                 Polynomial::Crc16 | Polynomial::CrcCcit => {
                     crc.crcdor_ha()
-                        .write_value(CrcdorHa((self.config.seed & 0xFFFF) as u16));
+                        .write_value((self.config.seed & 0xFFFF) as u16);
                 }
                 Polynomial::Crc32 | Polynomial::Crc32C => {
-                    crc.crcdor().write_value(Crcdor(self.config.seed));
+                    crc.crcdor().write_value(self.config.seed);
                 }
             }
         }
@@ -147,13 +143,13 @@ impl<'d> Crc<'d> {
             Gps::None | Gps::_RESERVED_6 | Gps::_RESERVED_7 => unimplemented!(),
             Gps::Crc8 | Gps::Crc16 | Gps::CrcCcit => {
                 for byte in bytes.iter() {
-                    crc.crcdir_by().write_value(CrcdirBy(*byte));
+                    crc.crcdir_by().write_value(*byte);
                 }
 
                 if algo == Gps::Crc8 {
-                    crc.crcdor_by().read().0 as _
+                    crc.crcdor_by().read() as _
                 } else {
-                    crc.crcdor_ha().read().0 as _
+                    crc.crcdor_ha().read() as _
                 }
             }
             Gps::Crc32 | Gps::Crc32C => {
@@ -163,22 +159,20 @@ impl<'d> Crc<'d> {
 
                 match self.config.reverse {
                     false => {
-                        // let it = bytes.chunks_exact(4).rev();
-                        let it = bytes.chunks_exact(4);
-                        for chunk in it {
+                        for chunk in bytes.chunks_exact(4) {
                             let word = u32::from_be_bytes(chunk.try_into().unwrap());
-                            crc.crcdir().write_value(Crcdir(word));
+                            crc.crcdir().write_value(word);
                         }
                     }
                     true => {
                         for chunk in bytes.chunks_exact(4) {
                             let word = u32::from_ne_bytes(chunk.try_into().unwrap());
-                            crc.crcdir().write_value(Crcdir(word));
+                            crc.crcdir().write_value(word);
                         }
                     }
                 }
 
-                crc.crcdor().read().0
+                crc.crcdor().read()
             }
         };
 

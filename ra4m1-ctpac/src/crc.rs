@@ -26,27 +26,27 @@ impl Crc {
     }
     #[doc = "CRC Data Input Register"]
     #[inline(always)]
-    pub const fn crcdir(self) -> crate::common::Reg<regs::Crcdir, crate::common::RW> {
+    pub const fn crcdir(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x04usize) as _) }
     }
     #[doc = "CRC Data Input Register (byte access)"]
     #[inline(always)]
-    pub const fn crcdir_by(self) -> crate::common::Reg<regs::CrcdirBy, crate::common::RW> {
+    pub const fn crcdir_by(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x04usize) as _) }
     }
     #[doc = "CRC Data Output Register"]
     #[inline(always)]
-    pub const fn crcdor(self) -> crate::common::Reg<regs::Crcdor, crate::common::RW> {
+    pub const fn crcdor(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x08usize) as _) }
     }
     #[doc = "CRC Data Output Register(byte access)"]
     #[inline(always)]
-    pub const fn crcdor_by(self) -> crate::common::Reg<regs::CrcdorBy, crate::common::RW> {
+    pub const fn crcdor_by(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x08usize) as _) }
     }
     #[doc = "CRC Data Output Register (halfword access)"]
     #[inline(always)]
-    pub const fn crcdor_ha(self) -> crate::common::Reg<regs::CrcdorHa, crate::common::RW> {
+    pub const fn crcdor_ha(self) -> crate::common::Reg<u16, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x08usize) as _) }
     }
     #[doc = "Snoop Address Register"]

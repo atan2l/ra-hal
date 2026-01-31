@@ -23,3 +23,5 @@ transforms:
     enum: crc::vals::Gps
     from: _101
     to: Crc32C
+  - !DeleteFieldsets
+    from: crc::regs::Crc(dir|dor)(By|Ha)?
