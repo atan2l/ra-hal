@@ -799,7 +799,7 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for RxInterruptHandl
                 }
             }
             true => {
-                let fifo_free = I::FIFO_DEPTH - sci.fdr().read().r() as u8;
+                let fifo_free = I::FIFO_DEPTH - sci.fdr().read().r();
 
                 warn!("{}RX Buffer full, FIFO cap={}", I::PERIPHERAL, fifo_free);
 

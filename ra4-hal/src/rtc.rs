@@ -109,7 +109,7 @@ impl<'d, I: Instance> Rtc<'d, I> {
             // w.set_aadje(true);
             // w.set_aadjp(true);
         });
-        while rtc.rcr2().read().cntmd() != false {
+        while rtc.rcr2().read().cntmd() {
             asm::nop();
         }
 

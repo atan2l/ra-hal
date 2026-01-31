@@ -86,8 +86,8 @@ impl<'d, I: Instance> Pwm<'d, I> {
 
     pub fn new_b<B: PwmPin<I, ChanB>>(_peri: Peri<'d, I>, pin_b: Peri<'d, B>) -> Self {
         let pwm = I::regs();
-
         let period = Self::period();
+
         pwm.gtcr().modify(|w| {
             w.set_md(Mode::TrianglePwm1);
             w.set_tpcs(Self::DIVIDER);

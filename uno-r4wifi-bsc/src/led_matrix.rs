@@ -109,6 +109,7 @@ const PIN_MAP: [[u8; 2]; 96] = [
 ];
 
 impl<'d> LedMatrix {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         d0: Peri<'d, P003>,
         d1: Peri<'d, P004>,
