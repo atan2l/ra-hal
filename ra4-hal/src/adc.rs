@@ -73,18 +73,12 @@ impl Instance for peripherals::ADC14 {}
 
 impl<'d, I: Instance> Adc<'d, I> {
     /// Creates a new `ADC14` driver.
-    pub fn new(
-        _adc: Peri<'d, I>,
-        config: AdcConfig,
-        // _irq: impl interrupt::typelevel::Binding<I::Interrupt, InterruptHandler<I>> + 'd,
-    ) -> Self {
+    pub fn new(_adc: Peri<'d, I>, config: AdcConfig) -> Self {
         debug!("ADC14: stop=false");
 
         let mstp = pac::MSTP;
 
-        mstp.mstpcrd().write(|w| {
-            w.set_mstpd16(false);
-        });
+        mstp.mstpcrd().write(|w| w.set_mstpd16(false));
 
         let resolution = match config.resolution {
             Resolution::Low => Adprc::_00,
@@ -151,13 +145,9 @@ impl<'d, I: Instance> Adc<'d, I> {
 
         // TODO: read ADST first to ensure we're stopped?
 
-        adc.adcsr().modify(|w| {
-            w.set_adcs(Adcs::Single);
-        });
+        adc.adcsr().modify(|w| w.set_adcs(Adcs::Single));
 
-        adc.adcsr().modify(|w| {
-            w.set_adst(true);
-        });
+        adc.adcsr().modify(|w| w.set_adst(true));
 
         // When the conversion is finished an interrupt is fired (without modifying the registers) and the ADST bit is cleared
         while adc.adcsr().read().adst() {
@@ -176,8 +166,6 @@ impl<'d, I: Instance> Drop for Adc<'d, I> {
 
         let mstp = pac::MSTP;
 
-        mstp.mstpcrd().write(|w| {
-            w.set_mstpd16(true);
-        });
+        mstp.mstpcrd().write(|w| w.set_mstpd16(true));
     }
 }
