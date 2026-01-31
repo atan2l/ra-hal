@@ -226,7 +226,7 @@ pub(crate) trait SealedPin {
         let pfs = crate::pac::PFS;
 
         let pfs_reg = pfs.pin(port_num, pin_num);
-        debug!("Port{}, Pin{}, pf={}", port_num, pin_num, port_func);
+        debug!("P{}{:02}: pfunc={}", port_num, pin_num, port_func);
 
         // The quick design guide suggests that first setting the pin to GPIO ensure the peripheral doesn't get any spurious input
         pfs.protected_write(|| {
@@ -250,7 +250,7 @@ pub(crate) trait SealedPin {
             "PSEL was ignored"
         );
 
-        info!("PFS={}", pfs_reg.read());
+        debug!("P{}{:02}: {}", port_num, pin_num, pfs_reg.read());
     }
 
     /// Get the GPIO register block for this pin.
