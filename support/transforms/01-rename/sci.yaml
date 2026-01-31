@@ -50,7 +50,7 @@ transforms:
   # BRR|FTDRL|FRDRL|RDR: any value is valid.
   # MDDR: 128 ≤ n  ≤ 255 (no way to capture this in chiptool so might as well nuke it)
   - !DeleteFieldsets
-    from: sci::regs::(Brr|Mddr|F[rt]drl|Rdr)
+    from: sci::regs::(Brr|Mddr|F[rt]drl|[RT]dr)
   # Mask is 0xFFFF
   # RDRHL|TDRHL: any value is valid.
   - !DeleteFieldsets

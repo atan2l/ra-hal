@@ -2745,38 +2745,3 @@ impl defmt::Format for SsrSmci {
         )
     }
 }
-#[doc = "Transmit Data Register"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Tdr(pub u8);
-impl Tdr {
-    #[doc = "TDR is an 8-bit register that stores transmit data."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn tdr(&self) -> u8 {
-        let val = (self.0 >> 0usize) & 0xff;
-        val as u8
-    }
-    #[doc = "TDR is an 8-bit register that stores transmit data."]
-    #[inline(always)]
-    pub const fn set_tdr(&mut self, val: u8) {
-        self.0 = (self.0 & !(0xff << 0usize)) | (((val as u8) & 0xff) << 0usize);
-    }
-}
-impl Default for Tdr {
-    #[inline(always)]
-    fn default() -> Tdr {
-        Tdr(0)
-    }
-}
-impl core::fmt::Debug for Tdr {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Tdr").field("tdr", &self.tdr()).finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Tdr {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Tdr {{ tdr: {=u8:?} }}", self.tdr())
-    }
-}

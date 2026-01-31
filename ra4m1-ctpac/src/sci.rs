@@ -41,7 +41,7 @@ impl Sci {
     }
     #[doc = "Transmit Data Register"]
     #[inline(always)]
-    pub const fn tdr(self) -> crate::common::Reg<regs::Tdr, crate::common::RW> {
+    pub const fn tdr(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x03usize) as _) }
     }
     #[doc = "Serial Status Register(SCMR.SMIF = 0 and FCR.FM=0)"]
