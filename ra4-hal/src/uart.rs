@@ -413,9 +413,7 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
     fn set_baud_from_entry(speed: &SpeedEntry) {
         let sci = I::regs();
 
-        sci.brr().write(|w| {
-            w.set_brr(speed.big_n);
-        });
+        sci.brr().write(|w| w.set_brr(speed.big_n));
 
         if speed.modulation != 0 {
             sci.mddr().write(|w| w.set_mddr(speed.modulation));

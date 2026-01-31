@@ -47,22 +47,16 @@ impl<'d, I: Instance> Rtc<'d, I> {
             let vbatt_enabled = system.vbtcr1().read().bpwswstp();
 
             if vbatt_enabled {
-                system.vbtcr1().write(|w| {
-                    w.set_bpwswstp(true);
-                });
+                system.vbtcr1().write(|w| w.set_bpwswstp(true));
             }
 
-            system.lococr().modify(|w| {
-                w.set_lcstp(false);
-            });
+            system.lococr().modify(|w| w.set_lcstp(false));
 
             // § 48.3.2
             Timer::after_micros(100).await;
 
             if vbatt_enabled {
-                system.vbtcr1().write(|w| {
-                    w.set_bpwswstp(false);
-                });
+                system.vbtcr1().write(|w| w.set_bpwswstp(false));
 
                 while !system.vbtsr().read().vbtrvld() {
                     asm::nop();
@@ -77,15 +71,11 @@ impl<'d, I: Instance> Rtc<'d, I> {
         };
 
         // §24.2.20
-        rtc.rfrl().write(|w| {
-            w.set_rfc(0xFF - 16);
-        });
+        rtc.rfrl().write(|w| w.set_rfc(0xFF - 16));
 
         let system = pac::SYSTEM;
         system.protected_write(|| {
-            system.locoutcr().write(|w| {
-                w.set_locoutrm((-128_i8) as u8);
-            });
+            system.locoutcr().write(|w| w.set_locoutrm((-128_i8) as u8));
         });
 
         info!(
@@ -94,9 +84,7 @@ impl<'d, I: Instance> Rtc<'d, I> {
             0b1111_1110
         );
 
-        rtc.rcr4().modify(|w| {
-            w.set_rcksel(Rcksel::Loco);
-        });
+        rtc.rcr4().modify(|w| w.set_rcksel(Rcksel::Loco));
 
         for _ in 0..6 {
             rtc.rcr4().read();
@@ -113,16 +101,12 @@ impl<'d, I: Instance> Rtc<'d, I> {
             asm::nop();
         }
 
-        rtc.rcr2().modify(|w| {
-            w.set_reset(true);
-        });
+        rtc.rcr2().modify(|w| w.set_reset(true));
         while rtc.rcr2().read().reset() {
             asm::nop();
         }
 
-        rtc.rcr2().modify(|w| {
-            w.set_start(false);
-        });
+        rtc.rcr2().modify(|w| w.set_start(false));
         while rtc.rcr2().read().start() {
             asm::nop();
         }
@@ -143,9 +127,7 @@ impl<'d, I: Instance> Rtc<'d, I> {
             w.set_pm(false);
         });
 
-        rtc.rwkcnt().write(|w| {
-            w.set_dayw(RwkcntDayw::Friday);
-        });
+        rtc.rwkcnt().write(|w| w.set_dayw(RwkcntDayw::Friday));
 
         rtc.rmoncnt().write(|w| {
             w.set_mon10(false);
@@ -166,9 +148,7 @@ impl<'d, I: Instance> Rtc<'d, I> {
     pub fn start(&mut self) {
         let rtc = I::regs();
 
-        rtc.rcr2().modify(|w| {
-            w.set_start(true);
-        });
+        rtc.rcr2().modify(|w| w.set_start(true));
 
         while !rtc.rcr2().read().start() {
             asm::nop();
@@ -179,9 +159,7 @@ impl<'d, I: Instance> Rtc<'d, I> {
     pub fn stop(&mut self) {
         let rtc = I::regs();
 
-        rtc.rcr2().modify(|w| {
-            w.set_start(false);
-        });
+        rtc.rcr2().modify(|w| w.set_start(false));
 
         while rtc.rcr2().read().start() {
             asm::nop();
