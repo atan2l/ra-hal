@@ -43,3 +43,5 @@ transforms:
     enum: sci::vals::SmrCks
     from: _11
     to: DIV_64
+  - !DeleteEnums
+    from: sci::vals::Ttrg

@@ -12,7 +12,7 @@ use embassy_sync::waitqueue::AtomicWaker;
 use paste::paste;
 use ra4m1_ctpac::sci::{
     regs::{Ftdrl, Scr},
-    vals::{ScrCke, SmrCks, SmrPm, Stop, Ttrg},
+    vals::{ScrCke, SmrCks, SmrPm, Stop},
 };
 
 use crate::interrupt::typelevel::{Handler as InterruptHandler, Interrupt as InterruptType};
@@ -497,7 +497,7 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
             // Enable FIFO
             w.set_fm(true);
             // TODO: Is this the value we want?
-            w.set_ttrg(Ttrg::from_bits(I::FIFO_DEPTH));
+            w.set_ttrg(I::FIFO_DEPTH);
         });
 
         // TODO: Give enum variants meaningful names.

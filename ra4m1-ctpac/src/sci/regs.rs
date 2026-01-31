@@ -269,14 +269,14 @@ impl Fcr {
     #[doc = "Transmit FIFO data trigger number (Valid only in asynchronous mode(including multi-processor) or clock synchronous mode)"]
     #[must_use]
     #[inline(always)]
-    pub const fn ttrg(&self) -> super::vals::Ttrg {
+    pub const fn ttrg(&self) -> u8 {
         let val = (self.0 >> 4usize) & 0x0f;
-        super::vals::Ttrg::from_bits(val as u8)
+        val as u8
     }
     #[doc = "Transmit FIFO data trigger number (Valid only in asynchronous mode(including multi-processor) or clock synchronous mode)"]
     #[inline(always)]
-    pub const fn set_ttrg(&mut self, val: super::vals::Ttrg) {
-        self.0 = (self.0 & !(0x0f << 4usize)) | (((val.to_bits() as u16) & 0x0f) << 4usize);
+    pub const fn set_ttrg(&mut self, val: u8) {
+        self.0 = (self.0 & !(0x0f << 4usize)) | (((val as u16) & 0x0f) << 4usize);
     }
     #[doc = "Receive FIFO data trigger number (Valid only in asynchronous mode(including multi-processor) or clock synchronous mode)"]
     #[must_use]
@@ -327,7 +327,7 @@ impl defmt::Format for Fcr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Fcr {{ fm: {=bool:?}, rfrst: {=bool:?}, tfrst: {=bool:?}, dres: {=bool:?}, ttrg: {:?}, rtrg: {:?}, rstrg: {:?} }}",
+            "Fcr {{ fm: {=bool:?}, rfrst: {=bool:?}, tfrst: {=bool:?}, dres: {=bool:?}, ttrg: {=u8:?}, rtrg: {:?}, rstrg: {:?} }}",
             self.fm(),
             self.rfrst(),
             self.tfrst(),
