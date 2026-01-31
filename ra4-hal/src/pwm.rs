@@ -55,7 +55,7 @@ impl<'d, I: Instance> Pwm<'d, I> {
 
         let period = (CLOCK_FREQUENCY as f32 / divider) / 240.0;
 
-        // Currently we assume all timers are 16-bit, but really timers 0 and 1 are 32-bit soooo
+        // Currently we assume all timers are 16-bit, but really timers 0 and 1 are 32-bit
         assert!(period as u32 <= u16::MAX as u32);
 
         period
