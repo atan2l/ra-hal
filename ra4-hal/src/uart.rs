@@ -413,13 +413,13 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
     fn set_baud_from_entry(speed: &SpeedEntry) {
         let sci = I::regs();
 
-        sci.brr().write(|w| w.set_brr(speed.big_n));
+        sci.brr().write_value(speed.big_n);
 
         if speed.modulation != 0 {
-            sci.mddr().write(|w| w.set_mddr(speed.modulation));
+            sci.mddr().write_value(speed.modulation);
             sci.semr().modify(|w| w.set_brme(true));
         } else {
-            sci.mddr().write(|w| w.set_mddr(0));
+            sci.mddr().write_value(0);
             sci.semr().modify(|w| w.set_brme(false));
         }
 
@@ -778,7 +778,7 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for RxInterruptHandl
                 let read_len = buf.len().min(fifo_len);
 
                 for out_byte in buf.iter_mut().take(read_len) {
-                    *out_byte = sci.frdrl().read().rdatl();
+                    *out_byte = sci.frdrl().read();
                 }
                 writer.push_done(read_len);
 

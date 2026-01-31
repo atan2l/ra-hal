@@ -1,38 +1,3 @@
-#[doc = "Bit Rate Register"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Brr(pub u8);
-impl Brr {
-    #[doc = "BRR is an 8-bit register that adjusts the bit rate."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn brr(&self) -> u8 {
-        let val = (self.0 >> 0usize) & 0xff;
-        val as u8
-    }
-    #[doc = "BRR is an 8-bit register that adjusts the bit rate."]
-    #[inline(always)]
-    pub const fn set_brr(&mut self, val: u8) {
-        self.0 = (self.0 & !(0xff << 0usize)) | (((val as u8) & 0xff) << 0usize);
-    }
-}
-impl Default for Brr {
-    #[inline(always)]
-    fn default() -> Brr {
-        Brr(0)
-    }
-}
-impl core::fmt::Debug for Brr {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Brr").field("brr", &self.brr()).finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Brr {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Brr {{ brr: {=u8:?} }}", self.brr())
-    }
-}
 #[doc = "Compare Match Data Register"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
@@ -699,41 +664,73 @@ impl defmt::Format for Frdrhl {
         )
     }
 }
-#[doc = "Receive FIFO Data Register L"]
+#[doc = "Transmit FIFO Data Register H"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Frdrl(pub u8);
-impl Frdrl {
-    #[doc = "Serial receive data (Valid only in asynchronous mode(including multi-processor) or clock synchronous mode, and FIFO selected) NOTE: When reading both of FRDRH register and FRDRL register, please read by an order of the FRDRH register and the FRDRL register."]
+pub struct Ftdrh(pub u8);
+impl Ftdrh {
+    #[doc = "Serial transmit data (b8) (Valid only in asynchronous mode(including multi-processor) or clock synchronous mode, and FIFO selected)"]
     #[must_use]
     #[inline(always)]
-    pub const fn rdatl(&self) -> u8 {
-        let val = (self.0 >> 0usize) & 0xff;
+    pub const fn tdath(&self) -> bool {
+        let val = (self.0 >> 0usize) & 0x01;
+        val != 0
+    }
+    #[doc = "Serial transmit data (b8) (Valid only in asynchronous mode(including multi-processor) or clock synchronous mode, and FIFO selected)"]
+    #[inline(always)]
+    pub const fn set_tdath(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
+    }
+    #[doc = "Multi-processor transfer bit flag (Valid only in asynchronous mode and SMR.MP=1 and FIFO selected)"]
+    #[must_use]
+    #[inline(always)]
+    pub const fn mpbt(&self) -> bool {
+        let val = (self.0 >> 1usize) & 0x01;
+        val != 0
+    }
+    #[doc = "Multi-processor transfer bit flag (Valid only in asynchronous mode and SMR.MP=1 and FIFO selected)"]
+    #[inline(always)]
+    pub const fn set_mpbt(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
+    }
+    #[doc = "The write value should be 111111."]
+    #[must_use]
+    #[inline(always)]
+    pub const fn reserved(&self) -> u8 {
+        let val = (self.0 >> 2usize) & 0x3f;
         val as u8
     }
-    #[doc = "Serial receive data (Valid only in asynchronous mode(including multi-processor) or clock synchronous mode, and FIFO selected) NOTE: When reading both of FRDRH register and FRDRL register, please read by an order of the FRDRH register and the FRDRL register."]
+    #[doc = "The write value should be 111111."]
     #[inline(always)]
-    pub const fn set_rdatl(&mut self, val: u8) {
-        self.0 = (self.0 & !(0xff << 0usize)) | (((val as u8) & 0xff) << 0usize);
+    pub const fn set_reserved(&mut self, val: u8) {
+        self.0 = (self.0 & !(0x3f << 2usize)) | (((val as u8) & 0x3f) << 2usize);
     }
 }
-impl Default for Frdrl {
+impl Default for Ftdrh {
     #[inline(always)]
-    fn default() -> Frdrl {
-        Frdrl(0)
+    fn default() -> Ftdrh {
+        Ftdrh(0)
     }
 }
-impl core::fmt::Debug for Frdrl {
+impl core::fmt::Debug for Ftdrh {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Frdrl")
-            .field("rdatl", &self.rdatl())
+        f.debug_struct("Ftdrh")
+            .field("tdath", &self.tdath())
+            .field("mpbt", &self.mpbt())
+            .field("reserved", &self.reserved())
             .finish()
     }
 }
 #[cfg(feature = "defmt")]
-impl defmt::Format for Frdrl {
+impl defmt::Format for Ftdrh {
     fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Frdrl {{ rdatl: {=u8:?} }}", self.rdatl())
+        defmt::write!(
+            f,
+            "Ftdrh {{ tdath: {=bool:?}, mpbt: {=bool:?}, reserved: {=u8:?} }}",
+            self.tdath(),
+            self.mpbt(),
+            self.reserved()
+        )
     }
 }
 #[doc = "Transmit FIFO Data Register HL"]
@@ -914,41 +911,6 @@ impl defmt::Format for Lsr {
             self.pnum(),
             self.reserved_3()
         )
-    }
-}
-#[doc = "Modulation Duty Register"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Mddr(pub u8);
-impl Mddr {
-    #[doc = "MDDR corrects the bit rate adjusted by the BRR register."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn mddr(&self) -> u8 {
-        let val = (self.0 >> 0usize) & 0xff;
-        val as u8
-    }
-    #[doc = "MDDR corrects the bit rate adjusted by the BRR register."]
-    #[inline(always)]
-    pub const fn set_mddr(&mut self, val: u8) {
-        self.0 = (self.0 & !(0xff << 0usize)) | (((val as u8) & 0xff) << 0usize);
-    }
-}
-impl Default for Mddr {
-    #[inline(always)]
-    fn default() -> Mddr {
-        Mddr(0)
-    }
-}
-impl core::fmt::Debug for Mddr {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Mddr").field("mddr", &self.mddr()).finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Mddr {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Mddr {{ mddr: {=u8:?} }}", self.mddr())
     }
 }
 #[doc = "Receive Data Register"]

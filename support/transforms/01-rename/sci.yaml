@@ -46,6 +46,8 @@ transforms:
   # FIFO trigger depth, mask is 0x0F, any value is valid.
   - !DeleteEnums
     from: sci::vals::Ttrg
-  # This is the input/output buffer. Mask is 0xFF
+  # Mask is 0xFF
+  # BRR|FTDRL|FRDRL: any value is valid.
+  # MDDR: 128 ≤ n  ≤ 255 (no way to capture this in chiptool so might as well nuke it)
   - !DeleteFieldsets
-    from: sci::regs::Ftdr[hl]
+    from: sci::regs::(Brr|Mddr|F[rt]drl)

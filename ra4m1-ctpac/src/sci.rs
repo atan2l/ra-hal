@@ -26,7 +26,7 @@ impl Sci {
     }
     #[doc = "Bit Rate Register"]
     #[inline(always)]
-    pub const fn brr(self) -> crate::common::Reg<regs::Brr, crate::common::RW> {
+    pub const fn brr(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x01usize) as _) }
     }
     #[doc = "Serial Control Register (SCMR.SMIF = 0)"]
@@ -106,7 +106,7 @@ impl Sci {
     }
     #[doc = "Transmit FIFO Data Register H"]
     #[inline(always)]
-    pub const fn ftdrh(self) -> crate::common::Reg<u8, crate::common::W> {
+    pub const fn ftdrh(self) -> crate::common::Reg<regs::Ftdrh, crate::common::W> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0eusize) as _) }
     }
     #[doc = "Transmit FIFO Data Register HL"]
@@ -141,12 +141,12 @@ impl Sci {
     }
     #[doc = "Receive FIFO Data Register L"]
     #[inline(always)]
-    pub const fn frdrl(self) -> crate::common::Reg<regs::Frdrl, crate::common::R> {
+    pub const fn frdrl(self) -> crate::common::Reg<u8, crate::common::R> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x11usize) as _) }
     }
     #[doc = "Modulation Duty Register"]
     #[inline(always)]
-    pub const fn mddr(self) -> crate::common::Reg<regs::Mddr, crate::common::RW> {
+    pub const fn mddr(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x12usize) as _) }
     }
     #[doc = "Data Compare Match Control Register"]
