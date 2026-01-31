@@ -11,7 +11,7 @@ use embassy_hal_internal::{
 use embassy_sync::waitqueue::AtomicWaker;
 use paste::paste;
 use ra4m1_ctpac::sci::{
-    regs::{Ftdrl, Scr},
+    regs::Scr,
     vals::{ScrCke, SmrCks, SmrPm, Stop},
 };
 
@@ -839,17 +839,17 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for TxInterruptHandl
 
         if out_len > fifo_available {
             for byte in out_buf[0..fifo_available].iter() {
-                sci.ftdrl().write_value(Ftdrl(*byte));
+                sci.ftdrl().write_value(*byte);
             }
 
             tx_reader.pop_done(fifo_available);
         } else {
             for byte in out_buf[0..out_len - 1].iter() {
-                sci.ftdrl().write_value(Ftdrl(*byte));
+                sci.ftdrl().write_value(*byte);
                 // Should we clear TDFE per Fig 28.14?
             }
 
-            sci.ftdrl().write_value(Ftdrl(out_buf[out_len - 1]));
+            sci.ftdrl().write_value(out_buf[out_len - 1]);
 
             sci.scr().modify(|w| {
                 w.set_tie(false);

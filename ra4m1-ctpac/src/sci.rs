@@ -106,7 +106,7 @@ impl Sci {
     }
     #[doc = "Transmit FIFO Data Register H"]
     #[inline(always)]
-    pub const fn ftdrh(self) -> crate::common::Reg<regs::Ftdrh, crate::common::W> {
+    pub const fn ftdrh(self) -> crate::common::Reg<u8, crate::common::W> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0eusize) as _) }
     }
     #[doc = "Transmit FIFO Data Register HL"]
@@ -121,7 +121,7 @@ impl Sci {
     }
     #[doc = "Transmit FIFO Data Register L"]
     #[inline(always)]
-    pub const fn ftdrl(self) -> crate::common::Reg<regs::Ftdrl, crate::common::W> {
+    pub const fn ftdrl(self) -> crate::common::Reg<u8, crate::common::W> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0fusize) as _) }
     }
     #[doc = "Receive FIFO Data Register H"]

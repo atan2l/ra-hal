@@ -43,5 +43,9 @@ transforms:
     enum: sci::vals::SmrCks
     from: _11
     to: DIV_64
+  # FIFO trigger depth, mask is 0x0F, any value is valid.
   - !DeleteEnums
     from: sci::vals::Ttrg
+  # This is the input/output buffer. Mask is 0xFF
+  - !DeleteFieldsets
+    from: sci::regs::Ftdr[hl]

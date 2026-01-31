@@ -736,75 +736,6 @@ impl defmt::Format for Frdrl {
         defmt::write!(f, "Frdrl {{ rdatl: {=u8:?} }}", self.rdatl())
     }
 }
-#[doc = "Transmit FIFO Data Register H"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Ftdrh(pub u8);
-impl Ftdrh {
-    #[doc = "Serial transmit data (b8) (Valid only in asynchronous mode(including multi-processor) or clock synchronous mode, and FIFO selected)"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn tdath(&self) -> bool {
-        let val = (self.0 >> 0usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Serial transmit data (b8) (Valid only in asynchronous mode(including multi-processor) or clock synchronous mode, and FIFO selected)"]
-    #[inline(always)]
-    pub const fn set_tdath(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 0usize)) | (((val as u8) & 0x01) << 0usize);
-    }
-    #[doc = "Multi-processor transfer bit flag (Valid only in asynchronous mode and SMR.MP=1 and FIFO selected)"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn mpbt(&self) -> bool {
-        let val = (self.0 >> 1usize) & 0x01;
-        val != 0
-    }
-    #[doc = "Multi-processor transfer bit flag (Valid only in asynchronous mode and SMR.MP=1 and FIFO selected)"]
-    #[inline(always)]
-    pub const fn set_mpbt(&mut self, val: bool) {
-        self.0 = (self.0 & !(0x01 << 1usize)) | (((val as u8) & 0x01) << 1usize);
-    }
-    #[doc = "The write value should be 111111."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn reserved(&self) -> u8 {
-        let val = (self.0 >> 2usize) & 0x3f;
-        val as u8
-    }
-    #[doc = "The write value should be 111111."]
-    #[inline(always)]
-    pub const fn set_reserved(&mut self, val: u8) {
-        self.0 = (self.0 & !(0x3f << 2usize)) | (((val as u8) & 0x3f) << 2usize);
-    }
-}
-impl Default for Ftdrh {
-    #[inline(always)]
-    fn default() -> Ftdrh {
-        Ftdrh(0)
-    }
-}
-impl core::fmt::Debug for Ftdrh {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Ftdrh")
-            .field("tdath", &self.tdath())
-            .field("mpbt", &self.mpbt())
-            .field("reserved", &self.reserved())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Ftdrh {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(
-            f,
-            "Ftdrh {{ tdath: {=bool:?}, mpbt: {=bool:?}, reserved: {=u8:?} }}",
-            self.tdath(),
-            self.mpbt(),
-            self.reserved()
-        )
-    }
-}
 #[doc = "Transmit FIFO Data Register HL"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
@@ -872,43 +803,6 @@ impl defmt::Format for Ftdrhl {
             self.mpbt(),
             self.reserved()
         )
-    }
-}
-#[doc = "Transmit FIFO Data Register L"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Ftdrl(pub u8);
-impl Ftdrl {
-    #[doc = "Serial transmit data(b7-b0) (Valid only in asynchronous mode(including multi-processor) or clock synchronous mode, and FIFO selected)"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn tdatl(&self) -> u8 {
-        let val = (self.0 >> 0usize) & 0xff;
-        val as u8
-    }
-    #[doc = "Serial transmit data(b7-b0) (Valid only in asynchronous mode(including multi-processor) or clock synchronous mode, and FIFO selected)"]
-    #[inline(always)]
-    pub const fn set_tdatl(&mut self, val: u8) {
-        self.0 = (self.0 & !(0xff << 0usize)) | (((val as u8) & 0xff) << 0usize);
-    }
-}
-impl Default for Ftdrl {
-    #[inline(always)]
-    fn default() -> Ftdrl {
-        Ftdrl(0)
-    }
-}
-impl core::fmt::Debug for Ftdrl {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Ftdrl")
-            .field("tdatl", &self.tdatl())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Ftdrl {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Ftdrl {{ tdatl: {=u8:?} }}", self.tdatl())
     }
 }
 #[doc = "Line Status Register"]
