@@ -1046,43 +1046,6 @@ impl defmt::Format for Gtdtcr {
         )
     }
 }
-#[doc = "General PWM Timer Dead Time Value Register U"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Gtdvu(pub u32);
-impl Gtdvu {
-    #[doc = "Dead Time Value Register U"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn gtdvu(&self) -> u32 {
-        let val = (self.0 >> 0usize) & 0xffff_ffff;
-        val as u32
-    }
-    #[doc = "Dead Time Value Register U"]
-    #[inline(always)]
-    pub const fn set_gtdvu(&mut self, val: u32) {
-        self.0 = (self.0 & !(0xffff_ffff << 0usize)) | (((val as u32) & 0xffff_ffff) << 0usize);
-    }
-}
-impl Default for Gtdvu {
-    #[inline(always)]
-    fn default() -> Gtdvu {
-        Gtdvu(0)
-    }
-}
-impl core::fmt::Debug for Gtdvu {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Gtdvu")
-            .field("gtdvu", &self.gtdvu())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Gtdvu {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Gtdvu {{ gtdvu: {=u32:?} }}", self.gtdvu())
-    }
-}
 #[doc = "General PWM Timer Input Capture Source Select Register A"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
@@ -2071,43 +2034,6 @@ impl defmt::Format for Gtior {
             self.nfben(),
             self.nfcsb()
         )
-    }
-}
-#[doc = "General PWM Timer Cycle Setting Buffer Register"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Gtpbr(pub u32);
-impl Gtpbr {
-    #[doc = "Cycle Setting Buffer Register"]
-    #[must_use]
-    #[inline(always)]
-    pub const fn gtpbr(&self) -> u32 {
-        let val = (self.0 >> 0usize) & 0xffff_ffff;
-        val as u32
-    }
-    #[doc = "Cycle Setting Buffer Register"]
-    #[inline(always)]
-    pub const fn set_gtpbr(&mut self, val: u32) {
-        self.0 = (self.0 & !(0xffff_ffff << 0usize)) | (((val as u32) & 0xffff_ffff) << 0usize);
-    }
-}
-impl Default for Gtpbr {
-    #[inline(always)]
-    fn default() -> Gtpbr {
-        Gtpbr(0)
-    }
-}
-impl core::fmt::Debug for Gtpbr {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Gtpbr")
-            .field("gtpbr", &self.gtpbr())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Gtpbr {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Gtpbr {{ gtpbr: {=u32:?} }}", self.gtpbr())
     }
 }
 #[doc = "General PWM Timer Stop Source Select Register"]

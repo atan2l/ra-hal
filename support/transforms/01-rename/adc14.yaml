@@ -30,3 +30,11 @@ transforms:
     enum: adc14::vals::Adcs
     from: _11
     to: Prohibited
+  # Mask is 0xFFFF
+  # ADCMPDR0|ADCMPDR1|ADWINLLB|ADWINULB|ADDBLDR|ADDBLDRA|ADDBLDRB|ADTSDR|ADOCDR|ADDRy|ADDR2: any value is valid.
+  - !DeleteFieldsets
+    from: adc14::regs::(Adcmpdr[01]|Adwin[ul]lb|Addbldr[ab]?|Adtsdr|Adocdr|Addr2?)
+  # Mask is 0xFF
+  # ADSSTRy|ADSSTRL|ADSSTRO|ADSSTRT|ADSSTRO: any value is valid.
+  - !DeleteFieldsets
+    from: adc14::regs::(Adsstr[lot]?)

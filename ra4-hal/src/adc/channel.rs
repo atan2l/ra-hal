@@ -72,9 +72,9 @@ pub(crate) trait SealedAdcChannel: AdcInputPin {
 
         // TODO: Merge these in the chiptool IR as it's continuous memory with channel 15 being a gap
         if Self::CHANNEL <= 14 {
-            adc.addr(Self::CHANNEL as _).read().addr()
+            adc.addr(Self::CHANNEL as _).read()
         } else if Self::CHANNEL >= 16 && Self::CHANNEL < 25 {
-            adc.addr2((Self::CHANNEL - 16) as _).read().addr()
+            adc.addr2((Self::CHANNEL - 16) as _).read()
         } else {
             unimplemented!("Invalid ADC channel");
         }
@@ -133,7 +133,7 @@ impl SealedAdcChannel for Temperature {
         let adc = I::regs();
 
         trace!("ADC14: read_one(TEMPERATURE)");
-        adc.adtsdr().read().adtsdr()
+        adc.adtsdr().read()
     }
 }
 
@@ -177,7 +177,7 @@ impl SealedAdcChannel for Vref {
         let adc = I::regs();
 
         trace!("ADC14: read_one(VREF)");
-        adc.adocdr().read().adocdr()
+        adc.adocdr().read()
     }
 }
 

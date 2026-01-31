@@ -125,6 +125,11 @@ transforms:
     enum: gpt::vals::Odty
     from: _11
     to: On
+  # Allowed but duplicates _00
   - !DeleteEnumVariants
     enum: gpt::vals::Odty
     from: _01
+  # Mask is 0xFFFFFFFF
+  # GTDVU|GTPBR: any value is valid.
+  - !DeleteFieldsets
+    from: gpt::regs::(Gtdvu|Gtpbr)

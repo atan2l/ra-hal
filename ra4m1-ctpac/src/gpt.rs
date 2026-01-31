@@ -141,7 +141,7 @@ impl Gpt {
     }
     #[doc = "General PWM Timer Cycle Setting Buffer Register"]
     #[inline(always)]
-    pub const fn gtpbr(self) -> crate::common::Reg<regs::Gtpbr, crate::common::RW> {
+    pub const fn gtpbr(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x68usize) as _) }
     }
     #[doc = "General PWM Timer Dead Time Control Register"]
@@ -151,7 +151,7 @@ impl Gpt {
     }
     #[doc = "General PWM Timer Dead Time Value Register U"]
     #[inline(always)]
-    pub const fn gtdvu(self) -> crate::common::Reg<regs::Gtdvu, crate::common::RW> {
+    pub const fn gtdvu(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x8cusize) as _) }
     }
 }

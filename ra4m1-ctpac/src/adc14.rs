@@ -71,17 +71,17 @@ impl Adc14 {
     }
     #[doc = "A/D Data Duplication Register"]
     #[inline(always)]
-    pub const fn addbldr(self) -> crate::common::Reg<regs::Addbldr, crate::common::R> {
+    pub const fn addbldr(self) -> crate::common::Reg<u16, crate::common::R> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x18usize) as _) }
     }
     #[doc = "A/D Temperature Sensor Data Register"]
     #[inline(always)]
-    pub const fn adtsdr(self) -> crate::common::Reg<regs::Adtsdr, crate::common::R> {
+    pub const fn adtsdr(self) -> crate::common::Reg<u16, crate::common::R> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x1ausize) as _) }
     }
     #[doc = "A/D Internal Reference Voltage Data Register"]
     #[inline(always)]
-    pub const fn adocdr(self) -> crate::common::Reg<regs::Adocdr, crate::common::R> {
+    pub const fn adocdr(self) -> crate::common::Reg<u16, crate::common::R> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x1cusize) as _) }
     }
     #[doc = "A/D Self-Diagnosis Data Register"]
@@ -91,13 +91,13 @@ impl Adc14 {
     }
     #[doc = "A/D Data Register %s"]
     #[inline(always)]
-    pub const fn addr(self, n: usize) -> crate::common::Reg<regs::Addr, crate::common::R> {
+    pub const fn addr(self, n: usize) -> crate::common::Reg<u16, crate::common::R> {
         assert!(n < 15usize);
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x20usize + n * 2usize) as _) }
     }
     #[doc = "A/D Data Register %s"]
     #[inline(always)]
-    pub const fn addr2(self, n: usize) -> crate::common::Reg<regs::Addr2, crate::common::R> {
+    pub const fn addr2(self, n: usize) -> crate::common::Reg<u16, crate::common::R> {
         assert!(n < 10usize);
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x40usize + n * 2usize) as _) }
     }
@@ -113,12 +113,12 @@ impl Adc14 {
     }
     #[doc = "A/D Data Duplexing Register A"]
     #[inline(always)]
-    pub const fn addbldra(self) -> crate::common::Reg<regs::Addbldra, crate::common::R> {
+    pub const fn addbldra(self) -> crate::common::Reg<u16, crate::common::R> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x84usize) as _) }
     }
     #[doc = "A/D Data Duplexing Register B"]
     #[inline(always)]
-    pub const fn addbldrb(self) -> crate::common::Reg<regs::Addbldrb, crate::common::R> {
+    pub const fn addbldrb(self) -> crate::common::Reg<u16, crate::common::R> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x86usize) as _) }
     }
     #[doc = "A/D High-Potential/Low-Potential Reference Voltage Control Register"]
@@ -168,12 +168,12 @@ impl Adc14 {
     }
     #[doc = "A/D Compare Function Window A Lower-Side Level Setting Register"]
     #[inline(always)]
-    pub const fn adcmpdr0(self) -> crate::common::Reg<regs::Adcmpdr0, crate::common::RW> {
+    pub const fn adcmpdr0(self) -> crate::common::Reg<u16, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x9cusize) as _) }
     }
     #[doc = "A/D Compare Function Window A Upper-Side Level Setting Register"]
     #[inline(always)]
-    pub const fn adcmpdr1(self) -> crate::common::Reg<regs::Adcmpdr1, crate::common::RW> {
+    pub const fn adcmpdr1(self) -> crate::common::Reg<u16, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x9eusize) as _) }
     }
     #[doc = "A/D Compare Function Window A Channel Status Register 0"]
@@ -198,12 +198,12 @@ impl Adc14 {
     }
     #[doc = "A/D Compare Function Window B Lower-Side Level Setting Register"]
     #[inline(always)]
-    pub const fn adwinllb(self) -> crate::common::Reg<regs::Adwinllb, crate::common::RW> {
+    pub const fn adwinllb(self) -> crate::common::Reg<u16, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0xa8usize) as _) }
     }
     #[doc = "A/D Compare Function Window B Upper-Side Level Setting Register"]
     #[inline(always)]
-    pub const fn adwinulb(self) -> crate::common::Reg<regs::Adwinulb, crate::common::RW> {
+    pub const fn adwinulb(self) -> crate::common::Reg<u16, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0xaausize) as _) }
     }
     #[doc = "A/D Compare Function Window B Status Register"]
@@ -213,22 +213,22 @@ impl Adc14 {
     }
     #[doc = "A/D Sampling State Register L"]
     #[inline(always)]
-    pub const fn adsstrl(self) -> crate::common::Reg<regs::Adsstrl, crate::common::RW> {
+    pub const fn adsstrl(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0xddusize) as _) }
     }
     #[doc = "A/D Sampling State Register T"]
     #[inline(always)]
-    pub const fn adsstrt(self) -> crate::common::Reg<regs::Adsstrt, crate::common::RW> {
+    pub const fn adsstrt(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0xdeusize) as _) }
     }
     #[doc = "A/D Sampling State Register O"]
     #[inline(always)]
-    pub const fn adsstro(self) -> crate::common::Reg<regs::Adsstro, crate::common::RW> {
+    pub const fn adsstro(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0xdfusize) as _) }
     }
     #[doc = "A/D Sampling State Register %s"]
     #[inline(always)]
-    pub const fn adsstr(self, n: usize) -> crate::common::Reg<regs::Adsstr, crate::common::RW> {
+    pub const fn adsstr(self, n: usize) -> crate::common::Reg<u8, crate::common::RW> {
         assert!(n < 15usize);
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0xe0usize + n * 1usize) as _) }
     }
