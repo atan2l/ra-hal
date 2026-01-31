@@ -31,8 +31,9 @@ ra4-hal = { path = "../ra4-hal", features = [ "unstable-pac" ] }
 uno-r4wifi-bsc = { path = "../uno-r4wifi-bsc" }
 
 ## Third party stuff
-atomic_float = { version = "1.1.0" }
+atomic_float = { version = "1.1.0", default-features = false }
 heapless = { version = "0.9.2" }
+micromath="2.1"
 
 ## For the I2C example
 # embedded-graphics = { version = "0.8.1" }

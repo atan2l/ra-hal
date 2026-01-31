@@ -63,6 +63,9 @@ pub enum ResetCause {
     Unknown,
 }
 
+/// System clock frequency in hertz.  Currently fixed at 48 MHz.
+pub const CLOCK_FREQUENCY: u32 = 48_000_000;
+
 /// Initializes the MCU.
 ///
 /// Currently limited to setting up the clocks and the time driver.
