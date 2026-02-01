@@ -36,17 +36,17 @@ impl Spi {
     }
     #[doc = "SPI Data Register"]
     #[inline(always)]
-    pub const fn spdr(self) -> crate::common::Reg<regs::Spdr, crate::common::RW> {
+    pub const fn spdr(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x04usize) as _) }
     }
     #[doc = "SPI Data Register ( halfword access )"]
     #[inline(always)]
-    pub const fn spdr_ha(self) -> crate::common::Reg<regs::SpdrHa, crate::common::RW> {
+    pub const fn spdr_ha(self) -> crate::common::Reg<u16, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x04usize) as _) }
     }
     #[doc = "SPI Bit Rate Register"]
     #[inline(always)]
-    pub const fn spbr(self) -> crate::common::Reg<regs::Spbr, crate::common::RW> {
+    pub const fn spbr(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0ausize) as _) }
     }
     #[doc = "SPI Data Control Register"]
