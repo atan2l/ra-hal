@@ -35,3 +35,11 @@ transforms:
     enum: rtc::vals::RwkcntDayw
     from: _110
     to: Saturday
+  # Mask is 0xFF
+  # BCNT0|BCNT1|BCNT2|BCNT3: any value is valid.
+  - !DeleteFieldsets
+    from: rtc::regs::Bcnt[0123]
+  # Mask is 0xFFFF
+  # RFRL: 7 ≤ n ≤ 0x01FF (no way to capture this in chiptool so might as well nuke it)
+  - !DeleteFieldsets
+    from: rtc::regs::Rfrl

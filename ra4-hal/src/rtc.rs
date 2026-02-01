@@ -71,7 +71,7 @@ impl<'d, I: Instance> Rtc<'d, I> {
         };
 
         // §24.2.20
-        rtc.rfrl().write(|w| w.set_rfc(0xFF - 16));
+        rtc.rfrl().write_value(0xFF - 16);
 
         let system = pac::SYSTEM;
         system.protected_write(|| {

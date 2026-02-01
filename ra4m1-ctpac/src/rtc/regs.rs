@@ -1,40 +1,3 @@
-#[doc = "Binary Counter 0"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Bcnt0(pub u8);
-impl Bcnt0 {
-    #[doc = "The BCNT0 counter is a readable/writable 32-bit binary counter b7 to b0."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn bcnt0(&self) -> u8 {
-        let val = (self.0 >> 0usize) & 0xff;
-        val as u8
-    }
-    #[doc = "The BCNT0 counter is a readable/writable 32-bit binary counter b7 to b0."]
-    #[inline(always)]
-    pub const fn set_bcnt0(&mut self, val: u8) {
-        self.0 = (self.0 & !(0xff << 0usize)) | (((val as u8) & 0xff) << 0usize);
-    }
-}
-impl Default for Bcnt0 {
-    #[inline(always)]
-    fn default() -> Bcnt0 {
-        Bcnt0(0)
-    }
-}
-impl core::fmt::Debug for Bcnt0 {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Bcnt0")
-            .field("bcnt0", &self.bcnt0())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Bcnt0 {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Bcnt0 {{ bcnt0: {=u8:?} }}", self.bcnt0())
-    }
-}
 #[doc = "Binary Counter 0 Alarm Enable Register"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
@@ -146,43 +109,6 @@ impl defmt::Format for Bcnt0cp {
         defmt::write!(f, "Bcnt0cp {{ bcnt0cp: {=u8:?} }}", self.bcnt0cp())
     }
 }
-#[doc = "Binary Counter 1"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Bcnt1(pub u8);
-impl Bcnt1 {
-    #[doc = "The BCNT1 counter is a readable/writable 32-bit binary counter b15 to b8."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn bcnt1(&self) -> u8 {
-        let val = (self.0 >> 0usize) & 0xff;
-        val as u8
-    }
-    #[doc = "The BCNT1 counter is a readable/writable 32-bit binary counter b15 to b8."]
-    #[inline(always)]
-    pub const fn set_bcnt1(&mut self, val: u8) {
-        self.0 = (self.0 & !(0xff << 0usize)) | (((val as u8) & 0xff) << 0usize);
-    }
-}
-impl Default for Bcnt1 {
-    #[inline(always)]
-    fn default() -> Bcnt1 {
-        Bcnt1(0)
-    }
-}
-impl core::fmt::Debug for Bcnt1 {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Bcnt1")
-            .field("bcnt1", &self.bcnt1())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Bcnt1 {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Bcnt1 {{ bcnt1: {=u8:?} }}", self.bcnt1())
-    }
-}
 #[doc = "Binary Counter 1 Alarm Enable Register"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
@@ -292,43 +218,6 @@ impl core::fmt::Debug for Bcnt1cp {
 impl defmt::Format for Bcnt1cp {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(f, "Bcnt1cp {{ bcnt1cp: {=u8:?} }}", self.bcnt1cp())
-    }
-}
-#[doc = "Binary Counter 2"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Bcnt2(pub u8);
-impl Bcnt2 {
-    #[doc = "The BCNT2 counter is a readable/writable 32-bit binary counter b23 to b16."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn bcnt2(&self) -> u8 {
-        let val = (self.0 >> 0usize) & 0xff;
-        val as u8
-    }
-    #[doc = "The BCNT2 counter is a readable/writable 32-bit binary counter b23 to b16."]
-    #[inline(always)]
-    pub const fn set_bcnt2(&mut self, val: u8) {
-        self.0 = (self.0 & !(0xff << 0usize)) | (((val as u8) & 0xff) << 0usize);
-    }
-}
-impl Default for Bcnt2 {
-    #[inline(always)]
-    fn default() -> Bcnt2 {
-        Bcnt2(0)
-    }
-}
-impl core::fmt::Debug for Bcnt2 {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Bcnt2")
-            .field("bcnt2", &self.bcnt2())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Bcnt2 {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Bcnt2 {{ bcnt2: {=u8:?} }}", self.bcnt2())
     }
 }
 #[doc = "Binary Counter 2 Alarm Enable Register"]
@@ -458,43 +347,6 @@ impl core::fmt::Debug for Bcnt2cp {
 impl defmt::Format for Bcnt2cp {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(f, "Bcnt2cp {{ bcnt2cp: {=u8:?} }}", self.bcnt2cp())
-    }
-}
-#[doc = "Binary Counter 3"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Bcnt3(pub u8);
-impl Bcnt3 {
-    #[doc = "The BCNT3 counter is a readable/writable 32-bit binary counter b31 to b24."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn bcnt3(&self) -> u8 {
-        let val = (self.0 >> 0usize) & 0xff;
-        val as u8
-    }
-    #[doc = "The BCNT3 counter is a readable/writable 32-bit binary counter b31 to b24."]
-    #[inline(always)]
-    pub const fn set_bcnt3(&mut self, val: u8) {
-        self.0 = (self.0 & !(0xff << 0usize)) | (((val as u8) & 0xff) << 0usize);
-    }
-}
-impl Default for Bcnt3 {
-    #[inline(always)]
-    fn default() -> Bcnt3 {
-        Bcnt3(0)
-    }
-}
-impl core::fmt::Debug for Bcnt3 {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Bcnt3")
-            .field("bcnt3", &self.bcnt3())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Bcnt3 {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Bcnt3 {{ bcnt3: {=u8:?} }}", self.bcnt3())
     }
 }
 #[doc = "Binary Counter 3 Alarm Enable Register"]
@@ -1339,41 +1191,6 @@ impl defmt::Format for Rfrh {
             self.rfc16(),
             self.reserved()
         )
-    }
-}
-#[doc = "Frequency Register L"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Rfrl(pub u16);
-impl Rfrl {
-    #[doc = "Frequency Comparison Value(b15-b0) To generate the operating clock from the main clock, this bit sets the comparison value of the 128-Hz clock cycle."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn rfc(&self) -> u16 {
-        let val = (self.0 >> 0usize) & 0xffff;
-        val as u16
-    }
-    #[doc = "Frequency Comparison Value(b15-b0) To generate the operating clock from the main clock, this bit sets the comparison value of the 128-Hz clock cycle."]
-    #[inline(always)]
-    pub const fn set_rfc(&mut self, val: u16) {
-        self.0 = (self.0 & !(0xffff << 0usize)) | (((val as u16) & 0xffff) << 0usize);
-    }
-}
-impl Default for Rfrl {
-    #[inline(always)]
-    fn default() -> Rfrl {
-        Rfrl(0)
-    }
-}
-impl core::fmt::Debug for Rfrl {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Rfrl").field("rfc", &self.rfc()).finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Rfrl {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Rfrl {{ rfc: {=u16:?} }}", self.rfc())
     }
 }
 #[doc = "Hour Alarm Register"]

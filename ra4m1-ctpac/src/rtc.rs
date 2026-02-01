@@ -21,7 +21,7 @@ impl Rtc {
     }
     #[doc = "Binary Counter 0"]
     #[inline(always)]
-    pub const fn bcnt0(self) -> crate::common::Reg<regs::Bcnt0, crate::common::RW> {
+    pub const fn bcnt0(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x02usize) as _) }
     }
     #[doc = "Second Counter"]
@@ -31,7 +31,7 @@ impl Rtc {
     }
     #[doc = "Binary Counter 1"]
     #[inline(always)]
-    pub const fn bcnt1(self) -> crate::common::Reg<regs::Bcnt1, crate::common::RW> {
+    pub const fn bcnt1(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x04usize) as _) }
     }
     #[doc = "Minute Counter"]
@@ -41,7 +41,7 @@ impl Rtc {
     }
     #[doc = "Binary Counter 2"]
     #[inline(always)]
-    pub const fn bcnt2(self) -> crate::common::Reg<regs::Bcnt2, crate::common::RW> {
+    pub const fn bcnt2(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x06usize) as _) }
     }
     #[doc = "Hour Counter"]
@@ -51,7 +51,7 @@ impl Rtc {
     }
     #[doc = "Binary Counter 3"]
     #[inline(always)]
-    pub const fn bcnt3(self) -> crate::common::Reg<regs::Bcnt3, crate::common::RW> {
+    pub const fn bcnt3(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x08usize) as _) }
     }
     #[doc = "Day-of-Week Counter"]
@@ -176,7 +176,7 @@ impl Rtc {
     }
     #[doc = "Frequency Register L"]
     #[inline(always)]
-    pub const fn rfrl(self) -> crate::common::Reg<regs::Rfrl, crate::common::RW> {
+    pub const fn rfrl(self) -> crate::common::Reg<u16, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x2cusize) as _) }
     }
     #[doc = "Time Error Adjustment Register"]
