@@ -11,3 +11,7 @@ transforms:
   - !Delete
     from: iic1::(.+)
     type: All
+  # Mask is 0xFF
+  # ICDRR|ICDRT: any value is valid.
+  - !DeleteFieldsets
+    from: iic::regs::Icdr[rt]

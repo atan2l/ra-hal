@@ -88,12 +88,12 @@ impl Iic {
     }
     #[doc = "I2C Bus Transmit Data Register"]
     #[inline(always)]
-    pub const fn icdrt(self) -> crate::common::Reg<regs::Icdrt, crate::common::RW> {
+    pub const fn icdrt(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x12usize) as _) }
     }
     #[doc = "I2C Bus Receive Data Register"]
     #[inline(always)]
-    pub const fn icdrr(self) -> crate::common::Reg<regs::Icdrr, crate::common::R> {
+    pub const fn icdrr(self) -> crate::common::Reg<u8, crate::common::R> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x13usize) as _) }
     }
     #[doc = "I2C Bus Wake Up Unit Register"]
