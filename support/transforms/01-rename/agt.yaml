@@ -7,3 +7,7 @@ transforms:
     from: agt::Agt0
     to: agt::Agt
     type: Block
+  # Mask is 0xFFFF
+  # AGT|AGTCMA: any value is valid.
+  - !DeleteFieldsets
+    from: agt::regs::Agt(cm[ab])?

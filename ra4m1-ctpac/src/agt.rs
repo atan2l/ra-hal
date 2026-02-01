@@ -16,17 +16,17 @@ impl Agt {
     }
     #[doc = "AGT Counter Register"]
     #[inline(always)]
-    pub const fn agt(self) -> crate::common::Reg<regs::Agt, crate::common::RW> {
+    pub const fn agt(self) -> crate::common::Reg<u16, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0usize) as _) }
     }
     #[doc = "AGT Compare Match A Register"]
     #[inline(always)]
-    pub const fn agtcma(self) -> crate::common::Reg<regs::Agtcma, crate::common::RW> {
+    pub const fn agtcma(self) -> crate::common::Reg<u16, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x02usize) as _) }
     }
     #[doc = "AGT Compare Match B Register"]
     #[inline(always)]
-    pub const fn agtcmb(self) -> crate::common::Reg<regs::Agtcmb, crate::common::RW> {
+    pub const fn agtcmb(self) -> crate::common::Reg<u16, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x04usize) as _) }
     }
     #[doc = "AGT Control Register"]
