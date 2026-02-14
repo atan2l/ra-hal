@@ -113,13 +113,13 @@ pub struct RxInterruptHandler<I: Instance> {
     _phantom: PhantomData<I>,
 }
 
-/// Interrupt handler that handles outgoing data (tx buffer empty) for an `SCI` instance.
-pub struct TxInterruptHandler<I: Instance> {
+/// Interrupt handler that handles outgoing data (transmission end) for an `SCI` instance.
+pub struct TeInterruptHandler<I: Instance> {
     _phantom: PhantomData<I>,
 }
 
-/// Interrupt handler that handles outgoing data (transmission end) for an `SCI` instance.
-pub struct TeInterruptHandler<I: Instance> {
+/// Interrupt handler that handles outgoing data (tx buffer empty) for an `SCI` instance.
+pub struct TxInterruptHandler<I: Instance> {
     _phantom: PhantomData<I>,
 }
 
@@ -401,15 +401,15 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
 
     /// Configures a new UART and returns the driver.
     #[allow(private_bounds)]
-    pub fn new<RxInt: InterruptType, TxInt: InterruptType, TeInt: InterruptType>(
+    pub fn new<RxInt: InterruptType, TeInt: InterruptType, TxInt: InterruptType>(
         _peri: Peri<'d, I>,
         tx_pin: Peri<'d, impl TxPin<I>>,
         tx_buffer: &'d mut [u8],
         rx_pin: Peri<'d, impl RxPin<I>>,
         rx_buffer: &'d mut [u8],
         irqs: impl interrupt::typelevel::Binding<RxInt, RxInterruptHandler<I>>
-        + interrupt::typelevel::Binding<TxInt, TxInterruptHandler<I>>
         + interrupt::typelevel::Binding<TeInt, TeInterruptHandler<I>>
+        + interrupt::typelevel::Binding<TxInt, TxInterruptHandler<I>>
         + 'd,
         config: Config,
     ) -> Self {
@@ -515,13 +515,13 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         // Enable interrupts in NVIC. We can largely ignore the NVIC after this as all of the
         // peripheral interrupts are going to be managed by the ICU and/or ELC.
         unsafe { RxInt::IRQ.enable() };
-        unsafe { TxInt::IRQ.enable() };
         unsafe { TeInt::IRQ.enable() };
+        unsafe { TxInt::IRQ.enable() };
 
         // Enable in ICU
         RxInt::IRQ.icu_enable(I::RX_INTERRUPT_EVENT);
-        TxInt::IRQ.icu_enable(I::TX_INTERRUPT_EVENT);
         TeInt::IRQ.icu_enable(I::TE_INTERRUPT_EVENT);
+        TxInt::IRQ.icu_enable(I::TX_INTERRUPT_EVENT);
 
         Self {
             _phantom: PhantomData,
@@ -736,7 +736,7 @@ impl<'d, I: Instance> Drop for BufferedUart<'d, I> {
     }
 }
 
-impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for RxInterruptHandler<I> {
+impl<I: Instance, RxInt: InterruptType> InterruptHandler<RxInt> for RxInterruptHandler<I> {
     unsafe fn on_interrupt() {
         trace!("RxI");
 
@@ -765,7 +765,7 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for RxInterruptHandl
                 if read_len != fifo_len {
                     trace!("{}RX Buffer full, FIFO drain={}", I::PERIPHERAL, read_len);
                 } else {
-                    Int::IRQ.icu_unpend();
+                    RxInt::IRQ.icu_unpend();
                 }
             }
             true => {
@@ -773,24 +773,53 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for RxInterruptHandl
 
                 warn!("{}RX Buffer full, FIFO cap={}", I::PERIPHERAL, fifo_free);
 
-                Int::IRQ.icu_unpend();
+                RxInt::IRQ.icu_unpend();
 
                 I::rx_waker().wake();
 
                 if sci.ssr_fifo().read().orer() {
                     error!("{}Overrun, dropping 1", I::PERIPHERAL);
                     sci.ssr_fifo().modify(|w| w.set_orer(false));
-                    Int::IRQ.icu_unpend();
+                    RxInt::IRQ.icu_unpend();
                 }
             }
         }
     }
 }
 
-impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for TxInterruptHandler<I> {
+impl<I: Instance, TeInt: InterruptType> InterruptHandler<TeInt> for TeInterruptHandler<I> {
+    unsafe fn on_interrupt() {
+        trace!("TeI");
+        TeInt::IRQ.icu_unpend();
+
+        let sci = I::regs();
+
+        if I::tx_buffer().is_empty() {
+            while !sci.ssr_fifo().read().tend() {
+                asm::nop();
+            }
+
+            sci.scr().modify(|w| {
+                w.set_te(false);
+                w.set_tie(false);
+                w.set_teie(false);
+            });
+
+            I::te_waker().wake();
+        } else {
+            sci.scr().modify(|w| {
+                w.set_te(true);
+                w.set_tie(true);
+                w.set_teie(false);
+            });
+        }
+    }
+}
+
+impl<I: Instance, TxInt: InterruptType> InterruptHandler<TxInt> for TxInterruptHandler<I> {
     unsafe fn on_interrupt() {
         trace!("TxI");
-        Int::IRQ.icu_unpend();
+        TxInt::IRQ.icu_unpend();
 
         let sci = I::regs();
         let mut tx_reader = unsafe { I::tx_buffer().reader() };
@@ -832,34 +861,6 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for TxInterruptHandl
         }
 
         I::tx_waker().wake();
-    }
-}
-impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for TeInterruptHandler<I> {
-    unsafe fn on_interrupt() {
-        trace!("TeI");
-        Int::IRQ.icu_unpend();
-
-        let sci = I::regs();
-
-        if I::tx_buffer().is_empty() {
-            while !sci.ssr_fifo().read().tend() {
-                asm::nop();
-            }
-
-            sci.scr().modify(|w| {
-                w.set_te(false);
-                w.set_tie(false);
-                w.set_teie(false);
-            });
-
-            I::te_waker().wake();
-        } else {
-            sci.scr().modify(|w| {
-                w.set_te(true);
-                w.set_tie(true);
-                w.set_teie(false);
-            });
-        }
     }
 }
 

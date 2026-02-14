@@ -8,7 +8,7 @@ use embassy_hal_internal::{Peri, PeripheralType};
 use embassy_time::Timer;
 use ra4m1_ctpac::rtc::vals::{Rcksel, RwkcntDayw};
 
-use crate::{pac, peripherals, write_protect::WriteProtect as _};
+use crate::{pac, peripherals, write_protect::ProtectedPeripheral as _};
 
 /// Realtime clock driver.
 ///

@@ -4,7 +4,6 @@
 #![no_main]
 #![warn(missing_docs)]
 
-use cortex_m::asm;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;

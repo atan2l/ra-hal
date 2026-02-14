@@ -23,7 +23,7 @@ use ra4m1_ctpac::gpt::{
 use crate::{
     event_link::{IcuInterrupt, InterruptEvent},
     peripherals::GPT32_0,
-    write_protect::WriteProtect as _,
+    write_protect::ProtectedPeripheral as _,
 };
 
 struct AlarmState {

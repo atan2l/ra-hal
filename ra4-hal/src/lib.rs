@@ -37,7 +37,7 @@ use cortex_m::asm;
 pub(crate) use ra4m1_ctpac as pac;
 use ra4m1_ctpac::system::vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd};
 
-use crate::{mcu_info::McuInfo, write_protect::WriteProtect as _};
+use crate::{mcu_info::McuInfo, write_protect::ProtectedPeripheral as _};
 
 /// Common peripheral operating modes.
 pub mod mode {

@@ -1,11 +1,10 @@
 //! I2C Bus Interface (`IIC`).
 //!
 //! # Notes
-//!
 //! Is it really worth allocating a buffer and grabbing an interrupt to make up for the lack of built-in FIFO?
 //! # TODO
 //! * Get clock stuff sorted for not 48 MHz
-//! * Get clock stuff sorted for 48 MHz (works, but verify it)
+//! * Error checking and handling
 
 use core::{future::poll_fn, marker::PhantomData, task::Poll};
 
@@ -38,7 +37,7 @@ pub struct I2c<'d, M: Mode, I: Instance> {
     _sda: Flex<'d>,
 }
 
-/// Max supported speed is 400 kHz
+/// Max supported speed is 400 kHz § 29.1
 #[derive(Debug, Default)]
 pub enum I2cSpeed {
     /// 100 kHz
@@ -75,19 +74,24 @@ pub(crate) trait SealedInstance {
     const PERIPHERAL: () = ();
 
     const RX_INTERRUPT_EVENT: InterruptEvent;
-    const TX_INTERRUPT_EVENT: InterruptEvent;
     const TE_INTERRUPT_EVENT: InterruptEvent;
+    const TX_INTERRUPT_EVENT: InterruptEvent;
 
     fn regs() -> pac::iic::Iic;
     fn module_stop();
     fn module_start();
 
-    /// Waker for "transmit end" events.
-    fn te_waker() -> &'static AtomicWaker;
+    /// Waker for receive data events.
+    fn rx_waker() -> &'static AtomicWaker;
 
     /// Waker for transmit buffer empty events.
     fn tx_waker() -> &'static AtomicWaker;
 
+    /// Waker for "transmit end" events.
+    fn te_waker() -> &'static AtomicWaker;
+
+    /// # Returns
+    /// Static [`RingBuffer`] for outgoing data.
     fn tx_buffer() -> &'static RingBuffer;
 }
 
@@ -125,15 +129,15 @@ impl Instance for crate::peripherals::IIC0 {}
 impl Instance for crate::peripherals::IIC1 {}
 
 macro_rules! instance_impl {
-    ($instance:ident, $mstp:ident, $rx_int:ident, $tx_int:ident, $te_int:ident) => {
+    ($instance:ident, $mstp:ident, $rx_int:ident, $te_int:ident, $tx_int:ident) => {
         paste::paste! {
             impl SealedInstance for crate::peripherals::$instance {
                 #[cfg(feature = "defmt")]
                 const PERIPHERAL: &'static str = concat!(stringify!($instance), ": ");
 
                 const RX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$rx_int;
-                const TX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$tx_int;
                 const TE_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$te_int;
+                const TX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$tx_int;
 
                 #[inline(always)]
                 fn regs() -> pac::iic::Iic {
@@ -152,6 +156,12 @@ macro_rules! instance_impl {
                     debug!("{}: stop=false", stringify!($instance));
                     let mstp = pac::MSTP;
                     mstp.mstpcrb().modify(|w| w.[< set_ $mstp >](false));
+                }
+
+                /// Waker for incoming data events.
+                fn rx_waker() -> &'static AtomicWaker{
+                    static RX_WAKER: AtomicWaker = AtomicWaker::new();
+                    &RX_WAKER
                 }
 
                 /// Waker for "transmit end" events.
@@ -175,8 +185,8 @@ macro_rules! instance_impl {
     };
 }
 
-instance_impl!(IIC0, mstpb9, Iic0Rxi, Iic0Txi, Iic0Tei);
-instance_impl!(IIC1, mstpb8, Iic1Rxi, Iic1Txi, Iic1Tei);
+instance_impl!(IIC0, mstpb9, Iic0Rxi, Iic0Tei, Iic0Txi);
+instance_impl!(IIC1, mstpb8, Iic1Rxi, Iic1Tei, Iic1Txi);
 
 #[allow(private_bounds)]
 impl<'d, M: Mode, I: Instance> I2c<'d, M, I> {
@@ -209,7 +219,7 @@ impl<'d, M: Mode, I: Instance> I2c<'d, M, I> {
 
         let out = writer.push_slice();
         if out.is_empty() {
-            error!("{}No TX room", I::PERIPHERAL);
+            error!("{}TX buffer is full", I::PERIPHERAL);
         }
         out[0] = w_addr;
         writer.push_done(1);
@@ -338,6 +348,88 @@ impl<'d, M: Mode, I: Instance> I2c<'d, M, I> {
         Ok(())
     }
 
+    async fn read_byte(&self) -> u8 {
+        let iic = I::regs();
+
+        poll_fn(|cx| {
+            if iic.icsr2().read().rdrf() {
+                let byte = iic.icdrr().read();
+                Poll::Ready(byte)
+            } else {
+                I::rx_waker().register(cx.waker());
+                Poll::Pending
+            }
+        })
+        .await
+    }
+
+    async fn read(&self, address: u8, data: &mut [u8]) -> Result<(), I2cError> {
+        let iic = I::regs();
+        let r_addr = (address << 1) | 0x01;
+        let data_len = data.len();
+
+        iic.icier().write(|w| w.set_rie(true));
+
+        while iic.iccr2().read().bbsy() {
+            asm::nop();
+        }
+
+        iic.iccr2().modify(|w| w.set_st(true));
+
+        while !iic.icsr2().read().tdre() {
+            asm::nop();
+        }
+
+        iic.icdrt().write_value(r_addr);
+
+        let mut status = iic.icsr2().read();
+        while !status.rdrf() {
+            if status.nackf() {
+                iic.iccr2().modify(|w| w.set_sp(true));
+                return Err(I2cError::Nack);
+            }
+            asm::nop();
+            status = iic.icsr2().read();
+        }
+
+        // Required dummy read
+        let _ = iic.icdrr().read();
+
+        for (i, byte) in data.iter_mut().enumerate() {
+            if i == (data_len - 1) {
+                iic.icmr3().protected_modify(|w| w.set_ackbt(true));
+            }
+
+            *byte = self.read_byte().await;
+        }
+
+        poll_fn(|cx| {
+            if iic.icsr2().read().rdrf() {
+                Poll::Ready(())
+            } else {
+                I::rx_waker().register(cx.waker());
+                Poll::Pending
+            }
+        })
+        .await;
+
+        iic.iccr2().modify(|w| w.set_sp(true));
+
+        // Required dummy read
+        let _ = iic.icdrr().read();
+
+        while !iic.icsr2().read().stop() {
+            asm::nop()
+        }
+
+        iic.icmr3().modify(|w| w.set_wait(false));
+        iic.icsr2().modify(|w| w.set_stop(false));
+
+        iic.icier().write(|w| w.set_rie(false));
+
+        Ok(())
+    }
+
     fn blocking_read(&self, address: u8, data: &mut [u8]) -> Result<(), I2cError> {
         let iic = I::regs();
         let r_addr = (address << 1) | 0x01;
@@ -402,8 +494,8 @@ impl<'d, M: Mode, I: Instance> I2c<'d, M, I> {
         C: SclPinSealed<I>,
         D: SdaPinSealed<I>,
         RxInt: InterruptType,
-        TxInt: InterruptType,
         TeInt: InterruptType,
+        TxInt: InterruptType,
     >(
         peri: Peri<'d, I>,
         scl: Peri<'d, C>,
@@ -411,22 +503,22 @@ impl<'d, M: Mode, I: Instance> I2c<'d, M, I> {
         speed: I2cSpeed,
         tx_buffer: &'d mut [u8],
         _irqs: impl interrupt::typelevel::Binding<RxInt, RxInterruptHandler<I>>
-        + interrupt::typelevel::Binding<TxInt, TxInterruptHandler<I>>
         + interrupt::typelevel::Binding<TeInt, TeInterruptHandler<I>>
+        + interrupt::typelevel::Binding<TxInt, TxInterruptHandler<I>>
         + 'd,
     ) -> Self {
         let tx_len = tx_buffer.len();
         unsafe { I::tx_buffer().init(tx_buffer.as_mut_ptr(), tx_len) };
 
         // Enable in NVIC
-        // unsafe { RxInt::IRQ.enable() };
-        unsafe { TxInt::IRQ.enable() };
+        unsafe { RxInt::IRQ.enable() };
         unsafe { TeInt::IRQ.enable() };
+        unsafe { TxInt::IRQ.enable() };
 
         // Enable in ICU
-        // RxInt::IRQ.icu_enable(I::RX_INTERRUPT_EVENT);
-        TxInt::IRQ.icu_enable(I::TX_INTERRUPT_EVENT);
+        RxInt::IRQ.icu_enable(I::RX_INTERRUPT_EVENT);
         TeInt::IRQ.icu_enable(I::TE_INTERRUPT_EVENT);
+        TxInt::IRQ.icu_enable(I::TX_INTERRUPT_EVENT);
 
         let iic = I::regs();
 
@@ -435,8 +527,8 @@ impl<'d, M: Mode, I: Instance> I2c<'d, M, I> {
             w.set_teie(false);
         });
 
-        TxInt::IRQ.icu_unpend();
         TeInt::IRQ.icu_unpend();
+        TxInt::IRQ.icu_unpend();
 
         Self::new(peri, scl, sda, speed)
     }
@@ -595,7 +687,7 @@ impl<'d, I: Instance> embedded_hal_async::i2c::I2c for I2c<'d, Async, I> {
         for op in operations.iter_mut() {
             match op {
                 embedded_hal_1::i2c::Operation::Read(buffer) => {
-                    self.blocking_read(address, buffer)?;
+                    I2c::read(self, address, buffer).await?;
                 }
                 embedded_hal_1::i2c::Operation::Write(data) => {
                     I2c::write(self, address, data).await?;
@@ -654,6 +746,10 @@ impl<I: Instance, TeInt: InterruptType> InterruptHandler<TeInt> for TeInterruptH
 
 impl<I: Instance, RxInt: InterruptType> InterruptHandler<RxInt> for RxInterruptHandler<I> {
     unsafe fn on_interrupt() {
-        error!("{}RxI", I::PERIPHERAL);
+        trace!("{}RxI", I::PERIPHERAL);
+
+        RxInt::IRQ.icu_unpend();
+
+        I::rx_waker().wake();
     }
 }

@@ -8,7 +8,7 @@ use ra4m1_ctpac::{
 };
 
 /// Manages write protection at the peripheral level.
-pub trait WriteProtect {
+pub trait ProtectedPeripheral {
     /// # Returns
     /// * `true` if this peripheral is currently write protected.
     fn is_protected(&self) -> bool;
@@ -23,6 +23,12 @@ pub trait WriteProtect {
 pub trait ProtectedModify<T: Copy> {
     /// Performs a modify operation on a register, disabling WP before and enabling it after.
     fn protected_modify(&self, f: impl FnOnce(&mut T));
+
+    /// # Returns
+    /// * `true` if this register is currently write protected.
+    fn is_protected(&self) -> bool {
+        true
+    }
 }
 
 /// Provides a function to disable write protection for a single write operation on a register.
@@ -33,18 +39,38 @@ pub trait ProtectedWrite<T: Copy> {
 
 impl ProtectedModify<Icmr3> for Reg<Icmr3, RW> {
     #[inline]
+    fn is_protected(&self) -> bool {
+        !self.read().ackwp()
+    }
+
+    #[inline]
     fn protected_modify(&self, func: impl FnOnce(&mut Icmr3)) {
-        self.modify(|w| w.set_ackwp(true));
-        self.modify(func)
+        let protected = self.is_protected();
+
+        if protected {
+            self.modify(|w| w.set_ackwp(true));
+        }
+
+        self.modify(func);
+
+        if protected {
+            self.modify(|w| w.set_ackwp(false));
+        }
     }
 }
 
 impl ProtectedModify<PmnPfs> for Reg<PmnPfs, RW> {
+    #[inline]
+    fn is_protected(&self) -> bool {
+        let pmisc = crate::pac::PMISC;
+        !pmisc.pwpr().read().pfswe()
+    }
+
     fn protected_modify(&self, func: impl FnOnce(&mut PmnPfs)) {
         // § 19.2.6
 
         let pmisc = crate::pac::PMISC;
-        let protected = !pmisc.pwpr().read().pfswe();
+        let protected = self.is_protected();
 
         if protected {
             trace!("PFS WriteProt: {}", pmisc.pwpr().read());
@@ -69,7 +95,7 @@ impl ProtectedModify<PmnPfs> for Reg<PmnPfs, RW> {
     }
 }
 
-impl WriteProtect for crate::pac::system::System {
+impl ProtectedPeripheral for crate::pac::system::System {
     fn protected_write<F>(&self, func: F)
     where
         F: Fn(),
@@ -104,7 +130,7 @@ impl WriteProtect for crate::pac::system::System {
 }
 
 /// Note that write protection is disabled by default for timers.
-impl WriteProtect for crate::pac::gpt::Gpt {
+impl ProtectedPeripheral for crate::pac::gpt::Gpt {
     fn protected_write<F>(&self, func: F)
     where
         F: Fn(),
