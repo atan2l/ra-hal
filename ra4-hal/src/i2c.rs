@@ -280,6 +280,7 @@ impl<'d, M: Mode, I: Instance> I2c<'d, M, I> {
         })
         .await?;
 
+        // Reading `tend` will not clear it, but a stop condition will.
         iic.iccr2().modify(|w| w.set_sp(true));
 
         while !iic.icsr2().read().stop() {
@@ -699,6 +700,18 @@ impl<'d, I: Instance> embedded_hal_async::i2c::I2c for I2c<'d, Async, I> {
     }
 }
 
+impl<I: Instance, TeInt: InterruptType> InterruptHandler<TeInt> for TeInterruptHandler<I> {
+    // Table 29.10, note 4 admonishes us to clear `tend` here, but since we set a stop
+    // condition after the waker is awoken this should be okay.
+    unsafe fn on_interrupt() {
+        trace!("{}TeInt", I::PERIPHERAL);
+        TeInt::IRQ.icu_unpend();
+        let iic = I::regs();
+        iic.icier().modify(|w| w.set_teie(false));
+        I::te_waker().wake();
+    }
+}
+
 impl<I: Instance, TxInt: InterruptType> InterruptHandler<TxInt> for TxInterruptHandler<I> {
     unsafe fn on_interrupt() {
         trace!("{}TxInt", I::PERIPHERAL);
@@ -731,16 +744,6 @@ impl<I: Instance, TxInt: InterruptType> InterruptHandler<TxInt> for TxInterruptH
         }
 
         I::tx_waker().wake();
-    }
-}
-
-impl<I: Instance, TeInt: InterruptType> InterruptHandler<TeInt> for TeInterruptHandler<I> {
-    unsafe fn on_interrupt() {
-        trace!("{}TeInt", I::PERIPHERAL);
-        TeInt::IRQ.icu_unpend();
-        let iic = I::regs();
-        iic.icier().modify(|w| w.set_teie(false));
-        I::te_waker().wake();
     }
 }
 
