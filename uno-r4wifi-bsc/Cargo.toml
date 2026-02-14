@@ -1,6 +1,6 @@
 [package]
 name = "uno-r4wifi-bsc"
-version = "0.1.5"
+version = "0.1.6-dev"
 description = "Board specific features for the Arduino Uno R4 WiFi."
 authors.workspace = true
 edition.workspace = true

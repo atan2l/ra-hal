@@ -1,6 +1,6 @@
 [package]
 name = "ra4-examples"
-version = "0.2.0"
+version = "0.2.1-dev"
 description = "HAL examples for the Renesas RA4 family of MCUs."
 license = "GPL-3.0-or-later"
 publish = false
