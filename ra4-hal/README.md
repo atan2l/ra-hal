@@ -55,5 +55,5 @@ $ bundle install --gemfile=./tools/meta-gen/Gemfile
 
 Then extract the metadata:
 ```
-$ ./tools/meta-gen/meta-gen.rb Renesas.RA_mcu_ra4m1.6.3.1.pack support/meta/
+$ ./tools/meta-gen/meta-gen.rb Renesas.RA_mcu_ra4m1.6.3.1.pack ra4-hal/meta/
 ```

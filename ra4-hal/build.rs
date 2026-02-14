@@ -434,18 +434,18 @@ fn generate_peripherals(
 }
 
 fn inner_main() -> Result<(), Box<dyn std::error::Error>> {
-    println!("cargo:rerun-if-changed=build.rs");
-    println!("cargo:rerun-if-changed=support/meta/pinmap.yaml");
-    println!("cargo:rerun-if-changed=support/meta/peripherals.yaml");
-    println!("cargo:rerun-if-changed=support/meta/interrupts.yaml");
+    println!("cargo::rerun-if-changed=build.rs");
+    println!("cargo::rerun-if-changed=meta/pinmap.yaml");
+    println!("cargo::rerun-if-changed=meta/peripherals.yaml");
+    println!("cargo::rerun-if-changed=meta/interrupts.yaml");
 
-    let pin_yaml = std::fs::read_to_string("../support/meta/pinmap.yaml")?;
+    let pin_yaml = std::fs::read_to_string("meta/pinmap.yaml")?;
     let pin_map = serde_yaml::from_str::<PinMap>(&pin_yaml)?;
 
-    let peri_yaml = std::fs::read_to_string("../support/meta/peripherals.yaml")?;
+    let peri_yaml = std::fs::read_to_string("meta/peripherals.yaml")?;
     let peri_map = serde_yaml::from_str::<Peripherals>(&peri_yaml)?;
 
-    let irq_yaml = std::fs::read_to_string("../support/meta/interrupts.yaml")?;
+    let irq_yaml = std::fs::read_to_string("meta/interrupts.yaml")?;
     let irq_map = serde_yaml::from_str::<Interrupts>(&irq_yaml)?;
 
     generate_pinmap(&pin_map)?;

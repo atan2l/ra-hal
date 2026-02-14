@@ -30,4 +30,4 @@ tasks:
   - clippy: |
       cargo clip
   - spell-check: |
-      "${HOME}/spellcode-cli" --exclude ra4m1-ctpac --exclude ignore --exclude tools --exclude support --exclude tools $(pwd)
+      "${HOME}/spellcode-cli" --exclude ra4m1-ctpac --exclude ignore --exclude tools --exclude support --exclude meta $(pwd)
