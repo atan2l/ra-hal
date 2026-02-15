@@ -29,15 +29,19 @@ pub struct PinId(u8);
 impl PinId {
     /// Constructs a `PinId` from a 16-bit number e.g. `408`.
     #[inline(always)]
-    pub const fn from_pin_number(pin_number: u16) -> Self {
-        let pin_number = (((pin_number / 100) as u8) << 4) | ((pin_number % 100) as u8);
-        Self(pin_number)
+    pub const fn from_pin_number(combined_number: u16) -> Self {
+        let port = (combined_number / 100) as u8;
+        let pin = (combined_number % 100) as u8;
+        Self::from_port_pin(port, pin)
     }
 
     /// Constructs a `PinId` from separate port and pin numbers e.g. `4` and `8`.
     #[inline(always)]
     pub const fn from_port_pin(port: u8, pin: u8) -> Self {
-        let pin_number = (port << 4) | pin;
+        assert!(port <= 15);
+        assert!(pin <= 15);
+
+        let pin_number = ((port & 0x0F) << 4) | (pin & 0x0F);
         Self(pin_number)
     }
 
