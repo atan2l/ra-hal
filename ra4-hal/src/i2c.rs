@@ -10,7 +10,7 @@ use core::{future::poll_fn, marker::PhantomData, task::Poll};
 
 use crate::{
     event_link::{IcuInterrupt as _, InterruptEvent},
-    gpio::{Flex, Pin, PortFunction},
+    gpio::{Flex, Pin, PortFunction, WithOpenDrain},
     interrupt::{
         self,
         typelevel::{Handler as InterruptHandler, Interrupt as InterruptType},
@@ -29,12 +29,17 @@ use embedded_hal_1::i2c::SevenBitAddress;
 use ra4m1_ctpac::iic::vals::Cks;
 
 /// I2C driver for the `IIC` peripheral.
+///
+/// # Notes
+///
+/// While there are internal pull-up resistors on the pins attached to the `IIC` peripherals they do *not* function in peripheral mode.
 #[allow(private_bounds)]
 pub struct I2c<'d, M: Mode, I: Instance> {
     _instance: PhantomData<&'d I>,
     _mode: PhantomData<M>,
-    _scl: Flex<'d>,
-    _sda: Flex<'d>,
+    // These are set to WithOpenDrain because on the RA4M1 all I2C pins have both capabilities
+    _scl: Flex<'d, WithOpenDrain>,
+    _sda: Flex<'d, WithOpenDrain>,
 }
 
 /// Max supported speed is 400 kHz § 29.1
@@ -105,7 +110,6 @@ pub(crate) trait SclPinSealed<I: SealedInstance>: Pin + PeripheralType {
     #[inline(always)]
     fn set_as_scl(&self) {
         trace!("P{}{:02}: SclPin::new", self.port(), self.pin());
-        self.set_pull_up(true);
         self.set_as_pf(Self::PERIPHERAL_FUNC);
     }
 }
@@ -120,7 +124,6 @@ pub(crate) trait SdaPinSealed<I: SealedInstance>: Pin {
     #[inline(always)]
     fn set_as_sda(&self) {
         trace!("P{}{:02}: SdaPin::new", self.port(), self.pin());
-        self.set_pull_up(true);
         self.set_as_pf(Self::PERIPHERAL_FUNC);
     }
 }

@@ -36,7 +36,7 @@ static SEC_MPU: SecurityMpu = SecurityMpu::disabled();
 async fn main(_spawner: Spawner) {
     let p = ra4_hal::init();
 
-    let _output = Output::new(p.P410, Level::High, DriveCapacity::Low);
+    let _output = Output::new_basic(p.P410, Level::High, DriveCapacity::Low);
 
     let input = AdcPin::new(p.P103);
 

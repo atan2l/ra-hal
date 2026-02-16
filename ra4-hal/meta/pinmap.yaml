@@ -6,12 +6,14 @@ cac0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CAC_AD
+      pfunc:
+      - IOPORT_PERIPHERAL_CAC_AD
     P204:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CAC_AD
+      pfunc:
+      - IOPORT_PERIPHERAL_CAC_AD
 adc:
   VREFL:
     P013:
@@ -20,7 +22,6 @@ adc:
       - 48
       - 64
       - 100
-      pfunc:
   VREFH:
     P012:
       pin_count:
@@ -28,7 +29,6 @@ adc:
       - 48
       - 64
       - 100
-      pfunc:
   VREFL0:
     P011:
       pin_count:
@@ -36,7 +36,6 @@ adc:
       - 48
       - 64
       - 100
-      pfunc:
   VREFH0:
     P010:
       pin_count:
@@ -44,7 +43,6 @@ adc:
       - 48
       - 64
       - 100
-      pfunc:
 adc0:
   ADTRG:
     P407:
@@ -53,14 +51,16 @@ adc0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CAC_AD
+      pfunc:
+      - IOPORT_PERIPHERAL_CAC_AD
     P102:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CAC_AD
+      pfunc:
+      - IOPORT_PERIPHERAL_CAC_AD
   AN00:
     P000:
       pin_count:
@@ -68,7 +68,6 @@ adc0:
       - 48
       - 64
       - 100
-      pfunc:
   AN01:
     P001:
       pin_count:
@@ -76,26 +75,22 @@ adc0:
       - 48
       - 64
       - 100
-      pfunc:
   AN02:
     P002:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc:
   AN03:
     P003:
       pin_count:
       - 64
       - 100
-      pfunc:
   AN04:
     P004:
       pin_count:
       - 64
       - 100
-      pfunc:
   AN05:
     P010:
       pin_count:
@@ -103,7 +98,6 @@ adc0:
       - 48
       - 64
       - 100
-      pfunc:
   AN06:
     P011:
       pin_count:
@@ -111,7 +105,6 @@ adc0:
       - 48
       - 64
       - 100
-      pfunc:
   AN07:
     P012:
       pin_count:
@@ -119,7 +112,6 @@ adc0:
       - 48
       - 64
       - 100
-      pfunc:
   AN08:
     P013:
       pin_count:
@@ -127,7 +119,6 @@ adc0:
       - 48
       - 64
       - 100
-      pfunc:
   AN09:
     P014:
       pin_count:
@@ -135,7 +126,6 @@ adc0:
       - 48
       - 64
       - 100
-      pfunc:
   AN10:
     P015:
       pin_count:
@@ -143,53 +133,44 @@ adc0:
       - 48
       - 64
       - 100
-      pfunc:
   AN11:
     P005:
       pin_count:
       - 100
-      pfunc:
   AN12:
     P006:
       pin_count:
       - 100
-      pfunc:
   AN13:
     P007:
       pin_count:
       - 100
-      pfunc:
   AN14:
     P008:
       pin_count:
       - 100
-      pfunc:
   AN16:
     P500:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc:
   AN17:
     P501:
       pin_count:
       - 64
       - 100
-      pfunc:
   AN18:
     P502:
       pin_count:
       - 64
       - 100
-      pfunc:
   AN19:
     P103:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc:
   AN20:
     P102:
       pin_count:
@@ -197,7 +178,6 @@ adc0:
       - 48
       - 64
       - 100
-      pfunc:
   AN21:
     P101:
       pin_count:
@@ -205,7 +185,6 @@ adc0:
       - 48
       - 64
       - 100
-      pfunc:
   AN22:
     P100:
       pin_count:
@@ -213,22 +192,18 @@ adc0:
       - 48
       - 64
       - 100
-      pfunc:
   AN23:
     P503:
       pin_count:
       - 100
-      pfunc:
   AN24:
     P504:
       pin_count:
       - 100
-      pfunc:
   AN25:
     P505:
       pin_count:
       - 100
-      pfunc:
 opamp0:
   AMP-:
     P001:
@@ -236,75 +211,63 @@ opamp0:
       - 48
       - 64
       - 100
-      pfunc:
   AMP+:
     P000:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc:
   AMPO:
     P002:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc:
 opamp1:
   AMP-:
     P012:
       pin_count:
       - 64
       - 100
-      pfunc:
   AMP+:
     P013:
       pin_count:
       - 64
       - 100
-      pfunc:
   AMPO:
     P003:
       pin_count:
       - 64
       - 100
-      pfunc:
 opamp2:
   AMP-:
     P010:
       pin_count:
       - 64
       - 100
-      pfunc:
   AMP+:
     P011:
       pin_count:
       - 64
       - 100
-      pfunc:
   AMPO:
     P004:
       pin_count:
       - 64
       - 100
-      pfunc:
 opamp3:
   AMP-:
     P006:
       pin_count:
       - 100
-      pfunc:
   AMP+:
     P005:
       pin_count:
       - 100
-      pfunc:
   AMPO:
     P007:
       pin_count:
       - 100
-      pfunc:
 cmp0:
   CMPIN0:
     P100:
@@ -313,11 +276,9 @@ cmp0:
       - 48
       - 64
       - 100
-      pfunc:
     P503:
       pin_count:
       - 100
-      pfunc:
   CMPIN1:
     P102:
       pin_count:
@@ -325,12 +286,10 @@ cmp0:
       - 48
       - 64
       - 100
-      pfunc:
     P501:
       pin_count:
       - 64
       - 100
-      pfunc:
   CMPREF0:
     P101:
       pin_count:
@@ -338,25 +297,21 @@ cmp0:
       - 48
       - 64
       - 100
-      pfunc:
     P502:
       pin_count:
       - 64
       - 100
-      pfunc:
   CMPREF1:
     P103:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc:
     P500:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc:
   VCOUT:
     P110:
       pin_count:
@@ -364,7 +319,8 @@ cmp0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
+      pfunc:
+      - IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
 dac0:
   DA:
     P014:
@@ -373,80 +329,90 @@ dac0:
       - 48
       - 64
       - 100
-      pfunc:
 can0:
   CRX:
     P402:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CAN
+      pfunc:
+      - IOPORT_PERIPHERAL_CAN
     P110:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CAN
+      pfunc:
+      - IOPORT_PERIPHERAL_CAN
     P102:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CAN
+      pfunc:
+      - IOPORT_PERIPHERAL_CAN
   CTX:
     P401:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CAN
+      pfunc:
+      - IOPORT_PERIPHERAL_CAN
     P109:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CAN
+      pfunc:
+      - IOPORT_PERIPHERAL_CAN
     P103:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CAN
+      pfunc:
+      - IOPORT_PERIPHERAL_CAN
 iic0:
   SDA:
     P401:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_IIC
+      pfunc:
+      - IOPORT_PERIPHERAL_IIC
     P407:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_IIC
+      pfunc:
+      - IOPORT_PERIPHERAL_IIC
   SCL:
     P400:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_IIC
+      pfunc:
+      - IOPORT_PERIPHERAL_IIC
     P408:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_IIC
+      pfunc:
+      - IOPORT_PERIPHERAL_IIC
     P204:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_IIC
+      pfunc:
+      - IOPORT_PERIPHERAL_IIC
 iic1:
   SDA:
     P206:
@@ -454,296 +420,345 @@ iic1:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_IIC
+      pfunc:
+      - IOPORT_PERIPHERAL_IIC
     P101:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_IIC
+      pfunc:
+      - IOPORT_PERIPHERAL_IIC
   SCL:
     P205:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_IIC
+      pfunc:
+      - IOPORT_PERIPHERAL_IIC
     P100:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_IIC
+      pfunc:
+      - IOPORT_PERIPHERAL_IIC
 sci0:
   TXD_MOSI:
     P411:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P205:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P101:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
   RXD_MISO:
     P410:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P206:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P104:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P100:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
   SCK:
     P400:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P412:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P204:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P102:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
   CTS_RTS_SS:
     P401:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P413:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P407:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P103:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
   SDA:
     P411:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P205:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P101:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
   SCL:
     P410:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P206:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P104:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P100:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
 sci1:
   TXD_MOSI:
     P401:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P213:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P501:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
   RXD_MISO:
     P402:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P212:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P708:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P502:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
   SCK:
     P400:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P109:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P112:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P100:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P503:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
   CTS_RTS_SS:
     P403:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P408:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P101:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P504:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
   SDA:
     P401:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P213:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P501:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
   SCL:
     P402:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P212:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P708:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P502:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
 sci2:
   TXD_MOSI:
     P302:
@@ -751,21 +766,24 @@ sci2:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P112:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P102:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
   RXD_MISO:
     P301:
       pin_count:
@@ -773,52 +791,60 @@ sci2:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
   SCK:
     P202:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P111:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
   CTS_RTS_SS:
     P203:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P110:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
   SDA:
     P302:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P112:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
     P102:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
   SCL:
     P301:
       pin_count:
@@ -826,7 +852,8 @@ sci2:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI0_2_4_6_8
 sci9:
   TXD_MOSI:
     P409:
@@ -834,22 +861,26 @@ sci9:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P203:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P109:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P602:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
   RXD_MISO:
     P408:
       pin_count:
@@ -857,85 +888,100 @@ sci9:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P202:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P110:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P601:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
   SCK:
     P204:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P111:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P600:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
   CTS_RTS_SS:
     P205:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P301:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P108:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P603:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
   SDA:
     P409:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P203:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P109:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P602:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
   SCL:
     P408:
       pin_count:
@@ -943,175 +989,204 @@ sci9:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P202:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P110:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
     P601:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      pfunc:
+      - IOPORT_PERIPHERAL_SCI1_3_5_7_9
 spi0:
   MISO:
     P410:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P100:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
   MOSI:
     P411:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P101:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
   RSPCK:
     P412:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P102:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
   SSL0:
     P413:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P103:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
   SSL1:
     P414:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P104:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
   SSL2:
     P415:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P105:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
   SSL3:
     P708:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P106:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
 spi1:
   MISO:
     P202:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P110:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
   MOSI:
     P203:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P109:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
   RSPCK:
     P204:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P111:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
   SSL0:
     P205:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P108:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P112:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
   SSL1:
     P206:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P300:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
   SSL2:
     P301:
       pin_count:
@@ -1119,7 +1194,8 @@ spi1:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
   SSL3:
     P407:
       pin_count:
@@ -1127,13 +1203,15 @@ spi1:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
     P302:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SPI
+      pfunc:
+      - IOPORT_PERIPHERAL_SPI
 ssi:
   AUDIO_CLK:
     P400:
@@ -1141,44 +1219,53 @@ ssi:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_SSI
+      pfunc:
+      - IOPORT_PERIPHERAL_SSI
 ssi0:
   SSISCK:
     P403:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SSI
+      pfunc:
+      - IOPORT_PERIPHERAL_SSI
     P112:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SSI
+      pfunc:
+      - IOPORT_PERIPHERAL_SSI
   SSIWS:
     P404:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SSI
+      pfunc:
+      - IOPORT_PERIPHERAL_SSI
     P113:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SSI
+      pfunc:
+      - IOPORT_PERIPHERAL_SSI
   SSITXD:
     P405:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SSI
+      pfunc:
+      - IOPORT_PERIPHERAL_SSI
     P115:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SSI
+      pfunc:
+      - IOPORT_PERIPHERAL_SSI
   SSIRXD:
     P406:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SSI
+      pfunc:
+      - IOPORT_PERIPHERAL_SSI
     P114:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_SSI
+      pfunc:
+      - IOPORT_PERIPHERAL_SSI
 usbfs0:
   USBDP:
     P914:
@@ -1187,7 +1274,8 @@ usbfs0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_USB_FS
+      pfunc:
+      - IOPORT_PERIPHERAL_USB_FS
   USBDM:
     P915:
       pin_count:
@@ -1195,42 +1283,49 @@ usbfs0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_USB_FS
+      pfunc:
+      - IOPORT_PERIPHERAL_USB_FS
   OVRCURB:
     P204:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_USB_FS
+      pfunc:
+      - IOPORT_PERIPHERAL_USB_FS
     P502:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_USB_FS
+      pfunc:
+      - IOPORT_PERIPHERAL_USB_FS
   OVRCURA:
     P205:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_USB_FS
+      pfunc:
+      - IOPORT_PERIPHERAL_USB_FS
     P501:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_USB_FS
+      pfunc:
+      - IOPORT_PERIPHERAL_USB_FS
   VBUSEN:
     P206:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_USB_FS
+      pfunc:
+      - IOPORT_PERIPHERAL_USB_FS
     P500:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_USB_FS
+      pfunc:
+      - IOPORT_PERIPHERAL_USB_FS
   VBUS:
     P407:
       pin_count:
@@ -1238,18 +1333,21 @@ usbfs0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_USB_FS
+      pfunc:
+      - IOPORT_PERIPHERAL_USB_FS
   EXICEN:
     P409:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_USB_FS
+      pfunc:
+      - IOPORT_PERIPHERAL_USB_FS
     P503:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_USB_FS
+      pfunc:
+      - IOPORT_PERIPHERAL_USB_FS
   ID:
     P408:
       pin_count:
@@ -1257,48 +1355,56 @@ usbfs0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_USB_FS
+      pfunc:
+      - IOPORT_PERIPHERAL_USB_FS
     P504:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_USB_FS
+      pfunc:
+      - IOPORT_PERIPHERAL_USB_FS
 ctsu0:
   TSCAP:
     P205:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
     P203:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
     P112:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS00:
     P204:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS01:
     P206:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS02:
     P303:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS03:
     P407:
       pin_count:
@@ -1306,7 +1412,8 @@ ctsu0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS04:
     P408:
       pin_count:
@@ -1314,33 +1421,38 @@ ctsu0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS05:
     P409:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS06:
     P410:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS07:
     P411:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS08:
     P302:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS09:
     P301:
       pin_count:
@@ -1348,7 +1460,8 @@ ctsu0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS10:
     P109:
       pin_count:
@@ -1356,13 +1469,15 @@ ctsu0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS11:
     P304:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS12:
     P111:
       pin_count:
@@ -1370,38 +1485,44 @@ ctsu0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS13:
     P104:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS17:
     P403:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS18:
     P402:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS19:
     P401:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS20:
     P400:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS21:
     P000:
       pin_count:
@@ -1409,7 +1530,8 @@ ctsu0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS22:
     P001:
       pin_count:
@@ -1417,13 +1539,15 @@ ctsu0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS27:
     P113:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS28:
     P015:
       pin_count:
@@ -1431,12 +1555,14 @@ ctsu0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS29:
     P114:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS30:
     P010:
       pin_count:
@@ -1444,7 +1570,8 @@ ctsu0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS31:
     P011:
       pin_count:
@@ -1452,18 +1579,21 @@ ctsu0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS34:
     P105:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
   TS35:
     P115:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_CTSU
+      pfunc:
+      - IOPORT_PERIPHERAL_CTSU
 irq0:
   NMI:
     P200:
@@ -1472,44 +1602,51 @@ irq0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ00:
     P400:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P206:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P105:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ01:
     P205:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P104:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P101:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ02:
     P213:
       pin_count:
@@ -1517,20 +1654,23 @@ irq0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P100:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P002:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ03:
     P212:
       pin_count:
@@ -1538,75 +1678,87 @@ irq0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P110:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P004:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ04:
     P402:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P411:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P111:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ05:
     P401:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P410:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P302:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ06:
     P409:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P301:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P000:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ07:
     P408:
       pin_count:
@@ -1614,62 +1766,73 @@ irq0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P015:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P001:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ08:
     P415:
       pin_count:
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P305:
       pin_count:
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ09:
     P414:
       pin_count:
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
     P304:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ10:
     P005:
       pin_count:
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ11:
     P501:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ12:
     P502:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ14:
     P505:
       pin_count:
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
   IRQ15:
     P011:
       pin_count:
@@ -1677,7 +1840,8 @@ irq0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_CFG_PORT_DIRECTION_INPUT
+      pfunc:
+      - IOPORT_CFG_PORT_DIRECTION_INPUT
 kint0:
   KRM0:
     P100:
@@ -1686,7 +1850,8 @@ kint0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_KEY
+      pfunc:
+      - IOPORT_PERIPHERAL_KEY
   KRM1:
     P101:
       pin_count:
@@ -1694,7 +1859,8 @@ kint0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_KEY
+      pfunc:
+      - IOPORT_PERIPHERAL_KEY
   KRM2:
     P102:
       pin_count:
@@ -1702,39 +1868,45 @@ kint0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_KEY
+      pfunc:
+      - IOPORT_PERIPHERAL_KEY
   KRM3:
     P103:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_KEY
+      pfunc:
+      - IOPORT_PERIPHERAL_KEY
   KRM4:
     P104:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_KEY
+      pfunc:
+      - IOPORT_PERIPHERAL_KEY
   KRM5:
     P105:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_KEY
+      pfunc:
+      - IOPORT_PERIPHERAL_KEY
   KRM6:
     P106:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_KEY
+      pfunc:
+      - IOPORT_PERIPHERAL_KEY
   KRM7:
     P107:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_KEY
+      pfunc:
+      - IOPORT_PERIPHERAL_KEY
 slcdc0:
   CAPH:
     P111:
@@ -1742,314 +1914,366 @@ slcdc0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   CAPL:
     P112:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   COM0:
     P104:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   COM1:
     P105:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   COM2:
     P106:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   COM3:
     P107:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   COM4:
     P113:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   COM5:
     P301:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   COM6:
     P302:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   COM7:
     P303:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   VL1:
     P100:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   VL2:
     P101:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   VL3:
     P102:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   VL4:
     P103:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG00:
     P113:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG01:
     P301:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG02:
     P302:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG03:
     P303:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG04:
     P400:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG05:
     P401:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG06:
     P402:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG07:
     P411:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG08:
     P410:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG09:
     P409:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG10:
     P408:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG11:
     P407:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG12:
     P206:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG13:
     P205:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG14:
     P204:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG15:
     P203:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG16:
     P202:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG17:
     P307:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG18:
     P306:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG19:
     P305:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG20:
     P304:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG21:
     P808:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG22:
     P809:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG23:
     P109:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG24:
     P110:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG25:
     P114:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG26:
     P115:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG27:
     P608:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG28:
     P609:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG29:
     P610:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG30:
     P603:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG31:
     P602:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG32:
     P601:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG33:
     P600:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG34:
     P500:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG35:
     P501:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG36:
     P502:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
   SEG37:
     P503:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_LCDC
+      pfunc:
+      - IOPORT_PERIPHERAL_LCDC
 cgc0:
   EXTAL:
     P212:
@@ -2058,7 +2282,8 @@ cgc0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
+      pfunc:
+      - IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
   XTAL:
     P213:
       pin_count:
@@ -2066,7 +2291,8 @@ cgc0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
+      pfunc:
+      - IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
   XCIN:
     P215:
       pin_count:
@@ -2074,7 +2300,8 @@ cgc0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
+      pfunc:
+      - IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
   XCOUT:
     P214:
       pin_count:
@@ -2082,20 +2309,23 @@ cgc0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
+      pfunc:
+      - IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
   CLKOUT:
     P205:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
+      pfunc:
+      - IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
     P109:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
+      pfunc:
+      - IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
 debug0:
   TCK:
     P300:
@@ -2104,7 +2334,8 @@ debug0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_DEBUG
+      pfunc:
+      - IOPORT_PERIPHERAL_DEBUG
   TDI:
     P110:
       pin_count:
@@ -2112,7 +2343,8 @@ debug0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_DEBUG
+      pfunc:
+      - IOPORT_PERIPHERAL_DEBUG
   TDO:
     P109:
       pin_count:
@@ -2120,7 +2352,8 @@ debug0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_DEBUG
+      pfunc:
+      - IOPORT_PERIPHERAL_DEBUG
   TMS:
     P108:
       pin_count:
@@ -2128,7 +2361,8 @@ debug0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_DEBUG
+      pfunc:
+      - IOPORT_PERIPHERAL_DEBUG
   SWCLK:
     P300:
       pin_count:
@@ -2136,7 +2370,8 @@ debug0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_DEBUG
+      pfunc:
+      - IOPORT_PERIPHERAL_DEBUG
   SWDIO:
     P108:
       pin_count:
@@ -2144,7 +2379,8 @@ debug0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_DEBUG
+      pfunc:
+      - IOPORT_PERIPHERAL_DEBUG
   SWO:
     P109:
       pin_count:
@@ -2152,39 +2388,45 @@ debug0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_DEBUG
+      pfunc:
+      - IOPORT_PERIPHERAL_DEBUG
 agt0:
   AGTIO:
     P402:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
     P403:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
     P407:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
     P301:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
     P100:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
   AGTO:
     P102:
       pin_count:
@@ -2192,20 +2434,23 @@ agt0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
   AGTOA:
     P500:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
   AGTOB:
     P501:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
   AGTEE:
     P101:
       pin_count:
@@ -2213,7 +2458,8 @@ agt0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
 agt1:
   AGTIO:
     P400:
@@ -2221,39 +2467,46 @@ agt1:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
     P402:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
     P403:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
     P204:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
   AGTO:
     P205:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
   AGTOA:
     P411:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
   AGTOB:
     P410:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
   AGTEE:
     P212:
       pin_count:
@@ -2261,7 +2514,8 @@ agt1:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_AGT
+      pfunc:
+      - IOPORT_PERIPHERAL_AGT
 gpt0:
   GTIOCA:
     P213:
@@ -2270,23 +2524,27 @@ gpt0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P415:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P300:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P107:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
   GTIOCB:
     P212:
       pin_count:
@@ -2294,159 +2552,186 @@ gpt0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P414:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P108:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P106:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
 gpt1:
   GTIOCA:
     P405:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P109:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P105:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
   GTIOCB:
     P406:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P110:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P104:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
 gpt2:
   GTIOCA:
     P113:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P103:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P500:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
   GTIOCB:
     P114:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P102:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P501:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
 gpt3:
   GTIOCA:
     P403:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P111:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
   GTIOCB:
     P404:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P112:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P502:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
 gpt4:
   GTIOCA:
     P205:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P302:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P115:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
   GTIOCB:
     P204:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P301:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P608:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
 gpt5:
   GTIOCA:
     P409:
@@ -2454,22 +2739,26 @@ gpt5:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P203:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P609:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P101:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
   GTIOCB:
     P408:
       pin_count:
@@ -2477,22 +2766,26 @@ gpt5:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P202:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P610:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P100:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
 gpt6:
   GTIOCA:
     P400:
@@ -2500,52 +2793,62 @@ gpt6:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P411:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P601:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
   GTIOCB:
     P401:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P410:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P600:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
 gpt7:
   GTIOCA:
     P304:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P603:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
   GTIOCB:
     P303:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
     P602:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT1
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT1
 ops0:
   GTOUUP:
     P302:
@@ -2553,137 +2856,159 @@ ops0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P300:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
   GTOULO:
     P301:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P108:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
   GTOVUP:
     P411:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P109:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
   GTOVLO:
     P410:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P110:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
   GTOWUP:
     P409:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P103:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
   GTOWLO:
     P408:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P102:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
   GTIU:
     P206:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P500:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
   GTIV:
     P205:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P501:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
   GTIW:
     P204:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P502:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
 poeg0:
   GTETRG:
     P401:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P213:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P105:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P100:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
 poeg1:
   GTETRG:
     P212:
@@ -2692,20 +3017,23 @@ poeg1:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P104:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
     P101:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_GPT0
+      pfunc:
+      - IOPORT_PERIPHERAL_GPT0
 rtc0:
   RTCOUT:
     P407:
@@ -2714,23 +3042,27 @@ rtc0:
       - 48
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
+      pfunc:
+      - IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
   RTCIC0:
     P402:
       pin_count:
       - 64
       - 100
-      pfunc: IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
+      pfunc:
+      - IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
   RTCIC1:
     P403:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
+      pfunc:
+      - IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
   RTCIC2:
     P404:
       pin_count:
       - 100
-      pfunc: IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
+      pfunc:
+      - IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
 port:
   p0:
     p000:
@@ -2739,46 +3071,60 @@ port:
       - 48
       - 64
       - 100
-      pfunc: IRQ6
+      pfunc:
+      - IRQ6
+      - IOPORT_CFG_PULLUP_ENABLE
     p001:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IRQ7
+      pfunc:
+      - IRQ7
+      - IOPORT_CFG_PULLUP_ENABLE
     p002:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IRQ2
+      pfunc:
+      - IRQ2
+      - IOPORT_CFG_PULLUP_ENABLE
     p003:
       pin_count:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
     p004:
       pin_count:
       - 64
       - 100
-      pfunc: IRQ3
+      pfunc:
+      - IRQ3
+      - IOPORT_CFG_PULLUP_ENABLE
     p005:
       pin_count:
       - 100
-      pfunc: IRQ10
+      pfunc:
+      - IRQ10
+      - IOPORT_CFG_PULLUP_ENABLE
     p006:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
     p007:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
     p008:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
     p010:
       pin_count:
       - 40
@@ -2786,13 +3132,16 @@ port:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
     p011:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IRQ15
+      pfunc:
+      - IRQ15
+      - IOPORT_CFG_PULLUP_ENABLE
     p012:
       pin_count:
       - 40
@@ -2800,6 +3149,7 @@ port:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
     p013:
       pin_count:
       - 40
@@ -2807,6 +3157,7 @@ port:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
     p014:
       pin_count:
       - 40
@@ -2814,13 +3165,16 @@ port:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
     p015:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IRQ7
+      pfunc:
+      - IRQ7
+      - IOPORT_CFG_PULLUP_ENABLE
   p1:
     p100:
       pin_count:
@@ -2828,14 +3182,20 @@ port:
       - 48
       - 64
       - 100
-      pfunc: IRQ2
+      pfunc:
+      - IRQ2
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p101:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IRQ1
+      pfunc:
+      - IRQ1
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p102:
       pin_count:
       - 40
@@ -2843,33 +3203,47 @@ port:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p103:
       pin_count:
       - 48
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p104:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IRQ1
+      pfunc:
+      - IRQ1
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p105:
       pin_count:
       - 64
       - 100
-      pfunc: IRQ0
+      pfunc:
+      - IRQ0
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p106:
       pin_count:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p107:
       pin_count:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p108:
       pin_count:
       - 40
@@ -2877,6 +3251,8 @@ port:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p109:
       pin_count:
       - 40
@@ -2884,20 +3260,28 @@ port:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p110:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IRQ3
+      pfunc:
+      - IRQ3
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p111:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IRQ4
+      pfunc:
+      - IRQ4
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p112:
       pin_count:
       - 40
@@ -2905,19 +3289,27 @@ port:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p113:
       pin_count:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p114:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p115:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
   p2:
     p200:
       pin_count:
@@ -2925,7 +3317,8 @@ port:
       - 48
       - 64
       - 100
-      pfunc: NMI
+      pfunc:
+      - NMI
     p201:
       pin_count:
       - 40
@@ -2933,58 +3326,76 @@ port:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p202:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p203:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p204:
       pin_count:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p205:
       pin_count:
       - 64
       - 100
-      pfunc: IRQ1
+      pfunc:
+      - IRQ1
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p206:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IRQ0
+      pfunc:
+      - IRQ0
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p212:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IRQ3
+      pfunc:
+      - IRQ3
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p213:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IRQ2
+      pfunc:
+      - IRQ2
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p214:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc:
     p215:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc:
   p3:
     p300:
       pin_count:
@@ -2993,74 +3404,111 @@ port:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p301:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IRQ6
+      pfunc:
+      - IRQ6
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p302:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IRQ5
+      pfunc:
+      - IRQ5
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p303:
       pin_count:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p304:
       pin_count:
       - 64
       - 100
-      pfunc: IRQ9
+      pfunc:
+      - IRQ9
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p305:
       pin_count:
       - 100
-      pfunc: IRQ8
+      pfunc:
+      - IRQ8
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p306:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p307:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
   p4:
     p400:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IRQ0
+      pfunc:
+      - IRQ0
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p401:
       pin_count:
       - 64
       - 100
-      pfunc: IRQ5
+      pfunc:
+      - IRQ5
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p402:
       pin_count:
       - 64
       - 100
-      pfunc: IRQ4
+      pfunc:
+      - IRQ4
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p403:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p404:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p405:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p406:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p407:
       pin_count:
       - 40
@@ -3068,45 +3516,69 @@ port:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p408:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc: IRQ7
+      pfunc:
+      - IRQ7
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p409:
       pin_count:
       - 48
       - 64
       - 100
-      pfunc: IRQ6
+      pfunc:
+      - IRQ6
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p410:
       pin_count:
       - 64
       - 100
-      pfunc: IRQ5
+      pfunc:
+      - IRQ5
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p411:
       pin_count:
       - 64
       - 100
-      pfunc: IRQ4
+      pfunc:
+      - IRQ4
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p412:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p413:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p414:
       pin_count:
       - 100
-      pfunc: IRQ9
+      pfunc:
+      - IRQ9
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p415:
       pin_count:
       - 100
-      pfunc: IRQ8
+      pfunc:
+      - IRQ8
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
   p5:
     p500:
       pin_count:
@@ -3114,71 +3586,106 @@ port:
       - 64
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p501:
       pin_count:
       - 64
       - 100
-      pfunc: IRQ11
+      pfunc:
+      - IRQ11
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p502:
       pin_count:
       - 64
       - 100
-      pfunc: IRQ12
+      pfunc:
+      - IRQ12
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p503:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p504:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p505:
       pin_count:
       - 100
-      pfunc: IRQ14
+      pfunc:
+      - IRQ14
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
   p6:
     p600:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p601:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p602:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p603:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p608:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p609:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p610:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
   p7:
     p708:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
   p8:
     p808:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
     p809:
       pin_count:
       - 100
       pfunc:
+      - IOPORT_CFG_PULLUP_ENABLE
+      - IOPORT_CFG_NMOS_ENABLE
   p9:
     p914:
       pin_count:
@@ -3186,11 +3693,9 @@ port:
       - 48
       - 64
       - 100
-      pfunc:
     p915:
       pin_count:
       - 40
       - 48
       - 64
       - 100
-      pfunc:

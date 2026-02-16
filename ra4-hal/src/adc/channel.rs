@@ -75,7 +75,7 @@ impl AdcPin {
     /// Takes ownership of a pin for ADC use.
     #[inline]
     pub fn new<'d, P: AdcInputPin>(pin: Peri<'d, P>) -> Self {
-        let mut flex = Flex::new(pin);
+        let mut flex = Flex::new_basic(pin);
         flex.set_as_analog();
 
         #[cfg(feature = "strict-assert")]

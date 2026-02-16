@@ -13,7 +13,8 @@ use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 struct PinDef {
     pin_count: Vec<u8>,
-    pfunc: Option<String>,
+    #[serde(default)]
+    pfunc: Vec<String>,
 }
 
 type PinEntry = HashMap<String, HashMap<String, PinDef>>;
@@ -125,7 +126,14 @@ fn do_sci(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
 
                 let conditions = pin_conditional(&config.pin_count);
 
-                let pfunc = match config.pfunc.as_ref().unwrap().as_str() {
+                let pfunc = match config
+                    .pfunc
+                    .iter()
+                    .find(|pf| pf.starts_with("IOPORT_PERIPHERAL_SCI"))
+                    .as_ref()
+                    .unwrap()
+                    .as_str()
+                {
                     "IOPORT_PERIPHERAL_SCI0_2_4_6_8" => format_ident!("Sci1"),
                     "IOPORT_PERIPHERAL_SCI1_3_5_7_9" => format_ident!("Sci2"),
                     _ => unreachable!(),
@@ -155,10 +163,8 @@ fn do_i2c(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
 
                 let conditions = pin_conditional(&config.pin_count);
 
-                let pfunc = match config.pfunc.as_ref().unwrap().as_str() {
-                    "IOPORT_PERIPHERAL_IIC" => format_ident!("I2c"),
-                    _ => unreachable!(),
-                };
+                assert!(config.pfunc.iter().any(|pf| pf == "IOPORT_PERIPHERAL_IIC"));
+                let pfunc = format_ident!("I2c");
 
                 acc.push(quote! {
                     #conditions
@@ -191,10 +197,8 @@ fn do_spi(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
 
                 let conditions = pin_conditional(&config.pin_count);
 
-                let pfunc = match config.pfunc.as_ref().unwrap().as_str() {
-                    "IOPORT_PERIPHERAL_SPI" => format_ident!("Spi"),
-                    _ => unreachable!(),
-                };
+                assert!(config.pfunc.iter().any(|pf| pf == "IOPORT_PERIPHERAL_SPI"));
+                let pfunc = format_ident!("Spi");
 
                 acc.push(quote! {
                     #conditions
@@ -250,32 +254,53 @@ fn do_port(_peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
                 crate::gpio::pin_impl!(#pin_ident, #pin_number, #port_ident);
             });
 
-            if let Some(pfunc) = config.pfunc.as_ref() {
-                if let Some(irq_number) = pfunc.strip_prefix("IRQ") {
-                    let irq_ident = format_ident!("PortIrq{}", irq_number);
-                    let irq_peri = format_ident!("GPIO_IRQ{}", irq_number);
+            let pull_up = config.pfunc.iter().any(|pf| pf == "IOPORT_CFG_PULLUP_ENABLE");
+            let open_drain = config.pfunc.iter().any(|pf| pf == "IOPORT_CFG_NMOS_ENABLE");
 
-                    acc.push(quote! {
-                        #conditions
-                        impl crate::gpio::InterruptiblePin for crate::peripherals::#pin_ident {}
+            let irq_number = config.pfunc
+                .iter()
+                .find_map(|pf| pf.strip_prefix("IRQ"));
 
-                        #conditions
-                        impl crate::gpio::SealedIntPin for crate::peripherals::#pin_ident {
-                            const INTERRUPT_EVENT: crate::event_link::InterruptEvent = crate::event_link::InterruptEvent::#irq_ident;
+            if let Some(irq_number) = irq_number {
+                let irq_ident = format_ident!("PortIrq{}", irq_number);
+                let irq_peri = format_ident!("GPIO_IRQ{}", irq_number);
 
-                            fn waker() -> &'static embassy_sync::waitqueue::AtomicWaker {
-                                static WAKER: embassy_sync::waitqueue::AtomicWaker = embassy_sync::waitqueue::AtomicWaker::new();
-                                &WAKER
-                            }
+                acc.push(quote! {
+                    #conditions
+                    impl crate::gpio::InterruptiblePin for crate::peripherals::#pin_ident {}
+
+                    #conditions
+                    impl crate::gpio::SealedIntPin for crate::peripherals::#pin_ident {
+                        const INTERRUPT_EVENT: crate::event_link::InterruptEvent = crate::event_link::InterruptEvent::#irq_ident;
+
+                        fn waker() -> &'static embassy_sync::waitqueue::AtomicWaker {
+                            static WAKER: embassy_sync::waitqueue::AtomicWaker = embassy_sync::waitqueue::AtomicWaker::new();
+                            &WAKER
                         }
+                    }
 
-                        #conditions
-                        impl crate::gpio::GpioIrq<crate::peripherals::#pin_ident> for crate::peripherals::#irq_peri {}
-                    });
-                }
-            } else {
-                continue;
+                    #conditions
+                    impl crate::gpio::GpioIrq<crate::peripherals::#pin_ident> for crate::peripherals::#irq_peri {}
+                });
             };
+
+            if pull_up {
+                acc.push(quote! {
+                    #conditions
+                    impl crate::gpio::PullUpPin for crate::peripherals::#pin_ident {}
+                    #conditions
+                    impl crate::gpio::SealedPullUpPin for crate::peripherals::#pin_ident {}
+                });
+            }
+
+            if open_drain {
+                acc.push(quote! {
+                    #conditions
+                    impl crate::gpio::OpenDrainPin for crate::peripherals::#pin_ident {}
+                    #conditions
+                    impl crate::gpio::SealedOpenDrainPin for crate::peripherals::#pin_ident {}
+                });
+            }
         }
 
         acc
@@ -395,9 +420,9 @@ fn generate_peripherals(
 
     let gpio_irqs = gpio.iter().fold(HashSet::new(), |mut acc, (_, pins)| {
         for (_, config) in pins.iter() {
-            let Some(pfunc) = &config.pfunc else { continue };
+            let pfunc = config.pfunc.iter().find(|pf| pf.starts_with("IRQ"));
 
-            if pfunc.starts_with("IRQ") {
+            if let Some(pfunc) = pfunc {
                 let gpio = format!("GPIO_{pfunc}");
                 let gpio_ident = format_ident!("{gpio}");
                 acc.insert((gpio, gpio_ident));

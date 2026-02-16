@@ -17,7 +17,7 @@ use panic_probe as _;
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
 use ra4_hal::{
-    gpio::Flex,
+    gpio::{DriveCapacity, Input, Level, Output},
     osm::{ofs0::Ofs0, ofs1::Ofs1, sec_mpu::SecurityMpu},
 };
 
@@ -59,12 +59,9 @@ async fn main(_spawner: Spawner) {
     // Grab D12 and the LED pins
     let (button, led) = pins!(p);
 
-    let mut button = Flex::new(button);
-    button.set_as_input(true);
+    let mut button = Input::new_with_pull_up(button, true);
 
-    let mut led = Flex::new(led);
-    led.set_as_output();
-    led.set_low();
+    let mut led = Output::new_basic(led, Level::Low, DriveCapacity::Low);
 
     loop {
         // The button pulls the line to ground so is_high() == false when the button is pressed.

@@ -17,7 +17,9 @@ use embassy_executor::Spawner;
 use panic_probe as _;
 use ra4_hal::{
     bind_interrupts,
-    gpio::{Debounce, Flex, GpioTrigger, InputInterruptHandler, InterruptFlex},
+    gpio::{
+        Debounce, DriveCapacity, GpioTrigger, InputInterruptHandler, InterruptFlex, Level, Output,
+    },
     osm::{ofs0::Ofs0, ofs1::Ofs1, sec_mpu::SecurityMpu},
 };
 #[allow(unused)]
@@ -76,9 +78,7 @@ async fn main(_spawner: Spawner) {
     button.set_trigger(GpioTrigger::Both);
     button.set_debounce(Debounce::Min8);
 
-    let mut led = Flex::new(led);
-    led.set_as_output();
-    led.set_low();
+    let mut led = Output::new_basic(led, Level::Low, DriveCapacity::Low);
 
     loop {
         let current_event = button.wait_for_event().await;

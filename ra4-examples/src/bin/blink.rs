@@ -12,7 +12,7 @@ use panic_probe as _;
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
 use ra4_hal::{
-    gpio::Flex,
+    gpio::{DriveCapacity, Level, Output},
     osm::{ofs0::Ofs0, ofs1::Ofs1, sec_mpu::SecurityMpu},
 };
 
@@ -51,8 +51,7 @@ macro_rules! pins {
 async fn main(_spawner: Spawner) {
     let p = ra4_hal::init();
 
-    let mut led = Flex::new(pins!(p));
-    led.set_as_output();
+    let mut led = Output::new_basic(pins!(p), Level::Low, DriveCapacity::Low);
 
     loop {
         led.toggle();

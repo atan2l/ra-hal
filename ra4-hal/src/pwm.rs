@@ -13,7 +13,7 @@ use paste::paste;
 use ra4m1_ctpac::gpt::vals::{Ccr, Gtio, Mode, Odty, Tpcs};
 
 use crate::{
-    gpio::{Flex, Pin, PortFunction},
+    gpio::{Flex, Pin, PortFunction, WithOpenDrain},
     pac,
 };
 
@@ -56,8 +56,9 @@ pub enum Divider {
 /// PWM driver
 pub struct Pwm<'d, I: Instance> {
     _instance: PhantomData<&'d I>,
-    channel_a: Option<Flex<'d>>,
-    channel_b: Option<Flex<'d>>,
+    // These are set to WithOpenDrain because on the RA4M1 all PWM pins have both capabilities
+    channel_a: Option<Flex<'d, WithOpenDrain>>,
+    channel_b: Option<Flex<'d, WithOpenDrain>>,
 }
 
 /// PWM instance

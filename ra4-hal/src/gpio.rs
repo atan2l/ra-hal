@@ -12,10 +12,9 @@ use crate::{
 
 use embassy_hal_internal::{Peri, PeripheralType, impl_peripheral, interrupt::InterruptExt as _};
 use embassy_sync::waitqueue::AtomicWaker;
-use ra4m1_ctpac::icu::vals::Fclksel;
 use ra4m1_ctpac::{
-    icu::vals::Irqmd,
-    pfs::vals::{PortDirection, PortDrive, PortMode},
+    icu::vals::{Fclksel, Irqmd},
+    pfs::vals::{OutputType, PortDirection, PortDrive, PortMode},
 };
 
 /// Uniquely identifies a pin.
@@ -73,6 +72,17 @@ pub enum DriveCapacity {
     Middle,
 }
 
+/// Output mode for a GPIO pin.
+#[derive(Debug, Eq, PartialEq, Copy, Clone)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum OutputMode {
+    /// Push-pull output
+    PushPull,
+
+    /// Open drain output
+    OpenDrain,
+}
+
 /// On a change in input level, which edge to trigger an interrupt on.
 #[derive(Clone, Copy)]
 pub enum GpioTrigger {
@@ -92,16 +102,16 @@ pub enum Debounce {
     /// Turn the digital filter off
     Off,
 
-    /// Event must last 1 peripheral clock cycle to trigger an interrupt.
+    /// Event must last 1 `PCLKB` cycle to trigger an interrupt.
     Min1,
 
-    /// Event must last 8 peripheral clock cycles to trigger an interrupt.
+    /// Event must last 8 `PCLKB` cycles to trigger an interrupt.
     Min8,
 
-    /// Event must last 32 peripheral clock cycles to trigger an interrupt.
+    /// Event must last 32 `PCLKB` cycles to trigger an interrupt.
     Min32,
 
-    /// Event must last 64 peripheral clock cycles to trigger an interrupt.
+    /// Event must last 64 `PCLKB` cycles to trigger an interrupt.
     Min64,
 }
 
@@ -150,27 +160,56 @@ pub struct AnyPin {
     pub(crate) pin_port: PinId,
 }
 
+/// Indicates what GPIO capabilities a pin has.
+#[allow(private_bounds)]
+pub trait ControlKind: SealedControlKind {}
+trait SealedControlKind {}
+
+/// GPIO pin with basic functionality
+///
+/// See [`Pin`] for a list of available pins.
+pub enum Basic {}
+impl ControlKind for Basic {}
+impl SealedControlKind for Basic {}
+
+/// GPIO pin that has a internal pull-up resistor but does not support open-drain output.
+///
+/// See [`PullUpPin`] for a list of compatible pins.
+pub enum WithPullUp {}
+impl ControlKind for WithPullUp {}
+impl SealedControlKind for WithPullUp {}
+
+/// GPIO pin that has a internal pull-up resistor and supports open-drain output.
+///
+/// See [`OpenDrainPin`] for a list of compatible pins.
+pub enum WithOpenDrain {}
+impl ControlKind for WithOpenDrain {}
+impl SealedControlKind for WithOpenDrain {}
+
 /// GPIO flexible pin.
 ///
 /// This pin can be configured for input, output, or attached to a peripheral.
-pub struct Flex<'d> {
+pub struct Flex<'d, C: ControlKind> {
     pin: Peri<'d, AnyPin>,
+    phantom: PhantomData<C>,
 }
 
 /// A flexible GPIO pin that can asynchronously wait for data.
-pub struct InterruptFlex<'d, I: InterruptiblePin> {
-    pin: Flex<'d>,
+#[allow(private_bounds)]
+pub struct InterruptFlex<'d, I: InterruptiblePin, C: ControlKind> {
+    pin: Flex<'d, C>,
     phantom: PhantomData<&'d I>,
+    phantom_k: PhantomData<C>,
 }
 
 /// GPIO input driver
-pub struct Input<'d> {
-    pin: Flex<'d>,
+pub struct Input<'d, C: ControlKind> {
+    pin: Flex<'d, C>,
 }
 
 /// GPIO output driver
-pub struct Output<'d> {
-    pin: Flex<'d>,
+pub struct Output<'d, C: ControlKind> {
+    pin: Flex<'d, C>,
 }
 
 // Should this just export the type from the PAC?
@@ -241,22 +280,41 @@ pub(crate) trait SealedPin {
         let pin_num = self._pin() as _;
         let pfs_reg = pfs.pin(port_num, pin_num);
 
-        pfs_reg.protected_modify(|w| match drive_capacity {
-            DriveCapacity::Low => w.set_dscr(PortDrive::Low),
-            DriveCapacity::Middle => w.set_dscr(PortDrive::Middle),
+        pfs_reg.protected_modify(|r| match drive_capacity {
+            DriveCapacity::Low => r.set_dscr(PortDrive::Low),
+            DriveCapacity::Middle => r.set_dscr(PortDrive::Middle),
         });
+    }
+
+    fn set_output_mode(&self, output_mode: OutputMode) {
+        let pfs = pac::PFS;
+        let port_num = self._port() as _;
+        let pin_num = self._pin() as _;
+        let pfs_reg = pfs.pin(port_num, pin_num);
+
+        match output_mode {
+            OutputMode::PushPull => pfs_reg.protected_modify(|r| r.set_ncodr(OutputType::Cmos)),
+            OutputMode::OpenDrain => pfs_reg.protected_modify(|r| r.set_ncodr(OutputType::Nmos)),
+        }
     }
 
     fn set_pull_up(&self, pull_up: bool) {
         let pfs = pac::PFS;
         let port_num = self._port() as _;
         let pin_num = self._pin() as _;
+        let pfs_reg = pfs.pin(port_num, pin_num);
 
         trace!("P{}{:02}: set_pull_up({})", port_num, pin_num, pull_up);
 
-        let pfs_reg = pfs.pin(port_num, pin_num);
+        // TODO: §19.5.5
+        // When the P402, P403, and P404 pins are configured as outputs or inputs with the internal
+        // pull-up resistor, set the VBTCR1.BPWSWSTP bit to 1 before setting the I/O registers
+        // regardless of whether or not the battery backup function is used. This setting is only
+        // required one time after a power-on reset. Clear the VBTCR1.BPWSWSTP bit to 0 again after
+        // setting registers associated with the battery backup function, when using the battery
+        // backup function.
 
-        pfs_reg.protected_modify(|w| w.set_pcr(pull_up));
+        pfs_reg.protected_modify(|r| r.set_pcr(pull_up));
 
         #[cfg(feature = "strict-assert")]
         assert_eq!(pfs_reg.read().pcr(), pull_up, "set_pull_up failed");
@@ -269,7 +327,7 @@ pub(crate) trait SealedPin {
     fn set_high(&self) {
         let port = self.regs();
 
-        port.pcntr3().write(|w| w.set_posr(self._pin() as _, true));
+        port.pcntr3().write(|r| r.set_posr(self._pin() as _, true));
     }
 
     /// Set the output as low.
@@ -277,7 +335,7 @@ pub(crate) trait SealedPin {
     fn set_low(&self) {
         let port = self.regs();
 
-        port.pcntr3().write(|w| w.set_porr(self._pin() as _, true));
+        port.pcntr3().write(|r| r.set_porr(self._pin() as _, true));
     }
 
     /// Is the input high?
@@ -352,21 +410,27 @@ pub(crate) trait SealedPin {
         // But we want to disable the pull-up resistor so PFS it is.
         // let port = self.block();
         // let pin = self._pin() as _;
-        // port.pcntr1().modify(|w| {
-        //     w.set_pdr(pin, true);
+        // port.pcntr1().modify(|r| {
+        //     r.set_pdr(pin, true);
         // });
 
         let pfs = pac::PFS;
         let port_num = self._port() as _;
         let pin_num = self._pin() as _;
-
-        trace!("P{}{:02}: → Output", port_num, pin_num);
         let pfs_reg = pfs.pin(port_num, pin_num);
 
-        pfs_reg.protected_modify(|w| {
-            w.set_pmr(PortMode::Gpio);
-            w.set_pdr(PortDirection::Output);
-            w.set_pcr(false);
+        trace!("P{}{:02}: → Output", port_num, pin_num);
+
+        // TODO: §19.5.7
+        // When P914 and P915 are used as GPIO pins, their operation is affected by the pull-up /
+        // pull-down function of the USBFS registers. Therefore, before using the GPIO function,
+        // disable the pull-up and pull-down control of the USBFS registers using the SYSCFG.DMRPU,
+        // SYSCFG.DPRPU and SYSCFG.DRPD bits.
+
+        pfs_reg.protected_modify(|r| {
+            r.set_pmr(PortMode::Gpio);
+            r.set_pdr(PortDirection::Output);
+            r.set_pcr(false);
         });
 
         #[cfg(feature = "strict-assert")]
@@ -379,17 +443,23 @@ pub(crate) trait SealedPin {
     }
 
     #[inline]
-    fn set_as_input(&self, pull_up: bool) {
+    fn set_as_input(&self) {
         let pfs = pac::PFS;
         let port_num = self._port() as _;
         let pin_num = self._pin() as _;
-
         let pfs_reg = pfs.pin(port_num, pin_num);
 
-        pfs_reg.protected_modify(|w| {
-            w.set_pmr(PortMode::Gpio);
-            w.set_pdr(PortDirection::Input);
-            w.set_pcr(pull_up);
+        trace!("P{}{:02}: → Input", port_num, pin_num);
+
+        // TODO: §19.5.7
+        // When P914 and P915 are used as GPIO pins, their operation is affected by the pull-up /
+        // pull-down function of the USBFS registers. Therefore, before using the GPIO function,
+        // disable the pull-up and pull-down control of the USBFS registers using the SYSCFG.DMRPU,
+        // SYSCFG.DPRPU and SYSCFG.DRPD bits.
+
+        pfs_reg.protected_modify(|r| {
+            r.set_pmr(PortMode::Gpio);
+            r.set_pdr(PortDirection::Input);
         });
 
         #[cfg(feature = "strict-assert")]
@@ -397,7 +467,6 @@ pub(crate) trait SealedPin {
             let status = pfs_reg.read();
             assert_eq!(status.pmr(), PortMode::Gpio);
             assert_eq!(status.pdr(), PortDirection::Input);
-            assert_eq!(status.pcr(), pull_up);
         }
     }
 
@@ -409,10 +478,10 @@ pub(crate) trait SealedPin {
         let pin_num = self._pin() as _;
         let pfs_reg = pfs.pin(port_num, pin_num);
 
-        pfs_reg.protected_modify(|w| {
-            w.set_pdr(PortDirection::Input);
-            w.set_asel(true);
-            w.set_pcr(false);
+        pfs_reg.protected_modify(|r| {
+            r.set_pdr(PortDirection::Input);
+            r.set_asel(true);
+            r.set_pcr(false);
         });
 
         #[cfg(feature = "strict-assert")]
@@ -433,11 +502,11 @@ pub(crate) trait SealedPin {
         let pfs_reg = pfs.pin(port_num, pin_num);
 
         // The quick design guide suggests that first setting the pin to GPIO ensure the peripheral doesn't get any spurious input
-        pfs_reg.protected_modify(|w| w.set_pmr(PortMode::Gpio));
+        pfs_reg.protected_modify(|r| r.set_pmr(PortMode::Gpio));
 
-        pfs_reg.protected_modify(|w| {
-            w.set_pmr(PortMode::Peripheral);
-            w.set_psel(port_func.into());
+        pfs_reg.protected_modify(|r| {
+            r.set_pmr(PortMode::Peripheral);
+            r.set_psel(port_func.into());
         });
 
         debug!("P{}{:02}: {}", port_num, pin_num, pfs_reg.read());
@@ -477,6 +546,24 @@ pub trait Pin: PeripheralType + Into<AnyPin> + SealedPin + Sized + 'static {
         SealedPin::pin_port(self)
     }
 }
+
+/// A GPIO pin with an internal pull-up resistor.
+///
+/// # Notes
+/// Pull-ups do not work when a pin is assigned to a peripheral.
+#[allow(private_bounds)]
+pub trait PullUpPin: SealedPullUpPin {}
+
+pub(crate) trait SealedPullUpPin: Pin {}
+
+/// A GPIO pin with an internal pull-up resistor and the ability to be configured for open-drain output.
+///
+/// # Notes
+/// Pull-ups do not work when a pin is assigned to a peripheral.
+#[allow(private_bounds)]
+pub trait OpenDrainPin: SealedOpenDrainPin {}
+
+pub(crate) trait SealedOpenDrainPin: Pin {}
 
 /// A GPIO pin that can generate interrupts based on input events.
 #[allow(private_bounds)]
@@ -537,9 +624,6 @@ impl AnyPin {
     /// Consult the reference manual to see which ports and pins your MCU has.
     #[inline]
     pub unsafe fn steal(pin_port: PinId) -> Peri<'static, Self> {
-        // #[cfg(feature = "strict-assert")]
-        // assert!(pin_port < 915);
-
         unsafe { Peri::new_unchecked(Self { pin_port }) }
     }
 
@@ -551,28 +635,53 @@ impl AnyPin {
     }
 }
 
-impl<'d> Input<'d> {
-    /// Create GPIO input driver for a [`Pin`].
+impl<'d> Input<'d, Basic> {
+    /// Create GPIO input driver for a [`Pin`] without pull-up capabilities.
+    ///
+    /// # Arguments
+    /// * `pin` the [`Pin`]
+    pub fn new_basic(pin: Peri<'d, impl Pin>) -> Self {
+        Self::new(pin)
+    }
+}
+
+impl<'d> Input<'d, WithPullUp> {
+    /// Create GPIO input driver for a [`Pin`] with the ability to toggle an internal pull-up resistor.
     ///
     /// # Arguments
     /// * `pin` suitable input pin
     /// * `pull_up` enable the internal pull-up resistor
     #[inline]
-    pub fn new(pin: Peri<'d, impl Pin>, pull_up: bool) -> Self {
-        let mut pin = Flex::new(pin);
+    pub fn new_with_pull_up(pin: Peri<'d, impl Pin>, pull_up: bool) -> Self {
+        let mut this = Self::new(pin);
 
-        pin.set_as_input(pull_up);
+        this.set_pull_up(pull_up);
 
-        Self { pin }
+        this
     }
 
     /// Enable the internal pull-up resistor?
     ///
     /// # Notes
     ///
-    /// This will (maybe?) be ignored by the MCU unless the pin is configured for input.
+    /// This is ignored by the MCU unless the pin is configured for input.
     pub fn set_pull_up(&mut self, pull_up: bool) {
         self.pin.set_pull_up(pull_up);
+    }
+}
+
+impl<'d, C: ControlKind> Input<'d, C> {
+    /// Create GPIO input driver for a [`Pin`].
+    ///
+    /// # Arguments
+    /// * `pin` suitable input pin
+    #[inline]
+    pub fn new(pin: Peri<'d, impl Pin>) -> Self {
+        let mut pin = Flex::new(pin);
+
+        pin.set_as_input();
+
+        Self { pin }
     }
 
     /// Is the input level low?
@@ -594,7 +703,51 @@ impl<'d> Input<'d> {
     }
 }
 
-impl<'d> Output<'d> {
+impl<'d> Output<'d, Basic> {
+    /// Create GPIO output driver for a [`Pin`] without pull-up or open-drain capabilities.
+    ///
+    /// # Arguments
+    /// * `pin` the [`Pin`]
+    /// * `initial` set the initial output level to logic low or high
+    /// * `drive_capacity` sets the output current, see [`DriveCapacity`] for details.
+    pub fn new_basic(
+        pin: Peri<'d, impl Pin>,
+        initial: Level,
+        drive_capacity: DriveCapacity,
+    ) -> Self {
+        Self::new(pin, initial, drive_capacity)
+    }
+}
+
+impl<'d> Output<'d, WithOpenDrain> {
+    /// Create GPIO output driver for a [`Pin`] that supports open-drain output.
+    ///
+    /// # Arguments
+    /// * `pin` the [`Pin`]
+    /// * `initial` set the initial output level to logic low or high
+    /// * `drive_capacity` sets the output current, see [`DriveCapacity`] for details.
+    #[inline]
+    pub fn new_with_open_drain(
+        pin: Peri<'d, impl Pin>,
+        initial: Level,
+        drive_capacity: DriveCapacity,
+        output_mode: OutputMode,
+    ) -> Self {
+        let mut this = Self::new(pin, initial, drive_capacity);
+
+        this.set_output_mode(output_mode);
+
+        this
+    }
+
+    /// Sets a pin's output mode to either open-drain or push-pull.
+    #[inline]
+    pub fn set_output_mode(&mut self, output_mode: OutputMode) {
+        self.pin.set_output_mode(output_mode);
+    }
+}
+
+impl<'d, C: ControlKind> Output<'d, C> {
     /// Create GPIO output driver for a [`Pin`].
     ///
     /// # Arguments
@@ -602,14 +755,18 @@ impl<'d> Output<'d> {
     /// * `initial` set the initial output level to logic low or high
     /// * `drive_capacity` sets the output current, see [`DriveCapacity`] for details.
     #[inline]
-    pub fn new(pin: Peri<'d, impl Pin>, initial: Level, drive_capacity: DriveCapacity) -> Self {
-        let mut pin = Flex::new(pin);
+    pub(crate) fn new(
+        pin: Peri<'d, impl Pin>,
+        initial: Level,
+        drive_capacity: DriveCapacity,
+    ) -> Self {
+        let mut this = Flex::new(pin);
 
-        pin.set_as_output();
-        pin.set_level(initial);
-        pin.set_drive_capacity(drive_capacity);
+        this.set_as_output();
+        this.set_level(initial);
+        this.set_drive_capacity(drive_capacity);
 
-        Self { pin }
+        Self { pin: this }
     }
 
     /// Sets the output drive capacity of a pin.
@@ -663,6 +820,7 @@ impl<'d> Output<'d> {
     pub fn output_level(&mut self) -> Level {
         self.pin.output_level()
     }
+
     /// Log current PFS state at `debug` level.
     #[inline]
     pub fn print_pfs_state(&self) {
@@ -670,31 +828,119 @@ impl<'d> Output<'d> {
     }
 }
 
-impl<'d> Flex<'d> {
-    /// Create `Flex` from pin.
+impl<'d> Flex<'d, WithPullUp> {
+    /// Create `Flex` from pin with the ability to toggle an internal pull-up resistor.
     #[inline]
-    pub fn new(pin: Peri<'d, impl Pin>) -> Self {
-        let s = Self { pin: pin.into() };
-        trace!("Flex: port={}, pin={}", s.pin._port(), s.pin._pin());
-        s
+    pub fn new_with_pull_up(pin: Peri<'d, impl PullUpPin>, pull_up: bool) -> Self {
+        let mut this = Self {
+            pin: pin.into(),
+            phantom: PhantomData,
+        };
+
+        this.set_pull_up(pull_up);
+
+        trace!(
+            "Flex<WithPullUp>: port={}, pin={}",
+            this.pin._port(),
+            this.pin._pin()
+        );
+
+        this
     }
 
     /// Enable the internal pull-up resistor?
     ///
     /// # Notes
     ///
-    /// This will (maybe?) be ignored by the MCU unless the pin is configured for input.
+    /// This will be ignored by the MCU unless the pin is configured for input.
+    pub fn set_pull_up(&mut self, pull_up: bool) {
+        self.pin.set_pull_up(pull_up);
+    }
+}
+
+impl<'d> Flex<'d, WithOpenDrain> {
+    /// Create `Flex` from pin with support for an internal pull-up resistor and open-drain capability.
+    #[inline]
+    pub fn new_with_open_drain(
+        pin: Peri<'d, impl OpenDrainPin>,
+        pull_up: bool,
+        output_mode: OutputMode,
+    ) -> Self {
+        let mut this = Self {
+            pin: pin.into(),
+            phantom: PhantomData,
+        };
+
+        this.set_pull_up(pull_up);
+        this.set_output_mode(output_mode);
+
+        trace!(
+            "Flex<OpenDrain>: port={}, pin={}",
+            this.pin._port(),
+            this.pin._pin()
+        );
+
+        this
+    }
+
+    /// Enable the internal pull-up resistor?
+    ///
+    /// # Notes
+    ///
+    /// This will be ignored by the MCU unless the pin is configured for input.
+    #[inline]
     pub fn set_pull_up(&mut self, pull_up: bool) {
         self.pin.set_pull_up(pull_up);
     }
 
+    /// Sets a pin's output mode to either open-drain or push-pull.
+    #[inline]
+    pub fn set_output_mode(&mut self, output_mode: OutputMode) {
+        self.pin.set_output_mode(output_mode);
+    }
+}
+
+impl<'d> Flex<'d, Basic> {
+    /// Create `Flex` from pin with no internal pull-up resistor or open-drain capability.
+    #[inline]
+    pub fn new_basic(pin: Peri<'d, impl Pin>) -> Self {
+        let this = Self {
+            pin: pin.into(),
+            phantom: PhantomData,
+        };
+
+        trace!(
+            "Flex<Basic>: port={}, pin={}",
+            this.pin._port(),
+            this.pin._pin()
+        );
+
+        this
+    }
+}
+
+impl<'d, C: ControlKind> Flex<'d, C> {
+    /// Create `Flex` from pin.
+    #[inline]
+    pub(crate) fn new(pin: Peri<'d, impl Pin>) -> Self {
+        let this = Self {
+            pin: pin.into(),
+            phantom: PhantomData,
+        };
+
+        trace!(
+            "Flex<Basic>: port={}, pin={}",
+            this.pin._port(),
+            this.pin._pin()
+        );
+
+        this
+    }
+
     /// Places pin into input mode.
-    ///
-    /// # Arguments
-    /// * `pull_up` enable the built-in pull-up resistor if true.
-    #[inline(never)]
-    pub fn set_as_input(&mut self, pull_up: bool) {
-        self.pin.set_as_input(pull_up);
+    #[inline]
+    pub fn set_as_input(&mut self) {
+        self.pin.set_as_input();
     }
 
     /// Is the input level low?
@@ -716,7 +962,7 @@ impl<'d> Flex<'d> {
     }
 
     /// Places pin in output mode.
-    #[inline(never)]
+    #[inline]
     pub fn set_as_output(&mut self) {
         self.pin.set_as_output();
     }
@@ -796,14 +1042,25 @@ impl<'d> Flex<'d> {
     }
 }
 
-impl<'d> Drop for Flex<'d> {
+impl<'d, C: ControlKind> Drop for Flex<'d, C> {
     fn drop(&mut self) {
         trace!("P{}{:02} Flex::drop", self.pin.port(), self.pin._pin());
-        self.set_as_input(false);
+        self.set_as_input();
+        self.pin.set_pull_up(false);
     }
 }
 
-impl<'d, I: InterruptiblePin> InterruptFlex<'d, I> {
+impl<'d, I: InterruptiblePin> InterruptFlex<'d, I, WithPullUp> {
+    /// Enable the internal pull-up resistor?
+    ///
+    /// # Notes
+    /// This is ignored by the MCU unless the pin is configured for input.
+    pub fn set_pull_up(&mut self, pull_up: bool) {
+        self.pin.set_pull_up(pull_up);
+    }
+}
+
+impl<'d, I: InterruptiblePin, C: ControlKind> InterruptFlex<'d, I, C> {
     /// Create `InterruptFlex` from pin.
     #[inline]
     pub fn new<Int: InterruptType>(
@@ -821,11 +1078,12 @@ impl<'d, I: InterruptiblePin> InterruptFlex<'d, I> {
         let pin_num = pin.pin._pin() as _;
         let pfs_reg = pfs.pin(port_num, pin_num);
 
-        pfs_reg.protected_modify(|w| w.set_isel(true));
+        pfs_reg.protected_modify(|r| r.set_isel(true));
 
         Self {
             pin,
             phantom: PhantomData,
+            phantom_k: PhantomData,
         }
     }
 
@@ -846,9 +1104,9 @@ impl<'d, I: InterruptiblePin> InterruptFlex<'d, I> {
         let reg = icu.irqcr((I::INTERRUPT_EVENT as u8 - 1) as _);
 
         match trigger {
-            GpioTrigger::Falling => reg.modify(|w| w.set_irqmd(Irqmd::FallingEdge)),
-            GpioTrigger::Rising => reg.modify(|w| w.set_irqmd(Irqmd::RisingEdge)),
-            GpioTrigger::Both => reg.modify(|w| w.set_irqmd(Irqmd::AnyEdge)),
+            GpioTrigger::Falling => reg.modify(|r| r.set_irqmd(Irqmd::FallingEdge)),
+            GpioTrigger::Rising => reg.modify(|r| r.set_irqmd(Irqmd::RisingEdge)),
+            GpioTrigger::Both => reg.modify(|r| r.set_irqmd(Irqmd::AnyEdge)),
         }
     }
 
@@ -862,49 +1120,41 @@ impl<'d, I: InterruptiblePin> InterruptFlex<'d, I> {
         let reg = icu.irqcr((I::INTERRUPT_EVENT as u8 - 1) as _);
 
         match debounce {
-            Debounce::Off => reg.modify(|w| w.set_flten(false)),
+            Debounce::Off => reg.modify(|r| r.set_flten(false)),
             Debounce::Min1 => {
-                reg.modify(|w| {
-                    w.set_flten(true);
-                    w.set_fclksel(Fclksel::PCLKB_1);
+                reg.modify(|r| {
+                    r.set_flten(true);
+                    r.set_fclksel(Fclksel::PCLKB_1);
                 });
             }
             Debounce::Min8 => {
-                reg.modify(|w| {
-                    w.set_flten(true);
-                    w.set_fclksel(Fclksel::PCLKB_8);
+                reg.modify(|r| {
+                    r.set_flten(true);
+                    r.set_fclksel(Fclksel::PCLKB_8);
                 });
             }
             Debounce::Min32 => {
-                reg.modify(|w| {
-                    w.set_flten(true);
-                    w.set_fclksel(Fclksel::PCLKB_32);
+                reg.modify(|r| {
+                    r.set_flten(true);
+                    r.set_fclksel(Fclksel::PCLKB_32);
                 });
             }
             Debounce::Min64 => {
-                reg.modify(|w| {
-                    w.set_flten(true);
-                    w.set_fclksel(Fclksel::PCLKB_64);
+                reg.modify(|r| {
+                    r.set_flten(true);
+                    r.set_fclksel(Fclksel::PCLKB_64);
                 });
             }
         }
-    }
-
-    /// Enable the internal pull-up resistor?
-    /// # Notes
-    ///
-    /// This will (maybe?) be ignored by the MCU unless the pin is configured for input.
-    pub fn set_pull_up(&mut self, pull_up: bool) {
-        self.pin.set_pull_up(pull_up);
     }
 
     /// Places pin into input mode.
     ///
     /// # Arguments
     /// * `pull_up` enable the built-in pull-up resistor if true.
-    #[inline(never)]
-    pub fn set_as_input(&mut self, pull_up: bool) {
-        self.pin.set_as_input(pull_up);
+    #[inline]
+    pub fn set_as_input(&mut self) {
+        self.pin.set_as_input();
     }
 
     /// Waits for the pin to go low.
@@ -976,7 +1226,7 @@ impl<'d, I: InterruptiblePin> InterruptFlex<'d, I> {
     }
 
     /// Places pin in output mode.
-    #[inline(never)]
+    #[inline]
     pub fn set_as_output(&mut self) {
         self.pin.set_as_output();
     }

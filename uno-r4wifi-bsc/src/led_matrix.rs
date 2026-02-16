@@ -167,11 +167,11 @@ impl<'d> LedMatrix {
             let high = &self.pins[high as usize];
             let low = &self.pins[low as usize];
 
-            let mut high = Flex::new(unsafe { high.clone_unchecked() });
+            let mut high = Flex::new_basic(unsafe { high.clone_unchecked() });
             high.set_as_output();
             high.set_high();
 
-            let mut low = Flex::new(unsafe { low.clone_unchecked() });
+            let mut low = Flex::new_basic(unsafe { low.clone_unchecked() });
             low.set_as_output();
             low.set_low();
         }
