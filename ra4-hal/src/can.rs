@@ -2,9 +2,12 @@
 
 use core::marker::PhantomData;
 
-use embassy_hal_internal::PeripheralType;
+use embassy_hal_internal::{Peri, PeripheralType};
 
-use crate::gpio::{Pin, PortFunction};
+use crate::{
+    gpio::{Pin, PortFunction},
+    pac,
+};
 
 #[allow(private_bounds)]
 pub struct Can<'d, I: Instance> {
@@ -14,7 +17,11 @@ pub struct Can<'d, I: Instance> {
 #[allow(private_bounds)]
 pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
 
-pub(crate) trait SealedInstance {}
+pub(crate) trait SealedInstance {
+    fn regs() -> pac::can::Can;
+    fn module_stop();
+    fn module_start();
+}
 
 #[allow(private_bounds)]
 pub trait RxPin<I: Instance>: SealedRxPin<I> {}
@@ -39,6 +46,29 @@ pub(crate) trait SealedTxPin<I: SealedInstance>: Pin + PeripheralType {
     fn set_as_ctx(&self) {
         trace!("P{}{:02}: CanTxPin::new", self.port(), self.pin());
         self.set_as_pf(Self::PERIPHERAL_FUNC);
+    }
+}
+
+impl<'d, I: Instance> Can<'d, I> {
+    pub fn new<R: RxPin<I>, T: TxPin<I>>(
+        _can: Peri<'d, I>,
+        rx: Peri<'d, R>,
+        tx: Peri<'d, T>,
+    ) -> Self {
+        I::module_start();
+
+        let can = I::regs();
+
+        rx.set_as_crx();
+        tx.set_as_ctx();
+
+        todo!()
+    }
+}
+
+impl<'d, I: Instance> Drop for Can<'d, I> {
+    fn drop(&mut self) {
+        I::module_stop();
     }
 }
 
@@ -67,6 +97,24 @@ macro_rules! instance_impl {
         paste::paste! {
             impl Instance for crate::peripherals::$instance {}
             impl SealedInstance for crate::peripherals::$instance {
+                #[inline(always)]
+                fn regs() -> pac::can::Can {
+                    crate::pac::$instance
+                }
+
+                #[inline(always)]
+                fn module_stop() {
+                    debug!("{}: stop=true", stringify!($instance));
+                    let mstp = pac::MSTP;
+                    mstp.mstpcrb().modify(|w| w.[< set_ $mstp >](true));
+                }
+
+                #[inline(always)]
+                fn module_start() {
+                    debug!("{}: stop=false", stringify!($instance));
+                    let mstp = pac::MSTP;
+                    mstp.mstpcrb().modify(|w| w.[< set_ $mstp >](false));
+                }
             }
         }
     };
