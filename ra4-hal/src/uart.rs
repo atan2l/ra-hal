@@ -187,6 +187,9 @@ pub(crate) trait SealedInstance {
     fn rx_waker() -> &'static AtomicWaker;
 }
 
+#[allow(private_bounds)]
+pub trait CtsRtsPin<I: Instance>: SealedCtsRtsPin<I> {}
+
 /// A pin that can be used for transmission.
 #[allow(private_bounds)]
 pub trait TxPin<I: Instance>: SealedTxPin<I> {}
@@ -195,6 +198,15 @@ pub trait TxPin<I: Instance>: SealedTxPin<I> {}
 /// A pin that can be used for reception.
 #[allow(private_bounds)]
 pub trait RxPin<I: Instance>: SealedRxPin<I> {}
+
+pub(crate) trait SealedCtsRtsPin<I: SealedInstance>: Pin + PeripheralType {
+    const PERIPHERAL_FUNC: PortFunction;
+
+    #[inline(always)]
+    fn set_pfunc(&self) {
+        self.set_as_pf(Self::PERIPHERAL_FUNC);
+    }
+}
 
 pub(crate) trait SealedTxPin<I: SealedInstance>: Pin + PeripheralType {
     const PERIPHERAL_FUNC: PortFunction;
@@ -927,6 +939,16 @@ impl<'d, I: Instance> embedded_serial::MutBlockingRx for BufferedUart<'d, I> {
         Ok(ch[0])
     }
 }
+
+macro_rules! cts_rts_pin_impl {
+    ($sci:ident, $pin:ident, $pfunc:ident) => {
+        impl crate::uart::CtsRtsPin<crate::peripherals::$sci> for crate::peripherals::$pin {}
+        impl crate::uart::SealedCtsRtsPin<crate::peripherals::$sci> for crate::peripherals::$pin {
+            const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
+        }
+    };
+}
+pub(crate) use cts_rts_pin_impl;
 
 macro_rules! tx_pin_impl {
     ($sci:ident, $pin:ident, $pfunc:ident) => {

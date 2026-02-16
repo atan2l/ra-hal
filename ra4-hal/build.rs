@@ -110,14 +110,17 @@ fn do_gpt(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
 fn do_sci(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
     let peripheral = format_ident!("{}", peripheral.to_uppercase());
 
+    const ACCEPTED_SIGNALS: &[&str] = &["TXD_MOSI", "RXD_MISO", "CTS_RTS_SS"];
+
     signals
         .iter()
-        .filter(|(signal, _)| signal.as_str() == "TXD_MOSI" || signal.as_str() == "RXD_MISO")
+        .filter(|(signal, _)| ACCEPTED_SIGNALS.iter().any(|okay| okay == signal))
         .fold(vec![], |mut acc, (signal, pins)| {
-            let signal = match signal.as_str() {
+            let signal_ident = match signal.as_str() {
                 "TXD_MOSI" => format_ident!("tx_pin_impl"),
                 "RXD_MISO" => format_ident!("rx_pin_impl"),
-                _ => unreachable!(),
+                "CTS_RTS_SS" => format_ident!("cts_rts_pin_impl"),
+                _ => unreachable!("Unknown signal: {signal}"),
             };
 
             for (pin, config) in pins.iter() {
@@ -133,7 +136,7 @@ fn do_sci(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
 
                 acc.push(quote! {
                     #conditions
-                    crate::uart::#signal!(#peripheral, #pin, #pfunc);
+                    crate::uart::#signal_ident!(#peripheral, #pin, #pfunc);
                 });
             }
 
