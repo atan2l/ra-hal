@@ -261,14 +261,14 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
     pub fn set_data_bits(&mut self, n: DataBits) {
         let sci = I::regs();
 
-        sci.scr().modify(|w| {
-            w.set_te(false);
-            w.set_re(false);
+        sci.scr().modify(|r| {
+            r.set_te(false);
+            r.set_re(false);
         });
 
         self.set_data_bits_inner(n);
 
-        sci.scr().modify(|w| w.set_re(true));
+        sci.scr().modify(|r| r.set_re(true));
     }
 
     fn set_data_bits_inner(&mut self, n: DataBits) {
@@ -277,17 +277,17 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         match n {
             DataBits::DataBits7 => {
                 // Restrictions apply, page 704 note 3
-                sci.scmr().modify(|w| w.set_chr1(true));
-                sci.smr().modify(|w| w.set_chr(true));
+                sci.scmr().modify(|r| r.set_chr1(true));
+                sci.smr().modify(|r| r.set_chr(true));
             }
             DataBits::DataBits8 => {
-                sci.scmr().modify(|w| w.set_chr1(true));
-                sci.smr().modify(|w| w.set_chr(false));
+                sci.scmr().modify(|r| r.set_chr1(true));
+                sci.smr().modify(|r| r.set_chr(false));
             }
             DataBits::DataBits9 => {
                 // // 9 Data bits
-                // sci.scmr().write(|w| w.set_chr1(false));
-                // sci.smr().write(|w| w.set_chr(false));
+                // sci.scmr().write(|r| r.set_chr1(false));
+                // sci.smr().write(|r| r.set_chr(false));
                 todo!()
             }
         }
@@ -299,14 +299,14 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
     pub fn set_parity(&mut self, parity: Parity) {
         let sci = I::regs();
 
-        sci.scr().modify(|w| {
-            w.set_te(false);
-            w.set_re(false);
+        sci.scr().modify(|r| {
+            r.set_te(false);
+            r.set_re(false);
         });
 
         self.set_parity_inner(parity);
 
-        sci.scr().modify(|w| w.set_re(true));
+        sci.scr().modify(|r| r.set_re(true));
     }
 
     fn set_parity_inner(&mut self, parity: Parity) {
@@ -318,9 +318,9 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
             Parity::None => (false, SmrPm::Even),
         };
 
-        sci.smr().modify(|w| {
-            w.set_pe(pe);
-            w.set_pm(pm);
+        sci.smr().modify(|r| {
+            r.set_pe(pe);
+            r.set_pm(pm);
         });
     }
 
@@ -330,24 +330,24 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
     pub fn set_stop_bits(&mut self, stop_bits: StopBits) {
         let sci = I::regs();
 
-        sci.scr().modify(|w| {
-            w.set_te(false);
-            w.set_re(false);
+        sci.scr().modify(|r| {
+            r.set_te(false);
+            r.set_re(false);
         });
 
         self.set_stop_bits_inner(stop_bits);
 
-        sci.scr().modify(|w| w.set_re(true));
+        sci.scr().modify(|r| r.set_re(true));
     }
 
     fn set_stop_bits_inner(&mut self, stop_bits: StopBits) {
         let sci = I::regs();
 
         // Set it up for No Parity, 1 stop bit
-        sci.smr().modify(|w| {
+        sci.smr().modify(|r| {
             match stop_bits {
-                StopBits::Stop1 => w.set_stop(Stop::Stop1),
-                StopBits::Stop2 => w.set_stop(Stop::Stop2),
+                StopBits::Stop1 => r.set_stop(Stop::Stop1),
+                StopBits::Stop2 => r.set_stop(Stop::Stop2),
             };
         });
     }
@@ -370,14 +370,14 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
 
         let sci = I::regs();
 
-        sci.scr().modify(|w| {
-            w.set_re(false);
-            w.set_te(false);
+        sci.scr().modify(|r| {
+            r.set_re(false);
+            r.set_te(false);
         });
 
         Self::set_baud_from_entry(speed);
 
-        sci.scr().modify(|w| w.set_re(true));
+        sci.scr().modify(|r| r.set_re(true));
     }
 
     fn set_baud_from_entry(speed: &SpeedEntry) {
@@ -387,16 +387,16 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
 
         if speed.modulation != 0 {
             sci.mddr().write_value(speed.modulation);
-            sci.semr().modify(|w| w.set_brme(true));
+            sci.semr().modify(|r| r.set_brme(true));
         } else {
             sci.mddr().write_value(0);
-            sci.semr().modify(|w| w.set_brme(false));
+            sci.semr().modify(|r| r.set_brme(false));
         }
 
         sci.smr()
-            .modify(|w| w.set_cks(SmrCks::from_bits(speed.small_n)));
+            .modify(|r| r.set_cks(SmrCks::from_bits(speed.small_n)));
 
-        sci.scr().modify(|w| w.set_re(true));
+        sci.scr().modify(|r| r.set_re(true));
     }
 
     /// Configures a new UART and returns the driver.
@@ -429,9 +429,9 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
 
         // We can leave the receiver on, but not the transmitter as enabling the transmitter in
         // combination with the TX interrupt is what kicks off the whole transmit procedure.
-        sci.scr().modify(|w| {
-            w.set_re(true);
-            w.set_rie(true);
+        sci.scr().modify(|r| {
+            r.set_re(true);
+            r.set_rie(true);
         });
 
         this
@@ -453,50 +453,50 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
 
         sci.scr().write_value(Scr(0));
 
-        sci.scr().modify(|w| {
-            w.set_tie(false);
-            w.set_rie(false);
-            w.set_te(false);
-            w.set_re(false);
-            w.set_teie(false);
+        sci.scr().modify(|r| {
+            r.set_tie(false);
+            r.set_rie(false);
+            r.set_te(false);
+            r.set_re(false);
+            r.set_teie(false);
         });
 
-        sci.fcr().modify(|w| {
+        sci.fcr().modify(|r| {
             // Enable FIFO
-            w.set_fm(true);
+            r.set_fm(true);
             // TODO: Is this the value we want?
-            w.set_ttrg(I::FIFO_DEPTH);
+            r.set_ttrg(I::FIFO_DEPTH);
         });
 
         // TODO: Give enum variants meaningful names.
-        sci.scr().modify(|w| w.set_cke(ScrCke::_00));
+        sci.scr().modify(|r| r.set_cke(ScrCke::_00));
 
-        sci.simr1().modify(|w| w.set_iicm(false));
+        sci.simr1().modify(|r| r.set_iicm(false));
 
-        sci.spmr().modify(|w| {
-            w.set_ckph(false);
-            w.set_ckpol(false);
+        sci.spmr().modify(|r| {
+            r.set_ckph(false);
+            r.set_ckpol(false);
         });
 
         // not-smart card mode
-        sci.scmr().modify(|w| w.set_smif(false));
+        sci.scmr().modify(|r| r.set_smif(false));
 
-        sci.smr().modify(|w| {
-            w.set_mp(false);
-            w.set_cm(false);
+        sci.smr().modify(|r| {
+            r.set_mp(false);
+            r.set_cm(false);
         });
 
-        sci.semr().modify(|w| {
-            w.set_brme(false);
-            w.set_bgdm(false);
-            w.set_abcs(false);
-            w.set_abcse(false);
-            w.set_rxdesel(false);
+        sci.semr().modify(|r| {
+            r.set_brme(false);
+            r.set_bgdm(false);
+            r.set_abcs(false);
+            r.set_abcse(false);
+            r.set_rxdesel(false);
         });
 
-        sci.sptr().write(|w| {
-            w.set_spb2dt(false);
-            w.set_spb2io(false);
+        sci.sptr().write(|r| {
+            r.set_spb2dt(false);
+            r.set_spb2io(false);
         });
 
         // Move pins over to SCI
@@ -646,9 +646,9 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
                 writer.push_done(chunk_len);
 
                 if !sci.scr().read().te() {
-                    sci.scr().modify(|w| {
-                        w.set_te(true);
-                        w.set_tie(true);
+                    sci.scr().modify(|r| {
+                        r.set_te(true);
+                        r.set_tie(true);
                     });
                 }
 
@@ -715,9 +715,9 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
             }
 
             if !sci.scr().read().te() {
-                sci.scr().modify(|w| {
-                    w.set_te(true);
-                    w.set_tie(true);
+                sci.scr().modify(|r| {
+                    r.set_te(true);
+                    r.set_tie(true);
                 });
             }
         }
@@ -754,10 +754,10 @@ impl<I: Instance, RxInt: InterruptType> InterruptHandler<RxInt> for RxInterruptH
                 }
                 writer.push_done(read_len);
 
-                sci.ssr_fifo().modify(|w| {
-                    w.set_rdf(false);
+                sci.ssr_fifo().modify(|r| {
+                    r.set_rdf(false);
                     // If there isn't enough space in the static buffer are we dropping it on the floor when we reset dr?
-                    w.set_dr(false);
+                    r.set_dr(false);
                 });
 
                 I::rx_waker().wake();
@@ -779,7 +779,7 @@ impl<I: Instance, RxInt: InterruptType> InterruptHandler<RxInt> for RxInterruptH
 
                 if sci.ssr_fifo().read().orer() {
                     error!("{}Overrun, dropping 1", I::PERIPHERAL);
-                    sci.ssr_fifo().modify(|w| w.set_orer(false));
+                    sci.ssr_fifo().modify(|r| r.set_orer(false));
                     RxInt::IRQ.icu_unpend();
                 }
             }
@@ -799,18 +799,18 @@ impl<I: Instance, TeInt: InterruptType> InterruptHandler<TeInt> for TeInterruptH
                 asm::nop();
             }
 
-            sci.scr().modify(|w| {
-                w.set_te(false);
-                w.set_tie(false);
-                w.set_teie(false);
+            sci.scr().modify(|r| {
+                r.set_te(false);
+                r.set_tie(false);
+                r.set_teie(false);
             });
 
             I::te_waker().wake();
         } else {
-            sci.scr().modify(|w| {
-                w.set_te(true);
-                w.set_tie(true);
-                w.set_teie(false);
+            sci.scr().modify(|r| {
+                r.set_te(true);
+                r.set_tie(true);
+                r.set_teie(false);
             });
         }
     }
@@ -827,9 +827,9 @@ impl<I: Instance, TxInt: InterruptType> InterruptHandler<TxInt> for TxInterruptH
         let out_buf = tx_reader.pop_slice();
 
         if out_buf.is_empty() {
-            sci.scr().modify(|w| {
-                w.set_tie(false);
-                w.set_teie(true);
+            sci.scr().modify(|r| {
+                r.set_tie(false);
+                r.set_teie(true);
             });
 
             return;
@@ -852,9 +852,9 @@ impl<I: Instance, TxInt: InterruptType> InterruptHandler<TxInt> for TxInterruptH
 
             sci.ftdrl().write_value(out_buf[out_len - 1]);
 
-            sci.scr().modify(|w| {
-                w.set_tie(false);
-                w.set_teie(true);
+            sci.scr().modify(|r| {
+                r.set_tie(false);
+                r.set_teie(true);
             });
 
             tx_reader.pop_done(out_len);
@@ -968,16 +968,16 @@ macro_rules! instance_impl {
                 fn start() {
                     debug!("{}stop=false", Self::PERIPHERAL);
 
-                    pac::MSTP.mstpcrb().write(|w| {
-                        w.[< set_ $stop >](false);
+                    pac::MSTP.mstpcrb().write(|r| {
+                        r.[< set_ $stop >](false);
                     });
                 }
 
                 fn stop() {
                     debug!("{}stop=true", Self::PERIPHERAL);
 
-                    pac::MSTP.mstpcrb().write(|w| {
-                        w.[< set_ $stop >](true);
+                    pac::MSTP.mstpcrb().write(|r| {
+                        r.[< set_ $stop >](true);
                     });
                 }
 
