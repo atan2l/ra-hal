@@ -152,7 +152,7 @@ pub const MSTP: mstp::Mstp = unsafe { mstp::Mstp::from_ptr(0x4004_7000usize as _
 #[doc = "Serial Sound Interface Ver.2.0"]
 pub const SSIE0: ssie0::Ssie0 = unsafe { ssie0::Ssie0::from_ptr(0x4004_e000usize as _) };
 #[doc = "CAN0 Module"]
-pub const CAN0: can0::Can0 = unsafe { can0::Can0::from_ptr(0x4005_0000usize as _) };
+pub const CAN0: can::Can = unsafe { can::Can::from_ptr(0x4005_0000usize as _) };
 #[doc = "Inter-Integrated Circuit 0"]
 pub const IIC0: iic::Iic = unsafe { iic::Iic::from_ptr(0x4005_3000usize as _) };
 #[doc = "Inter-Integrated Circuit 1"]
@@ -230,7 +230,7 @@ pub mod adc14;
 pub mod agt;
 pub mod bus;
 pub mod cac;
-pub mod can0;
+pub mod can;
 pub mod common;
 pub mod crc;
 pub mod ctsu;

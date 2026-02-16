@@ -1,11 +1,11 @@
 #[doc = "CAN0 Module"]
 #[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Can0 {
+pub struct Can {
     ptr: *mut u8,
 }
-unsafe impl Send for Can0 {}
-unsafe impl Sync for Can0 {}
-impl Can0 {
+unsafe impl Send for Can {}
+unsafe impl Sync for Can {}
+impl Can {
     #[inline(always)]
     pub const unsafe fn from_ptr(ptr: *mut ()) -> Self {
         Self { ptr: ptr as _ }

@@ -1,0 +1,11 @@
+---
+transforms:
+  - !MergeBlocks
+    from: can(0)::Can(0)
+    to: can::Can
+    main: can0::Can0
+  - !Rename
+    from: can0::(.+)
+    to: can::${1}
+    type: All
+
