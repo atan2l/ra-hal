@@ -189,14 +189,14 @@ pub(crate) trait SealedInstance {
 
 /// A pin that can be used for transmission.
 #[allow(private_bounds)]
-pub trait TxPin<I: Instance>: TxPinSealed<I> {}
-// impl<I: Instance, T: TxPinSealed<I>> UartTxPin<I> for T {}
+pub trait TxPin<I: Instance>: SealedTxPin<I> {}
+// impl<I: Instance, T: SealedTxPin<I>> UartTxPin<I> for T {}
 
 /// A pin that can be used for reception.
 #[allow(private_bounds)]
-pub trait RxPin<I: Instance>: RxPinSealed<I> {}
+pub trait RxPin<I: Instance>: SealedRxPin<I> {}
 
-pub(crate) trait TxPinSealed<I: SealedInstance>: Pin + PeripheralType {
+pub(crate) trait SealedTxPin<I: SealedInstance>: Pin + PeripheralType {
     const PERIPHERAL_FUNC: PortFunction;
 
     #[inline(always)]
@@ -205,7 +205,7 @@ pub(crate) trait TxPinSealed<I: SealedInstance>: Pin + PeripheralType {
     }
 }
 
-pub(crate) trait RxPinSealed<I: SealedInstance>: Pin + PeripheralType {
+pub(crate) trait SealedRxPin<I: SealedInstance>: Pin + PeripheralType {
     const PERIPHERAL_FUNC: PortFunction;
 
     #[inline(always)]
@@ -931,7 +931,7 @@ impl<'d, I: Instance> embedded_serial::MutBlockingRx for BufferedUart<'d, I> {
 macro_rules! tx_pin_impl {
     ($sci:ident, $pin:ident, $pfunc:ident) => {
         impl crate::uart::TxPin<crate::peripherals::$sci> for crate::peripherals::$pin {}
-        impl crate::uart::TxPinSealed<crate::peripherals::$sci> for crate::peripherals::$pin {
+        impl crate::uart::SealedTxPin<crate::peripherals::$sci> for crate::peripherals::$pin {
             const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
         }
     };
@@ -941,7 +941,7 @@ pub(crate) use tx_pin_impl;
 macro_rules! rx_pin_impl {
     ($sci:ident, $pin:ident, $pfunc:ident) => {
         impl crate::uart::RxPin<crate::peripherals::$sci> for crate::peripherals::$pin {}
-        impl crate::uart::RxPinSealed<crate::peripherals::$sci> for crate::peripherals::$pin {
+        impl crate::uart::SealedRxPin<crate::peripherals::$sci> for crate::peripherals::$pin {
             const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
         }
     };
