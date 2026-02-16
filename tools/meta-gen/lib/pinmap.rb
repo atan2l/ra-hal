@@ -60,14 +60,15 @@ module Meta
                   "@id='%s'" % alt
                 end.join(' or ')
 
-                pfunc_query = '/pinMappings/device/components[@id="ports"]/components/component[@id="%<pin>s"]/pins/pin[@id="%<pin>s"]/configurations/configuration/alt[%<alt_args>s]/registerSetting[@mask="PIN_CFG_MODE_MASK"][1]'
-                pfunc_query = pfunc_query % query_args
-                pfunc = pinmap.xpath(pfunc_query)
-                if !pfunc.empty?
-                  # throw pfunc[0][:value].inspect
-                end
+                pfunc = []
 
-                @peripherals[peripheral[:id]][config[:name]][alt_config[:name]].add(pin_count:, pfunc: pfunc[0]&.attr(:value))
+                pfunc_query = '/pinMappings/device/components[@id="ports"]/components/component[@id="%<pin>s"]/pins/pin[@id="%<pin>s"]/configurations/configuration/alt[%<alt_args>s]/registerSetting[@mask="PIN_CFG_MODE_MASK"][1]'
+                pfunc.push pinmap.xpath(pfunc_query % query_args)[0]&.attr(:value)
+
+                debug_query = '/pinMappings/device/components[@id="ports"]/components/component[@type="port" and @id="%<pin>s"]/pins/pin/configurations/configuration[@id="%<pin>s"]/alt/registerSetting[@value="IOPORT_PERIPHERAL_DEBUG"]'
+                pfunc.push pinmap.xpath(debug_query % query_args)[0]&.attr(:value)
+
+                @peripherals[peripheral[:id]][config[:name]][alt_config[:name]].add(pin_count:, pfunc: pfunc.compact)
                 @pin_counts.add(pin_count)
               end
             end
@@ -77,11 +78,13 @@ module Meta
 
       pinmap.xpath('/pinMappings/device/components[@id="ports"]/components').each do |port|
         port.xpath('./component[@type="port"]').each do |pin|
-          irq = pin.xpath('./configurations/configuration[@name="IRQ"]/alt/registerSetting[@value="IOPORT_CFG_IRQ_ENABLE"]/parent::alt')[0]&.attr(:name)
-          pull_up = pin.xpath('./configurations/configuration[@name="Pull up"]/alt/registerSetting[@value="IOPORT_CFG_PULLUP_ENABLE"]')[0]&.attr(:value)
-          open_drain = pin.xpath('./configurations/configuration[@name="Output type"]/alt/registerSetting[@value="IOPORT_CFG_NMOS_ENABLE"]')[0]&.attr(:value)
+          pfuncs = []
+          pfuncs.push pin.xpath('./configurations/configuration[@name="IRQ"]/alt/registerSetting[@value="IOPORT_CFG_IRQ_ENABLE"]/parent::alt')[0]&.attr(:name)
+          pfuncs.push pin.xpath('./configurations/configuration[@name="Pull up"]/alt/registerSetting[@value="IOPORT_CFG_PULLUP_ENABLE"]')[0]&.attr(:value)
+          pfuncs.push pin.xpath('./configurations/configuration[@name="Output type"]/alt/registerSetting[@value="IOPORT_CFG_NMOS_ENABLE"]')[0]&.attr(:value)
+          pfuncs.push pin.xpath("./pins/pin/configurations/configuration[@name='#{pin[:name]}']/alt/registerSetting[@value='IOPORT_PERIPHERAL_DEBUG']")[0]&.attr(:value)
       
-          @peripherals['port'][port[:id]][pin[:id]].add(pin_count:, pfunc: [irq, pull_up, open_drain].compact)
+          @peripherals['port'][port[:id]][pin[:id]].add(pin_count:, pfunc: pfuncs.compact)
           @pin_counts.add(pin_count)
         end
       end

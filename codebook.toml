@@ -147,6 +147,7 @@ ignore_patterns = [
     "Vcc",
     '\w+_pin_impl',
     'FSP_Packs_v\d.\d.\d.zip',
-    "T(low|high)"
+    "T(low|high)",
+    'swd-.\w+',
 ]
 use_global = false

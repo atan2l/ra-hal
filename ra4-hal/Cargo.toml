@@ -66,6 +66,9 @@ defmt = [ "dep:defmt", "ra4m1-ctpac/defmt", "embassy-time/defmt", "embassy-time/
 ## Log the reset reason during initialization. Only useful in conjunction with `defmt` feature.
 diag = [ ]
 
+## Allow access to pins normally used for JTAG/SWD debugging
+swd-as-gpio = [ ]
+
 ## Re-export the PAC at `ra4_hal::pac`.
 ## This is unstable because minor HAL updates may depend on major PAC updates.
 unstable-pac = [ ]

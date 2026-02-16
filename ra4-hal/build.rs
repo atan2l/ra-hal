@@ -6,9 +6,12 @@ use std::{
 };
 
 use proc_macro2::TokenStream;
-use quote::{format_ident, quote};
+use quote::{ToTokens, format_ident, quote};
 use regex::Regex;
 use serde::Deserialize;
+
+/// The `RA4M1` is available with the following pin configurations
+const ALL_PINS: &[u8] = &[40, 48, 64, 100];
 
 #[derive(Debug, Deserialize)]
 struct PinDef {
@@ -35,6 +38,103 @@ struct Interrupts {
     interrupts: Vec<String>,
 }
 
+struct Peripheral {
+    pub name: String,
+    pub conditional: Option<String>,
+}
+
+struct PeripheralList {
+    items: Vec<Peripheral>,
+}
+
+impl syn::parse::Parse for Peripheral {
+    fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
+        let mut conditional = None;
+        if input.peek(syn::token::Pound) {
+            let attrib = input
+                .call(syn::Attribute::parse_outer)
+                .unwrap()
+                .into_iter()
+                .map(|x| x.to_token_stream().to_string())
+                .collect::<Vec<_>>()
+                .join("\n");
+            conditional = Some(attrib);
+        }
+        let peri = input.parse::<syn::Ident>().unwrap().to_string();
+        Ok(Self {
+            name: peri,
+            conditional,
+        })
+    }
+}
+
+impl syn::parse::Parse for PeripheralList {
+    fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
+        let mut items = vec![];
+        while !input.is_empty() {
+            let item = input.parse().unwrap();
+            items.push(item);
+
+            if input.is_empty() {
+                break;
+            }
+            input.parse::<syn::Token![,]>().unwrap();
+        }
+
+        Ok(Self { items })
+    }
+}
+
+impl PinDef {
+    fn debug(&self) -> bool {
+        self.pfunc.iter().any(|pf| pf == "IOPORT_PERIPHERAL_DEBUG")
+    }
+
+    fn pin_conditional(&self) -> TokenStream {
+        let valid_for_pins = &self.pin_count;
+        if valid_for_pins == ALL_PINS {
+            if self.debug() {
+                quote!(#[cfg(feature = "swd-as-gpio")])
+            } else {
+                quote!()
+            }
+        } else {
+            let pin_conditions = valid_for_pins
+                .iter()
+                .map(|config| {
+                    let config = format!("_{config}pin");
+                    quote!(feature = #config)
+                })
+                .collect::<Vec<_>>();
+
+            let mut conditions = vec![];
+            match pin_conditions.len() {
+                1 => {
+                    let condition = pin_conditions.first().unwrap();
+                    conditions.push(quote!(#condition))
+                }
+                _ => {
+                    conditions.push(quote!(any(#(#pin_conditions),*)));
+                }
+            }
+
+            if self.debug() {
+                conditions.push(quote!(feature = "swd-as-gpio"));
+            }
+
+            match conditions.len() {
+                1 => {
+                    let condition = &conditions[0];
+                    quote!(#[cfg(#condition)])
+                }
+                _ => {
+                    quote!(#[cfg(all(#(#conditions),*))])
+                }
+            }
+        }
+    }
+}
+
 fn main() {
     if let Err(e) = inner_main() {
         eprintln!("{e}");
@@ -42,34 +142,10 @@ fn main() {
     }
 }
 
-/// The `RA4M1` is available with the following pin configurations
-const ALL_PINS: &[u8] = &[40, 48, 64, 100];
-
 /// Beautify output from `quote!`
 fn pretty_print(ts: &proc_macro2::TokenStream) -> String {
     let file = syn::parse_file(&ts.to_string()).unwrap();
     prettyplease::unparse(&file)
-}
-
-fn pin_conditional(valid_for_pins: &[u8]) -> TokenStream {
-    if valid_for_pins == ALL_PINS {
-        quote!()
-    } else {
-        let conditions = valid_for_pins
-            .iter()
-            .map(|config| {
-                let config = format!("_{config}pin");
-                quote!(feature = #config)
-            })
-            .collect::<Vec<_>>();
-
-        if conditions.len() == 1 {
-            let condition = conditions.first().unwrap();
-            quote!(#[cfg(#condition)])
-        } else {
-            quote!(#[cfg(any(#(#conditions),*))])
-        }
-    }
 }
 
 /// Add the appropriate impls for a `GPT` timer
@@ -96,7 +172,7 @@ fn do_gpt(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
             for (pin, config) in pins.iter() {
                 let pin = format_ident!("{}", pin);
 
-                let conditions = pin_conditional(&config.pin_count);
+                let conditions = config.pin_conditional();
 
                 acc.push(quote! {
                     #conditions
@@ -124,7 +200,7 @@ fn do_sci(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
             for (pin, config) in pins.iter() {
                 let pin = format_ident!("{}", pin);
 
-                let conditions = pin_conditional(&config.pin_count);
+                let conditions = config.pin_conditional();
 
                 let pfunc = match config
                     .pfunc
@@ -161,7 +237,7 @@ fn do_i2c(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
             for (pin, config) in pins.iter() {
                 let pin = format_ident!("{}", pin);
 
-                let conditions = pin_conditional(&config.pin_count);
+                let conditions = config.pin_conditional();
 
                 assert!(config.pfunc.iter().any(|pf| pf == "IOPORT_PERIPHERAL_IIC"));
                 let pfunc = format_ident!("I2c");
@@ -195,7 +271,7 @@ fn do_spi(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
 
                 let pin = format_ident!("{}", pin);
 
-                let conditions = pin_conditional(&config.pin_count);
+                let conditions = config.pin_conditional();
 
                 assert!(config.pfunc.iter().any(|pf| pf == "IOPORT_PERIPHERAL_SPI"));
                 let pfunc = format_ident!("Spi");
@@ -224,7 +300,7 @@ fn do_adc(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
 
             for (pin, config) in pins.iter() {
                 let pin = format_ident!("{}", pin);
-                let conditions = pin_conditional(&config.pin_count);
+                let conditions = config.pin_conditional();
 
                 acc.push(quote! {
                     #conditions
@@ -247,15 +323,16 @@ fn do_port(_peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
                 .parse::<u16>()
                 .expect("Expect pin name in form of pNNN");
 
-            let conditions = pin_conditional(&config.pin_count);
+
+            let pull_up = config.pfunc.iter().any(|pf| pf == "IOPORT_CFG_PULLUP_ENABLE");
+            let open_drain = config.pfunc.iter().any(|pf| pf == "IOPORT_CFG_NMOS_ENABLE");
+
+            let conditions = config.pin_conditional();
 
             acc.push(quote! {
                 #conditions
                 crate::gpio::pin_impl!(#pin_ident, #pin_number, #port_ident);
             });
-
-            let pull_up = config.pfunc.iter().any(|pf| pf == "IOPORT_CFG_PULLUP_ENABLE");
-            let open_drain = config.pfunc.iter().any(|pf| pf == "IOPORT_CFG_NMOS_ENABLE");
 
             let irq_number = config.pfunc
                 .iter()
@@ -404,7 +481,7 @@ fn generate_peripherals(
 
     let gpio_peris = gpio.iter().fold(vec![], |mut acc, (_, pins)| {
         for (pin, config) in pins.iter() {
-            let conditions = pin_conditional(&config.pin_count);
+            let conditions = config.pin_conditional();
             let pin_ident = format_ident!("{}", pin.to_uppercase());
 
             acc.push((
@@ -450,7 +527,40 @@ fn generate_peripherals(
                 #(#peripheral_list),*
         );
     };
-    let peripherals = pretty_print(&peripherals);
+
+    // Ah maybe we should just take the peripheral list and convert it directly to a string?
+    let peripherals = {
+        let mut output = vec![];
+        let file = syn::parse_file(&peripherals.to_string()).unwrap();
+        for i in file.items.iter() {
+            if let syn::Item::Macro(m) = i {
+                let macro_path = m
+                    .mac
+                    .path
+                    .segments
+                    .iter()
+                    .map(|x| x.ident.to_string())
+                    .collect::<Vec<_>>()
+                    .join("::");
+
+                let items: PeripheralList = m.mac.parse_body().unwrap();
+
+                output.push(format!("{macro_path}! {{"));
+                for item in items.items.iter() {
+                    if let Some(conditional) = item.conditional.as_ref() {
+                        output.push(format!("  {conditional}"));
+                    }
+                    output.push(format!("  {},", item.name));
+                }
+                output.push(format!("}}"));
+            }
+        }
+
+        output.join("\n")
+    };
+
+    // Or we could just call pretty_print and accept the garbled mess
+    // let peripherals = pretty_print(&peripherals);
 
     let out_dir = &PathBuf::from(env::var_os("OUT_DIR").unwrap());
     fs::write(out_dir.join("peripherals.rs"), peripherals)?;

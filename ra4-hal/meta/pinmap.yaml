@@ -321,6 +321,7 @@ cmp0:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
+      - IOPORT_PERIPHERAL_DEBUG
 dac0:
   DA:
     P014:
@@ -345,6 +346,7 @@ can0:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_CAN
+      - IOPORT_PERIPHERAL_DEBUG
     P102:
       pin_count:
       - 40
@@ -368,6 +370,7 @@ can0:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_CAN
+      - IOPORT_PERIPHERAL_DEBUG
     P103:
       pin_count:
       - 48
@@ -664,6 +667,7 @@ sci1:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      - IOPORT_PERIPHERAL_DEBUG
     P112:
       pin_count:
       - 40
@@ -821,6 +825,7 @@ sci2:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_SCI0_2_4_6_8
+      - IOPORT_PERIPHERAL_DEBUG
   SDA:
     P302:
       pin_count:
@@ -876,6 +881,7 @@ sci9:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      - IOPORT_PERIPHERAL_DEBUG
     P602:
       pin_count:
       - 100
@@ -903,6 +909,7 @@ sci9:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      - IOPORT_PERIPHERAL_DEBUG
     P601:
       pin_count:
       - 100
@@ -951,6 +958,7 @@ sci9:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      - IOPORT_PERIPHERAL_DEBUG
     P603:
       pin_count:
       - 100
@@ -977,6 +985,7 @@ sci9:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      - IOPORT_PERIPHERAL_DEBUG
     P602:
       pin_count:
       - 100
@@ -1004,6 +1013,7 @@ sci9:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_SCI1_3_5_7_9
+      - IOPORT_PERIPHERAL_DEBUG
     P601:
       pin_count:
       - 100
@@ -1119,6 +1129,7 @@ spi1:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_SPI
+      - IOPORT_PERIPHERAL_DEBUG
   MOSI:
     P203:
       pin_count:
@@ -1133,6 +1144,7 @@ spi1:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_SPI
+      - IOPORT_PERIPHERAL_DEBUG
   RSPCK:
     P204:
       pin_count:
@@ -1163,6 +1175,7 @@ spi1:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_SPI
+      - IOPORT_PERIPHERAL_DEBUG
     P112:
       pin_count:
       - 40
@@ -1187,6 +1200,7 @@ spi1:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_SPI
+      - IOPORT_PERIPHERAL_DEBUG
   SSL2:
     P301:
       pin_count:
@@ -1471,6 +1485,7 @@ ctsu0:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_CTSU
+      - IOPORT_PERIPHERAL_DEBUG
   TS11:
     P304:
       pin_count:
@@ -1688,6 +1703,7 @@ irq0:
       - 100
       pfunc:
       - IOPORT_CFG_PORT_DIRECTION_INPUT
+      - IOPORT_PERIPHERAL_DEBUG
     P004:
       pin_count:
       - 64
@@ -2184,6 +2200,7 @@ slcdc0:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_LCDC
+      - IOPORT_PERIPHERAL_DEBUG
   SEG24:
     P110:
       pin_count:
@@ -2192,6 +2209,7 @@ slcdc0:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_LCDC
+      - IOPORT_PERIPHERAL_DEBUG
   SEG25:
     P114:
       pin_count:
@@ -2326,6 +2344,7 @@ cgc0:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_CLKOUT_COMP_RTC
+      - IOPORT_PERIPHERAL_DEBUG
 debug0:
   TCK:
     P300:
@@ -2539,6 +2558,7 @@ gpt0:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_GPT1
+      - IOPORT_PERIPHERAL_DEBUG
     P107:
       pin_count:
       - 64
@@ -2567,6 +2587,7 @@ gpt0:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_GPT1
+      - IOPORT_PERIPHERAL_DEBUG
     P106:
       pin_count:
       - 64
@@ -2588,6 +2609,7 @@ gpt1:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_GPT1
+      - IOPORT_PERIPHERAL_DEBUG
     P105:
       pin_count:
       - 64
@@ -2608,6 +2630,7 @@ gpt1:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_GPT1
+      - IOPORT_PERIPHERAL_DEBUG
     P104:
       pin_count:
       - 48
@@ -2865,6 +2888,7 @@ ops0:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_GPT0
+      - IOPORT_PERIPHERAL_DEBUG
   GTOULO:
     P301:
       pin_count:
@@ -2880,6 +2904,7 @@ ops0:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_GPT0
+      - IOPORT_PERIPHERAL_DEBUG
   GTOVUP:
     P411:
       pin_count:
@@ -2894,6 +2919,7 @@ ops0:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_GPT0
+      - IOPORT_PERIPHERAL_DEBUG
   GTOVLO:
     P410:
       pin_count:
@@ -2908,6 +2934,7 @@ ops0:
       - 100
       pfunc:
       - IOPORT_PERIPHERAL_GPT0
+      - IOPORT_PERIPHERAL_DEBUG
   GTOWUP:
     P409:
       pin_count:
@@ -3253,6 +3280,7 @@ port:
       pfunc:
       - IOPORT_CFG_PULLUP_ENABLE
       - IOPORT_CFG_NMOS_ENABLE
+      - IOPORT_PERIPHERAL_DEBUG
     p109:
       pin_count:
       - 40
@@ -3262,6 +3290,7 @@ port:
       pfunc:
       - IOPORT_CFG_PULLUP_ENABLE
       - IOPORT_CFG_NMOS_ENABLE
+      - IOPORT_PERIPHERAL_DEBUG
     p110:
       pin_count:
       - 40
@@ -3272,6 +3301,7 @@ port:
       - IRQ3
       - IOPORT_CFG_PULLUP_ENABLE
       - IOPORT_CFG_NMOS_ENABLE
+      - IOPORT_PERIPHERAL_DEBUG
     p111:
       pin_count:
       - 40
@@ -3406,6 +3436,7 @@ port:
       pfunc:
       - IOPORT_CFG_PULLUP_ENABLE
       - IOPORT_CFG_NMOS_ENABLE
+      - IOPORT_PERIPHERAL_DEBUG
     p301:
       pin_count:
       - 40
