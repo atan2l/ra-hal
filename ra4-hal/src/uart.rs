@@ -149,8 +149,8 @@ pub(crate) trait SealedInstance {
     const PERIPHERAL: () = ();
 
     const RX_INTERRUPT_EVENT: InterruptEvent;
-    const TX_INTERRUPT_EVENT: InterruptEvent;
     const TE_INTERRUPT_EVENT: InterruptEvent;
+    const TX_INTERRUPT_EVENT: InterruptEvent;
 
     /// `SCI0` and `SCI1` have 16-byte FIFO buffers for RX and TX ops per Table 28.1.
     const FIFO_DEPTH: u8 = 16;
@@ -169,34 +169,34 @@ pub(crate) trait SealedInstance {
 
     /// # Returns
     ///
-    /// Static reference to the statically allocated [`RingBuffer`] for transmit operations.
-    fn tx_buffer() -> &'static RingBuffer;
+    /// Static reference to the statically allocated [`RingBuffer`] for receive operations.
+    fn rx_buffer() -> &'static RingBuffer;
 
     /// # Returns
     ///
-    /// Static reference to the statically allocated [`RingBuffer`] for receive operations.
-    fn rx_buffer() -> &'static RingBuffer;
+    /// Static reference to the statically allocated [`RingBuffer`] for transmit operations.
+    fn tx_buffer() -> &'static RingBuffer;
+
+    /// Waker for receive events.
+    fn rx_waker() -> &'static AtomicWaker;
 
     /// Waker for "transmit end" events.
     fn te_waker() -> &'static AtomicWaker;
 
     /// Waker for transmit buffer empty events.
     fn tx_waker() -> &'static AtomicWaker;
-
-    /// Waker for receive events.
-    fn rx_waker() -> &'static AtomicWaker;
 }
+
+/// A pin that can be used for reception.
+#[allow(private_bounds)]
+pub trait RxPin<I: Instance>: SealedRxPin<I> {}
 
 /// A pin that can be used for transmission.
 #[allow(private_bounds)]
 pub trait TxPin<I: Instance>: SealedTxPin<I> {}
 // impl<I: Instance, T: SealedTxPin<I>> UartTxPin<I> for T {}
 
-/// A pin that can be used for reception.
-#[allow(private_bounds)]
-pub trait RxPin<I: Instance>: SealedRxPin<I> {}
-
-pub(crate) trait SealedTxPin<I: SealedInstance>: Pin + PeripheralType {
+pub(crate) trait SealedRxPin<I: SealedInstance>: Pin + PeripheralType {
     const PERIPHERAL_FUNC: PortFunction;
 
     #[inline(always)]
@@ -205,7 +205,7 @@ pub(crate) trait SealedTxPin<I: SealedInstance>: Pin + PeripheralType {
     }
 }
 
-pub(crate) trait SealedRxPin<I: SealedInstance>: Pin + PeripheralType {
+pub(crate) trait SealedTxPin<I: SealedInstance>: Pin + PeripheralType {
     const PERIPHERAL_FUNC: PortFunction;
 
     #[inline(always)]
@@ -262,8 +262,8 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         let sci = I::regs();
 
         sci.scr().modify(|r| {
-            r.set_te(false);
             r.set_re(false);
+            r.set_te(false);
         });
 
         self.set_data_bits_inner(n);
@@ -300,8 +300,8 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         let sci = I::regs();
 
         sci.scr().modify(|r| {
-            r.set_te(false);
             r.set_re(false);
+            r.set_te(false);
         });
 
         self.set_parity_inner(parity);
@@ -331,8 +331,8 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         let sci = I::regs();
 
         sci.scr().modify(|r| {
-            r.set_te(false);
             r.set_re(false);
+            r.set_te(false);
         });
 
         self.set_stop_bits_inner(stop_bits);
@@ -454,11 +454,11 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         sci.scr().write_value(Scr(0));
 
         sci.scr().modify(|r| {
-            r.set_tie(false);
+            r.set_re(false);
             r.set_rie(false);
             r.set_te(false);
-            r.set_re(false);
             r.set_teie(false);
+            r.set_tie(false);
         });
 
         sci.fcr().modify(|r| {
@@ -482,15 +482,15 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         sci.scmr().modify(|r| r.set_smif(false));
 
         sci.smr().modify(|r| {
-            r.set_mp(false);
             r.set_cm(false);
+            r.set_mp(false);
         });
 
         sci.semr().modify(|r| {
-            r.set_brme(false);
-            r.set_bgdm(false);
             r.set_abcs(false);
             r.set_abcse(false);
+            r.set_bgdm(false);
+            r.set_brme(false);
             r.set_rxdesel(false);
         });
 
@@ -500,17 +500,17 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         });
 
         // Move pins over to SCI
-        trace!("{}TX=p{}/{}", I::PERIPHERAL, tx_pin._port(), tx_pin._pin());
-        tx_pin.set_pfunc();
-
         trace!("P{}RX=p{}/{}", I::PERIPHERAL, rx_pin._port(), rx_pin._pin());
         rx_pin.set_pfunc();
 
-        let tx_len = tx_buffer.len();
-        unsafe { I::tx_buffer().init(tx_buffer.as_mut_ptr(), tx_len) };
+        trace!("{}TX=p{}/{}", I::PERIPHERAL, tx_pin._port(), tx_pin._pin());
+        tx_pin.set_pfunc();
 
         let rx_len = rx_buffer.len();
         unsafe { I::rx_buffer().init(rx_buffer.as_mut_ptr(), rx_len) };
+
+        let tx_len = tx_buffer.len();
+        unsafe { I::tx_buffer().init(tx_buffer.as_mut_ptr(), tx_len) };
 
         // Enable interrupts in NVIC. We can largely ignore the NVIC after this as all of the
         // peripheral interrupts are going to be managed by the ICU and/or ELC.
@@ -755,9 +755,9 @@ impl<I: Instance, RxInt: InterruptType> InterruptHandler<RxInt> for RxInterruptH
                 writer.push_done(read_len);
 
                 sci.ssr_fifo().modify(|r| {
-                    r.set_rdf(false);
                     // If there isn't enough space in the static buffer are we dropping it on the floor when we reset dr?
                     r.set_dr(false);
+                    r.set_rdf(false);
                 });
 
                 I::rx_waker().wake();
@@ -801,16 +801,16 @@ impl<I: Instance, TeInt: InterruptType> InterruptHandler<TeInt> for TeInterruptH
 
             sci.scr().modify(|r| {
                 r.set_te(false);
-                r.set_tie(false);
                 r.set_teie(false);
+                r.set_tie(false);
             });
 
             I::te_waker().wake();
         } else {
             sci.scr().modify(|r| {
                 r.set_te(true);
-                r.set_tie(true);
                 r.set_teie(false);
+                r.set_tie(true);
             });
         }
     }
@@ -828,8 +828,8 @@ impl<I: Instance, TxInt: InterruptType> InterruptHandler<TxInt> for TxInterruptH
 
         if out_buf.is_empty() {
             sci.scr().modify(|r| {
-                r.set_tie(false);
                 r.set_teie(true);
+                r.set_tie(false);
             });
 
             return;
@@ -853,8 +853,8 @@ impl<I: Instance, TxInt: InterruptType> InterruptHandler<TxInt> for TxInterruptH
             sci.ftdrl().write_value(out_buf[out_len - 1]);
 
             sci.scr().modify(|r| {
-                r.set_tie(false);
                 r.set_teie(true);
+                r.set_tie(false);
             });
 
             tx_reader.pop_done(out_len);
@@ -949,36 +949,44 @@ macro_rules! rx_pin_impl {
 pub(crate) use rx_pin_impl;
 
 macro_rules! instance_impl {
-    ($instance:ident, $rx_int:ident, $tx_int:ident, $te_int:ident, $stop:ident) => {
+    ($instance:ident, $mstp:ident, $rx_int:ident, $te_int:ident, $tx_int:ident) => {
         impl Instance for peripherals::$instance {}
 
         paste! {
             impl SealedInstance for crate::peripherals::$instance {
                 #[cfg(feature = "defmt")]
                 const PERIPHERAL: &'static str = concat!(stringify!($instance), ": ");
+
                 const RX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$rx_int;
-                const TX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$tx_int;
                 const TE_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$te_int;
+                const TX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$tx_int;
 
                 #[inline]
                 fn regs() -> ra4m1_ctpac::sci::Sci {
                     crate::pac::$instance
                 }
 
+                #[inline]
                 fn start() {
                     debug!("{}stop=false", Self::PERIPHERAL);
 
                     pac::MSTP.mstpcrb().write(|r| {
-                        r.[< set_ $stop >](false);
+                        r.[< set_ $mstp >](false);
                     });
                 }
 
+                #[inline]
                 fn stop() {
                     debug!("{}stop=true", Self::PERIPHERAL);
 
                     pac::MSTP.mstpcrb().write(|r| {
-                        r.[< set_ $stop >](true);
+                        r.[< set_ $mstp>](true);
                     });
+                }
+
+                fn rx_buffer() -> &'static RingBuffer {
+                    static RX_BUF: RingBuffer = RingBuffer::new();
+                    &RX_BUF
                 }
 
                 fn tx_buffer() -> &'static RingBuffer {
@@ -986,9 +994,9 @@ macro_rules! instance_impl {
                     &TX_BUF
                 }
 
-                fn rx_buffer() -> &'static RingBuffer {
-                    static RX_BUF: RingBuffer = RingBuffer::new();
-                    &RX_BUF
+                fn rx_waker() -> &'static AtomicWaker{
+                    static RX_WAKER: AtomicWaker = AtomicWaker::new();
+                    &RX_WAKER
                 }
 
                 fn te_waker() -> &'static AtomicWaker{
@@ -1000,18 +1008,12 @@ macro_rules! instance_impl {
                     static TX_WAKER: AtomicWaker = AtomicWaker::new();
                     &TX_WAKER
                 }
-
-                fn rx_waker() -> &'static AtomicWaker{
-                    static RX_WAKER: AtomicWaker = AtomicWaker::new();
-                    &RX_WAKER
-
-                }
             }
         }
     };
 }
 
-instance_impl!(SCI0, Sci0Rxi, Sci0Txi, Sci0Tei, mstpb31);
-instance_impl!(SCI1, Sci1Rxi, Sci1Txi, Sci1Tei, mstpb30);
-instance_impl!(SCI2, Sci2Rxi, Sci2Txi, Sci2Tei, mstpb29);
-instance_impl!(SCI9, Sci9Rxi, Sci9Txi, Sci9Tei, mstpb22);
+instance_impl!(SCI0, mstpb31, Sci0Rxi, Sci0Tei, Sci0Txi);
+instance_impl!(SCI1, mstpb30, Sci1Rxi, Sci1Tei, Sci1Txi);
+instance_impl!(SCI2, mstpb29, Sci2Rxi, Sci2Tei, Sci2Txi);
+instance_impl!(SCI9, mstpb22, Sci9Rxi, Sci9Tei, Sci9Txi);
