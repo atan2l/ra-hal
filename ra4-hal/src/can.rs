@@ -6,13 +6,15 @@ use embassy_hal_internal::{Peri, PeripheralType};
 use ra4m1_ctpac::can::vals::{Tseg1, Tseg2};
 
 use crate::{
-    gpio::{Pin, PortFunction},
+    gpio::{Basic, Flex, Pin, PortFunction},
     pac,
 };
 
 #[allow(private_bounds)]
 pub struct Can<'d, I: Instance> {
     _instance: PhantomData<&'d I>,
+    _rx: Flex<'d, Basic>,
+    _tx: Flex<'d, Basic>,
 }
 
 #[derive(Copy, Clone)]
@@ -88,13 +90,17 @@ impl<'d, I: Instance> Can<'d, I> {
 
         let can_config = &TIMING[0];
 
-        can.bcr().modify(|w| {
-            w.set_tseg1(can_config.ts1);
-            w.set_tseg2(can_config.ts2);
-            w.set_brp(can_config.prescaler.into());
+        can.bcr().modify(|r| {
+            r.set_tseg1(can_config.ts1);
+            r.set_tseg2(can_config.ts2);
+            r.set_brp(can_config.prescaler.into());
         });
 
-        todo!()
+        Self {
+            _instance: PhantomData,
+            _rx: Flex::new_basic(rx),
+            _tx: Flex::new_basic(tx),
+        }
     }
 }
 
@@ -138,14 +144,14 @@ macro_rules! instance_impl {
                 fn module_stop() {
                     debug!("{}: stop=true", stringify!($instance));
                     let mstp = pac::MSTP;
-                    mstp.mstpcrb().modify(|w| w.[< set_ $mstp >](true));
+                    mstp.mstpcrb().modify(|r| r.[< set_ $mstp >](true));
                 }
 
                 #[inline(always)]
                 fn module_start() {
                     debug!("{}: stop=false", stringify!($instance));
                     let mstp = pac::MSTP;
-                    mstp.mstpcrb().modify(|w| w.[< set_ $mstp >](false));
+                    mstp.mstpcrb().modify(|r| r.[< set_ $mstp >](false));
                 }
             }
         }
