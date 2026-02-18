@@ -312,31 +312,31 @@ pub enum Tseg1 {
     _RESERVED_1 = 0x01,
     _RESERVED_2 = 0x02,
     #[doc = "4 Tq"]
-    _0011 = 0x03,
+    Tq4 = 0x03,
     #[doc = "5 Tq"]
-    _0100 = 0x04,
+    Tq5 = 0x04,
     #[doc = "6 Tq"]
-    _0101 = 0x05,
+    Tq6 = 0x05,
     #[doc = "7 Tq"]
-    _0110 = 0x06,
+    Tq7 = 0x06,
     #[doc = "8 Tq"]
-    _0111 = 0x07,
+    Tq8 = 0x07,
     #[doc = "9 Tq"]
-    _1000 = 0x08,
+    Tq9 = 0x08,
     #[doc = "10 Tq"]
-    _1001 = 0x09,
+    Tq10 = 0x09,
     #[doc = "11 Tq"]
-    _1010 = 0x0a,
+    Tq11 = 0x0a,
     #[doc = "12 Tq"]
-    _1011 = 0x0b,
+    Tq12 = 0x0b,
     #[doc = "13 Tq"]
-    _1100 = 0x0c,
+    Tq13 = 0x0c,
     #[doc = "14 Tq"]
-    _1101 = 0x0d,
+    Tq14 = 0x0d,
     #[doc = "15 Tq"]
-    _1110 = 0x0e,
+    Tq15 = 0x0e,
     #[doc = "16 Tq"]
-    _1111 = 0x0f,
+    Tq16 = 0x0f,
 }
 impl Tseg1 {
     #[inline(always)]
@@ -367,19 +367,19 @@ pub enum Tseg2 {
     #[doc = "Setting prohibited"]
     _000 = 0x0,
     #[doc = "2 Tq"]
-    _001 = 0x01,
+    Tq2 = 0x01,
     #[doc = "3 Tq"]
-    _010 = 0x02,
+    Tq3 = 0x02,
     #[doc = "4 Tq"]
-    _011 = 0x03,
+    Tq4 = 0x03,
     #[doc = "5 Tq"]
-    _100 = 0x04,
+    Tq5 = 0x04,
     #[doc = "6 Tq"]
-    _101 = 0x05,
+    Tq6 = 0x05,
     #[doc = "7 Tq"]
-    _110 = 0x06,
+    Tq7 = 0x06,
     #[doc = "8 Tq"]
-    _111 = 0x07,
+    Tq8 = 0x07,
 }
 impl Tseg2 {
     #[inline(always)]

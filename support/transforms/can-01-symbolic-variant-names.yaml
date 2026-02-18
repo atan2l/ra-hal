@@ -1,0 +1,28 @@
+---
+transforms:
+  - !MapEnumVariants
+    enum: can::vals::Tseg1
+    variants:
+      _0011: Tq4
+      _0100: Tq5
+      _0101: Tq6
+      _0110: Tq7
+      _0111: Tq8
+      _1000: Tq9
+      _1001: Tq10
+      _1010: Tq11
+      _1011: Tq12
+      _1100: Tq13
+      _1101: Tq14
+      _1110: Tq15
+      _1111: Tq16
+  - !MapEnumVariants
+    enum: can::vals::Tseg2
+    variants:
+      _001: Tq2
+      _010: Tq3
+      _011: Tq4
+      _100: Tq5
+      _101: Tq6
+      _110: Tq7
+      _111: Tq8

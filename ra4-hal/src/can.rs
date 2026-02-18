@@ -3,6 +3,7 @@
 use core::marker::PhantomData;
 
 use embassy_hal_internal::{Peri, PeripheralType};
+use ra4m1_ctpac::can::vals::{Tseg1, Tseg2};
 
 use crate::{
     gpio::{Pin, PortFunction},
@@ -13,6 +14,28 @@ use crate::{
 pub struct Can<'d, I: Instance> {
     _instance: PhantomData<&'d I>,
 }
+
+#[derive(Copy, Clone)]
+pub enum Bitrate {
+    _125,
+    _250,
+    _500,
+    _1000,
+}
+
+struct Timing {
+    bitrate: Bitrate,
+    prescaler: u8,
+    ts1: Tseg1,
+    ts2: Tseg2,
+}
+
+const TIMING: [Timing; 1] = [Timing {
+    bitrate: Bitrate::_500,
+    prescaler: 3,
+    ts1: Tseg1::Tq11,
+    ts2: Tseg2::Tq4,
+}];
 
 #[allow(private_bounds)]
 pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
@@ -54,6 +77,7 @@ impl<'d, I: Instance> Can<'d, I> {
         _can: Peri<'d, I>,
         rx: Peri<'d, R>,
         tx: Peri<'d, T>,
+        _bitrate: Bitrate,
     ) -> Self {
         I::module_start();
 
@@ -61,6 +85,14 @@ impl<'d, I: Instance> Can<'d, I> {
 
         rx.set_as_crx();
         tx.set_as_ctx();
+
+        let can_config = &TIMING[0];
+
+        can.bcr().modify(|w| {
+            w.set_tseg1(can_config.ts1);
+            w.set_tseg2(can_config.ts2);
+            w.set_brp(can_config.prescaler.into());
+        });
 
         todo!()
     }
