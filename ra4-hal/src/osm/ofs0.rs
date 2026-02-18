@@ -8,7 +8,7 @@
 //! ```rust,ignore
 //! #[unsafe(no_mangle)]
 //! #[unsafe(link_section = ".ofs0")]
-//! static OFS0: Ofs0 = Ofs0::arduino_core();
+//! static OFS0: Ofs0 = Ofs0::default();
 //! ```
 
 const OFS0_H: u32 = 0xA0010000;
@@ -429,9 +429,9 @@ impl Ofs0 {
     /// ```rust,ignore
     /// #[unsafe(no_mangle)]
     /// #[unsafe(link_section = ".ofs0")]
-    /// static OFS0: Ofs0 = Ofs0::arduino_core();
+    /// static OFS0: Ofs0 = Ofs0::default();
     /// ```
-    pub const fn arduino_core() -> Self {
+    pub const fn default() -> Self {
         Self::new::<
             IwdtAutoStartOff,
             IwdtTimeout2048,

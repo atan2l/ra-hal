@@ -8,7 +8,7 @@
 //! ```rust,ignore
 //! #[unsafe(no_mangle)]
 //! #[unsafe(link_section = ".ofs1")]
-//! static OFS1: Ofs1 = Ofs1::arduino_core();
+//! static OFS1: Ofs1 = Ofs1::default();
 //! ```
 
 // Reserved bits are to be written as 1.
@@ -134,9 +134,18 @@ impl Ofs1 {
     /// ```rust,ignore
     /// #[unsafe(no_mangle)]
     /// #[unsafe(link_section = ".ofs1")]
-    /// static OFS1: Ofs1 = Ofs1::arduino_core();
+    /// static OFS1: Ofs1 = Ofs1::default();
     /// ```
-    pub const fn arduino_core() -> Self {
+    #[cfg(feature = "_hoco_48mhz")]
+    pub const fn default() -> Self {
         Self::new::<LvdasOff, Vdsel190, HocoOn, Hoco48Mhz>()
+    }
+    #[cfg(feature = "_hoco_32mhz")]
+    pub const fn default() -> Self {
+        Self::new::<LvdasOff, Vdsel190, HocoOn, Hoco32Mhz>()
+    }
+    #[cfg(feature = "_hoco_64mhz")]
+    pub const fn default() -> Self {
+        Self::new::<LvdasOff, Vdsel190, HocoOn, Hoco64Mhz>()
     }
 }
