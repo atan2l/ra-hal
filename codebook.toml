@@ -149,5 +149,7 @@ ignore_patterns = [
     'FSP_Packs_v\d.\d.\d.zip',
     "T(low|high)",
     'swd-.\w+',
+    '_c[tr]x',
+    'regs\(\)',
 ]
 use_global = false

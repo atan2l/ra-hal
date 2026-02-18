@@ -37,7 +37,12 @@ impl PinId {
     /// Constructs a `PinId` from separate port and pin numbers e.g. `4` and `8`.
     #[inline(always)]
     pub const fn from_port_pin(port: u8, pin: u8) -> Self {
-        assert!(port <= 15);
+        // This isn't gated by "strict-assertions" because
+        // SealedPin::regs() depends on port being valid.
+        assert!(port <= 9);
+
+        // A port may have less than 16 pins, but we're not
+        // worried.
         assert!(pin <= 15);
 
         let pin_number = ((port & 0x0F) << 4) | (pin & 0x0F);
@@ -263,12 +268,12 @@ pub struct InputInterruptHandler<I: Pin> {
 pub(crate) trait SealedPin {
     fn pin_port(&self) -> PinId;
 
-    #[inline]
+    #[inline(always)]
     fn _pin(&self) -> u8 {
         self.pin_port().pin()
     }
 
-    #[inline]
+    #[inline(always)]
     fn _port(&self) -> u8 {
         self.pin_port().port()
     }
@@ -323,18 +328,16 @@ pub(crate) trait SealedPin {
     }
 
     /// Set the output as high.
-    #[inline]
+    #[inline(always)]
     fn set_high(&self) {
         let port = self.regs();
-
         port.pcntr3().write(|r| r.set_posr(self._pin() as _, true));
     }
 
     /// Set the output as low.
-    #[inline]
+    #[inline(always)]
     fn set_low(&self) {
         let port = self.regs();
-
         port.pcntr3().write(|r| r.set_porr(self._pin() as _, true));
     }
 
@@ -342,7 +345,6 @@ pub(crate) trait SealedPin {
     #[inline]
     fn is_high(&self) -> bool {
         let port = self.regs();
-
         port.pcntr2().read().pidr(self._pin() as _)
     }
 
@@ -364,7 +366,7 @@ pub(crate) trait SealedPin {
     }
 
     /// Set the output level.
-    #[inline]
+    #[inline(always)]
     fn set_level(&self, level: Level) {
         match level {
             Level::Low => self.set_low(),
@@ -373,13 +375,13 @@ pub(crate) trait SealedPin {
     }
 
     /// Is the pin output set as logic low?
-    #[inline]
+    #[inline(always)]
     fn is_set_low(&self) -> bool {
         !self.is_set_high()
     }
 
     /// Is the pin output set as logic high?
-    #[inline]
+    #[inline(always)]
     fn is_set_high(&self) -> bool {
         let port = self.regs();
         port.pcntr1().read().podr(self._pin() as _)
@@ -395,7 +397,7 @@ pub(crate) trait SealedPin {
     }
 
     /// Toggle pin output
-    #[inline]
+    #[inline(always)]
     fn toggle(&self) {
         match self.is_set_high() {
             true => self.set_low(),
@@ -593,25 +595,19 @@ impl From<bool> for Level {
 impl Pin for AnyPin {}
 
 impl SealedPin for AnyPin {
-    #[inline]
+    #[inline(always)]
     fn pin_port(&self) -> PinId {
         self.pin_port
     }
 
+    #[inline(always)]
     fn regs(&self) -> crate::pac::port::Port {
-        match self._port() {
-            0 => crate::pac::PORT0,
-            1 => crate::pac::PORT1,
-            2 => crate::pac::PORT2,
-            3 => crate::pac::PORT3,
-            4 => crate::pac::PORT4,
-            5 => crate::pac::PORT5,
-            6 => crate::pac::PORT6,
-            7 => crate::pac::PORT7,
-            8 => crate::pac::PORT8,
-            9 => crate::pac::PORT9,
-            _ => unreachable!(),
-        }
+        // This is safe because we know the ports are laid out
+        // contiguously at fixed intervals and that the PinId
+        // constructor won't allow an invalid port number.
+        let portn_ptr = crate::pac::PORT0.as_ptr() as usize;
+        let offset = 0x20 * self._port() as usize;
+        unsafe { crate::pac::port::Port::from_ptr(portn_ptr.wrapping_add(offset) as _) }
     }
 }
 
@@ -780,25 +776,25 @@ impl<'d, C: ControlKind> Output<'d, C> {
     }
 
     /// Set the output as low.
-    #[inline]
+    #[inline(always)]
     pub fn set_low(&mut self) {
         self.pin.set_low();
     }
 
     /// Set the output as high.
-    #[inline]
+    #[inline(always)]
     pub fn set_high(&mut self) {
         self.pin.set_high();
     }
 
     /// Set the output level.
-    #[inline]
+    #[inline(always)]
     pub fn set_level(&mut self, level: Level) {
         self.pin.set_level(level)
     }
 
     /// Toggle pin output.
-    #[inline]
+    #[inline(always)]
     pub fn toggle(&mut self) {
         self.pin.toggle();
     }
@@ -976,25 +972,25 @@ impl<'d, C: ControlKind> Flex<'d, C> {
     }
 
     /// Set the output as low.
-    #[inline]
+    #[inline(always)]
     pub fn set_low(&mut self) {
         self.pin.set_low();
     }
 
     /// Set the output as high.
-    #[inline]
+    #[inline(always)]
     pub fn set_high(&mut self) {
         self.pin.set_high();
     }
 
     /// Set the output level.
-    #[inline]
+    #[inline(always)]
     pub fn set_level(&mut self, level: Level) {
         self.pin.set_level(level)
     }
 
     /// Toggle pin output.
-    #[inline]
+    #[inline(always)]
     pub fn toggle(&mut self) {
         self.pin.toggle();
     }
@@ -1297,10 +1293,12 @@ macro_rules! pin_impl {
         impl crate::gpio::Pin for crate::peripherals::$pin_name {}
 
         impl crate::gpio::SealedPin for crate::peripherals::$pin_name {
+            #[inline(always)]
             fn pin_port(&self) -> crate::gpio::PinId {
                 crate::gpio::PinId::from_pin_number($pin_number)
             }
 
+            #[inline(always)]
             fn regs(&self) -> crate::pac::port::Port {
                 crate::pac::$port
             }
