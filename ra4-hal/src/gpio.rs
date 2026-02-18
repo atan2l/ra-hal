@@ -605,9 +605,9 @@ impl SealedPin for AnyPin {
         // This is safe because we know the ports are laid out
         // contiguously at fixed intervals and that the PinId
         // constructor won't allow an invalid port number.
-        let portn_ptr = crate::pac::PORT0.as_ptr() as usize;
+        let port_ptr = crate::pac::PORT0.as_ptr() as usize;
         let offset = 0x20 * self._port() as usize;
-        unsafe { crate::pac::port::Port::from_ptr(portn_ptr.wrapping_add(offset) as _) }
+        unsafe { crate::pac::port::Port::from_ptr(port_ptr.wrapping_add(offset) as _) }
     }
 }
 
