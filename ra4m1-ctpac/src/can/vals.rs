@@ -3,13 +3,13 @@
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Bom {
     #[doc = "Normal mode (ISO11898-1 compliant)"]
-    _00 = 0x0,
+    Normal = 0x0,
     #[doc = "Entry to CAN halt mode automatically at bus-off entry"]
-    _01 = 0x01,
+    HaltOnEnter = 0x01,
     #[doc = "Entry to CAN halt mode automatically at bus-off end"]
-    _10 = 0x02,
+    HaltOnExit = 0x02,
     #[doc = "Entry to CAN halt mode (during bus-off recovery period)"]
-    _11 = 0x03,
+    HaltDuring = 0x03,
 }
 impl Bom {
     #[inline(always)]
@@ -38,13 +38,13 @@ impl From<Bom> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Canm {
     #[doc = "CAN operation mode"]
-    _00 = 0x0,
+    Run = 0x0,
     #[doc = "CAN reset mode"]
-    _01 = 0x01,
+    Reset = 0x01,
     #[doc = "CAN halt mode"]
-    _10 = 0x02,
+    Halt = 0x02,
     #[doc = "CAN reset mode (forcible transition)"]
-    _11 = 0x03,
+    ForcedReset = 0x03,
 }
 impl Canm {
     #[inline(always)]
@@ -124,13 +124,13 @@ impl From<Dlc> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Idfm {
     #[doc = "Standard ID mode.All mailboxes (including FIFO mailboxes) handle only standard Ids."]
-    _00 = 0x0,
+    Standard = 0x0,
     #[doc = "Extended ID mode.All mailboxes (including FIFO mailboxes) handle only extended IDs."]
-    _01 = 0x01,
+    Extended = 0x01,
     #[doc = "Mixed ID mode.All mailboxes (including FIFO mailboxes) handle both standard IDs and extended IDs. Standard IDs or extended IDs are specified by using the IDE bit in the corresponding mailbox in normal mailbox mode. In FIFO mailbox mode, the IDE bit in the corresponding mailbox is used for mailboxes \\[0\\] to \\[23\\], the IDE bits in FIDCR0 and FIDCR1 are used for the receive FIFO, and the IDE bit in mailbox \\[24\\] is used for the transmit FIFO."]
-    _10 = 0x02,
+    Mixed = 0x02,
     #[doc = "Do not use this combination"]
-    _11 = 0x03,
+    _RESERVED = 0x03,
 }
 impl Idfm {
     #[inline(always)]
@@ -234,13 +234,13 @@ impl From<Rfust> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Sjw {
     #[doc = "1 Tq"]
-    _00 = 0x0,
+    Tq1 = 0x0,
     #[doc = "2 Tq"]
-    _01 = 0x01,
+    Tq2 = 0x01,
     #[doc = "3 Tq"]
-    _10 = 0x02,
+    Tq3 = 0x02,
     #[doc = "4 Tq"]
-    _11 = 0x03,
+    Tq4 = 0x03,
 }
 impl Sjw {
     #[inline(always)]
@@ -365,7 +365,7 @@ impl From<Tseg1> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Tseg2 {
     #[doc = "Setting prohibited"]
-    _000 = 0x0,
+    _RESERVED = 0x0,
     #[doc = "2 Tq"]
     Tq2 = 0x01,
     #[doc = "3 Tq"]
@@ -443,13 +443,13 @@ impl From<Tsps> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Tstm {
     #[doc = "Other than CAN test mode"]
-    _00 = 0x0,
+    Disabled = 0x0,
     #[doc = "Listen-only mode"]
-    _01 = 0x01,
+    Listen = 0x01,
     #[doc = "Self-test mode 0 (external loopback)"]
-    _10 = 0x02,
+    ExternalLoopback = 0x02,
     #[doc = "Self-test mode 1 (internal loopback)"]
-    _11 = 0x03,
+    InternalLoopback = 0x03,
 }
 impl Tstm {
     #[inline(always)]

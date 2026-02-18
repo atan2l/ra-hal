@@ -19,6 +19,7 @@ transforms:
   - !MapEnumVariants
     enum: can::vals::Tseg2
     variants:
+      _000: _RESERVED
       _001: Tq2
       _010: Tq3
       _011: Tq4
@@ -26,3 +27,38 @@ transforms:
       _101: Tq6
       _110: Tq7
       _111: Tq8
+  - !MapEnumVariants
+    enum: can::vals::Idfm
+    variants:
+      _00: Standard
+      _01: Extended
+      _10: Mixed
+      _11: _RESERVED
+  - !MapEnumVariants
+    enum: can::vals::Canm
+    variants:
+      _00: Run
+      _01: Reset
+      _10: Halt
+      _11: ForcedReset
+  - !MapEnumVariants
+    enum: can::vals::Bom
+    variants:
+      _00: Normal
+      _01: HaltOnEnter
+      _10: HaltOnExit
+      _11: HaltDuring
+  - !MapEnumVariants
+    enum: can::vals::Sjw
+    variants:
+      _00: Tq1
+      _01: Tq2
+      _10: Tq3
+      _11: Tq4
+  - !MapEnumVariants
+    enum: can::vals::Tstm
+    variants:
+      _00: Disabled
+      _01: Listen
+      _10: ExternalLoopback
+      _11: InternalLoopback
