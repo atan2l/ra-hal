@@ -70,6 +70,8 @@ pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
 
 pub(crate) trait SealedInstance {
     fn regs() -> pac::gpt::Gpt;
+    fn module_stop();
+    fn module_start();
 }
 
 pub(crate) trait PwmChannel {}
@@ -101,7 +103,7 @@ pub trait PwmChansetter<'d, C: PwmChannel, I: Instance>: SealedPwmStruct {
 
 impl<'d, I: Instance> PwmChansetter<'d, ChanA, I> for Pwm<'d, I> {
     /// This will panic if Channel A has already been set.
-    fn with_channel<A: PwmPin<I, ChanA>>(self, pin_a: Peri<'d, A>) -> Self {
+    fn with_channel<A: PwmPin<I, ChanA>>(mut self, pin_a: Peri<'d, A>) -> Self {
         assert!(self.channel_b.is_none());
 
         let pwm = I::regs();
@@ -116,16 +118,14 @@ impl<'d, I: Instance> PwmChansetter<'d, ChanA, I> for Pwm<'d, I> {
         pin_a.set_pfunc();
         let pin_a = Flex::new(pin_a);
 
-        Self {
-            channel_a: Some(pin_a),
-            ..self
-        }
+        self.channel_a = Some(pin_a);
+        self
     }
 }
 
 impl<'d, I: Instance> PwmChansetter<'d, ChanB, I> for Pwm<'d, I> {
     /// This will panic if Channel B has already been set.
-    fn with_channel<B: PwmPin<I, ChanB>>(self, pin_b: Peri<'d, B>) -> Self {
+    fn with_channel<B: PwmPin<I, ChanB>>(mut self, pin_b: Peri<'d, B>) -> Self {
         assert!(self.channel_b.is_none());
 
         let pwm = I::regs();
@@ -140,10 +140,8 @@ impl<'d, I: Instance> PwmChansetter<'d, ChanB, I> for Pwm<'d, I> {
         pin_b.set_pfunc();
         let pin_b = Flex::new(pin_b);
 
-        Self {
-            channel_b: Some(pin_b),
-            ..self
-        }
+        self.channel_b = Some(pin_b);
+        self
     }
 }
 
@@ -210,6 +208,8 @@ impl<'d, I: Instance> Pwm<'d, I> {
     ///
     /// A `PWM` driver with no output pins assigned and whose counter is initialized to `0` but has not been started.
     pub fn new(_peri: Peri<'d, I>, config: Config) -> Self {
+        I::module_start();
+
         let pwm = I::regs();
 
         pwm.gtcr().modify(|w| w.set_md(Mode::TrianglePwm1));
@@ -352,6 +352,13 @@ impl<'d, I: Instance> Pwm<'d, I> {
     }
 }
 
+impl<'d, I: Instance> Drop for Pwm<'d, I> {
+    fn drop(&mut self) {
+        self.stop();
+        I::module_stop();
+    }
+}
+
 macro_rules! declare_pwm_channel {
     ($chan:ident) => {
         paste! {
@@ -389,24 +396,38 @@ declare_pwm_channel!(A);
 declare_pwm_channel!(B);
 
 macro_rules! gpt_instance {
-    ($size:literal, $instance:literal) => {
+    ($size:literal, $instance:literal, $mstp:ident) => {
         paste! {
             impl Instance for crate::peripherals::[< GPT $size _ $instance >] {}
             impl SealedInstance for crate::peripherals::[< GPT $size _ $instance >]{
+                #[inline(always)]
                 fn regs() -> crate::pac::gpt::Gpt {
                     crate::pac::[< GPT $size _ $instance >]
                 }
+
+                #[inline(always)]
+                fn module_stop() {
+                    error!("GPT{}_{}: Module stop for GPT not yet implemented", stringify!($size), stringify!($instance));
+                }
+
+                #[inline(always)]
+                fn module_start() {
+                    debug!("GPT{}_{}: stop=false", stringify!($size), stringify!($instance));
+                    let mstp = pac::MSTP;
+                    mstp.mstpcrd().modify(|w| w.[< set_ $mstp >](false));
+                }
+
             }
         }
     };
 }
 
-gpt_instance!(32, 0);
-gpt_instance!(32, 1);
+gpt_instance!(32, 0, mstpd5);
+gpt_instance!(32, 1, mstpd5);
 
-gpt_instance!(16, 2);
-gpt_instance!(16, 3);
-gpt_instance!(16, 4);
-gpt_instance!(16, 5);
-gpt_instance!(16, 6);
-gpt_instance!(16, 7);
+gpt_instance!(16, 2, mstpd6);
+gpt_instance!(16, 3, mstpd6);
+gpt_instance!(16, 4, mstpd6);
+gpt_instance!(16, 5, mstpd6);
+gpt_instance!(16, 6, mstpd6);
+gpt_instance!(16, 7, mstpd6);
