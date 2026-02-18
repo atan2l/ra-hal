@@ -5,6 +5,9 @@
 //! # Notes
 //! * The `RA4M1` has both 16-bit and 32-bit timer instances.
 //!   This driver treats all instances as 16-bit for the sake of brevity.
+//! * The default configuration sets the CPU and GPT clocks to 48 MHz,
+//!   however setting the CPU clock to 32 MHz allows for the GPT clock
+//!   to be set to 32 MHz or 64 MHz.
 
 use core::marker::PhantomData;
 
@@ -239,6 +242,9 @@ impl<'d, I: Instance> Pwm<'d, I> {
     }
 
     /// Sets the duty cycle for both channels to the same value.
+    ///
+    /// # Arguments
+    /// `pct` Duty cycle, range is 0.0..=1.0
     #[inline]
     pub fn set_duty_pct(&mut self, pct: f32) {
         self.set_duty_pct_a(pct);
@@ -246,6 +252,9 @@ impl<'d, I: Instance> Pwm<'d, I> {
     }
 
     /// Sets the duty cycle for channel A if it's been assigned to a pin.
+    ///
+    /// # Arguments
+    /// `pct` Duty cycle, range is 0.0..=1.0
     pub fn set_duty_pct_a(&mut self, pct: f32) {
         if self.channel_a.is_none() {
             return;
@@ -270,6 +279,9 @@ impl<'d, I: Instance> Pwm<'d, I> {
     }
 
     /// Sets the duty cycle for channel B if it's been assigned to a pin.
+    ///
+    /// # Arguments
+    /// `pct` Duty cycle, range is 0.0..=1.0
     pub fn set_duty_pct_b(&mut self, pct: f32) {
         if self.channel_b.is_none() {
             return;
