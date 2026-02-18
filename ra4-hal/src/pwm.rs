@@ -8,6 +8,10 @@
 //! * The default configuration sets the CPU and GPT clocks to 48 MHz,
 //!   however setting the CPU clock to 32 MHz allows for the GPT clock
 //!   to be set to 32 MHz or 64 MHz.
+//! * Two clocks are shared across all `GPT` instances.  One for 16-bit
+//!   and one for 32-bit instances.  Currently they are not disabled
+//!   on `Drop` as we're not refcounting `GPT` usage and `time-driver`
+//!   uses `GPT32_0`.  Pins are returned to input state on drop.
 
 use core::marker::PhantomData;
 
