@@ -158,6 +158,34 @@ impl Default for Config {
     }
 }
 
+impl From<Divider> for u16 {
+    fn from(value: Divider) -> Self {
+        match value {
+            Divider::Div1 => 1,
+            Divider::Div4 => 4,
+            Divider::Div16 => 16,
+            Divider::Div64 => 64,
+            Divider::Div256 => 256,
+            Divider::Div1024 => 1024,
+        }
+    }
+}
+
+impl From<Tpcs> for Divider {
+    fn from(value: Tpcs) -> Self {
+        match value {
+            Tpcs::DIV_1 => Self::Div1,
+            Tpcs::DIV_4 => Self::Div4,
+            Tpcs::DIV_16 => Self::Div16,
+            Tpcs::DIV_64 => Self::Div64,
+            Tpcs::DIV_256 => Self::Div256,
+            Tpcs::DIV_1024 => Self::Div1024,
+            Tpcs::_RESERVED_6 => unimplemented!(),
+            Tpcs::_RESERVED_7 => unimplemented!(),
+        }
+    }
+}
+
 impl From<Divider> for Tpcs {
     fn from(value: Divider) -> Self {
         match value {
@@ -241,10 +269,28 @@ impl<'d, I: Instance> Pwm<'d, I> {
         pwm.gtcr().modify(|w| w.set_cst(false));
     }
 
+    /// Sets the frequency and duty cycle for both channels.
+    ///
+    /// # Arguments
+    /// * `frequency` Frequency in hertz
+    /// * `pct` Duty cycle percentage, range is `0.0..=1.0`
+    pub fn set_frequency(&mut self, frequency: u16, pct: f32) {
+        let pwm = I::regs();
+        let clocks = crate::clock_config();
+        let divider: Divider = pwm.gtcr().read().tpcs().into();
+        let divider: u16 = divider.into();
+        let divider = divider as f32;
+        let pwm_clk = clocks.peripheral_d as f32;
+        let period = (pwm_clk / divider) / (frequency as f32 * 2.0);
+
+        pwm.gtpr().write_value(period as u32);
+        self.set_duty_pct(pct);
+    }
+
     /// Sets the duty cycle for both channels to the same value.
     ///
     /// # Arguments
-    /// `pct` Duty cycle, range is 0.0..=1.0
+    /// `pct` Duty cycle percentage, range is `0.0..=1.0`
     #[inline]
     pub fn set_duty_pct(&mut self, pct: f32) {
         self.set_duty_pct_a(pct);
@@ -254,7 +300,7 @@ impl<'d, I: Instance> Pwm<'d, I> {
     /// Sets the duty cycle for channel A if it's been assigned to a pin.
     ///
     /// # Arguments
-    /// `pct` Duty cycle, range is 0.0..=1.0
+    /// `pct` Duty cycle percentage, range is `0.0..=1.0`
     pub fn set_duty_pct_a(&mut self, pct: f32) {
         if self.channel_a.is_none() {
             return;
