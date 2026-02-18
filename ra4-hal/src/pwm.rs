@@ -1,6 +1,4 @@
-//! Pulse Width Modulation driver (`GPT`).
-//!
-//! PWM driver utilizing the General PWM Timer (`GPT`).
+//! Pulse Width Modulation (`PWM`) driver utilizing the General PWM Timer (`GPT`).
 //!
 //! # Notes
 //! * The `RA4M1` has both 16-bit and 32-bit timer instances.
@@ -25,6 +23,7 @@ use crate::{
 };
 
 /// PWM configuration
+#[non_exhaustive]
 pub struct Config {
     /// Timer prescaler. §22.2.12.
     pub divider: Divider,
@@ -73,6 +72,11 @@ pub struct Pwm<'d, I: Instance> {
 pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
 
 pub(crate) trait SealedInstance {
+    #[cfg(feature = "defmt")]
+    const PERIPHERAL: &'static str;
+    #[cfg(not(feature = "defmt"))]
+    const PERIPHERAL: () = ();
+
     fn regs() -> pac::gpt::Gpt;
     fn module_stop();
     fn module_start();
@@ -95,12 +99,12 @@ pub(crate) trait SealedPwmPin<I: SealedInstance, C: PwmChannel>:
     }
 }
 
-trait SealedPwmStruct {}
-impl<'d, I: Instance> SealedPwmStruct for Pwm<'d, I> {}
+trait SealedPwmChansetter {}
+impl<'d, I: Instance> SealedPwmChansetter for Pwm<'d, I> {}
 
 /// Trait that allows setting specific channels with the same function name.
 #[allow(private_bounds)]
-pub trait PwmChansetter<'d, C: PwmChannel, I: Instance>: SealedPwmStruct {
+pub trait PwmChansetter<'d, C: PwmChannel, I: Instance>: SealedPwmChansetter {
     /// Takes ownership of a pin and assigns it to output channel `C`.
     fn with_channel<A: PwmPin<I, C>>(self, pin_a: Peri<'d, A>) -> Self;
 }
@@ -278,7 +282,7 @@ impl<'d, I: Instance> Pwm<'d, I> {
     /// # Arguments
     /// * `frequency` Frequency in hertz
     /// * `pct` Duty cycle percentage, range is `0.0..=1.0`
-    pub fn set_frequency(&mut self, frequency: u16, pct: f32) {
+    pub fn set_frequency(&mut self, frequency: u32, pct: f32) -> Result<(), ()> {
         let pwm = I::regs();
         let clocks = crate::clock_config();
         let divider: Divider = pwm.gtcr().read().tpcs().into();
@@ -287,8 +291,30 @@ impl<'d, I: Instance> Pwm<'d, I> {
         let pwm_clk = clocks.peripheral_d as f32;
         let period = (pwm_clk / divider) / (frequency as f32 * 2.0);
 
+        trace!(
+            "{}set_freq(freq={}, pct={}%, divider={}, clk={}, period={})",
+            I::PERIPHERAL,
+            frequency,
+            pct * 100.0,
+            divider,
+            pwm_clk,
+            period,
+        );
+
+        if period < 2.0 || period > f32::from(u16::MAX - 2) {
+            error!(
+                "{}Unable to set frequency={} Hz, max allowable={}",
+                I::PERIPHERAL,
+                frequency,
+                (pwm_clk / (divider * 4.0)) as u32,
+            );
+            return Err(());
+        }
+
         pwm.gtpr().write_value(period as u32);
         self.set_duty_pct(pct);
+
+        Ok(())
     }
 
     /// Sets the duty cycle for both channels to the same value.
@@ -404,6 +430,9 @@ macro_rules! gpt_instance {
         paste! {
             impl Instance for crate::peripherals::[< GPT $size _ $instance >] {}
             impl SealedInstance for crate::peripherals::[< GPT $size _ $instance >]{
+                #[cfg(feature = "defmt")]
+                const PERIPHERAL: &'static str = concat!("GPT", stringify!($size), "_", stringify!($instance), ": ");
+
                 #[inline(always)]
                 fn regs() -> crate::pac::gpt::Gpt {
                     crate::pac::[< GPT $size _ $instance >]

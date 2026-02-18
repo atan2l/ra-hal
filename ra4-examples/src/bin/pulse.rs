@@ -72,15 +72,12 @@ async fn main(_spawner: Spawner) {
     let mut duty_cycle: f32 = 0.00;
     let mut direction_up = true;
     let delay_ms = DELAY_MS.round() as u64;
-    let pwm_config = pwm::Config {
-        top: 10240,
-        ..Default::default()
-    };
+    let pwm_config = pwm::Config::default();
 
     let (timer, pin) = pins!(p);
 
     let mut pwm = Pwm::new(timer, pwm_config).with_channel(pin);
-    pwm.set_duty_pct(0.0);
+    pwm.set_frequency(5000, 0.0).unwrap();
     pwm.start();
 
     loop {
