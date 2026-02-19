@@ -92,6 +92,11 @@ _hoco_48mhz = [ "embassy-time-driver/tick-hz-48_000_000" ]
 ## This necessitates non-default settings for [`Ofs1`](osm::ofs1::Ofs1).
 _hoco_64mhz = [ "embassy-time-driver/tick-hz-32_000_000" ]
 
+## Enables the `rtc` module with Real-Time Clock (`RTC`) support.
+## *Note:* the internal oscillator (`LOCO`) is generally too inaccurate to be useful.
+## Future iterations of the `RTC` driver may panic when the clock drifts too far. 
+_enable-rtc-beware-of-dragons = [ ]
+
 #! ### Board features
 
 ## Enable Arduino Uno R4 specific configuration knobs.

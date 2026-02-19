@@ -17,6 +17,7 @@ pub mod i2c;
 pub mod mcu_info;
 pub mod osm;
 pub mod pwm;
+#[cfg(feature = "_enable-rtc-beware-of-dragons")]
 pub mod rtc;
 // pub mod sce5;
 pub mod spi;

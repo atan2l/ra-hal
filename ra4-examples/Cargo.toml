@@ -9,6 +9,10 @@ edition.workspace = true
 rust-version.workspace = true
 homepage.workspace = true
 
+[[bin]]
+name = "rtc"
+required-features = [ "_enable-rtc-beware-of-dragons" ]
+
 [dependencies]
 ## Core dependencies
 cortex-m = { workspace = true }
