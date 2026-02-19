@@ -81,15 +81,14 @@ strict-assert = [ "ra4m1-ctpac/strict-assert" ]
 ## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver.
 time-driver = [ "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "_hoco_48mhz" ]
 
-## Sets the high speed on-chip oscillator to (`HOCO`) to 32 MHz.
+## Sets the high speed on-chip oscillator (`HOCO`) to 32 MHz.
 _hoco_32mhz = [ "embassy-time-driver/tick-hz-32_000_000" ]
 
-## Sets the high speed on-chip oscillator to (`HOCO`) to 48 MHz.
+## Sets the high speed on-chip oscillator (`HOCO`) to 48 MHz.
 _hoco_48mhz = [ "embassy-time-driver/tick-hz-48_000_000" ]
 
-## Sets the high speed on-chip oscillator to (`HOCO`) to 64 MHz.
+## Sets the high speed on-chip oscillator (`HOCO`) to 64 MHz.
 ## This allows some peripheral clocks to run faster but slows the CPU to 32 MHz.
-## This necessitates non-default settings for [`Ofs1`](osm::ofs1::Ofs1).
 _hoco_64mhz = [ "embassy-time-driver/tick-hz-32_000_000" ]
 
 ## Enables the `rtc` module with Real-Time Clock (`RTC`) support.
