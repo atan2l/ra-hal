@@ -14,26 +14,10 @@ use ra4_hal::{
     bind_interrupts,
     i2c::{I2c, I2cSpeed, RxInterruptHandler, TeInterruptHandler, TxInterruptHandler},
     mode::Async,
-    osm::{ofs0::Ofs0, ofs1::Ofs1, sec_mpu::SecurityMpu},
     peripherals::IIC1,
 };
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
-
-// Option Function Select Register 0 (required)
-#[unsafe(no_mangle)]
-#[unsafe(link_section = ".ofs0")]
-static OFS0: Ofs0 = Ofs0::default();
-
-// Option Function Select Register 1 (required)
-#[unsafe(no_mangle)]
-#[unsafe(link_section = ".ofs1")]
-static OFS1: Ofs1 = Ofs1::default();
-
-// Security MPU (required)
-#[unsafe(no_mangle)]
-#[unsafe(link_section = ".sec_mpu")]
-static SEC_MPU: SecurityMpu = SecurityMpu::disabled();
 
 const CHIP_ID: u8 = 0xD1;
 const I2C_ADDRESS: u8 = 0x69;

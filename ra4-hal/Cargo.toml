@@ -76,6 +76,10 @@ unstable-pac = [ ]
 ## Extra runtime assertions.
 strict-assert = [ "ra4m1-ctpac/strict-assert" ]
 
+## Don't set `OSM` registers in the library.
+## This requires you to define them in your application.
+skip-osm = [ ]
+
 #! ### Time features
 
 ## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver.

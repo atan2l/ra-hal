@@ -11,7 +11,9 @@
 //!
 //! For more information see §6 of the reference manual.
 //!
-//! Typical usage:
+//! Typically `ra4-hal` will set sensible defaults.
+//! However by enabling the `skip-osm` feature you can override the defaults in your application.
+//! Typical  usage:
 //!
 //! ```rust,ignore
 //! // Option Function Select Register 0

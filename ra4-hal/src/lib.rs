@@ -506,3 +506,23 @@ macro_rules! bind_interrupts {
 include!(concat!(env!("OUT_DIR"), "/pin_traits.rs"));
 include!(concat!(env!("OUT_DIR"), "/interrupts.rs"));
 include!(concat!(env!("OUT_DIR"), "/peripherals.rs"));
+
+#[cfg(not(feature = "skip-osm"))]
+mod _osm_config {
+    use crate::osm::{ofs0::Ofs0, ofs1::Ofs1, sec_mpu::SecurityMpu};
+
+    // Option Function Select Register 0
+    #[unsafe(no_mangle)]
+    #[unsafe(link_section = ".ofs0")]
+    static OFS0: Ofs0 = Ofs0::default();
+
+    // Option Function Select Register 1
+    #[unsafe(no_mangle)]
+    #[unsafe(link_section = ".ofs1")]
+    static OFS1: Ofs1 = Ofs1::default();
+
+    // Security MPU
+    #[unsafe(no_mangle)]
+    #[unsafe(link_section = ".sec_mpu")]
+    static SEC_MPU: SecurityMpu = SecurityMpu::disabled();
+}
