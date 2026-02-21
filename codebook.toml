@@ -156,6 +156,7 @@ ignore_patterns = [
     "_c[tr]x",
     'regs\(\)',
     "skip-osm",
-    "(Msb|Lsb)First"
+    "(Msb|Lsb)First",
+    "- osm",
 ]
 use_global = false
