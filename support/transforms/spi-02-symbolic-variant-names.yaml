@@ -1,0 +1,60 @@
+transforms:
+  - !MapEnumVariants
+    enum: spi::vals::Spms
+    variants:
+      _0: Spi
+      _1: ClockSynchronous
+  - !MapEnumVariants
+    enum: spi::vals::(Cpol|Moifv)
+    variants:
+      _0: Low
+      _1: High
+  - !MapEnumVariants
+    enum: spi::vals::Cpha
+    variants:
+      _0: SampleShift
+      _1: ShiftSample
+  - !MapEnumVariants
+    enum: spi::vals::Sprdtd
+    variants:
+      _0: RxBuf
+      _1: TxBuf
+  - !MapEnumVariants
+    enum: spi::vals::Splw
+    variants:
+      _0: HalfWord
+      _1: Word
+  - !MapEnumVariants
+    enum: spi::vals::Spbyt
+    variants:
+      _0: Word
+      _1: Byte
+  - !MapEnumVariants
+    enum: spi::vals::Lsbf
+    variants:
+      _0: Msb
+      _1: Lsb
+  - !MapEnumVariants
+    enum: spi::vals::Spb
+    variants:
+      _0000: _20bits
+      _0001: _24bits
+      _0010: _32bits
+      _0011: _RESERVED
+      _0101: _RESERVED
+      _0110: _RESERVED
+      _0111: _RESERVED
+      _1000: _9bits
+      _1001: _10bits
+      _1010: _11bits
+      _1011: _12bits
+      _1100: _13bits
+      _1101: _14bits
+      _1110: _15bits
+      _1111: _16bits
+  - !AddEnumVariants
+    enum: spi::vals::Spb
+    variants:
+      - name: _8bits
+        description: 8 bits
+        value: 0b0100

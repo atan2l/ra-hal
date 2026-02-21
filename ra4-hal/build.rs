@@ -258,7 +258,10 @@ fn do_spi(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
     signals
         .iter()
         .filter(|(signal, _)| {
-            signal.as_str() == "MISO" || signal.as_str() == "MOSI" || signal.as_str() == "RSPCK"
+            signal.as_str() == "MISO"
+                || signal.as_str() == "MOSI"
+                || signal.as_str() == "RSPCK"
+                || signal.as_str() == "SSL0"
         })
         .fold(vec![], |mut acc, (signal, pins)| {
             for (pin, config) in pins.iter() {
@@ -266,6 +269,7 @@ fn do_spi(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
                     "MISO" => format_ident!("miso_pin_impl"),
                     "MOSI" => format_ident!("mosi_pin_impl"),
                     "RSPCK" => format_ident!("sck_pin_impl"),
+                    "SSL0" => format_ident!("ss_pin_impl"),
                     _ => unreachable!(),
                 };
 

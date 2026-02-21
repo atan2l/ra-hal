@@ -8,6 +8,7 @@ words = [
     "asel",
     "baudrate",
     "binutils",
+    "brdv",
     "brme",
     "bysw",
     "chiptool",
@@ -58,6 +59,7 @@ words = [
     "microcontrollers",
     "moco",
     "mosc",
+    "mosi",
     "mpu",
     "mstp",
     "nmos",
@@ -94,6 +96,7 @@ words = [
     "rtc",
     "rtt",
     "rvm",
+    "sck",
     "sckdivcr",
     "scl",
     "scmr",
@@ -101,6 +104,7 @@ words = [
     "sed",
     "smr",
     "sosc",
+    "spbr",
     "spbyt",
     "spcdr",
     "ssie",
@@ -149,8 +153,9 @@ ignore_patterns = [
     'FSP_Packs_v\d.\d.\d.zip',
     "T(low|high)",
     'swd-.\w+',
-    '_c[tr]x',
+    "_c[tr]x",
     'regs\(\)',
-    'skip-osm',
+    "skip-osm",
+    "(Msb|Lsb)First"
 ]
 use_global = false

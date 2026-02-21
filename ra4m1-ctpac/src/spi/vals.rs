@@ -65,6 +65,130 @@ impl From<Bysw> for u8 {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum Cpha {
+    #[doc = "Data sampling on odd edge, data variation on even edge"]
+    SampleShift = 0x0,
+    #[doc = "Data variation on odd edge, data sampling on even edge"]
+    ShiftSample = 0x01,
+}
+impl Cpha {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> Cpha {
+        unsafe { core::mem::transmute(val & 0x01) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for Cpha {
+    #[inline(always)]
+    fn from(val: u8) -> Cpha {
+        Cpha::from_bits(val)
+    }
+}
+impl From<Cpha> for u8 {
+    #[inline(always)]
+    fn from(val: Cpha) -> u8 {
+        Cpha::to_bits(val)
+    }
+}
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum Cpol {
+    #[doc = "RSPCK is low when idle"]
+    Low = 0x0,
+    #[doc = "RSPCK is high when idle"]
+    High = 0x01,
+}
+impl Cpol {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> Cpol {
+        unsafe { core::mem::transmute(val & 0x01) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for Cpol {
+    #[inline(always)]
+    fn from(val: u8) -> Cpol {
+        Cpol::from_bits(val)
+    }
+}
+impl From<Cpol> for u8 {
+    #[inline(always)]
+    fn from(val: Cpol) -> u8 {
+        Cpol::to_bits(val)
+    }
+}
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum Lsbf {
+    #[doc = "MSB first"]
+    Msb = 0x0,
+    #[doc = "LSB first"]
+    Lsb = 0x01,
+}
+impl Lsbf {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> Lsbf {
+        unsafe { core::mem::transmute(val & 0x01) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for Lsbf {
+    #[inline(always)]
+    fn from(val: u8) -> Lsbf {
+        Lsbf::from_bits(val)
+    }
+}
+impl From<Lsbf> for u8 {
+    #[inline(always)]
+    fn from(val: Lsbf) -> u8 {
+        Lsbf::to_bits(val)
+    }
+}
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum Moifv {
+    #[doc = "The level output on the MOSIn pin during MOSI idling corresponds to low."]
+    Low = 0x0,
+    #[doc = "The level output on the MOSIn pin during MOSI idling corresponds to high."]
+    High = 0x01,
+}
+impl Moifv {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> Moifv {
+        unsafe { core::mem::transmute(val & 0x01) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for Moifv {
+    #[inline(always)]
+    fn from(val: u8) -> Moifv {
+        Moifv::from_bits(val)
+    }
+}
+impl From<Moifv> for u8 {
+    #[inline(always)]
+    fn from(val: Moifv) -> u8 {
+        Moifv::to_bits(val)
+    }
+}
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Sckdl {
     #[doc = "1 RSPCK"]
     _000 = 0x0,
@@ -153,33 +277,34 @@ impl From<Slndl> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Spb {
     #[doc = "20 bits"]
-    _0000 = 0x0,
+    _20bits = 0x0,
     #[doc = "24 bits"]
-    _0001 = 0x01,
+    _24bits = 0x01,
     #[doc = "32 bits"]
-    _0010 = 0x02,
+    _32bits = 0x02,
     #[doc = "32 bits"]
-    _0011 = 0x03,
-    _RESERVED_4 = 0x04,
+    _RESERVED = 0x03,
+    #[doc = "8 bits"]
+    _8bits = 0x04,
     _RESERVED_5 = 0x05,
     _RESERVED_6 = 0x06,
     _RESERVED_7 = 0x07,
     #[doc = "9 bits"]
-    _1000 = 0x08,
+    _9bits = 0x08,
     #[doc = "10 bits"]
-    _1001 = 0x09,
+    _10bits = 0x09,
     #[doc = "11 bits"]
-    _1010 = 0x0a,
+    _11bits = 0x0a,
     #[doc = "12 bits"]
-    _1011 = 0x0b,
+    _12bits = 0x0b,
     #[doc = "13 bits"]
-    _1100 = 0x0c,
+    _13bits = 0x0c,
     #[doc = "14 bits"]
-    _1101 = 0x0d,
+    _14bits = 0x0d,
     #[doc = "15 bits"]
-    _1110 = 0x0e,
+    _15bits = 0x0e,
     #[doc = "16 bits"]
-    _1111 = 0x0f,
+    _16bits = 0x0f,
 }
 impl Spb {
     #[inline(always)]
@@ -201,6 +326,99 @@ impl From<Spb> for u8 {
     #[inline(always)]
     fn from(val: Spb) -> u8 {
         Spb::to_bits(val)
+    }
+}
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum Spbyt {
+    #[doc = "SPDR is accessed in halfword or word (SPLW is valid)."]
+    Word = 0x0,
+    #[doc = "SPDR is accessed in byte (SPLW is invalid)."]
+    Byte = 0x01,
+}
+impl Spbyt {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> Spbyt {
+        unsafe { core::mem::transmute(val & 0x01) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for Spbyt {
+    #[inline(always)]
+    fn from(val: u8) -> Spbyt {
+        Spbyt::from_bits(val)
+    }
+}
+impl From<Spbyt> for u8 {
+    #[inline(always)]
+    fn from(val: Spbyt) -> u8 {
+        Spbyt::to_bits(val)
+    }
+}
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum Splw {
+    #[doc = "SPDR_HA is valid to access in halfwords"]
+    HalfWord = 0x0,
+    #[doc = "SPDR is valid (to access in words)."]
+    Word = 0x01,
+}
+impl Splw {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> Splw {
+        unsafe { core::mem::transmute(val & 0x01) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for Splw {
+    #[inline(always)]
+    fn from(val: u8) -> Splw {
+        Splw::from_bits(val)
+    }
+}
+impl From<Splw> for u8 {
+    #[inline(always)]
+    fn from(val: Splw) -> u8 {
+        Splw::to_bits(val)
+    }
+}
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum Spms {
+    #[doc = "SPI operation (4-wire method)"]
+    Spi = 0x0,
+    #[doc = "Clock synchronous operation (3-wire method)"]
+    ClockSynchronous = 0x01,
+}
+impl Spms {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> Spms {
+        unsafe { core::mem::transmute(val & 0x01) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for Spms {
+    #[inline(always)]
+    fn from(val: u8) -> Spms {
+        Spms::from_bits(val)
+    }
+}
+impl From<Spms> for u8 {
+    #[inline(always)]
+    fn from(val: Spms) -> u8 {
+        Spms::to_bits(val)
     }
 }
 #[repr(u8)]
@@ -244,6 +462,37 @@ impl From<Spndl> for u8 {
     #[inline(always)]
     fn from(val: Spndl) -> u8 {
         Spndl::to_bits(val)
+    }
+}
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum Sprdtd {
+    #[doc = "SPDR values are read from the receive buffer"]
+    RxBuf = 0x0,
+    #[doc = "SPDR values are read from the transmit buffer (but only if the transmit buffer is empty)"]
+    TxBuf = 0x01,
+}
+impl Sprdtd {
+    #[inline(always)]
+    pub const fn from_bits(val: u8) -> Sprdtd {
+        unsafe { core::mem::transmute(val & 0x01) }
+    }
+    #[inline(always)]
+    pub const fn to_bits(self) -> u8 {
+        unsafe { core::mem::transmute(self) }
+    }
+}
+impl From<u8> for Sprdtd {
+    #[inline(always)]
+    fn from(val: u8) -> Sprdtd {
+        Sprdtd::from_bits(val)
+    }
+}
+impl From<Sprdtd> for u8 {
+    #[inline(always)]
+    fn from(val: Sprdtd) -> u8 {
+        Sprdtd::to_bits(val)
     }
 }
 #[repr(u8)]

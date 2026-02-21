@@ -8,6 +8,7 @@ transforms:
         description: SPI Byte Access Specification
         bit_offset: 6
         bit_size: 1
+        enum: spi::vals::Spbyt
   - !AddRegisters
     block: spi::Spi
     registers:
@@ -43,3 +44,14 @@ transforms:
           - !EnumVariant
             name: BigEndian
             value: 0x01
+      enum/spi::vals::Spbyt: !Enum
+        bit_size: 1
+        variants:
+          - !EnumVariant
+            name: Word
+            value: 0x00
+            description: SPDR is accessed in halfword or word (SPLW is valid).
+          - !EnumVariant
+            name: Byte
+            value: 0x01
+            description: SPDR is accessed in byte (SPLW is invalid).
