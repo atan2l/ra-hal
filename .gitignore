@@ -5,3 +5,4 @@ legacy
 svd-playground
 .idea
 *.pack
+/support/pack
