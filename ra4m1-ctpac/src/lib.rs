@@ -2,7 +2,7 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 #![no_std]
-#![doc = "Peripheral access API (generated using chiptool v0.1.0 (9e37a92 2026-02-01))"]
+#![doc = "Peripheral access API (generated using chiptool v0.1.0 (7b7cac2 2026-02-06))"]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Interrupt {

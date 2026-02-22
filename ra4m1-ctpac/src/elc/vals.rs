@@ -1,121 +1,272 @@
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd)]
-pub struct Elsr12Els(u8);
-impl Elsr12Els {
-    #[doc = "Event output to the corresponding peripheral module is disabled."]
-    pub const _0X00: Self = Self(0x0);
+#[repr(u8)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum ElsrEls {
+    None = 0x0,
+    PortIrq0 = 0x01,
+    PortIrq1 = 0x02,
+    PortIrq2 = 0x03,
+    PortIrq3 = 0x04,
+    PortIrq4 = 0x05,
+    PortIrq5 = 0x06,
+    PortIrq6 = 0x07,
+    PortIrq7 = 0x08,
+    PortIrq8 = 0x09,
+    PortIrq9 = 0x0a,
+    Spi1SpTend = 0x0b,
+    PortIrq11 = 0x0c,
+    PortIrq12 = 0x0d,
+    PortIrq13 = 0x0e,
+    PortIrq14 = 0x0f,
+    PortIrq15 = 0x10,
+    Dmac0Int = 0x11,
+    Dmac1Int = 0x12,
+    Dmac2Int = 0x13,
+    Dmac3Int = 0x14,
+    _RESERVED_15 = 0x15,
+    DtcEnd = 0x16,
+    _RESERVED_17 = 0x17,
+    _RESERVED_18 = 0x18,
+    Lvd1 = 0x19,
+    Lvd2 = 0x1a,
+    _RESERVED_1b = 0x1b,
+    MoscStop = 0x1c,
+    SnoozeRequest = 0x1d,
+    Agt0Agti = 0x1e,
+    Agt0AgtCmAi = 0x1f,
+    Agt0AgtCmBi = 0x20,
+    Agt1Agti = 0x21,
+    Agt1AgtCmAi = 0x22,
+    Agt1AgtCmBi = 0x23,
+    IwdtNmi = 0x24,
+    WdtNmi = 0x25,
+    _RESERVED_26 = 0x26,
+    RtcPrd = 0x27,
+    _RESERVED_28 = 0x28,
+    AdcAdi = 0x29,
+    _RESERVED_2a = 0x2a,
+    _RESERVED_2b = 0x2b,
+    _RESERVED_2c = 0x2c,
+    AdcWcmpM = 0x2d,
+    AdcWcmpUm = 0x2e,
+    AcmpLp0 = 0x2f,
+    AcmpLp1 = 0x30,
+    _RESERVED_31 = 0x31,
+    _RESERVED_32 = 0x32,
+    _RESERVED_33 = 0x33,
+    _RESERVED_34 = 0x34,
+    Iic0Rxi = 0x35,
+    Iic0Txi = 0x36,
+    Iic0Tei = 0x37,
+    Iic0Eei = 0x38,
+    _RESERVED_39 = 0x39,
+    Iic1Rxi = 0x3a,
+    Iic1Txi = 0x3b,
+    Iic1Tei = 0x3c,
+    Iic1Eei = 0x3d,
+    _RESERVED_3e = 0x3e,
+    _RESERVED_3f = 0x3f,
+    _RESERVED_40 = 0x40,
+    _RESERVED_41 = 0x41,
+    _RESERVED_42 = 0x42,
+    _RESERVED_43 = 0x43,
+    _RESERVED_44 = 0x44,
+    _RESERVED_45 = 0x45,
+    DocDopci = 0x46,
+    _RESERVED_47 = 0x47,
+    _RESERVED_48 = 0x48,
+    _RESERVED_49 = 0x49,
+    _RESERVED_4a = 0x4a,
+    _RESERVED_4b = 0x4b,
+    _RESERVED_4c = 0x4c,
+    _RESERVED_4d = 0x4d,
+    _RESERVED_4e = 0x4e,
+    IoportGroup1 = 0x4f,
+    IoportGroup2 = 0x50,
+    IoportGroup3 = 0x51,
+    IoportGroup4 = 0x52,
+    ElcSwevt0 = 0x53,
+    ElcSwevt1 = 0x54,
+    _RESERVED_55 = 0x55,
+    _RESERVED_56 = 0x56,
+    Gpt0CcmpA = 0x57,
+    Gpt0CcmpB = 0x58,
+    Gpt0CmpC = 0x59,
+    Gpt0CmpD = 0x5a,
+    Gpt0CmpE = 0x5b,
+    Gpt0CmpF = 0x5c,
+    Gpt0Ovf = 0x5d,
+    Gpt0Udf = 0x5e,
+    Gpt1CcmpA = 0x5f,
+    Gpt1CcmpB = 0x60,
+    Gpt1CmpC = 0x61,
+    Gpt1CmpD = 0x62,
+    Gpt1CmpE = 0x63,
+    Gpt1CmpF = 0x64,
+    Gpt1Ovf = 0x65,
+    Gpt1Udf = 0x66,
+    Gpt2CcmpA = 0x67,
+    Gpt2CcmpB = 0x68,
+    Gpt2CmpC = 0x69,
+    Gpt2CmpD = 0x6a,
+    Gpt2CmpE = 0x6b,
+    Gpt2CmpF = 0x6c,
+    Gpt2Ovf = 0x6d,
+    Gpt2Udf = 0x6e,
+    Gpt3CcmpA = 0x6f,
+    Gpt3CcmpB = 0x70,
+    Gpt3CmpC = 0x71,
+    Gpt3CmpD = 0x72,
+    Gpt3CmpE = 0x73,
+    Gpt3CmpF = 0x74,
+    Gpt3Ovf = 0x75,
+    Gpt3Udf = 0x76,
+    Gpt4CcmpA = 0x77,
+    Gpt4CcmpB = 0x78,
+    Gpt4CmpC = 0x79,
+    Gpt4CmpD = 0x7a,
+    Gpt4CmpE = 0x7b,
+    Gpt4CmpF = 0x7c,
+    Gpt4Ovf = 0x7d,
+    Gpt4Udf = 0x7e,
+    Gpt5CcmpA = 0x7f,
+    Gpt5CcmpB = 0x80,
+    Gpt5CmpC = 0x81,
+    Gpt5CmpD = 0x82,
+    Gpt5CmpE = 0x83,
+    Gpt5CmpF = 0x84,
+    Gpt5Ovf = 0x85,
+    Gpt5Udf = 0x86,
+    Gpt6CcmpA = 0x87,
+    Gpt6CcmpB = 0x88,
+    Gpt6CmpC = 0x89,
+    Gpt6CmpD = 0x8a,
+    Gpt6CmpE = 0x8b,
+    Gpt6CmpF = 0x8c,
+    Gpt6Ovf = 0x8d,
+    Gpt6Udf = 0x8e,
+    Gpt7CcmpA = 0x8f,
+    Gpt7CcmpB = 0x90,
+    Gpt7CmpC = 0x91,
+    Gpt7CmpD = 0x92,
+    Gpt7CmpE = 0x93,
+    Gpt7CmpF = 0x94,
+    Gpt7Ovf = 0x95,
+    Gpt7Udf = 0x96,
+    GptUvwEdge = 0x97,
+    Sci0Rxi = 0x98,
+    Sci0Txi = 0x99,
+    Sci0Tei = 0x9a,
+    Sci0Eri = 0x9b,
+    Sci0Am = 0x9c,
+    _RESERVED_9d = 0x9d,
+    Sci1Rxi = 0x9e,
+    Sci1Txi = 0x9f,
+    Sci1Tei = 0xa0,
+    Sci1Eri = 0xa1,
+    Sci1Am = 0xa2,
+    Sci2Rxi = 0xa3,
+    Sci2Txi = 0xa4,
+    Sci2Tei = 0xa5,
+    Sci2Eri = 0xa6,
+    Sci2Am = 0xa7,
+    Sci9Rxi = 0xa8,
+    Sci9Txi = 0xa9,
+    Sci9Tei = 0xaa,
+    Sci9Eri = 0xab,
+    Sci9Am = 0xac,
+    Spi0SpRi = 0xad,
+    Spi0SpTi = 0xae,
+    Spi0SpIi = 0xaf,
+    Spi0SpEi = 0xb0,
+    Spi0SpTend = 0xb1,
+    Spi1SpRi = 0xb2,
+    Spi1SpTi = 0xb3,
+    Spi1SpIi = 0xb4,
+    Spi1SpEi = 0xb5,
+    _RESERVED_b6 = 0xb6,
+    _RESERVED_b7 = 0xb7,
+    _RESERVED_b8 = 0xb8,
+    _RESERVED_b9 = 0xb9,
+    _RESERVED_ba = 0xba,
+    _RESERVED_bb = 0xbb,
+    _RESERVED_bc = 0xbc,
+    _RESERVED_bd = 0xbd,
+    _RESERVED_be = 0xbe,
+    _RESERVED_bf = 0xbf,
+    _RESERVED_c0 = 0xc0,
+    _RESERVED_c1 = 0xc1,
+    _RESERVED_c2 = 0xc2,
+    _RESERVED_c3 = 0xc3,
+    _RESERVED_c4 = 0xc4,
+    _RESERVED_c5 = 0xc5,
+    _RESERVED_c6 = 0xc6,
+    _RESERVED_c7 = 0xc7,
+    _RESERVED_c8 = 0xc8,
+    _RESERVED_c9 = 0xc9,
+    _RESERVED_ca = 0xca,
+    _RESERVED_cb = 0xcb,
+    _RESERVED_cc = 0xcc,
+    _RESERVED_cd = 0xcd,
+    _RESERVED_ce = 0xce,
+    _RESERVED_cf = 0xcf,
+    _RESERVED_d0 = 0xd0,
+    _RESERVED_d1 = 0xd1,
+    _RESERVED_d2 = 0xd2,
+    _RESERVED_d3 = 0xd3,
+    _RESERVED_d4 = 0xd4,
+    _RESERVED_d5 = 0xd5,
+    _RESERVED_d6 = 0xd6,
+    _RESERVED_d7 = 0xd7,
+    _RESERVED_d8 = 0xd8,
+    _RESERVED_d9 = 0xd9,
+    _RESERVED_da = 0xda,
+    _RESERVED_db = 0xdb,
+    _RESERVED_dc = 0xdc,
+    _RESERVED_dd = 0xdd,
+    _RESERVED_de = 0xde,
+    _RESERVED_df = 0xdf,
+    _RESERVED_e0 = 0xe0,
+    _RESERVED_e1 = 0xe1,
+    _RESERVED_e2 = 0xe2,
+    _RESERVED_e3 = 0xe3,
+    _RESERVED_e4 = 0xe4,
+    _RESERVED_e5 = 0xe5,
+    _RESERVED_e6 = 0xe6,
+    _RESERVED_e7 = 0xe7,
+    _RESERVED_e8 = 0xe8,
+    _RESERVED_e9 = 0xe9,
+    _RESERVED_ea = 0xea,
+    _RESERVED_eb = 0xeb,
+    _RESERVED_ec = 0xec,
+    _RESERVED_ed = 0xed,
+    _RESERVED_ee = 0xee,
+    _RESERVED_ef = 0xef,
+    _RESERVED_f0 = 0xf0,
+    _RESERVED_f1 = 0xf1,
+    _RESERVED_f2 = 0xf2,
+    _RESERVED_f3 = 0xf3,
+    _RESERVED_f4 = 0xf4,
+    _RESERVED_f5 = 0xf5,
+    _RESERVED_f6 = 0xf6,
+    _RESERVED_f7 = 0xf7,
+    _RESERVED_f8 = 0xf8,
+    _RESERVED_f9 = 0xf9,
+    _RESERVED_fa = 0xfa,
+    _RESERVED_fb = 0xfb,
+    _RESERVED_fc = 0xfc,
+    _RESERVED_fd = 0xfd,
+    _RESERVED_fe = 0xfe,
+    _RESERVED_ff = 0xff,
 }
-impl Elsr12Els {
-    pub const fn from_bits(val: u8) -> Elsr12Els {
-        Self(val & 0xff)
-    }
-    pub const fn to_bits(self) -> u8 {
-        self.0
-    }
-}
-impl core::fmt::Debug for Elsr12Els {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        match self.0 {
-            0x0 => f.write_str("_0X00"),
-            other => core::write!(f, "0x{:02X}", other),
-        }
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Elsr12Els {
-    fn format(&self, f: defmt::Formatter) {
-        match self.0 {
-            0x0 => defmt::write!(f, "_0X00"),
-            other => defmt::write!(f, "0x{:02X}", other),
-        }
-    }
-}
-impl From<u8> for Elsr12Els {
-    #[inline(always)]
-    fn from(val: u8) -> Elsr12Els {
-        Elsr12Els::from_bits(val)
-    }
-}
-impl From<Elsr12Els> for u8 {
-    #[inline(always)]
-    fn from(val: Elsr12Els) -> u8 {
-        Elsr12Els::to_bits(val)
-    }
-}
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd)]
-pub struct Elsr2Els(u8);
-impl Elsr2Els {
-    #[doc = "Event output to the corresponding peripheral module is disabled."]
-    pub const _0X00: Self = Self(0x0);
-}
-impl Elsr2Els {
-    pub const fn from_bits(val: u8) -> Elsr2Els {
-        Self(val & 0xff)
-    }
-    pub const fn to_bits(self) -> u8 {
-        self.0
-    }
-}
-impl core::fmt::Debug for Elsr2Els {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        match self.0 {
-            0x0 => f.write_str("_0X00"),
-            other => core::write!(f, "0x{:02X}", other),
-        }
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Elsr2Els {
-    fn format(&self, f: defmt::Formatter) {
-        match self.0 {
-            0x0 => defmt::write!(f, "_0X00"),
-            other => defmt::write!(f, "0x{:02X}", other),
-        }
-    }
-}
-impl From<u8> for Elsr2Els {
-    #[inline(always)]
-    fn from(val: u8) -> Elsr2Els {
-        Elsr2Els::from_bits(val)
-    }
-}
-impl From<Elsr2Els> for u8 {
-    #[inline(always)]
-    fn from(val: Elsr2Els) -> u8 {
-        Elsr2Els::to_bits(val)
-    }
-}
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd)]
-pub struct ElsrEls(u8);
 impl ElsrEls {
-    #[doc = "Event output to the corresponding peripheral module is disabled."]
-    pub const _0X00: Self = Self(0x0);
-}
-impl ElsrEls {
+    #[inline(always)]
     pub const fn from_bits(val: u8) -> ElsrEls {
-        Self(val & 0xff)
+        unsafe { core::mem::transmute(val & 0xff) }
     }
+    #[inline(always)]
     pub const fn to_bits(self) -> u8 {
-        self.0
-    }
-}
-impl core::fmt::Debug for ElsrEls {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        match self.0 {
-            0x0 => f.write_str("_0X00"),
-            other => core::write!(f, "0x{:02X}", other),
-        }
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for ElsrEls {
-    fn format(&self, f: defmt::Formatter) {
-        match self.0 {
-            0x0 => defmt::write!(f, "_0X00"),
-            other => defmt::write!(f, "0x{:02X}", other),
-        }
+        unsafe { core::mem::transmute(self) }
     }
 }
 impl From<u8> for ElsrEls {

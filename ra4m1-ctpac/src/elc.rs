@@ -28,19 +28,8 @@ impl Elc {
     #[doc = "Event Link Setting Register %s"]
     #[inline(always)]
     pub const fn elsr(self, n: usize) -> crate::common::Reg<regs::Elsr, crate::common::RW> {
-        assert!(n < 10usize);
+        assert!(n < 19usize);
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x10usize + n * 4usize) as _) }
-    }
-    #[doc = "Event Link Setting Register 12"]
-    #[inline(always)]
-    pub const fn elsr12(self) -> crate::common::Reg<regs::Elsr12, crate::common::RW> {
-        unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x40usize) as _) }
-    }
-    #[doc = "Event Link Setting Register %s"]
-    #[inline(always)]
-    pub const fn elsr2(self, n: usize) -> crate::common::Reg<regs::Elsr2, crate::common::RW> {
-        assert!(n < 5usize);
-        unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x48usize + n * 4usize) as _) }
     }
 }
 pub mod regs;
