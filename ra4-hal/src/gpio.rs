@@ -1288,7 +1288,7 @@ impl<'d, I: InterruptiblePin, C: ControlKind> InterruptFlex<'d, I, C> {
     }
 }
 
-macro_rules! pin_impl {
+macro_rules! gpio_pin {
     ($pin_name:ident, $pin_number:literal, $port:ident) => {
         impl crate::gpio::Pin for crate::peripherals::$pin_name {}
 
@@ -1314,7 +1314,7 @@ macro_rules! pin_impl {
         }
     };
 }
-pub(crate) use pin_impl;
+pub(crate) use gpio_pin;
 
 impl_peripheral!(AnyPin);
 

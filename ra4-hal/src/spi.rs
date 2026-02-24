@@ -239,7 +239,7 @@ pub(crate) trait SealedSsPin<I: SealedInstance>: Pin + PeripheralType {
     }
 }
 
-macro_rules! miso_pin_impl {
+macro_rules! miso_pin {
     ($instance:ident, $pin:ident, $pfunc:ident) => {
         impl crate::spi::MisoPin<crate::peripherals::$instance> for crate::peripherals::$pin {}
         impl crate::spi::SealedMisoPin<crate::peripherals::$instance> for crate::peripherals::$pin {
@@ -247,9 +247,9 @@ macro_rules! miso_pin_impl {
         }
     };
 }
-pub(crate) use miso_pin_impl;
+pub(crate) use miso_pin;
 
-macro_rules! mosi_pin_impl {
+macro_rules! mosi_pin {
     ($instance:ident, $pin:ident, $pfunc:ident) => {
         impl crate::spi::MosiPin<crate::peripherals::$instance> for crate::peripherals::$pin {}
         impl crate::spi::SealedMosiPin<crate::peripherals::$instance> for crate::peripherals::$pin {
@@ -257,9 +257,9 @@ macro_rules! mosi_pin_impl {
         }
     };
 }
-pub(crate) use mosi_pin_impl;
+pub(crate) use mosi_pin;
 
-macro_rules! sck_pin_impl {
+macro_rules! sck_pin {
     ($instance:ident, $pin:ident, $pfunc:ident) => {
         impl crate::spi::SckPin<crate::peripherals::$instance> for crate::peripherals::$pin {}
         impl crate::spi::SealedSckPin<crate::peripherals::$instance> for crate::peripherals::$pin {
@@ -267,9 +267,9 @@ macro_rules! sck_pin_impl {
         }
     };
 }
-pub(crate) use sck_pin_impl;
+pub(crate) use sck_pin;
 
-macro_rules! ss_pin_impl {
+macro_rules! ss_pin {
     ($instance:ident, $pin:ident, $pfunc:ident) => {
         impl crate::spi::SsPin<crate::peripherals::$instance> for crate::peripherals::$pin {}
         impl crate::spi::SealedSsPin<crate::peripherals::$instance> for crate::peripherals::$pin {
@@ -277,7 +277,7 @@ macro_rules! ss_pin_impl {
         }
     };
 }
-pub(crate) use ss_pin_impl;
+pub(crate) use ss_pin;
 
 macro_rules! instance_impl {
     ($instance:ident, $mstp:ident, $te_int:ident, $tx_int:ident, $rx_int:ident) => {

@@ -192,14 +192,13 @@ fn do_sci(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
         .filter(|(signal, _)| signal.as_str() == "TXD_MOSI" || signal.as_str() == "RXD_MISO")
         .fold(vec![], |mut acc, (signal, pins)| {
             let signal = match signal.as_str() {
-                "TXD_MOSI" => format_ident!("tx_pin_impl"),
-                "RXD_MISO" => format_ident!("rx_pin_impl"),
+                "TXD_MOSI" => format_ident!("tx_pin"),
+                "RXD_MISO" => format_ident!("rx_pin"),
                 _ => unreachable!(),
             };
 
             for (pin, config) in pins.iter() {
                 let pin = format_ident!("{}", pin);
-
                 let conditions = config.pin_conditional();
 
                 let pfunc = match config
@@ -232,7 +231,7 @@ fn do_i2c(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
         .iter()
         .filter(|(signal, _)| signal.as_str() == "SDA" || signal.as_str() == "SCL")
         .fold(vec![], |mut acc, (signal, pins)| {
-            let signal = format_ident!("{}_pin_impl", signal.to_lowercase());
+            let signal = format_ident!("{}_pin", signal.to_lowercase());
 
             for (pin, config) in pins.iter() {
                 let pin = format_ident!("{}", pin);
@@ -266,10 +265,10 @@ fn do_spi(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
         .fold(vec![], |mut acc, (signal, pins)| {
             for (pin, config) in pins.iter() {
                 let signal = match signal.as_str() {
-                    "MISO" => format_ident!("miso_pin_impl"),
-                    "MOSI" => format_ident!("mosi_pin_impl"),
-                    "RSPCK" => format_ident!("sck_pin_impl"),
-                    "SSL0" => format_ident!("ss_pin_impl"),
+                    "MISO" => format_ident!("miso_pin"),
+                    "MOSI" => format_ident!("mosi_pin"),
+                    "RSPCK" => format_ident!("sck_pin"),
+                    "SSL0" => format_ident!("ss_pin"),
                     _ => unreachable!(),
                 };
 
@@ -335,7 +334,7 @@ fn do_port(_peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
 
             acc.push(quote! {
                 #conditions
-                crate::gpio::pin_impl!(#pin_ident, #pin_number, #port_ident);
+                crate::gpio::gpio_pin!(#pin_ident, #pin_number, #port_ident);
             });
 
             let irq_number = config.pfunc

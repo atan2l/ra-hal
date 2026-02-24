@@ -597,7 +597,7 @@ impl<'d, M: Mode, I: Instance> Drop for I2c<'d, M, I> {
     }
 }
 
-macro_rules! scl_pin_impl {
+macro_rules! scl_pin {
     ($instance:ident, $pin:ident, $pfunc:ident) => {
         impl crate::i2c::SclPin<crate::peripherals::$instance> for crate::peripherals::$pin {}
         impl crate::i2c::SclPinSealed<crate::peripherals::$instance> for crate::peripherals::$pin {
@@ -605,9 +605,9 @@ macro_rules! scl_pin_impl {
         }
     };
 }
-pub(crate) use scl_pin_impl;
+pub(crate) use scl_pin;
 
-macro_rules! data_pin_impl {
+macro_rules! sda_pin {
     ($instance:ident, $pin:ident, $pfunc:ident) => {
         impl crate::i2c::SdaPin<crate::peripherals::$instance> for crate::peripherals::$pin {}
         impl crate::i2c::SdaPinSealed<crate::peripherals::$instance> for crate::peripherals::$pin {
@@ -615,7 +615,7 @@ macro_rules! data_pin_impl {
         }
     };
 }
-pub(crate) use data_pin_impl as sda_pin_impl;
+pub(crate) use sda_pin;
 
 /// I2C error.
 #[derive(Debug, PartialEq, Eq, Copy, Clone)]

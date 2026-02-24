@@ -928,7 +928,7 @@ impl<'d, I: Instance> embedded_serial::MutBlockingRx for BufferedUart<'d, I> {
     }
 }
 
-macro_rules! tx_pin_impl {
+macro_rules! tx_pin {
     ($sci:ident, $pin:ident, $pfunc:ident) => {
         impl crate::uart::TxPin<crate::peripherals::$sci> for crate::peripherals::$pin {}
         impl crate::uart::SealedTxPin<crate::peripherals::$sci> for crate::peripherals::$pin {
@@ -936,9 +936,9 @@ macro_rules! tx_pin_impl {
         }
     };
 }
-pub(crate) use tx_pin_impl;
+pub(crate) use tx_pin;
 
-macro_rules! rx_pin_impl {
+macro_rules! rx_pin {
     ($sci:ident, $pin:ident, $pfunc:ident) => {
         impl crate::uart::RxPin<crate::peripherals::$sci> for crate::peripherals::$pin {}
         impl crate::uart::SealedRxPin<crate::peripherals::$sci> for crate::peripherals::$pin {
@@ -946,7 +946,7 @@ macro_rules! rx_pin_impl {
         }
     };
 }
-pub(crate) use rx_pin_impl;
+pub(crate) use rx_pin;
 
 macro_rules! instance_impl {
     ($instance:ident, $mstp:ident, $rx_int:ident, $te_int:ident, $tx_int:ident) => {
