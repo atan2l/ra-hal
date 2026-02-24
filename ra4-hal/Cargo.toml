@@ -57,7 +57,7 @@ default = [ "time-driver", "rt", "diag", "uno_r4", "chrono", "strict-assert" ]
 ## See <https://docs.rs/cortex-m-rt/latest/cortex_m_rt/#device> for more info.
 rt = [ "ra4m1-ctpac/rt" ]
 
-## Enable dependency on [`chrono`](https://docs.rs/chronno) and expose methods that work with chrono structures.
+## Enable dependency on [`chrono`](https://docs.rs/chrono) and expose methods that work with chrono structures.
 chrono = [ "dep:chrono" ]
 
 ## Use [`defmt`](https://docs.rs/defmt/latest/defmt/) for logging.
