@@ -71,12 +71,12 @@ pub mod mode {
 ///
 /// Assumes that the system clock source `ICLK` = `HOCO`.
 /// Possible sources (§ 48.3.2, Table 8.2):
-/// * `MOSC` 1–20 MHz depending on `Vcc`, accuracy not specified
-/// * `SOSC`
+/// * `MOSC` 1–20 MHz depending on `Vcc`, user supplied external oscillator
+/// * `SOSC` 32.768 kHz user supplied external oscillator
 /// * `HOCO` ±1% @ 48,64 MHz (±1.5% extreme cold, ±2% extreme heat)
 /// * `MOCO` 8 MHz, ±15%
 /// * `LOCO` 32.768 kHz ±15%
-/// * `PLL`
+/// * `PLL` driven by `MOSC`, output 24–64 MHz
 pub struct ClockConfig {
     /// System clock frequency (`ICK`).
     ///
