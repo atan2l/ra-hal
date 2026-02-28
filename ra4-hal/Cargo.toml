@@ -34,6 +34,8 @@ embassy-usb-driver = { version = "0.2.0", optional = true }
 
 ra4m1-ctpac = { path = "../ra4m1-ctpac", version = "0.2.2-dev" }
 
+arbitrary-int = "2.1.1"
+bitbybit = "2.0.0"
 cfg-if = "1"
 chrono = { version = "^0.4", default-features = false, optional = true }
 document-features = { workspace = true }

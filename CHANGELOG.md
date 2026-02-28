@@ -5,7 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project will eventually adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) once the 1.0 milestone is reached.
 
-## Unreleased - TBD
+## [0.2.2] - TBD
+### Added
+- dac
+  * Support for basic configuration and output configuration
+  * Example showing DAC+DTC usage
+- dtc: DTC transfer API
+- elc
+  * pac: New transforms
+  * hal: API for triggering software generated interrupts
+- gpt: General purpose timer API (16-bit only)
+### Changed
+- elc: Rename `ElcSwevt0` and `ElcSwevt1`
+- Trait names harmonized across different drivers
 
 ## [0.2.1] - 2026-02-20
 ### Added

@@ -16,7 +16,7 @@ impl Dac12 {
     }
     #[doc = "D/A Data Register 0"]
     #[inline(always)]
-    pub const fn dadr0(self) -> crate::common::Reg<regs::Dadr0, crate::common::RW> {
+    pub const fn dadr0(self) -> crate::common::Reg<u16, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0usize) as _) }
     }
     #[doc = "D/A Control Register"]

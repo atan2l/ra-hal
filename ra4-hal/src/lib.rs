@@ -11,6 +11,8 @@ pub mod fmt;
 
 pub mod adc;
 pub mod crc;
+pub mod dac;
+pub mod dtc;
 pub mod event_link;
 pub mod gpio;
 pub mod i2c;
@@ -19,6 +21,7 @@ pub mod osm;
 pub mod pwm;
 #[cfg(feature = "_enable-rtc-beware-of-dragons")]
 pub mod rtc;
+pub mod timer;
 // pub mod sce5;
 pub mod spi;
 #[cfg(feature = "time-driver")]
@@ -314,6 +317,8 @@ pub fn init() -> Peripherals {
 
         #[cfg(feature = "time-driver")]
         time_driver::init();
+        event_link::init();
+        dtc::init();
 
         p
     })

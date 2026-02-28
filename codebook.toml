@@ -26,6 +26,7 @@ words = [
     "dtc",
     "dtce",
     "eidr",
+    "elc",
     "fieldsets",
     "fmifrt",
     "getc",
@@ -49,6 +50,7 @@ words = [
     "isel",
     "iwdt",
     "kint",
+    "libm",
     "lms",
     "loco",
     "lvdas",
@@ -57,6 +59,7 @@ words = [
     "memwait",
     "microcontroller",
     "microcontrollers",
+    "micromath",
     "moco",
     "mosc",
     "mosi",
@@ -158,5 +161,8 @@ ignore_patterns = [
     "skip-osm",
     "(Msb|Lsb)First",
     "- osm",
+    "ElcSw[eE]vt[01]",
+    "Avcc",
+    "Vref(h?)",
 ]
 use_global = false

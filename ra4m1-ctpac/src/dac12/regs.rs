@@ -173,41 +173,6 @@ impl defmt::Format for Dadpr {
         )
     }
 }
-#[doc = "D/A Data Register 0"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Dadr0(pub u16);
-impl Dadr0 {
-    #[doc = "D/A Data Register NOTE: When DADPR.DPSEL = 0, the high-order 4 bits are fixed to 0: right justified format. When DADPR.DPSEL = 1, the low-order 4 bits are fixed to 0: left justified format."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn dadr(&self) -> u16 {
-        let val = (self.0 >> 0usize) & 0xffff;
-        val as u16
-    }
-    #[doc = "D/A Data Register NOTE: When DADPR.DPSEL = 0, the high-order 4 bits are fixed to 0: right justified format. When DADPR.DPSEL = 1, the low-order 4 bits are fixed to 0: left justified format."]
-    #[inline(always)]
-    pub const fn set_dadr(&mut self, val: u16) {
-        self.0 = (self.0 & !(0xffff << 0usize)) | (((val as u16) & 0xffff) << 0usize);
-    }
-}
-impl Default for Dadr0 {
-    #[inline(always)]
-    fn default() -> Dadr0 {
-        Dadr0(0)
-    }
-}
-impl core::fmt::Debug for Dadr0 {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Dadr0").field("dadr", &self.dadr()).finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Dadr0 {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Dadr0 {{ dadr: {=u16:?} }}", self.dadr())
-    }
-}
 #[doc = "D/A VREF Control Register"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]

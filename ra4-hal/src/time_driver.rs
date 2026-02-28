@@ -77,9 +77,7 @@ impl GptDriver {
 
         let mstp = pac::MSTP;
 
-        mstp.mstpcrd().write(|w| {
-            w.set_mstpd5(false);
-        });
+        mstp.mstpcrd().write(|r| r.set_mstpd5(false));
 
         // Enable the interrupts at the NVIC level,
         // arm the overflow interrupt in the ICU.
@@ -101,36 +99,32 @@ impl GptDriver {
         timer.gtupsr().write_value(Gtupsr(0));
         timer.gtdnsr().write_value(Gtdnsr(0));
 
-        timer.gtcr().write(|w| {
-            w.set_md(Mode::SawWavePwm);
-        });
+        timer.gtcr().write(|r| r.set_md(Mode::SawWavePwm));
 
         // Ensure count direction is UP
-        timer.gtuddtyc().write(|w| {
-            w.set_udf(true);
-            w.set_ud(Ud::Up);
+        timer.gtuddtyc().write(|r| {
+            r.set_udf(true);
+            r.set_ud(Ud::Up);
         });
-        timer.gtuddtyc().write(|w| {
-            w.set_udf(false);
-            w.set_ud(Ud::Up);
+        timer.gtuddtyc().write(|r| {
+            r.set_udf(false);
+            r.set_ud(Ud::Up);
         });
 
         // Since we're at 48 MHz just use the clock, undivided
-        timer.gtcr().write(|w| {
-            w.set_tpcs(Tpcs::DIV_1);
-        });
+        timer.gtcr().write(|r| r.set_tpcs(Tpcs::DIV_1));
         trace!("GTCR: {}", timer.gtcr().read());
 
         // Overflow at u32::MAX
-        timer.gtpr().write(|w| *w = u32::MAX);
+        timer.gtpr().write_value(u32::MAX);
         trace!("GTPR: {}", timer.gtpr().read());
 
-        timer.gtcnt().write(|w| *w = 0);
+        timer.gtcnt().write_value(0);
         trace!("GTCNT: {}", timer.gtcnt().read());
 
         // This is faster??
-        timer.gtssr().write(|w| w.set_cstrt(true));
-        timer.gtstr().write(|w| w.set_cstrt(0, true));
+        timer.gtssr().write(|r| r.set_cstrt(true));
+        timer.gtstr().write(|r| r.set_cstrt(0, true));
     }
 
     fn interrupted_alarm(&'static self) {
@@ -239,9 +233,7 @@ pub(crate) fn init() {
 fn IEL0() {
     let icu = pac::ICU;
 
-    icu.ielsr(0).modify(|w| {
-        w.set_ir(false);
-    });
+    icu.ielsr(0).modify(|r| r.set_ir(false));
 
     DRIVER.interrupted_overflow();
 }
@@ -250,9 +242,7 @@ fn IEL0() {
 fn IEL1() {
     let icu = pac::ICU;
 
-    icu.ielsr(1).modify(|w| {
-        w.set_ir(false);
-    });
+    icu.ielsr(1).modify(|r| r.set_ir(false));
 
     DRIVER.interrupted_alarm();
 }

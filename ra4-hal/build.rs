@@ -315,6 +315,25 @@ fn do_adc(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
         })
 }
 
+fn do_dac(_peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
+    signals
+        .iter()
+        .filter(|(signal, _)| signal.starts_with("DA"))
+        .fold(vec![], |mut acc, (_signal, pins)| {
+            for (pin, config) in pins.iter() {
+                let pin = format_ident!("{}", pin);
+                let conditions = config.pin_conditional();
+
+                acc.push(quote! {
+                    #conditions
+                    crate::dac::dac_pin!(#pin);
+                });
+            }
+
+            acc
+        })
+}
+
 fn do_port(_peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
     signals.iter().fold(vec![], |mut acc, (port, pins)| {
         for (pin_name, config) in pins.iter() {
@@ -404,6 +423,7 @@ fn generate_pinmap(pin_map: &PinMap) -> Result<(), Box<dyn std::error::Error>> {
                 "spi" => Some(do_spi(peripheral, signal)),
                 "sci" => Some(do_sci(peripheral, signal)),
                 "port" => Some(do_port(peripheral, signal)),
+                "dac" => Some(do_dac(peripheral, signal)),
                 _ => None,
             }
         })
@@ -446,11 +466,14 @@ fn generate_interrupt_mod(irq_map: &Interrupts) -> Result<(), Box<dyn std::error
 fn generate_peripherals(
     pin_map: &PinMap,
     peripherals: &Peripherals,
+    irq_map: &Interrupts,
 ) -> Result<(), Box<dyn std::error::Error>> {
     // Regex implicitly matches the whole line
     // If the result is an empty string the peripheral is removed
     let transform = [
         ("ADC140", "ADC14"),
+        // This is part of the analog comparator (ACMPLP)
+        ("DAC8", ""),
         ("GPT(16|32)(\\d)", "GPT${1}_${2}"),
         ("PORT[0-9]", ""),
         ("TSN", ""),
@@ -512,11 +535,18 @@ fn generate_peripherals(
     });
 
     peripheral_list.extend(gpio_peris);
+
     peripheral_list.extend(
         gpio_irqs
             .into_iter()
             .map(|(name, irq)| (name, quote!(#irq))),
     );
+
+    peripheral_list.extend(irq_map.interrupts.clone().into_iter().map(|irq| {
+        let dtc_chan = irq.replace("IEL", "DTC_CHAN");
+        let dtc_ident = format_ident!("{dtc_chan}");
+        (dtc_chan, quote!(#dtc_ident))
+    }));
 
     peripheral_list.sort_by(|a, b| a.0.cmp(&b.0));
     let peripheral_list = peripheral_list.into_iter().map(|p| p.1).collect::<Vec<_>>();
@@ -588,7 +618,7 @@ fn inner_main() -> Result<(), Box<dyn std::error::Error>> {
 
     generate_pinmap(&pin_map)?;
     generate_interrupt_mod(&irq_map)?;
-    generate_peripherals(&pin_map, &peri_map)?;
+    generate_peripherals(&pin_map, &peri_map, &irq_map)?;
 
     Ok(())
 }

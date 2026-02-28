@@ -1,0 +1,5 @@
+transforms:
+  # Valid values are 0..=8191 but optional left alignment means
+  # that basically anything goes and the SVD allows ..=0xFFFF
+  - !DeleteFieldsets
+    from: dac12::regs::Dadr0

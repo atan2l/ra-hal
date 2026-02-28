@@ -22,6 +22,7 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
         let icu = pac::ICU;
 
         icu.ielsr(self.number() as _).modify(|w| w.set_iels(0));
+        trace!("IEL{}: disable", self.number());
     }
 
     /// Enables the interrupt in the `ICU`.  Does not modify its status in the `NVIC`.
@@ -34,6 +35,27 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
         icu.ielsr(self.number() as _).modify(|w| {
             w.set_iels(mask as _);
         });
+    }
+
+    /// Returns `true` if the interrupt has been linked to an [`InterruptEvent`].
+    #[inline(always)]
+    fn icu_enabled(&self) -> bool {
+        self.icu_event() != InterruptEvent::None
+    }
+
+    /// Returns the [`InterruptEvent`] that the interrupt is linked to or `InterruptEvent::None` if none is configured.
+    #[inline(always)]
+    fn icu_event(&self) -> InterruptEvent {
+        let icu = pac::ICU;
+
+        let event = icu.ielsr(self.number() as _).read().iels();
+
+        // Yeah we're trusting there won't be gibberish in the register.
+        // TODO: Find a better way to map a bunch of variants to/from primitives.
+        let event: InterruptEvent = unsafe { core::mem::transmute(event) };
+        trace!("IEL{}: event={}", self.number(), event);
+
+        event
     }
 
     /// Configures the Data Transfer Controller (`DTC`) activation bit.
@@ -105,6 +127,65 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
 }
 
 unsafe impl<T: InterruptNumber + Copy> IcuInterrupt for T {}
+
+/// Trait that restricts the software event generator to one of the two available events.
+#[allow(private_bounds)]
+pub trait SoftwareEventGenerator<const N: u8>: SealedSoftwareEventGenerator<N> {
+    /// Returns the [`InterruptEvent`] associated with this software generated event.
+    fn event(&self) -> InterruptEvent;
+
+    /// Trigger a software generated event.
+    #[inline(always)]
+    fn fire(&self) {
+        let elc = crate::pac::ELC;
+        elc.elsegr(self.index() as _).write(|r| r.set_wi(false));
+        elc.elsegr(self.index() as _).write(|r| r.set_we(true));
+        elc.elsegr(self.index() as _).write(|r| r.set_seg(true));
+    }
+}
+
+trait SealedSoftwareEventGenerator<const N: u8> {
+    fn index(&self) -> u8;
+}
+
+/// A software event generator.
+/// Use this to trigger a software event for the ICU.
+/// On the `RA4M1` valid values for `N` are 0 or 1.
+pub struct SoftwareEvent<const N: u8> {}
+
+impl<const N: u8> SoftwareEvent<N> {
+    /// Constructs a new software event generator.
+    pub const fn new() -> Self {
+        Self {}
+    }
+}
+
+impl SoftwareEventGenerator<0> for SoftwareEvent<0> {
+    #[inline(always)]
+    fn event(&self) -> InterruptEvent {
+        InterruptEvent::ElcSwEvt0
+    }
+}
+
+impl SealedSoftwareEventGenerator<0> for SoftwareEvent<0> {
+    #[inline(always)]
+    fn index(&self) -> u8 {
+        0
+    }
+}
+
+impl SoftwareEventGenerator<1> for SoftwareEvent<1> {
+    #[inline(always)]
+    fn event(&self) -> InterruptEvent {
+        InterruptEvent::ElcSwEvt1
+    }
+}
+impl SealedSoftwareEventGenerator<1> for SoftwareEvent<1> {
+    #[inline(always)]
+    fn index(&self) -> u8 {
+        1
+    }
+}
 
 /// `ELC` event signal numbers.
 /// These correspond to Table 18.3 in the reference manual.
@@ -181,8 +262,8 @@ pub enum EventSignal {
     IoportGroup3 = 0x51,
     IoportGroup4 = 0x52,
 
-    ElcSwevt0 = 0x53,
-    ElcSwevt1 = 0x54,
+    ElcSwEvt0 = 0x53,
+    ElcSwEvt1 = 0x54,
 
     Gpt0CcmpA = 0x57,
     Gpt0CcmpB = 0x58,
@@ -301,7 +382,10 @@ pub enum EventSignal {
 #[allow(unused, missing_docs)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[repr(u8)]
+#[derive(Copy, Clone, PartialEq)]
 pub enum InterruptEvent {
+    None = 0x00,
+
     PortIrq0 = 0x01,
     PortIrq1 = 0x02,
     PortIrq2 = 0x03,
@@ -407,8 +491,8 @@ pub enum InterruptEvent {
     IoportGroup3 = 0x51,
     IoportGroup4 = 0x52,
 
-    ElcSwevt0 = 0x53,
-    ElcSwevt1 = 0x54,
+    ElcSwEvt0 = 0x53,
+    ElcSwEvt1 = 0x54,
 
     PoegGroup0 = 0x55,
     PoegGroup1 = 0x56,
@@ -523,4 +607,11 @@ pub enum InterruptEvent {
     Spi1SpIi = 0xB4,
     Spi1SpEi = 0xB5,
     Spi1SpTend = 0xB6,
+}
+
+/// Turn on the `ELC` clock.
+pub(crate) fn init() {
+    let mstp = crate::pac::MSTP;
+    debug!("ELC: stop=false");
+    mstp.mstpcrc().modify(|r| r.set_mstpc14(false));
 }
