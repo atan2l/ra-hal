@@ -357,7 +357,7 @@ impl<'d, C: Instance> Drop for Transfer<'d, C> {
 
 impl<C: Instance> Drop for Channel<C> {
     fn drop(&mut self) {
-        warn!("DTC{}: Drop", C::Int::IRQ.number());
+        trace!("DTC{}: Drop", C::Int::IRQ.number());
         unsafe { DTC_VECTOR_TABLE.vectors[C::Int::IRQ.number() as usize] = 0 };
         C::Int::IRQ.set_dtc(false);
         C::Int::IRQ.icu_disable();
