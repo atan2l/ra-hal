@@ -9,7 +9,7 @@ use ra4m1_ctpac::crc::vals::Gps;
 use crate::{pac, peripherals::CRC};
 
 /// Polynomial to use for CRC calculation.
-#[derive(Default)]
+#[derive(Default, Copy, Clone, PartialEq)]
 pub enum Polynomial {
     /// This will panic
     None,
@@ -129,31 +129,20 @@ impl<'d> Crc<'d> {
     /// # Arguments
     /// * `bytes` Input data
     ///
-    /// Note: CRC-32 / CRC-32C require 32-bit input values.
-    /// If a 32-bit polynomial is selected and the provided input is not a multiple of `4` bytes the function will panic.
-    ///
-    /// # Returns
-    ///
-    /// The computed CRC.
-    pub fn feed_bytes(&mut self, bytes: &[u8]) -> u32 {
+    /// # Notes
+    /// * CRC-32 / CRC-32C require 32-bit input values.
+    ///   If a 32-bit polynomial is selected and the provided input is not a multiple of `4` bytes the function will panic.
+    /// * TODO: implement a function that takes a `&[u32]` slice and writes to the 32-bit data register.
+    pub fn feed_bytes(&mut self, bytes: &[u8]) {
         let crc = crate::pac::CRC;
 
-        let algo = crc.crccr0().read().gps();
-
-        let output = match algo {
-            Gps::None | Gps::_RESERVED_6 | Gps::_RESERVED_7 => unimplemented!(),
-            Gps::Crc8 | Gps::Crc16 | Gps::CrcCcit => {
+        match self.config.polynomial {
+            Polynomial::Crc8 | Polynomial::Crc16 | Polynomial::CrcCcit => {
                 for byte in bytes.iter() {
                     crc.crcdir_by().write_value(*byte);
                 }
-
-                if algo == Gps::Crc8 {
-                    crc.crcdor_by().read() as _
-                } else {
-                    crc.crcdor_ha().read() as _
-                }
             }
-            Gps::Crc32 | Gps::Crc32C => {
+            Polynomial::Crc32 | Polynomial::Crc32C => {
                 if !bytes.len().is_multiple_of(4) {
                     unimplemented!("CRC-32 input len must be a multiple of 4");
                 }
@@ -172,16 +161,32 @@ impl<'d> Crc<'d> {
                         }
                     }
                 }
-
-                crc.crcdor().read()
             }
+            Polynomial::None => unimplemented!(),
+        };
+    }
+
+    /// Returns the CRC calculated from the data inputted.
+    pub fn read(&mut self) -> u32 {
+        let crc = crate::pac::CRC;
+
+        let output = match self.config.polynomial {
+            Polynomial::None => unimplemented!(),
+            Polynomial::Crc8 | Polynomial::Crc16 | Polynomial::CrcCcit => {
+                if self.config.polynomial == Polynomial::Crc8 {
+                    crc.crcdor_by().read() as _
+                } else {
+                    crc.crcdor_ha().read() as _
+                }
+            }
+            Polynomial::Crc32 | Polynomial::Crc32C => crc.crcdor().read(),
         };
 
         if self.config.reflect_output {
-            let mask = match algo {
-                Gps::Crc8 => u8::MAX as _,
-                Gps::Crc16 | Gps::CrcCcit => u16::MAX as _,
-                Gps::Crc32 | Gps::Crc32C => u32::MAX,
+            let mask = match self.config.polynomial {
+                Polynomial::Crc8 => u8::MAX as _,
+                Polynomial::Crc16 | Polynomial::CrcCcit => u16::MAX as _,
+                Polynomial::Crc32 | Polynomial::Crc32C => u32::MAX,
                 _ => unimplemented!(),
             };
             (!output) & mask
@@ -192,6 +197,7 @@ impl<'d> Crc<'d> {
 }
 
 impl<'d> Drop for Crc<'d> {
+    /// Turns off `CRC` and sets `MSTPC1=true`.
     fn drop(&mut self) {
         debug!("CRC: stop=true");
 

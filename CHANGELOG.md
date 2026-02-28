@@ -16,6 +16,7 @@ and this project will eventually adhere to [Semantic Versioning](https://semver.
   * hal: API for triggering software generated interrupts
 - gpt: General purpose timer API (16-bit only)
 ### Changed
+- crc: `feed_bytes` no longer returns computed value
 - elc: Rename `ElcSwevt0` and `ElcSwevt1`
 - Trait names harmonized across different drivers
 

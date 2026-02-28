@@ -28,7 +28,8 @@ async fn main(_spawner: Spawner) {
         },
     );
 
-    let output = crc.feed_bytes(data);
+    crc.feed_bytes(data);
+    let output = crc.read();
     assert_eq!(output, 0xbb3d);
     info!("Crc16 ARC Passed");
 
@@ -37,7 +38,8 @@ async fn main(_spawner: Spawner) {
         seed: 0xffff,
         ..Default::default()
     });
-    let output = crc.feed_bytes(data);
+    crc.feed_bytes(data);
+    let output = crc.read();
     assert_eq!(output, 0xaee7);
     info!("Crc16 CMS Passed");
 
@@ -47,7 +49,8 @@ async fn main(_spawner: Spawner) {
         seed: 0x800d,
         ..Default::default()
     });
-    let output = crc.feed_bytes(data);
+    crc.feed_bytes(data);
+    let output = crc.read();
     assert_eq!(output, 0x9ecf);
     info!("Crc16 DDS-110 Passed");
 
@@ -57,7 +60,8 @@ async fn main(_spawner: Spawner) {
         reflect_output: true,
         seed: 0x0000,
     });
-    let output = crc.feed_bytes(data);
+    crc.feed_bytes(data);
+    let output = crc.read();
     assert_eq!(output, 0x44c2);
     info!("Crc16 MAXIM-DOW Passed");
 
@@ -67,7 +71,8 @@ async fn main(_spawner: Spawner) {
         seed: 0xffff,
         ..Default::default()
     });
-    let output = crc.feed_bytes(data);
+    crc.feed_bytes(data);
+    let output = crc.read();
     assert_eq!(output, 0x4b37);
     info!("Crc16 MODBUS Passed");
 
@@ -77,7 +82,8 @@ async fn main(_spawner: Spawner) {
         seed: 0x0000,
         ..Default::default()
     });
-    let output = crc.feed_bytes(data);
+    crc.feed_bytes(data);
+    let output = crc.read();
     assert_eq!(output, 0x2189);
     info!("Crc16 KERMIT Passed");
 
@@ -91,7 +97,8 @@ async fn main(_spawner: Spawner) {
         reflect_output: true,
         ..Default::default()
     });
-    let output = crc.feed_bytes(data);
+    crc.feed_bytes(data);
+    let output = crc.read();
     assert_eq!(output, 0x481f_7de5);
     info!("Crc32 BZIP2 Passed");
 
@@ -101,7 +108,8 @@ async fn main(_spawner: Spawner) {
         reflect_output: true,
         ..Default::default()
     });
-    let output = crc.feed_bytes(data);
+    crc.feed_bytes(data);
+    let output = crc.read();
     assert_eq!(output, 0x4183_29c4);
     info!("Crc32 CKSUM/POSIX Passed");
 
@@ -111,7 +119,8 @@ async fn main(_spawner: Spawner) {
         reverse: true,
         reflect_output: true,
     });
-    let output = crc.feed_bytes(data);
+    crc.feed_bytes(data);
+    let output = crc.read();
     assert_eq!(output, 0x5d34_eb96);
     info!("Crc32 ISO-HDLC Passed");
 
@@ -121,7 +130,8 @@ async fn main(_spawner: Spawner) {
         reverse: true,
         ..Default::default()
     });
-    let output = crc.feed_bytes(data);
+    crc.feed_bytes(data);
+    let output = crc.read();
     assert_eq!(output, 0xA2CB_1469);
     info!("Crc32 JAMCRC Passed");
 
@@ -130,7 +140,8 @@ async fn main(_spawner: Spawner) {
         seed: 0xffff_ffff,
         ..Default::default()
     });
-    let output = crc.feed_bytes(data);
+    crc.feed_bytes(data);
+    let output = crc.read();
     assert_eq!(output, 0xb7e0_821a);
     info!("Crc32 MPEG-2 Passed");
 
@@ -140,7 +151,8 @@ async fn main(_spawner: Spawner) {
         reverse: true,
         reflect_output: true,
     });
-    let output = crc.feed_bytes(data);
+    crc.feed_bytes(data);
+    let output = crc.read();
     assert_eq!(output, 0xd75d_fdfb);
     info!("Crc32 BASE-91C Passed");
 
