@@ -19,7 +19,7 @@ use ra4_hal::{
     dtc::{Channel, DtcInterruptHandler},
     event_link::{SoftwareEvent, SoftwareEventGenerator as _},
     peripherals::DTC_CHAN2,
-    timer::Timer as GeneralTimer,
+    timer::InterruptTimer,
 };
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
@@ -103,7 +103,7 @@ async fn main(_spawner: Spawner) {
     let frequency = 10 * buffer.len();
 
     let mut dtc_channel2 = Channel::new(p.DTC_CHAN2, Irqs);
-    let mut timer = GeneralTimer::new(p.GPT16_2);
+    let mut timer = InterruptTimer::new(p.GPT16_2);
     timer.set_frequency(frequency as u32);
 
     let mut dac = Dac::new(p.DAC12, p.P014);

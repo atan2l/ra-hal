@@ -1,4 +1,9 @@
-#![allow(missing_docs)]
+//! Timer that generates interrupts utilizing the General PWM Timer (`GPT`).
+//!
+//! # Notes
+//!
+//! * Only 16-bit `GPT` instances are currently supported
+//! * `GPT` module stop will be disabled on instantiation, but not reenabled on drop.
 
 use core::marker::PhantomData;
 
@@ -10,9 +15,11 @@ use ra4m1_ctpac::gpt::{
 
 use crate::{event_link::InterruptEvent, peripherals};
 
+/// An [`InterruptTimer`] instance.
+#[allow(private_bounds)]
 pub trait Instance: SealedInstance {}
 
-pub trait SealedInstance: PeripheralType {
+trait SealedInstance: PeripheralType {
     const INDEX: usize;
 
     fn regs() -> crate::pac::gpt::Gpt;
@@ -23,14 +30,19 @@ pub trait SealedInstance: PeripheralType {
     fn underflow_interrupt() -> crate::event_link::InterruptEvent;
 }
 
-pub struct Timer<'d, I: Instance> {
+/// A timer that fires an [`InterruptEvent`] at a fixed interval.
+pub struct InterruptTimer<'d, I: Instance> {
     phantom: PhantomData<&'d I>,
     triangle: bool,
 }
 
-impl<'d, I: Instance> Timer<'d, I> {
+impl<'d, I: Instance> InterruptTimer<'d, I> {
+    /// Creates a new timer.
     pub fn new(peri: Peri<'d, I>) -> Self {
         let _ = peri;
+
+        I::module_start();
+
         let gpt = I::regs();
 
         // Disable external things that might modify the counter
@@ -74,11 +86,13 @@ impl<'d, I: Instance> Timer<'d, I> {
     }
 
     #[inline(always)]
-    pub fn set_period(&mut self, period: u16) {
+    fn set_period(&mut self, period: u16) {
         let gpt = I::regs();
         gpt.gtpr().write_value(period as u32);
     }
 
+    /// Starts the timer and resets the counter and returns the associated [`InterruptEvent`].
+    /// The event is either over- or underflow depending on the frequency of the timer.
     #[inline]
     pub fn start(&mut self) -> InterruptEvent {
         let gpt = I::regs();
@@ -104,6 +118,7 @@ impl<'d, I: Instance> Timer<'d, I> {
         }
     }
 
+    /// Stops the timer.
     #[inline(always)]
     pub fn stop(&mut self) {
         let gpt = I::regs();
@@ -113,9 +128,12 @@ impl<'d, I: Instance> Timer<'d, I> {
     }
 }
 
-impl<'d, I: Instance> Drop for Timer<'d, I> {
+impl<'d, I: Instance> Drop for InterruptTimer<'d, I> {
     fn drop(&mut self) {
-        error!("GPT{}: Drop not yet implemented", I::INDEX);
+        error!(
+            "GPT{}: Drop not yet implemented, module will not be stopped",
+            I::INDEX
+        );
     }
 }
 
