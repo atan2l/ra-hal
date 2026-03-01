@@ -27,6 +27,7 @@ words = [
     "dtce",
     "eidr",
     "elc",
+    "fcache",
     "fieldsets",
     "fmifrt",
     "getc",

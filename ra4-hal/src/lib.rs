@@ -255,6 +255,18 @@ pub fn init() -> Peripherals {
             system.sckscr().write(|w| w.set_cksel(Cksel::Hoco));
             debug!("SYSTEM: ClkSource: {}", system.sckscr().read().cksel());
 
+            #[cfg(feature = "cache")]
+            {
+                let fcache = pac::FCACHE;
+                fcache.fcacheiv().write(|r| r.set_fcacheiv(true));
+
+                while fcache.fcacheiv().read().fcacheiv() {
+                    asm::nop();
+                }
+
+                fcache.fcachee().write(|r| r.set_fcacheen(true));
+            }
+
             // Max frequencies Table 8.2, p130
             // ICLK = 48 MHz
             // FCLK = 32 MHz

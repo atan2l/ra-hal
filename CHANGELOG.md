@@ -14,6 +14,7 @@ and this project will eventually adhere to [Semantic Versioning](https://semver.
 - elc
   * pac: New transforms
   * hal: API for triggering software generated interrupts
+- fcache: Add off-by-default feature to enable the flash cache
 - gpt: General purpose timer API (16-bit only)
 ### Changed
 - crc: `feed_bytes` no longer returns computed value

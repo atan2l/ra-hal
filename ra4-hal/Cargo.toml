@@ -59,6 +59,9 @@ default = [ "time-driver", "rt", "diag", "uno_r4", "chrono", "strict-assert" ]
 ## See <https://docs.rs/cortex-m-rt/latest/cortex_m_rt/#device> for more info.
 rt = [ "ra4m1-ctpac/rt" ]
 
+## Enable the flash cache. The cache is invalidated after each `DMAC` / `DTC` operation. See: §44.3.
+cache = [ ]
+
 ## Enable dependency on [`chrono`](https://docs.rs/chrono) and expose methods that work with chrono structures.
 chrono = [ "dep:chrono" ]
 
