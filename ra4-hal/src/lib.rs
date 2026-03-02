@@ -257,6 +257,7 @@ pub fn init() -> Peripherals {
 
             #[cfg(feature = "cache")]
             {
+                trace!("SYSTEM: fcache enabled");
                 let fcache = pac::FCACHE;
                 fcache.fcacheiv().write(|r| r.set_fcacheiv(true));
 
@@ -265,6 +266,13 @@ pub fn init() -> Peripherals {
                 }
 
                 fcache.fcachee().write(|r| r.set_fcacheen(true));
+            }
+            #[cfg(not(feature = "cache"))]
+            {
+                trace!("SYSTEM: fcache disabled");
+                let fcache = pac::FCACHE;
+                fcache.fcacheiv().write(|r| r.set_fcacheiv(true));
+                fcache.fcachee().write(|r| r.set_fcacheen(false));
             }
 
             // Max frequencies Table 8.2, p130
