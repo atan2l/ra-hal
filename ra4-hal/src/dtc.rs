@@ -293,6 +293,42 @@ impl<C: Instance> Channel<C> {
         this
     }
 
+    /// Copies the contents of `source` to `dest`.
+    ///
+    /// # Arguments
+    /// * `source` Slice to copy from.
+    /// * `dest` Slice to write to.
+    /// * `increment_on` An [`InterruptEvent`] used to start the transfer.  Can be used with
+    ///   [`SoftwareEvent`](crate::event_link::SoftwareEvent).
+    pub unsafe fn copy_slice<'d, W: Word>(
+        &mut self,
+        source: &'d [W],
+        dest: &'d mut [W],
+        increment_on: InterruptEvent,
+    ) -> Transfer<'d, C> {
+        let len = source.len() as u8;
+        let transfer_entry = DtcEntry::builder()
+            .with_chain_mode(ChainMode::Disabled)
+            .with_source_address_mode(AddressMode::Increment)
+            .with_dest_address_mode(AddressMode::Increment)
+            .with_word_size(W::WORD_SIZE)
+            .with_transfer_mode(TransferMode::Block)
+            .with_repeat_mode(RepeatMode::Destination)
+            .with_interrupt_mode(InterruptMode::OnCompletion)
+            .with_source_address(source.as_ptr() as u32)
+            .with_dest_address(dest.as_ptr() as u32)
+            .with_count_b(1)
+            .with_count_a_low(len)
+            .with_count_a_high(len)
+            .build();
+        self.update_entry(transfer_entry);
+
+        let mut transfer = Transfer::new(increment_on);
+        transfer.start();
+
+        transfer
+    }
+
     /// Configures a DTC transfer
     pub unsafe fn write<'d, W: Word>(
         &mut self,
