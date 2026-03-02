@@ -390,7 +390,7 @@ impl<'d, I: Instance, W: Word> Spi<'d, I, W> {
         // At 48 MHz:
         //   The slowest clock is about 11 kHz
         //   The fastest clock is about 24 MHz
-        #[cfg(feature = "_hoco_48mhz")]
+        #[cfg(feature = "hoco_48mhz")]
         let (spbr, brdv) = match config.bit_rate {
             24_000_000 => (0, Brdv::_00),
             12_000_000 => (1, Brdv::_00),

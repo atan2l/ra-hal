@@ -214,7 +214,7 @@ pub(crate) trait SealedTxPin<I: SealedInstance>: Pin + PeripheralType {
     }
 }
 
-#[cfg(feature = "_hoco_48mhz")]
+#[cfg(feature = "hoco_48mhz")]
 #[rustfmt::skip]
 const SPEED_ENTRIES: [SpeedEntry; 8] = [
     SpeedEntry { baud: 300,    small_n: 3, big_n: 77,  modulation: 0 },
@@ -228,7 +228,7 @@ const SPEED_ENTRIES: [SpeedEntry; 8] = [
     SpeedEntry { baud: 115200, small_n: 0, big_n: 12,  modulation: 0 },
 ];
 
-#[cfg(any(feature = "_hoco_32mhz", feature = "_hoco_64mhz"))]
+#[cfg(any(feature = "hoco_32mhz", feature = "hoco_64mhz"))]
 #[rustfmt::skip]
 const SPEED_ENTRIES: [SpeedEntry; 7] = [
     SpeedEntry { baud: 300,    small_n: 3, big_n: 52,  modulation: 0 },

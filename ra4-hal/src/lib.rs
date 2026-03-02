@@ -223,11 +223,11 @@ pub fn init() -> Peripherals {
             );
 
             cfg_if! {
-                if #[cfg(feature = "_hoco_32mhz")] {
+                if #[cfg(feature = "hoco_32mhz")] {
                     let target_freq = Hcfrq1::_32mhz;
-                } else if #[cfg(feature = "_hoco_48mhz")] {
+                } else if #[cfg(feature = "hoco_48mhz")] {
                     let target_freq = Hcfrq1::_48mhz;
-                } else if #[cfg(feature = "_hoco_64mhz")] {
+                } else if #[cfg(feature = "hoco_64mhz")] {
                     let target_freq = Hcfrq1::_64mhz;
                 } else {
                     compile_error!()

@@ -136,15 +136,15 @@ impl Ofs1 {
     /// #[unsafe(link_section = ".ofs1")]
     /// static OFS1: Ofs1 = Ofs1::default();
     /// ```
-    #[cfg(feature = "_hoco_48mhz")]
+    #[cfg(feature = "hoco_48mhz")]
     pub const fn default() -> Self {
         Self::new::<LvdasOff, Vdsel190, HocoOn, Hoco48Mhz>()
     }
-    #[cfg(feature = "_hoco_32mhz")]
+    #[cfg(feature = "hoco_32mhz")]
     pub const fn default() -> Self {
         Self::new::<LvdasOff, Vdsel190, HocoOn, Hoco32Mhz>()
     }
-    #[cfg(feature = "_hoco_64mhz")]
+    #[cfg(feature = "hoco_64mhz")]
     pub const fn default() -> Self {
         Self::new::<LvdasOff, Vdsel190, HocoOn, Hoco64Mhz>()
     }

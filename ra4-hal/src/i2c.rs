@@ -552,7 +552,7 @@ impl<'d, M: Mode, I: Instance> I2c<'d, M, I> {
         iic.iccr1().modify(|w| w.set_iicrst(true));
         iic.iccr1().modify(|w| w.set_ice(true));
 
-        #[cfg(feature = "_hoco_48mhz")]
+        #[cfg(feature = "hoco_48mhz")]
         match speed {
             // Tlow ≥ 4.7 µs, Thigh ≥ 4.0 µs, UM10204 Table 11
             I2cSpeed::Normal => {
@@ -571,7 +571,7 @@ impl<'d, M: Mode, I: Instance> I2c<'d, M, I> {
             }
         }
 
-        #[cfg(not(feature = "_hoco_48mhz"))]
+        #[cfg(not(feature = "hoco_48mhz"))]
         compile_error!("Not yet");
 
         iic.iccr1().modify(|w| w.set_iicrst(false));
