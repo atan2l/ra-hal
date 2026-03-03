@@ -14,7 +14,7 @@ pub mod adc;
 // W… w… why?
 // CAN requires PCLKA:PCLKB = 2:1 (§30.9.2) and with ICLK != 48 MHz you're looking at
 // PCLKB = 16 MHz which seems unnecessarily slow.
-#[cfg(feature = "_hoco_48mhz")]
+#[cfg(feature = "hoco_48mhz")]
 pub mod can;
 pub mod crc;
 pub mod dac;
