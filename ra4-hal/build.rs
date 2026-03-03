@@ -289,6 +289,33 @@ fn do_spi(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
         })
 }
 
+fn do_canbus(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
+    let peripheral = format_ident!("{}", peripheral.to_uppercase());
+
+    signals
+        .iter()
+        .filter(|(signal, _)| signal.as_str() == "CRX" || signal.as_str() == "CTX")
+        .fold(vec![], |mut acc, (signal, pins)| {
+            let signal = format_ident!("{}_pin_impl", signal.to_lowercase());
+
+            for (pin, config) in pins.iter() {
+                let pin = format_ident!("{}", pin);
+
+                let conditions = config.pin_conditional();
+
+                assert!(config.pfunc.iter().any(|pf| pf == "IOPORT_PERIPHERAL_CAN"));
+                let pfunc = format_ident!("Can");
+
+                acc.push(quote! {
+                    #conditions
+                    crate::can::#signal!(#peripheral, #pin, #pfunc);
+                });
+            }
+
+            acc
+        })
+}
+
 fn do_adc(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
     // Not really needed because the 'adc' instance doesn't define any signals we care about but why not
     if peripheral == "adc" {
@@ -424,6 +451,7 @@ fn generate_pinmap(pin_map: &PinMap) -> Result<(), Box<dyn std::error::Error>> {
                 "sci" => Some(do_sci(peripheral, signal)),
                 "port" => Some(do_port(peripheral, signal)),
                 "dac" => Some(do_dac(peripheral, signal)),
+                "can" => Some(do_canbus(peripheral, signal)),
                 _ => None,
             }
         })

@@ -10,6 +10,7 @@
 pub mod fmt;
 
 pub mod adc;
+pub mod can;
 pub mod crc;
 pub mod dac;
 pub mod dtc;
