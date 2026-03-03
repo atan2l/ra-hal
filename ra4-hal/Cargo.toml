@@ -1,6 +1,6 @@
 [package]
 name = "ra4-hal"
-version = "0.2.2-dev"
+version = "0.2.2"
 description = "Hardware Abstraction Layer (HAL) for the Renesas RA4 family of MCUs."
 authors.workspace = true
 edition.workspace = true
@@ -32,7 +32,7 @@ embassy-time-driver = { version = "0.2.1", optional = true }
 embassy-time-queue-utils = { version = "0.3.0", optional = true }
 embassy-usb-driver = { version = "0.2.0", optional = true }
 
-ra4m1-ctpac = { path = "../ra4m1-ctpac", version = "0.2.2-dev" }
+ra4m1-ctpac = { path = "../ra4m1-ctpac", version = "0.2.2" }
 
 arbitrary-int = "2.1.1"
 bitbybit = "2.0.0"
