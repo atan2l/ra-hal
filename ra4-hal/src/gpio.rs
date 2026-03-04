@@ -2,19 +2,19 @@
 
 use core::{future::poll_fn, marker::PhantomData, task::Poll};
 
-use crate::interrupt;
-use crate::{
-    event_link::{IcuInterrupt as _, InterruptEvent},
-    interrupt::typelevel::{Handler as InterruptHandler, Interrupt as InterruptType},
-    pac,
-    write_protect::ProtectedModify as _,
-};
-
 use embassy_hal_internal::{Peri, PeripheralType, impl_peripheral, interrupt::InterruptExt as _};
 use embassy_sync::waitqueue::AtomicWaker;
-use ra4m1_ctpac::{
-    icu::vals::{Fclksel, Irqmd},
-    pfs::vals::{OutputType, PortDirection, PortDrive, PortMode},
+
+use crate::{
+    event_link::{IcuInterrupt as _, InterruptEvent},
+    interrupt,
+    interrupt::typelevel::{Handler as InterruptHandler, Interrupt as InterruptType},
+    pac::{
+        self,
+        icu::vals::{Fclksel, Irqmd},
+        pfs::vals::{OutputType, PortDirection, PortDrive, PortMode},
+    },
+    write_protect::ProtectedModify as _,
 };
 
 /// Uniquely identifies a pin.

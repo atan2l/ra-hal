@@ -8,9 +8,11 @@ use core::marker::PhantomData;
 
 use embassy_hal_internal::{Peri, PeripheralType};
 use embassy_time::{Duration, block_for};
-use ra4m1_ctpac::dac12::vals::Ref;
 
-use crate::gpio::{Basic, Flex, Pin};
+use crate::{
+    gpio::{Basic, Flex, Pin},
+    pac::dac12::vals::Ref,
+};
 
 /// `DAC12` driver.
 #[allow(private_bounds)]

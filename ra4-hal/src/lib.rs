@@ -37,9 +37,9 @@ pub use ra4m1_ctpac as pac;
 
 use cfg_if::cfg_if;
 use cortex_m::asm;
+use pac::system::vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd};
 #[cfg(not(feature = "unstable-pac"))]
 pub(crate) use ra4m1_ctpac as pac;
-use ra4m1_ctpac::system::vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd};
 
 use crate::{mcu_info::McuInfo, write_protect::ProtectedPeripheral as _};
 

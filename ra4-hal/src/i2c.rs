@@ -8,6 +8,13 @@
 
 use core::{future::poll_fn, marker::PhantomData, task::Poll};
 
+use cortex_m::asm;
+use embassy_hal_internal::{
+    Peri, PeripheralType, atomic_ring_buffer::RingBuffer, interrupt::InterruptExt as _,
+};
+use embassy_sync::waitqueue::AtomicWaker;
+use embedded_hal_1::i2c::SevenBitAddress;
+
 use crate::{
     event_link::{IcuInterrupt as _, InterruptEvent},
     gpio::{Flex, Pin, PortFunction, WithOpenDrain},
@@ -16,17 +23,9 @@ use crate::{
         typelevel::{Handler as InterruptHandler, Interrupt as InterruptType},
     },
     mode::{Async, Blocking, Mode},
-    pac,
+    pac::{self, iic::vals::Cks},
     write_protect::ProtectedModify,
 };
-
-use cortex_m::asm;
-use embassy_hal_internal::{
-    Peri, PeripheralType, atomic_ring_buffer::RingBuffer, interrupt::InterruptExt as _,
-};
-use embassy_sync::waitqueue::AtomicWaker;
-use embedded_hal_1::i2c::SevenBitAddress;
-use ra4m1_ctpac::iic::vals::Cks;
 
 /// I2C driver for the `IIC` peripheral.
 ///

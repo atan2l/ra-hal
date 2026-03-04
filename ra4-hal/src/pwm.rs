@@ -15,11 +15,13 @@ use core::marker::PhantomData;
 
 use embassy_hal_internal::{Peri, PeripheralType};
 use paste::paste;
-use ra4m1_ctpac::gpt::vals::{Ccr, Gtio, Mode, Odty, Tpcs};
 
 use crate::{
     gpio::{Flex, Pin, PortFunction, WithOpenDrain},
-    pac,
+    pac::{
+        self,
+        gpt::vals::{Ccr, Gtio, Mode, Odty, Tpcs},
+    },
 };
 
 /// PWM configuration

@@ -7,12 +7,18 @@ use core::marker::PhantomData;
 
 use cortex_m::asm;
 use embassy_hal_internal::{Peri, PeripheralType};
-use ra4m1_ctpac::adc14::{
-    regs::Adans,
-    vals::{AdcCountSelect, Adcs, Adprc},
-};
 
-use crate::{adc::channel::AdcChannel, pac, peripherals::ADC14};
+use crate::{
+    adc::channel::AdcChannel,
+    pac::{
+        self,
+        adc14::{
+            regs::Adans,
+            vals::{AdcCountSelect, Adcs, Adprc},
+        },
+    },
+    peripherals::ADC14,
+};
 
 pub use channel::{AdcInputPin, AdcPin, AdcSequence, Temperature, Vref};
 
@@ -129,7 +135,7 @@ trait SealedInstance: PeripheralType {
 }
 
 impl SealedInstance for ADC14 {
-    fn regs() -> ra4m1_ctpac::adc14::Adc14 {
+    fn regs() -> pac::adc14::Adc14 {
         pac::ADC14
     }
 }

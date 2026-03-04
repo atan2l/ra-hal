@@ -1,9 +1,9 @@
 use embassy_hal_internal::{Peri, PeripheralType};
-use ra4m1_ctpac::adc14::regs::Adans;
 
 use crate::{
     adc::{AdcChannelConfig, AverageMode},
     gpio::{Flex, Pin},
+    pac::adc14::regs::Adans,
 };
 
 /// Pseudo-channel for the on-die temperature sensor.

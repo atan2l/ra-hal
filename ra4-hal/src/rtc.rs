@@ -6,9 +6,15 @@ use chrono::{Datelike, NaiveDate, NaiveDateTime, NaiveTime, Timelike};
 use cortex_m::asm;
 use embassy_hal_internal::{Peri, PeripheralType};
 use embassy_time::Timer;
-use ra4m1_ctpac::rtc::vals::{Rcksel, RwkcntDayw};
 
-use crate::{pac, peripherals, write_protect::ProtectedPeripheral as _};
+use crate::{
+    pac::{
+        self,
+        rtc::vals::{Rcksel, RwkcntDayw},
+    },
+    peripherals,
+    write_protect::ProtectedPeripheral as _,
+};
 
 /// Realtime clock driver.
 ///
@@ -33,7 +39,7 @@ trait SealedInstance {
 impl Instance for peripherals::RTC {}
 
 impl SealedInstance for peripherals::RTC {
-    fn regs() -> ra4m1_ctpac::rtc::Rtc {
+    fn regs() -> pac::rtc::Rtc {
         pac::RTC
     }
 }

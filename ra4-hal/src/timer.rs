@@ -8,12 +8,15 @@
 use core::marker::PhantomData;
 
 use embassy_hal_internal::{Peri, PeripheralType};
-use ra4m1_ctpac::gpt::{
-    regs::{Gtdnsr, Gtupsr},
-    vals::{Ccr, Mode, Tpcs, Ud},
-};
 
-use crate::{event_link::InterruptEvent, peripherals};
+use crate::{
+    event_link::InterruptEvent,
+    pac::gpt::{
+        regs::{Gtdnsr, Gtupsr},
+        vals::{Ccr, Mode, Tpcs, Ud},
+    },
+    peripherals,
+};
 
 /// An [`InterruptTimer`] instance.
 #[allow(private_bounds)]

@@ -6,22 +6,27 @@
 //! * Allow use of a different `GPT` instance
 //! * Add an `AGT` implementation
 
-use core::cell::Cell;
-use core::cell::RefCell;
-use core::sync::atomic::{AtomicU32, Ordering};
+use core::{
+    cell::{Cell, RefCell},
+    sync::atomic::{AtomicU32, Ordering},
+};
 
-use crate::{interrupt, interrupt::typelevel::Interrupt, pac};
 use critical_section::{CriticalSection, Mutex};
-use embassy_hal_internal::interrupt::InterruptExt;
+use embassy_hal_internal::interrupt::InterruptExt as _;
 use embassy_time_driver::Driver;
 use embassy_time_queue_utils::Queue;
-use ra4m1_ctpac::gpt::{
-    regs::{Gtdnsr, Gtupsr},
-    vals::{Mode, Tpcs, Ud},
-};
 
 use crate::{
     event_link::{IcuInterrupt, InterruptEvent},
+    interrupt,
+    interrupt::typelevel::Interrupt,
+    pac::{
+        self,
+        gpt::{
+            regs::{Gtdnsr, Gtupsr},
+            vals::{Mode, Tpcs, Ud},
+        },
+    },
     peripherals::GPT32_0,
     write_protect::ProtectedPeripheral as _,
 };

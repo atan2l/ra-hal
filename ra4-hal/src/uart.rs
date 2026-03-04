@@ -15,10 +15,6 @@ use embassy_hal_internal::{
 };
 use embassy_sync::waitqueue::AtomicWaker;
 use paste::paste;
-use ra4m1_ctpac::sci::{
-    regs::Scr,
-    vals::{ScrCke, SmrCks, SmrPm, Stop},
-};
 
 use crate::interrupt::typelevel::{Handler as InterruptHandler, Interrupt as InterruptType};
 use crate::{
@@ -26,7 +22,14 @@ use crate::{
     gpio::{Pin, PortFunction},
     interrupt,
     interrupt::Interrupt,
-    pac, peripherals,
+    pac::{
+        self,
+        sci::{
+            regs::Scr,
+            vals::{ScrCke, SmrCks, SmrPm, Stop},
+        },
+    },
+    peripherals,
 };
 
 /// UART configuration
@@ -962,7 +965,7 @@ macro_rules! instance_impl {
                 const TX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$tx_int;
 
                 #[inline]
-                fn regs() -> ra4m1_ctpac::sci::Sci {
+                fn regs() -> crate::pac::sci::Sci {
                     crate::pac::$instance
                 }
 

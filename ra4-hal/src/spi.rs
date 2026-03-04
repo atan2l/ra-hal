@@ -12,11 +12,13 @@ use core::marker::PhantomData;
 use cortex_m::asm;
 use embassy_hal_internal::{Peri, PeripheralType};
 use embedded_hal_1::spi::{MODE_0, Mode};
-use ra4m1_ctpac::spi::vals::{Brdv, Cpha, Cpol, Lsbf, Spb, Spbyt, Splw, Spms, Sprdtd};
 
 use crate::{
     gpio::{Basic, Flex, Pin, PortFunction},
-    pac,
+    pac::{
+        self,
+        spi::vals::{Brdv, Cpha, Cpol, Lsbf, Spb, Spbyt, Splw, Spms, Sprdtd},
+    },
 };
 
 /// SPI driver for the `SPI` peripheral.

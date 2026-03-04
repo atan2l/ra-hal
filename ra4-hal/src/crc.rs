@@ -4,9 +4,11 @@
 //! * The driver will turn the module off (`MSTPC1=1`) when it is dropped.
 
 use embassy_hal_internal::Peri;
-use ra4m1_ctpac::crc::vals::Gps;
 
-use crate::{pac, peripherals::CRC};
+use crate::{
+    pac::{self, crc::vals::Gps},
+    peripherals::CRC,
+};
 
 /// Polynomial to use for CRC calculation.
 #[derive(Default, Copy, Clone, PartialEq)]
