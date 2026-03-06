@@ -267,15 +267,17 @@ pub fn init() -> Peripherals {
                 warn!("HOCO: expected={}, actual={}", hoco_freq, target_freq);
             }
 
-            // High speed mode and wait states needed for ICLK > 32 MHz
+            // High speed mode needed for ICLK > 12 MHz.  Currently there are no features to select
+            // ICLK <= 12 MHz so just enable high speed mode unconditionally.
+            trace!("Setting high speed mode on");
+            system.opccr().write(|w| w.set_opcm(Opcm::HighSpeed));
+
+            while system.opccr().read().opcmtsf() {
+                asm::nop();
+            }
+
+            // Wait states needed for ICLK > 32 MHz
             if hoco_freq == Hcfrq1::_48mhz || hoco_freq == Hcfrq1::_64mhz {
-                trace!("Setting high speed mode on");
-                system.opccr().write(|w| w.set_opcm(Opcm::HighSpeed));
-
-                while system.opccr().read().opcmtsf() {
-                    asm::nop();
-                }
-
                 trace!("Setting SYSTEM_MEMWAIT to 1");
                 system.memwait().write(|w| w.set_memwait(true));
             }

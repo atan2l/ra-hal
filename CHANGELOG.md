@@ -12,6 +12,7 @@ and this project will eventually adhere to [Semantic Versioning](https://semver.
 - pac: `OSM` peripheral with `OFS0` and `OFS1` registers
 ### Fixed
 - gpt: Ensure `embassy-time` uses the correct tick rate when ƒHOCO=64 MHz
+- system: Enable high speed mode for ƒICLK=32 MHz
 
 ## [0.2.2] - 2026-03-02
 ### Added
