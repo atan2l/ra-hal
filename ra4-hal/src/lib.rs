@@ -22,6 +22,7 @@ pub mod pwm;
 #[cfg(feature = "_enable-rtc-beware-of-dragons")]
 pub mod rtc;
 pub mod timer;
+pub mod watchdog;
 // pub mod sce5;
 pub mod spi;
 #[cfg(feature = "time-driver")]
@@ -81,32 +82,56 @@ pub mod mode {
 /// * `LOCO` 32.768 kHz ±15%
 /// * `PLL` driven by `MOSC`, output 24–64 MHz
 pub struct ClockConfig {
-    /// System clock frequency (`ICK`).
+    /// System clock frequency (`ICLK`).
     ///
-    /// Supplies: `CPU`, `DTC`, `DMAC`, `SRAM`, and the flash memory.
+    /// Supplies: `CPU`, `DMAC`, [`DTC`](module@dtc), `SRAM`, and the flash memory.
     pub system: u32,
 
-    /// Flash interface clock
+    /// Flash interface clock (`FCLK`).
     pub flash: u32,
 
-    /// Peripheral Clock "A".
+    /// Peripheral Clock "A" (`PCLKA`).
     ///
-    /// Supplies: `SPI`, `SCI`, `SCE5`, `CRC`, and `GPT` bus clock.
+    /// Supplies:
+    /// [`CRC`](module@crc),
+    /// `SCE5`,
+    /// [`SCI`](module@uart),
+    /// [`SPI`](module@spi),
+    /// and the [`GPT`](module@timer) bus clock.
     pub peripheral_a: u32,
 
-    /// Peripheral Clock "B".
+    /// Peripheral Clock "B" (`PCLKB`).
     ///
-    /// Supplies: `DAC12`, `IIC`, `SSIE`, `DOC`, `CAC`, `CAN`, `AGT`, `POEG`, `CTSU`, `ELC`, I/O Ports (`PORT`), `RTC`, `WDT`, `IWDT`, `ADC14`, `KINT`, `USBFS`, `ACMPLP`, and `SLCDC`.
+    /// Supplies:
+    /// `ACMPLP`,
+    /// [`ADC14`](module@adc),
+    /// `AGT`,
+    /// `CAC`,
+    /// `CAN`,
+    /// `CTSU`,
+    /// [`DAC12`](module@dac),
+    /// `DOC`,
+    /// [`ELC`](module@event_link),
+    /// [`IIC`](module@i2c),
+    /// `IWDT`,
+    /// `KINT`,
+    /// `POEG`,
+    /// [`PORT`](module@gpio) (I/O Ports),
+    /// `RTC`,
+    /// `SLCDC`,
+    /// `SSIE`,
+    /// `USBFS`,
+    /// and [`WDT`](module@watchdog::wdt).
     pub peripheral_b: u32,
 
-    /// Peripheral Clock "C".
+    /// Peripheral Clock "C" (`PCLKC`).
     ///
-    /// Supplies `ADC14` conversion clock.
+    /// Supplies [`ADC14`](module@adc) conversion clock.
     pub peripheral_c: u32,
 
-    /// Peripheral Clock "D".
+    /// Peripheral Clock "D" (`PCLKD`).
     ///
-    /// Supplies `GPT` count clock.
+    /// Supplies [`GPT`](module@timer) count clock.
     pub peripheral_d: u32,
 }
 
@@ -195,6 +220,10 @@ pub fn init() -> Peripherals {
 
         // Check if the crate was configured correctly
         mcu_info.validate_pin_count();
+
+        let osm = pac::OSM;
+        debug!("OFS0: {}", osm.ofs0().read());
+        debug!("OFS1: {}", osm.ofs1().read());
 
         trace!(
             "HOCO: wait={}, status={}",

@@ -9,7 +9,7 @@ transforms:
   - !MapEnumVariants
     enum: wdt::vals::Cks
     variants:
-      _0000: PCLKB_4
+      _0001: PCLKB_4
       _0100: PCLKB_64
       _1111: PCLKB_128
       _0110: PCLKB_512

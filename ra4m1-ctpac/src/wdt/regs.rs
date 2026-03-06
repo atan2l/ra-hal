@@ -215,43 +215,6 @@ impl defmt::Format for Wdtrcr {
         defmt::write!(f, "Wdtrcr {{ rstirqs: {=bool:?} }}", self.rstirqs())
     }
 }
-#[doc = "WDT Refresh Register"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Wdtrr(pub u8);
-impl Wdtrr {
-    #[doc = "WDTRR is an 8-bit register that refreshes the down-counter of the WDT."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn wdtrr(&self) -> u8 {
-        let val = (self.0 >> 0usize) & 0xff;
-        val as u8
-    }
-    #[doc = "WDTRR is an 8-bit register that refreshes the down-counter of the WDT."]
-    #[inline(always)]
-    pub const fn set_wdtrr(&mut self, val: u8) {
-        self.0 = (self.0 & !(0xff << 0usize)) | (((val as u8) & 0xff) << 0usize);
-    }
-}
-impl Default for Wdtrr {
-    #[inline(always)]
-    fn default() -> Wdtrr {
-        Wdtrr(0)
-    }
-}
-impl core::fmt::Debug for Wdtrr {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Wdtrr")
-            .field("wdtrr", &self.wdtrr())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Wdtrr {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Wdtrr {{ wdtrr: {=u8:?} }}", self.wdtrr())
-    }
-}
 #[doc = "WDT Status Register"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]

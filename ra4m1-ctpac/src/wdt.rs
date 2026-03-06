@@ -16,7 +16,7 @@ impl Wdt {
     }
     #[doc = "WDT Refresh Register"]
     #[inline(always)]
-    pub const fn wdtrr(self) -> crate::common::Reg<regs::Wdtrr, crate::common::RW> {
+    pub const fn wdtrr(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0usize) as _) }
     }
     #[doc = "WDT Control Register"]

@@ -81,12 +81,14 @@ To read the OFS values from a board connected to your computer:
 | ⬛⬛⬛⬛⬛ | `FMIFRT` Factory MCU Information Flash Root Table  |                                                             |
 | ⬛⬛⬛⬛⬜ | `GPT` General PWM Timer                            | General PWM support in progress.                            |
 | ⬛⬛⬛⬜⬜ | `IIC` I2C Bus                                      | In progress. Slave, MultiMaster, DMA, Error handling TODO.  |
+| ⬛⬛⬛⬛⬜ | `IWDT` Independent Watchdog Timer                  | See WDT.                                                    |
 | ⬛⬛⬛⬛⬜ | `PORT` I/O Ports                                   | In progress.                                                |
 | ⬛⬛⬜⬜⬜ | `RTC` Real-Time Clock                              | In progress. Needs `CAC` for trimming.                      |
 | ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine                 | Undocumented.                                               |
 | ⬛⬛⬛⬜⬜ | `SCI` Serial Communications Interface              | In progress, DMA (DTC) no-go, embedded-serial pending.      |
 | ⬜⬜⬜⬜⬜ | `SPI` Serial Peripheral Interface                  |                                                             |
 | ⬜⬜⬜⬜⬜ | `SSIE` Serial Sound Interface Enhanced             |                                                             |
+| ⬛⬛⬛⬛⬜ | `WDT` Watchdog Timer                               | User defined handlers?                                      |
 
 ## License
 
