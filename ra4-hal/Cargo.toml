@@ -98,7 +98,7 @@ hoco_48mhz = [ "embassy-time-driver/tick-hz-48_000_000" ]
 
 ## Sets the high speed on-chip oscillator (`HOCO`) to 64 MHz.
 ## This allows some peripheral clocks to run faster but slows the CPU to 32 MHz.
-hoco_64mhz = [ "embassy-time-driver/tick-hz-32_000_000" ]
+hoco_64mhz = [ "embassy-time-driver/tick-hz-64_000_000" ]
 
 ## Enables the `rtc` module with Real-Time Clock (`RTC`) support.
 ## *Note:* the internal oscillator (`LOCO`) is generally too inaccurate to be useful.

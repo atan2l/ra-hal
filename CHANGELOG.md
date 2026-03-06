@@ -10,6 +10,8 @@ and this project will eventually adhere to [Semantic Versioning](https://semver.
 - iwdt: new driver
 - wdt: new driver
 - pac: `OSM` peripheral with `OFS0` and `OFS1` registers
+### Fixed
+- gpt: Ensure `embassy-time` uses the correct tick rate when ƒHOCO=64 MHz
 
 ## [0.2.2] - 2026-03-02
 ### Added
