@@ -41,7 +41,7 @@ impl Instance for peripherals::IWDT {}
 
 impl SealedInstance for peripherals::IWDT {
     #[inline(always)]
-    fn regs() -> ra4m1_ctpac::iwdt::Iwdt {
+    fn regs() -> pac::iwdt::Iwdt {
         pac::IWDT
     }
 }
