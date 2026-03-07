@@ -19,14 +19,14 @@ use crate::{
     watchdog::Action,
 };
 
-/// Watchdog driver.
-pub struct Watchdog<'d, I: Instance> {
-    phantom: PhantomData<&'d I>,
-}
-
 /// Interrupt handler for the watchdog timer, used with [`Watchdog::new_handler`].
 pub struct IwdtInterruptHandler<I: Instance> {
     _phantom: PhantomData<I>,
+}
+
+/// Watchdog driver.
+pub struct Watchdog<'d, I: Instance> {
+    phantom: PhantomData<&'d I>,
 }
 
 /// Watchdog instance.
@@ -35,15 +35,6 @@ pub trait Instance: SealedInstance {}
 
 pub(crate) trait SealedInstance: PeripheralType {
     fn regs() -> pac::iwdt::Iwdt;
-}
-
-impl Instance for peripherals::IWDT {}
-
-impl SealedInstance for peripherals::IWDT {
-    #[inline(always)]
-    fn regs() -> pac::iwdt::Iwdt {
-        pac::IWDT
-    }
 }
 
 impl<'d, I: Instance> Watchdog<'d, I> {
@@ -89,8 +80,8 @@ impl<'d, I: Instance> Watchdog<'d, I> {
                 IwdtCks::_16 => 16,
                 IwdtCks::_32 => 32,
                 IwdtCks::_64 => 64,
-                IwdtCks::_256 => 256,
                 IwdtCks::_128 => 128,
+                IwdtCks::_256 => 256,
                 _ => unreachable!(),
             };
             let period: u16 = match ofs0.iwdttops() {
@@ -140,6 +131,15 @@ impl<'d, I: Instance> Watchdog<'d, I> {
         let iwdt = I::regs();
 
         iwdt.iwdtsr().read().cntval()
+    }
+}
+
+impl Instance for peripherals::IWDT {}
+
+impl SealedInstance for peripherals::IWDT {
+    #[inline(always)]
+    fn regs() -> pac::iwdt::Iwdt {
+        pac::IWDT
     }
 }
 
