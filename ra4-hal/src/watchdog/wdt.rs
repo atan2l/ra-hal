@@ -42,6 +42,21 @@ pub enum ClockDivider {
     Div8192,
 }
 
+/// Watchdog configuration.
+///
+/// # TODO
+/// Handle the reset window settings.
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[non_exhaustive]
+pub struct Config {
+    #[allow(missing_docs)]
+    pub action: Action,
+    #[allow(missing_docs)]
+    pub divider: ClockDivider,
+    #[allow(missing_docs)]
+    pub period: TimeoutPeriod,
+}
+
 /// Reset / refresh value for watchdog timer.
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Copy, Clone)]
@@ -57,21 +72,6 @@ pub enum TimeoutPeriod {
 
     /// `CNTVAL` = 16,384
     _16384,
-}
-
-/// Watchdog configuration.
-///
-/// # TODO
-/// Handle the reset window settings.
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-#[non_exhaustive]
-pub struct Config {
-    #[allow(missing_docs)]
-    pub action: Action,
-    #[allow(missing_docs)]
-    pub divider: ClockDivider,
-    #[allow(missing_docs)]
-    pub period: TimeoutPeriod,
 }
 
 /// Watchdog driver.
@@ -102,6 +102,20 @@ impl From<ClockDivider> for u16 {
             ClockDivider::Div512 => 512,
             ClockDivider::Div2048 => 2048,
             ClockDivider::Div8192 => 8192,
+        }
+    }
+}
+
+impl From<ClockDivider> for Cks {
+    #[inline]
+    fn from(value: ClockDivider) -> Self {
+        match value {
+            ClockDivider::Div4 => Cks::PCLKB_4,
+            ClockDivider::Div64 => Cks::PCLKB_64,
+            ClockDivider::Div128 => Cks::PCLKB_128,
+            ClockDivider::Div512 => Cks::PCLKB_512,
+            ClockDivider::Div2048 => Cks::PCLKB_2048,
+            ClockDivider::Div8192 => Cks::PCLKB_8192,
         }
     }
 }
@@ -138,37 +152,6 @@ impl Default for Config {
             period: TimeoutPeriod::_8192,
             action: Action::Interrupt,
         }
-    }
-}
-
-impl Instance for crate::peripherals::WDT {}
-
-impl SealedInstance for crate::peripherals::WDT {
-    #[inline(always)]
-    fn regs() -> pac::wdt::Wdt {
-        pac::WDT
-    }
-}
-
-impl From<ClockDivider> for Cks {
-    #[inline]
-    fn from(value: ClockDivider) -> Self {
-        match value {
-            ClockDivider::Div4 => Cks::PCLKB_4,
-            ClockDivider::Div64 => Cks::PCLKB_64,
-            ClockDivider::Div128 => Cks::PCLKB_128,
-            ClockDivider::Div512 => Cks::PCLKB_512,
-            ClockDivider::Div2048 => Cks::PCLKB_2048,
-            ClockDivider::Div8192 => Cks::PCLKB_8192,
-        }
-    }
-}
-
-impl<I: Instance, WdtInt: InterruptType> InterruptHandler<WdtInt> for WdtInterruptHandler<I> {
-    unsafe fn on_interrupt() {
-        WdtInt::IRQ.icu_unpend();
-
-        panic!("Watchdog underflow");
     }
 }
 
@@ -301,5 +284,22 @@ impl<'d, I: Instance> Watchdog<'d, I> {
         let status = wdt.wdtsr().read();
 
         status.cntval()
+    }
+}
+
+impl Instance for crate::peripherals::WDT {}
+
+impl SealedInstance for crate::peripherals::WDT {
+    #[inline(always)]
+    fn regs() -> pac::wdt::Wdt {
+        pac::WDT
+    }
+}
+
+impl<I: Instance, WdtInt: InterruptType> InterruptHandler<WdtInt> for WdtInterruptHandler<I> {
+    unsafe fn on_interrupt() {
+        WdtInt::IRQ.icu_unpend();
+
+        panic!("Watchdog underflow");
     }
 }
