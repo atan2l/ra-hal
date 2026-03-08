@@ -6,7 +6,7 @@
 //! Each `ICU` interrupt can also be used to trigger a variety of different events including DMA transfers and power state changes.
 //! See §13, §18 of the reference manual for more information.
 
-use crate::pac;
+use crate::{module_stop::ModuleStop as _, pac, peripherals::ELC};
 
 use cortex_m::interrupt::InterruptNumber;
 
@@ -611,7 +611,5 @@ pub enum InterruptEvent {
 
 /// Turn on the `ELC` clock.
 pub(crate) fn init() {
-    let mstp = crate::pac::MSTP;
-    debug!("ELC: stop=false");
-    mstp.mstpcrc().modify(|r| r.set_mstpc14(false));
+    ELC::start_module();
 }

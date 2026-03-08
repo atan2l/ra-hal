@@ -17,6 +17,7 @@ pub mod event_link;
 pub mod gpio;
 pub mod i2c;
 pub mod mcu_info;
+pub mod module_stop;
 pub mod osm;
 pub mod pwm;
 #[cfg(feature = "_enable-rtc-beware-of-dragons")]
@@ -562,6 +563,7 @@ macro_rules! bind_interrupts {
 include!(concat!(env!("OUT_DIR"), "/pin_traits.rs"));
 include!(concat!(env!("OUT_DIR"), "/interrupts.rs"));
 include!(concat!(env!("OUT_DIR"), "/peripherals.rs"));
+include!(concat!(env!("OUT_DIR"), "/module_stops.rs"));
 
 #[cfg(not(feature = "skip-osm"))]
 mod _osm_config {

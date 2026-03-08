@@ -10,6 +10,7 @@ use embassy_hal_internal::{Peri, PeripheralType};
 
 use crate::{
     adc::channel::AdcChannel,
+    module_stop::ModuleStop,
     pac::{
         self,
         adc14::{
@@ -116,7 +117,7 @@ struct AdcChannelConfig {
 
 /// `ADC14` peripheral instance.
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
+pub trait Instance: SealedInstance + ModuleStop + PeripheralType + 'static + Send {}
 
 impl Default for AdcConfig {
     fn default() -> Self {
@@ -145,14 +146,10 @@ impl Instance for ADC14 {}
 impl<'d, I: Instance> Adc<'d, I> {
     /// Creates a new `ADC14` driver.
     pub fn new(_adc: Peri<'d, I>, config: AdcConfig) -> Self {
-        debug!("ADC14: stop=false");
-
         #[cfg(feature = "strict-assert")]
         assert!(config.sample_time >= 5);
 
-        let mstp = pac::MSTP;
-
-        mstp.mstpcrd().write(|w| w.set_mstpd16(false));
+        I::start_module();
 
         let resolution = match config.resolution {
             Resolution::Low => Adprc::_12bit,
@@ -279,9 +276,6 @@ impl<'d, I: Instance> Adc<'d, I> {
 
 impl<'d, I: Instance> Drop for Adc<'d, I> {
     fn drop(&mut self) {
-        debug!("ADC14: stop=true");
-
-        let mstp = pac::MSTP;
-        mstp.mstpcrd().write(|w| w.set_mstpd16(true));
+        I::stop_module();
     }
 }

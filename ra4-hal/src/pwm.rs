@@ -18,6 +18,7 @@ use paste::paste;
 
 use crate::{
     gpio::{Flex, Pin, PortFunction, WithOpenDrain},
+    module_stop::ModuleStop,
     pac::{
         self,
         gpt::vals::{Ccr, Gtio, Mode, Odty, Tpcs},
@@ -71,7 +72,7 @@ pub struct Pwm<'d, I: Instance> {
 
 /// PWM instance
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
+pub trait Instance: SealedInstance + ModuleStop + PeripheralType + 'static + Send {}
 
 pub(crate) trait SealedInstance {
     #[cfg(feature = "defmt")]
@@ -80,8 +81,6 @@ pub(crate) trait SealedInstance {
     const PERIPHERAL: () = ();
 
     fn regs() -> pac::gpt::Gpt;
-    fn module_stop();
-    fn module_start();
 }
 
 pub(crate) trait PwmChannel {}
@@ -218,7 +217,7 @@ impl<'d, I: Instance> Pwm<'d, I> {
     ///
     /// A `PWM` driver with no output pins assigned and whose counter is initialized to `0` but has not been started.
     pub fn new(_peri: Peri<'d, I>, config: Config) -> Self {
-        I::module_start();
+        I::start_module();
 
         let pwm = I::regs();
 
@@ -387,7 +386,7 @@ impl<'d, I: Instance> Pwm<'d, I> {
 impl<'d, I: Instance> Drop for Pwm<'d, I> {
     fn drop(&mut self) {
         self.stop();
-        I::module_stop();
+        I::stop_module();
     }
 }
 
@@ -439,19 +438,6 @@ macro_rules! gpt_instance {
                 fn regs() -> crate::pac::gpt::Gpt {
                     crate::pac::[< GPT $size _ $instance >]
                 }
-
-                #[inline(always)]
-                fn module_stop() {
-                    error!("GPT{}_{}: Module stop for GPT not yet implemented", stringify!($size), stringify!($instance));
-                }
-
-                #[inline(always)]
-                fn module_start() {
-                    debug!("GPT{}_{}: stop=false", stringify!($size), stringify!($instance));
-                    let mstp = pac::MSTP;
-                    mstp.mstpcrd().modify(|w| w.[< set_ $mstp >](false));
-                }
-
             }
         }
     };

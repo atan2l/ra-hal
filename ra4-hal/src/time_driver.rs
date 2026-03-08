@@ -20,6 +20,7 @@ use crate::{
     event_link::{IcuInterrupt, InterruptEvent},
     interrupt,
     interrupt::typelevel::Interrupt,
+    module_stop::ModuleStop as _,
     pac::{
         self,
         gpt::{
@@ -78,11 +79,7 @@ impl GptDriver {
     const FUDGE_FACTOR: u64 = 10;
 
     pub(crate) fn init(&'static self) {
-        debug!("GPT32_0: stop=false");
-
-        let mstp = pac::MSTP;
-
-        mstp.mstpcrd().write(|r| r.set_mstpd5(false));
+        GPT32_0::start_module();
 
         // Enable the interrupts at the NVIC level,
         // arm the overflow interrupt in the ICU.

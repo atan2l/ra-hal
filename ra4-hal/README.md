@@ -40,8 +40,8 @@ Older versions of Rust may work but this is not guaranteed.
 
 ### Rebuilding the metadata bits and bobs
 
-This crate extracts information about peripherals, interrupts, and pin configuration from the FSP pack provided by Renesas.
-To update the extracted information:
+This crate extracts information about peripherals, interrupts, and pin configuration from the FSP directly and from the FSP pack provided by Renesas.
+To update the metadata extracted from the FSP pack:
 
 * Ensure you have a Ruby version manager e.g. [`rvm`](https://rvm.io/) already installed and configured.  The tooling is written in Ruby and tested against v4.
 * Download the FSP pack collection e.g. `FSP_Packs_v6.3.1.zip` from <https://github.com/renesas/fsp/releases/>
@@ -57,3 +57,6 @@ Then extract the metadata:
 ```
 $ ./tools/meta-gen/meta-gen.rb Renesas.RA_mcu_ra4m1.6.3.1.pack ra4-hal/meta/
 ```
+
+Information about the module stop functionality is extracted from FSP headers via a separate program.
+To update `mstp.yaml` see the `ra-mstp` crate.

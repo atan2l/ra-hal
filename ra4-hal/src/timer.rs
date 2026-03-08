@@ -11,6 +11,7 @@ use embassy_hal_internal::{Peri, PeripheralType};
 
 use crate::{
     event_link::InterruptEvent,
+    module_stop::ModuleStop,
     pac::gpt::{
         regs::{Gtdnsr, Gtupsr},
         vals::{Ccr, Mode, Tpcs, Ud},
@@ -20,14 +21,12 @@ use crate::{
 
 /// An [`InterruptTimer`] instance.
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance {}
+pub trait Instance: SealedInstance + ModuleStop + PeripheralType {}
 
 trait SealedInstance: PeripheralType {
     const INDEX: usize;
 
     fn regs() -> crate::pac::gpt::Gpt;
-    // fn module_stop();
-    fn module_start();
 
     fn overflow_interrupt() -> crate::event_link::InterruptEvent;
     fn underflow_interrupt() -> crate::event_link::InterruptEvent;
@@ -44,7 +43,7 @@ impl<'d, I: Instance> InterruptTimer<'d, I> {
     pub fn new(peri: Peri<'d, I>) -> Self {
         let _ = peri;
 
-        I::module_start();
+        I::start_module();
 
         let gpt = I::regs();
 
@@ -150,13 +149,6 @@ macro_rules! instance_impl {
                 #[inline(always)]
                 fn regs() -> crate::pac::gpt::Gpt {
                     crate::pac::[< $size _ $instance >]
-                }
-
-                #[inline(always)]
-                fn module_start() {
-                    debug!("{}: stop=false", stringify!([< $size _ $instance >]));
-                    let mstp = crate::pac::MSTP;
-                    mstp.mstpcrd().modify(|r| r.[< set_ $mstp >](false));
                 }
 
                 #[inline(always)]

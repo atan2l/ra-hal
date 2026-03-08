@@ -66,6 +66,7 @@ words = [
     "mosi",
     "mpu",
     "mstp",
+    "mstpcr",
     "nmi",
     "nmos",
     "objdump",

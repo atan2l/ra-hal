@@ -31,9 +31,9 @@ pub struct Watchdog<'d, I: Instance> {
 
 /// Watchdog instance.
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance {}
+pub trait Instance: SealedInstance + PeripheralType {}
 
-pub(crate) trait SealedInstance: PeripheralType {
+pub(crate) trait SealedInstance {
     fn regs() -> pac::iwdt::Iwdt;
 }
 

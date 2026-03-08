@@ -11,6 +11,7 @@ use embassy_time::{Duration, block_for};
 
 use crate::{
     gpio::{Basic, Flex, Pin},
+    module_stop::ModuleStop,
     pac::dac12::vals::Ref,
 };
 
@@ -57,12 +58,10 @@ pub(crate) trait SealedDacOutputPin: Pin + PeripheralType {}
 
 /// `DAC12` peripheral instance.
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance {}
+pub trait Instance: SealedInstance + ModuleStop + PeripheralType {}
 
 pub(crate) trait SealedInstance: PeripheralType {
     fn regs() -> crate::pac::dac12::Dac12;
-    fn module_stop();
-    fn module_start();
 }
 
 impl<'d, I: Instance> Dac<'d, I> {
@@ -70,7 +69,7 @@ impl<'d, I: Instance> Dac<'d, I> {
     pub fn new<P: DacOutputPin>(peri: Peri<'d, I>, output_pin: Peri<'d, P>) -> Self {
         let _ = peri;
 
-        I::module_start();
+        I::start_module();
         output_pin.set_as_analog();
 
         let mut this = Self {
@@ -160,7 +159,7 @@ impl<'d, I: Instance> Drop for Dac<'d, I> {
         warn!("DAC12: Drop");
         let dac = I::regs();
         dac.dacr().modify(|r| r.set_daoe0(false));
-        I::module_stop();
+        I::stop_module();
     }
 }
 
@@ -169,20 +168,6 @@ impl SealedInstance for crate::peripherals::DAC12 {
     #[inline(always)]
     fn regs() -> crate::pac::dac12::Dac12 {
         crate::pac::DAC12
-    }
-
-    #[inline(always)]
-    fn module_stop() {
-        debug!("{}: stop=true", "DAC12");
-        let mstp = crate::pac::MSTP;
-        mstp.mstpcrd().modify(|w| w.set_mstpd20(true));
-    }
-
-    #[inline(always)]
-    fn module_start() {
-        debug!("{}: stop=false", "DAC12");
-        let mstp = crate::pac::MSTP;
-        mstp.mstpcrd().modify(|w| w.set_mstpd20(false));
     }
 }
 

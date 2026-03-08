@@ -23,6 +23,7 @@ use crate::{
         typelevel::{Handler as InterruptHandler, Interrupt as InterruptType},
     },
     mode::{Async, Blocking, Mode},
+    module_stop::ModuleStop,
     pac::{self, iic::vals::Cks},
     write_protect::ProtectedModify,
 };
@@ -69,7 +70,7 @@ pub struct TeInterruptHandler<I: Instance> {
 
 /// [`I2c`] driver instance.
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
+pub trait Instance: SealedInstance + ModuleStop + PeripheralType + 'static + Send {}
 
 pub(crate) trait SealedInstance {
     #[cfg(feature = "defmt")]
@@ -82,8 +83,6 @@ pub(crate) trait SealedInstance {
     const TX_INTERRUPT_EVENT: InterruptEvent;
 
     fn regs() -> pac::iic::Iic;
-    fn module_stop();
-    fn module_start();
 
     /// Waker for receive data events.
     fn rx_waker() -> &'static AtomicWaker;
@@ -144,20 +143,6 @@ macro_rules! instance_impl {
                 #[inline(always)]
                 fn regs() -> pac::iic::Iic {
                     crate::pac::$instance
-                }
-
-                #[inline(always)]
-                fn module_stop() {
-                    debug!("{}: stop=true", stringify!($instance));
-                    let mstp = pac::MSTP;
-                    mstp.mstpcrb().modify(|w| w.[< set_ $mstp >](true));
-                }
-
-                #[inline(always)]
-                fn module_start() {
-                    debug!("{}: stop=false", stringify!($instance));
-                    let mstp = pac::MSTP;
-                    mstp.mstpcrb().modify(|w| w.[< set_ $mstp >](false));
                 }
 
                 /// Waker for incoming data events.
@@ -543,7 +528,7 @@ impl<'d, M: Mode, I: Instance> I2c<'d, M, I> {
         sda: Peri<'d, D>,
         speed: I2cSpeed,
     ) -> Self {
-        I::module_start();
+        I::start_module();
 
         let iic = I::regs();
 
@@ -592,7 +577,7 @@ impl<'d, M: Mode, I: Instance> I2c<'d, M, I> {
 
 impl<'d, M: Mode, I: Instance> Drop for I2c<'d, M, I> {
     fn drop(&mut self) {
-        I::module_stop();
+        I::stop_module();
     }
 }
 

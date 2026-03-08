@@ -15,6 +15,7 @@ use embedded_hal_1::spi::{MODE_0, Mode};
 
 use crate::{
     gpio::{Basic, Flex, Pin, PortFunction},
+    module_stop::ModuleStop,
     pac::{
         self,
         spi::vals::{Brdv, Cpha, Cpol, Lsbf, Spb, Spbyt, Splw, Spms, Sprdtd},
@@ -181,12 +182,10 @@ impl SealedWord for u32 {
 
 /// [`Spi`] driver instance.
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
+pub trait Instance: SealedInstance + ModuleStop + PeripheralType + 'static + Send {}
 
 pub(crate) trait SealedInstance {
     fn regs() -> pac::spi::Spi;
-    fn module_stop();
-    fn module_start();
 }
 
 /// GPIO pin connected to the `MISO` line of an [`Spi`] instance.
@@ -291,20 +290,6 @@ macro_rules! instance_impl {
                 fn regs() -> crate::pac::spi::Spi {
                     crate::pac::$instance
                 }
-
-                #[inline(always)]
-                fn module_stop() {
-                    debug!("{}: stop=true", stringify!($instance));
-                    let mstp = crate::pac::MSTP;
-                    mstp.mstpcrb().modify(|w| w.[< set_ $mstp >](true));
-                }
-
-                #[inline(always)]
-                fn module_start() {
-                    debug!("{}: stop=false", stringify!($instance));
-                    let mstp = crate::pac::MSTP;
-                    mstp.mstpcrb().modify(|w| w.[< set_ $mstp >](false));
-                }
             }
         }
     };
@@ -348,7 +333,7 @@ impl<'d, I: Instance, W: Word> Spi<'d, I, W> {
     ) -> Self {
         let _ = spi;
 
-        I::module_start();
+        I::start_module();
 
         sck.set_pfunc();
         mosi.set_pfunc();
@@ -479,7 +464,7 @@ impl<'d, I: Instance, W: Word> Spi<'d, I, W> {
 
 impl<'d, I: Instance, W: Word> Drop for Spi<'d, I, W> {
     fn drop(&mut self) {
-        I::module_stop();
+        I::stop_module();
     }
 }
 

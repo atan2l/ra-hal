@@ -5,10 +5,7 @@
 
 use embassy_hal_internal::Peri;
 
-use crate::{
-    pac::{self, crc::vals::Gps},
-    peripherals::CRC,
-};
+use crate::{module_stop::ModuleStop, pac::crc::vals::Gps, peripherals::CRC};
 
 /// Polynomial to use for CRC calculation.
 #[derive(Default, Copy, Clone, PartialEq)]
@@ -64,11 +61,7 @@ impl<'d> Crc<'d> {
     ///
     /// A `CRC` driver.
     pub fn new(peri: Peri<'d, CRC>, config: Config) -> Self {
-        debug!("CRC: stop=false");
-
-        let mstp = pac::MSTP;
-
-        mstp.mstpcrc().write(|w| w.set_mstpc1(false));
+        CRC::start_module();
 
         let mut instance = Self {
             _peri: peri,
@@ -201,10 +194,6 @@ impl<'d> Crc<'d> {
 impl<'d> Drop for Crc<'d> {
     /// Turns off `CRC` and sets `MSTPC1=true`.
     fn drop(&mut self) {
-        debug!("CRC: stop=true");
-
-        let mstp = pac::MSTP;
-
-        mstp.mstpcrc().write(|w| w.set_mstpc1(true));
+        CRC::stop_module();
     }
 }
