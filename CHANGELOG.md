@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project will eventually adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) once the 1.0 milestone is reached.
 
-## [0.2.3] - TBD
+## [0.2.3] - 2026-03-09
 ### Added
 - iwdt: new driver
 - wdt: new driver

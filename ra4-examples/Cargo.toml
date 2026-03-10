@@ -1,6 +1,6 @@
 [package]
 name = "ra4-examples"
-version = "0.2.3-dev"
+version = "0.2.3"
 description = "HAL examples for the Renesas RA4 family of MCUs."
 license = "GPL-3.0-or-later"
 publish = false
@@ -33,7 +33,7 @@ embedded-io = { workspace = true }
 embedded-io-async = { workspace = true }
 
 ## Board stuff
-ra4-hal = { path = "../ra4-hal", version = "0.2.3-dev", features = [ "unstable-pac" ] }
+ra4-hal = { path = "../ra4-hal", version = "0.2.3", features = [ "unstable-pac" ] }
 uno-r4wifi-bsc = { path = "../uno-r4wifi-bsc" }
 
 ## Third party stuff
