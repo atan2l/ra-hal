@@ -11,6 +11,9 @@ and this project will eventually adhere to [Semantic Versioning](https://semver.
 - wdt: new driver
 - pac: `OSM` peripheral with `OFS0` and `OFS1` registers
 - mstp: `ModuleStop` trait to provide a consistent interface to clock gating
+- gpt: Add 32-bit `GPT` support.
+### Changed
+- time-driver: Make generic over 32-bit `GPT` instances.
 ### Fixed
 - gpt: Ensure `embassy-time` uses the correct tick rate when ƒHOCO=64 MHz
 - system: Enable high speed mode for ƒICLK=32 MHz

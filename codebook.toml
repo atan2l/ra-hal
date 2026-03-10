@@ -167,5 +167,11 @@ ignore_patterns = [
     "Vref(h?)",
     "pcl?k[abcd]",
     "PCL?K[ABCD]",
+    "Ccmp[AB]",
+    "Cmp[CDEF]",
+    "ccmp[ab]",
+    "cmp[cdef]",
+    "Udf",
+    "Ovf",
 ]
 use_global = false

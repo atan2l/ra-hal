@@ -179,7 +179,7 @@ fn do_gpt(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
         }
     };
 
-    signals
+    let mut impls = signals
         .iter()
         .filter(|(signal, _)| signal.as_str() == "GTIOCA" || signal.as_str() == "GTIOCB")
         .fold(vec![], |mut acc, (signal, pins)| {
@@ -201,7 +201,34 @@ fn do_gpt(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
             }
 
             acc
-        })
+        });
+
+    if let Some(index) = peripheral.to_string().strip_prefix("GPT16_") {
+        let index = index.parse::<usize>().unwrap();
+
+        let ccmpa = format_ident!("Gpt{index}CcmpA");
+        let ccmpb = format_ident!("Gpt{index}CcmpB");
+        let cmpc = format_ident!("Gpt{index}CmpC");
+        let overflow = format_ident!("Gpt{index}Ovf");
+        let underflow = format_ident!("Gpt{index}Udf");
+        impls.push(quote! {
+            crate::timer::timer_instance!(#peripheral, u16, #index, #ccmpa, #ccmpb, #cmpc, #overflow, #underflow);
+        });
+    }
+    if let Some(index) = peripheral.to_string().strip_prefix("GPT32_") {
+        let index = index.parse::<usize>().unwrap();
+
+        let ccmpa = format_ident!("Gpt{index}CcmpA");
+        let ccmpb = format_ident!("Gpt{index}CcmpB");
+        let cmpc = format_ident!("Gpt{index}CmpC");
+        let overflow = format_ident!("Gpt{index}Ovf");
+        let underflow = format_ident!("Gpt{index}Udf");
+        impls.push(quote! {
+            crate::timer::timer_instance!(#peripheral, u32, #index, #ccmpa, #ccmpb, #cmpc, #overflow, #underflow);
+        });
+    }
+
+    impls
 }
 
 fn do_sci(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {

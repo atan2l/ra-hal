@@ -4,10 +4,11 @@
 //!
 //! # TODO
 //! * Allow use of a different `GPT` instance
-//! * Add an `AGT` implementation
+//! * Add an `AGT` implementation (only useful with external oscillators)
 
 use core::{
     cell::{Cell, RefCell},
+    marker::PhantomData,
     sync::atomic::{AtomicU32, Ordering},
 };
 
@@ -17,10 +18,9 @@ use embassy_time_driver::Driver;
 use embassy_time_queue_utils::Queue;
 
 use crate::{
-    event_link::{IcuInterrupt, InterruptEvent},
+    event_link::IcuInterrupt,
     interrupt,
     interrupt::typelevel::Interrupt,
-    module_stop::ModuleStop as _,
     pac::{
         self,
         gpt::{
@@ -46,56 +46,48 @@ impl AlarmState {
     }
 }
 
-trait Instance {
+trait Instance: crate::timer::Instance<u32> + Send + Sync + 'static {
     type AlarmInterrupt: interrupt::typelevel::Interrupt;
     type OverflowInterrupt: interrupt::typelevel::Interrupt;
-    const ALARM_EVENT: InterruptEvent;
-    const OVERFLOW_EVENT: InterruptEvent;
-
-    fn regs() -> pac::gpt::Gpt;
 }
 
 impl Instance for crate::peripherals::GPT32_0 {
     type AlarmInterrupt = crate::interrupt::typelevel::IEL1;
     type OverflowInterrupt = crate::interrupt::typelevel::IEL0;
-    const ALARM_EVENT: InterruptEvent = InterruptEvent::Gpt0CmpC;
-    const OVERFLOW_EVENT: InterruptEvent = InterruptEvent::Gpt0Ovf;
-
-    #[inline(always)]
-    fn regs() -> crate::pac::gpt::Gpt {
-        crate::pac::GPT32_0
-    }
 }
 
-struct GptDriver {
+impl Instance for crate::peripherals::GPT32_1 {
+    type AlarmInterrupt = crate::interrupt::typelevel::IEL1;
+    type OverflowInterrupt = crate::interrupt::typelevel::IEL0;
+}
+
+struct GptDriver<I: Instance> {
     /// Number of 2^32 periods elapsed since boot.
     period: AtomicU32,
     queue: Mutex<RefCell<Queue>>,
     alarms: Mutex<AlarmState>,
+    phantom: PhantomData<I>,
 }
 
-impl GptDriver {
+impl<I: Instance> GptDriver<I> {
     // Fudge factor to ensure we don't fire early
     const FUDGE_FACTOR: u64 = 10;
 
     pub(crate) fn init(&'static self) {
-        GPT32_0::start_module();
+        I::start_module();
 
         // Enable the interrupts at the NVIC level,
         // arm the overflow interrupt in the ICU.
         {
-            type AlarmInt = <GPT32_0 as Instance>::AlarmInterrupt;
-            type OverflowInt = <GPT32_0 as Instance>::OverflowInterrupt;
-
             unsafe {
-                AlarmInt::IRQ.enable();
-                OverflowInt::IRQ.enable();
+                I::AlarmInterrupt::IRQ.enable();
+                I::OverflowInterrupt::IRQ.enable();
             };
 
-            OverflowInt::IRQ.icu_enable(<GPT32_0 as Instance>::OVERFLOW_EVENT);
+            I::OverflowInterrupt::IRQ.icu_enable(I::OVERFLOW_EVENT);
         }
 
-        let timer = GPT32_0::regs();
+        let timer = I::regs();
 
         // Disable external things that might modify the counter
         timer.gtupsr().write_value(Gtupsr(0));
@@ -113,7 +105,8 @@ impl GptDriver {
             r.set_ud(Ud::Up);
         });
 
-        // Since we're at 48 MHz just use the clock, undivided
+        // Since PCLKD is configured at a rate that is directly supported by embassy-time
+        // as a tick rate, let's just use the peripheral clock undivided.
         timer.gtcr().write(|r| r.set_tpcs(Tpcs::DIV_1));
         trace!("GTCR: {}", timer.gtcr().read());
 
@@ -143,7 +136,7 @@ impl GptDriver {
                     .borrow(cs)
                     .borrow_mut()
                     .next_expiration(self.now());
-            } //
+            }
         });
     }
 
@@ -162,9 +155,7 @@ impl GptDriver {
 
     #[must_use]
     fn set_alarm(&self, cs: &CriticalSection, timestamp: u64) -> bool {
-        type AlarmInt = <GPT32_0 as Instance>::AlarmInterrupt;
-
-        let timer = GPT32_0::regs();
+        let timer = I::regs();
 
         let alarm = self.alarms.borrow(*cs);
         alarm.timestamp.set(timestamp);
@@ -172,7 +163,7 @@ impl GptDriver {
         let t = self.now();
         if timestamp <= t {
             // Disarm the alarm and return `false` to indicate that.
-            AlarmInt::IRQ.icu_disable();
+            I::AlarmInterrupt::IRQ.icu_disable();
             alarm.timestamp.set(u64::MAX);
 
             return false;
@@ -187,7 +178,7 @@ impl GptDriver {
                 // Load the safe timestamp
                 timer.gtccrc().write_value(safe_timestamp);
                 // Enable the compare interrupt
-                AlarmInt::IRQ.icu_enable(<GPT32_0 as Instance>::ALARM_EVENT);
+                I::AlarmInterrupt::IRQ.icu_enable(I::COMP_C_EVENT);
             });
         } else {
             // TODO: Uhhhhh
@@ -199,9 +190,9 @@ impl GptDriver {
     }
 }
 
-impl Driver for GptDriver {
+impl<I: Instance> Driver for GptDriver<I> {
     fn now(&self) -> u64 {
-        let timer = GPT32_0::regs();
+        let timer = I::regs();
 
         let period = self.period.load(Ordering::Acquire);
         let count = timer.gtcnt().read();
@@ -221,10 +212,11 @@ impl Driver for GptDriver {
     }
 }
 
-embassy_time_driver::time_driver_impl!(static DRIVER: GptDriver = GptDriver{
-    period: AtomicU32::new(0),
-    queue: Mutex::new(RefCell::new(Queue::new())),
-    alarms: Mutex::new(AlarmState::new())
+embassy_time_driver::time_driver_impl!(static DRIVER: GptDriver<GPT32_0> = GptDriver {
+    period:AtomicU32::new(0),
+    queue:Mutex::new(RefCell::new(Queue::new())),
+    alarms:Mutex::new(AlarmState::new()),
+    phantom: PhantomData
 });
 
 pub(crate) fn init() {
