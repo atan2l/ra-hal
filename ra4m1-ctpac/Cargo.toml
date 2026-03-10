@@ -1,6 +1,6 @@
 [package]
 name = "ra4m1-ctpac"
-version = "0.2.3"
+version = "0.2.4-dev"
 description = "Peripheral Access Crate (PAC) for the Renesas RA4M1."
 categories = [ "embedded", "hardware-support", "no-std", "asynchronous" ]
 authors.workspace = true
