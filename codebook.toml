@@ -173,5 +173,6 @@ ignore_patterns = [
     "cmp[cdef]",
     "Udf",
     "Ovf",
+    "vergen-gitcl",
 ]
 use_global = false
