@@ -1057,13 +1057,16 @@ impl<'d, I: InterruptiblePin> InterruptFlex<'d, I, WithPullUp> {
 }
 
 impl<'d, I: InterruptiblePin, C: ControlKind> InterruptFlex<'d, I, C> {
-    /// Create `InterruptFlex` from pin.
+    /// Creates an `InterruptFlex` configured for input that detects falling edge events and has the debounce filter disabled.
     #[inline]
     pub fn new<Int: InterruptType>(
         pin: Peri<'d, I>,
-        _irq: Peri<'d, impl GpioIrq<I>>,
-        _handler: impl interrupt::typelevel::Binding<Int, InputInterruptHandler<I>>,
+        irq: Peri<'d, impl GpioIrq<I>>,
+        handler: impl interrupt::typelevel::Binding<Int, InputInterruptHandler<I>>,
     ) -> Self {
+        let _ = irq;
+        let _ = handler;
+
         unsafe { Int::IRQ.enable() };
 
         Int::IRQ.icu_enable(I::INTERRUPT_EVENT);
@@ -1076,11 +1079,17 @@ impl<'d, I: InterruptiblePin, C: ControlKind> InterruptFlex<'d, I, C> {
 
         pfs_reg.protected_modify(|r| r.set_isel(true));
 
-        Self {
+        let mut this = Self {
             pin,
             phantom: PhantomData,
             phantom_k: PhantomData,
-        }
+        };
+
+        this.set_as_input();
+        this.set_trigger(GpioTrigger::Falling);
+        this.set_debounce(Debounce::Off);
+
+        this
     }
 
     // The RM says:
