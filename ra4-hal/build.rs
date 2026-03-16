@@ -315,7 +315,7 @@ fn do_spi(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
                     "MISO" => format_ident!("miso_pin"),
                     "MOSI" => format_ident!("mosi_pin"),
                     "RSPCK" => format_ident!("sck_pin"),
-                    "SSL0" => format_ident!("ss_pin"),
+                    "SSL0" => format_ident!("cs_pin"),
                     _ => unreachable!(),
                 };
 

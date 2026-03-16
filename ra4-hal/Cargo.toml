@@ -23,6 +23,7 @@ embedded-hal-1 = { workspace = true }
 embedded-hal-async = { workspace = true }
 
 embassy-hal-internal = { workspace = true }
+embassy-futures = { version = "0.1.2" }
 embedded-io = { workspace = true }
 embedded-io-async = { workspace = true }
 embedded-serial = { workspace = true }

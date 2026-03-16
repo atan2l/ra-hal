@@ -233,80 +233,6 @@ impl defmt::Format for Dmcra {
         )
     }
 }
-#[doc = "DMA Block Transfer Count Register"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Dmcrb(pub u16);
-impl Dmcrb {
-    #[doc = "Specifies the number of block transfer operations or repeat transfer operations."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn dmcrb(&self) -> super::vals::Dmcrb {
-        let val = (self.0 >> 0usize) & 0xffff;
-        super::vals::Dmcrb::from_bits(val as u16)
-    }
-    #[doc = "Specifies the number of block transfer operations or repeat transfer operations."]
-    #[inline(always)]
-    pub const fn set_dmcrb(&mut self, val: super::vals::Dmcrb) {
-        self.0 = (self.0 & !(0xffff << 0usize)) | (((val.to_bits() as u16) & 0xffff) << 0usize);
-    }
-}
-impl Default for Dmcrb {
-    #[inline(always)]
-    fn default() -> Dmcrb {
-        Dmcrb(0)
-    }
-}
-impl core::fmt::Debug for Dmcrb {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Dmcrb")
-            .field("dmcrb", &self.dmcrb())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Dmcrb {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Dmcrb {{ dmcrb: {:?} }}", self.dmcrb())
-    }
-}
-#[doc = "DMA Destination Address Register"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Dmdar(pub u32);
-impl Dmdar {
-    #[doc = "Specifies the transfer destination start address."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn dmdar(&self) -> u32 {
-        let val = (self.0 >> 0usize) & 0xffff_ffff;
-        val as u32
-    }
-    #[doc = "Specifies the transfer destination start address."]
-    #[inline(always)]
-    pub const fn set_dmdar(&mut self, val: u32) {
-        self.0 = (self.0 & !(0xffff_ffff << 0usize)) | (((val as u32) & 0xffff_ffff) << 0usize);
-    }
-}
-impl Default for Dmdar {
-    #[inline(always)]
-    fn default() -> Dmdar {
-        Dmdar(0)
-    }
-}
-impl core::fmt::Debug for Dmdar {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Dmdar")
-            .field("dmdar", &self.dmdar())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Dmdar {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Dmdar {{ dmdar: {=u32:?} }}", self.dmdar())
-    }
-}
 #[doc = "DMA Interrupt Setting Register"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
@@ -418,43 +344,6 @@ impl defmt::Format for Dmint {
         )
     }
 }
-#[doc = "DMA Offset Register"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Dmofr(pub u32);
-impl Dmofr {
-    #[doc = "Specifies the offset when offset addition is selected as the address update mode for transfer source or destination."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn dmofr(&self) -> u32 {
-        let val = (self.0 >> 0usize) & 0xffff_ffff;
-        val as u32
-    }
-    #[doc = "Specifies the offset when offset addition is selected as the address update mode for transfer source or destination."]
-    #[inline(always)]
-    pub const fn set_dmofr(&mut self, val: u32) {
-        self.0 = (self.0 & !(0xffff_ffff << 0usize)) | (((val as u32) & 0xffff_ffff) << 0usize);
-    }
-}
-impl Default for Dmofr {
-    #[inline(always)]
-    fn default() -> Dmofr {
-        Dmofr(0)
-    }
-}
-impl core::fmt::Debug for Dmofr {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Dmofr")
-            .field("dmofr", &self.dmofr())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Dmofr {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Dmofr {{ dmofr: {=u32:?} }}", self.dmofr())
-    }
-}
 #[doc = "DMA Software Start Register"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
@@ -536,43 +425,6 @@ impl defmt::Format for Dmreq {
             self.clrs(),
             self.reserved_2()
         )
-    }
-}
-#[doc = "DMA Source Address Register"]
-#[repr(transparent)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Dmsar(pub u32);
-impl Dmsar {
-    #[doc = "Specifies the transfer source start address."]
-    #[must_use]
-    #[inline(always)]
-    pub const fn dmsar(&self) -> u32 {
-        let val = (self.0 >> 0usize) & 0xffff_ffff;
-        val as u32
-    }
-    #[doc = "Specifies the transfer source start address."]
-    #[inline(always)]
-    pub const fn set_dmsar(&mut self, val: u32) {
-        self.0 = (self.0 & !(0xffff_ffff << 0usize)) | (((val as u32) & 0xffff_ffff) << 0usize);
-    }
-}
-impl Default for Dmsar {
-    #[inline(always)]
-    fn default() -> Dmsar {
-        Dmsar(0)
-    }
-}
-impl core::fmt::Debug for Dmsar {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
-        f.debug_struct("Dmsar")
-            .field("dmsar", &self.dmsar())
-            .finish()
-    }
-}
-#[cfg(feature = "defmt")]
-impl defmt::Format for Dmsar {
-    fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "Dmsar {{ dmsar: {=u32:?} }}", self.dmsar())
     }
 }
 #[doc = "DMA Status Register"]

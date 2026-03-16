@@ -37,8 +37,8 @@ impl From<Brdv> for u8 {
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Bysw {
-    LittleEndian = 0x0,
-    BigEndian = 0x01,
+    Little = 0x0,
+    Big = 0x01,
 }
 impl Bysw {
     #[inline(always)]
@@ -129,9 +129,9 @@ impl From<Cpol> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Lsbf {
     #[doc = "MSB first"]
-    Msb = 0x0,
+    Msb0 = 0x0,
     #[doc = "LSB first"]
-    Lsb = 0x01,
+    Lsb0 = 0x01,
 }
 impl Lsbf {
     #[inline(always)]

@@ -74,7 +74,7 @@ To read the OFS values from a board connected to your computer:
 |            | Peripheral                                         | Notes                                                       |
 | ---------- | -------------------------------------------------- | ----------------------------------------------------------- |
 | ⬛⬛⬛⬜⬜ | `ADC14` 14-Bit A/D Converter                       | In progress, single shot for 1 and multi channel work.      |
-| ⬜⬜⬜⬜⬜ | `CAC` Clock Frequency Accuracy Measurement Circuit |                                                             |
+| ⬜⬜⬜⬜⬜ | `CAC` Clock Frequency Accuracy Measurement Circuit | Internal oscillators aren't accurate enough to calibrate?   |
 | ⬜⬜⬜⬜⬜ | `CAN` Controller Area Network                      |                                                             |
 | ⬛⬛⬛⬛⬛ | `CRC` Cyclic Redundancy Check Calculator           | 32-bit CRC only works on multiples of 4 bytes.              |
 | ⬛⬜⬜⬜⬜ | `DAC12` 12-bit D/A Converter                       | In progress.                                                |
@@ -85,8 +85,8 @@ To read the OFS values from a board connected to your computer:
 | ⬛⬛⬛⬛⬜ | `PORT` I/O Ports                                   | In progress.                                                |
 | ⬛⬛⬜⬜⬜ | `RTC` Real-Time Clock                              | In progress. Needs `CAC` for trimming.                      |
 | ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine                 | Undocumented.                                               |
-| ⬛⬛⬛⬜⬜ | `SCI` Serial Communications Interface              | In progress, DMA (DTC) no-go, embedded-serial pending.      |
-| ⬜⬜⬜⬜⬜ | `SPI` Serial Peripheral Interface                  |                                                             |
+| ⬛⬛⬛⬜⬜ | `SCI` Serial Communications Interface              | In progress, Embedded-serial pending.                       |
+| ⬛⬛⬛⬜⬜ | `SPI` Serial Peripheral Interface                  | In progress. Blocking and DMAC via EH 1.0 works.            |
 | ⬜⬜⬜⬜⬜ | `SSIE` Serial Sound Interface Enhanced             |                                                             |
 | ⬛⬛⬛⬛⬜ | `WDT` Watchdog Timer                               | User defined handlers?                                      |
 

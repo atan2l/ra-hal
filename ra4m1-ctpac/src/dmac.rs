@@ -16,12 +16,12 @@ impl Dmac {
     }
     #[doc = "DMA Source Address Register"]
     #[inline(always)]
-    pub const fn dmsar(self) -> crate::common::Reg<regs::Dmsar, crate::common::RW> {
+    pub const fn dmsar(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0usize) as _) }
     }
     #[doc = "DMA Destination Address Register"]
     #[inline(always)]
-    pub const fn dmdar(self) -> crate::common::Reg<regs::Dmdar, crate::common::RW> {
+    pub const fn dmdar(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x04usize) as _) }
     }
     #[doc = "DMA Transfer Count Register"]
@@ -31,7 +31,7 @@ impl Dmac {
     }
     #[doc = "DMA Block Transfer Count Register"]
     #[inline(always)]
-    pub const fn dmcrb(self) -> crate::common::Reg<regs::Dmcrb, crate::common::RW> {
+    pub const fn dmcrb(self) -> crate::common::Reg<u16, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0cusize) as _) }
     }
     #[doc = "DMA Transfer Mode Register"]
@@ -51,7 +51,7 @@ impl Dmac {
     }
     #[doc = "DMA Offset Register"]
     #[inline(always)]
-    pub const fn dmofr(self) -> crate::common::Reg<regs::Dmofr, crate::common::RW> {
+    pub const fn dmofr(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x18usize) as _) }
     }
     #[doc = "DMA Transfer Enable Register"]

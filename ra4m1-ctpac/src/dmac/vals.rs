@@ -3,13 +3,13 @@
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Dctg {
     #[doc = "Software"]
-    _00 = 0x0,
+    Software = 0x0,
     #[doc = "Interrupts*1 from peripheral modules or external interrupt input pins"]
-    _01 = 0x01,
+    Interrupts = 0x01,
     #[doc = "Setting prohibited"]
-    _10 = 0x02,
+    _RESERVED_2 = 0x02,
     #[doc = "Setting prohibited"]
-    _11 = 0x03,
+    _RESERVED_3 = 0x03,
 }
 impl Dctg {
     #[inline(always)]
@@ -38,13 +38,13 @@ impl From<Dctg> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Dm {
     #[doc = "Fixed address"]
-    _00 = 0x0,
+    Fixed = 0x0,
     #[doc = "Offset addition"]
-    _01 = 0x01,
+    OffsetAddition = 0x01,
     #[doc = "Incremented address"]
-    _10 = 0x02,
+    Increment = 0x02,
     #[doc = "Decremented address."]
-    _11 = 0x03,
+    Decrement = 0x03,
 }
 impl Dm {
     #[inline(always)]
@@ -117,13 +117,13 @@ impl From<Dmcrb> for u16 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Dts {
     #[doc = "The destination is specified as the repeat area or block area."]
-    _00 = 0x0,
+    RepeatDestination = 0x0,
     #[doc = "The source is specified as the repeat area or block area."]
-    _01 = 0x01,
+    RepeatSource = 0x01,
     #[doc = "The repeat area or block area is not specified."]
-    _10 = 0x02,
+    Unspecified = 0x02,
     #[doc = "Setting prohibited"]
-    _11 = 0x03,
+    _RESERVED_3 = 0x03,
 }
 impl Dts {
     #[inline(always)]
@@ -152,13 +152,13 @@ impl From<Dts> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Md {
     #[doc = "Normal transfer"]
-    _00 = 0x0,
+    Normal = 0x0,
     #[doc = "Repeat transfer"]
-    _01 = 0x01,
+    Repeat = 0x01,
     #[doc = "Block transfer"]
-    _10 = 0x02,
+    Block = 0x02,
     #[doc = "Setting prohibited"]
-    _11 = 0x03,
+    _RESERVED_3 = 0x03,
 }
 impl Md {
     #[inline(always)]
@@ -187,13 +187,13 @@ impl From<Md> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Sm {
     #[doc = "Fixed address"]
-    _00 = 0x0,
+    Fixed = 0x0,
     #[doc = "Offset addition"]
-    _01 = 0x01,
+    OffsetAddition = 0x01,
     #[doc = "Incremented address"]
-    _10 = 0x02,
+    Increment = 0x02,
     #[doc = "Decremented address."]
-    _11 = 0x03,
+    Decrement = 0x03,
 }
 impl Sm {
     #[inline(always)]
@@ -222,13 +222,13 @@ impl From<Sm> for u8 {
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Sz {
     #[doc = "8 bits"]
-    _00 = 0x0,
+    _8bits = 0x0,
     #[doc = "16 bits"]
-    _01 = 0x01,
+    _16bits = 0x01,
     #[doc = "32 bits"]
-    _10 = 0x02,
+    _32bits = 0x02,
     #[doc = "Setting prohibited"]
-    _11 = 0x03,
+    _RESERVED_3 = 0x03,
 }
 impl Sz {
     #[inline(always)]

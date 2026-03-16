@@ -417,6 +417,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2fc328bf943af66b80b98755db9106bf7e7471b0cf47dc8559cd9a6be504cc9c"
 
 [[package]]
+name = "embassy-futures"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dc2d050bdc5c21e0862a89256ed8029ae6c290a93aecefc73084b3002cdebb01"
+
+[[package]]
 name = "embassy-hal-internal"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -709,13 +715,14 @@ dependencies = [
 [[package]]
 name = "mini-sensors"
 version = "0.1.0"
-source = "git+https://git.sr.ht/~az1/mini-sensors#b9034bcab3e1708274ef5c77b3e059e4c201a808"
+source = "git+https://git.sr.ht/~az1/mini-sensors#5cbf3f98d8e0a3f530f1d8f035fd9e695abffd64"
 dependencies = [
  "defmt",
  "device-driver",
  "embassy-sync",
  "embassy-time",
  "embedded-hal 1.0.0",
+ "safe-transmute",
 ]
 
 [[package]]
@@ -944,6 +951,7 @@ dependencies = [
  "critical-section",
  "defmt",
  "document-features",
+ "embassy-futures",
  "embassy-hal-internal",
  "embassy-sync",
  "embassy-time",
@@ -1039,6 +1047,12 @@ name = "ryu"
 version = "1.0.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a50f4cf475b65d88e057964e0e9bb1f0aa9bbb2036dc65c64596b42932536984"
+
+[[package]]
+name = "safe-transmute"
+version = "0.11.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3944826ff8fa8093089aba3acb4ef44b9446a99a16f3bf4e74af3f77d340ab7d"
 
 [[package]]
 name = "semver"

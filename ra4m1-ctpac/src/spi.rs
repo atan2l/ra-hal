@@ -39,6 +39,11 @@ impl Spi {
     pub const fn spdr(self) -> crate::common::Reg<u32, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x04usize) as _) }
     }
+    #[doc = "SPI Data Register ( byte access )"]
+    #[inline(always)]
+    pub const fn spdr_by(self) -> crate::common::Reg<u8, crate::common::RW> {
+        unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x04usize) as _) }
+    }
     #[doc = "SPI Data Register ( halfword access )"]
     #[inline(always)]
     pub const fn spdr_ha(self) -> crate::common::Reg<u16, crate::common::RW> {

@@ -1,0 +1,36 @@
+transforms:
+  - !MapEnumVariants
+    enum: dmac::vals::Dctg
+    variants:
+      _00: Software
+      _01: Interrupts
+      _10: _RESERVED_2
+      _11: _RESERVED_3
+  - !MapEnumVariants
+    enum: dmac::vals::Sz
+    variants:
+      _00: _8bits
+      _01: _16bits
+      _10: _32bits
+      _11: _RESERVED_3
+  - !MapEnumVariants
+    enum: dmac::vals::Dts
+    variants:
+      _00: RepeatDestination
+      _01: RepeatSource
+      _10: Unspecified
+      _11: _RESERVED_3
+  - !MapEnumVariants
+    enum: dmac::vals::Md
+    variants:
+      _00: Normal
+      _01: Repeat
+      _10: Block
+      _11: _RESERVED_3
+  - !MapEnumVariants
+    enum: dmac::vals::[DS]m
+    variants:
+      _00: Fixed
+      _01: OffsetAddition
+      _10: Increment
+      _11: Decrement

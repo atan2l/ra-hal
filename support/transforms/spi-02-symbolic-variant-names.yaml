@@ -32,8 +32,8 @@ transforms:
   - !MapEnumVariants
     enum: spi::vals::Lsbf
     variants:
-      _0: Msb
-      _1: Lsb
+      _0: Msb0
+      _1: Lsb0
   - !MapEnumVariants
     enum: spi::vals::Spb
     variants:

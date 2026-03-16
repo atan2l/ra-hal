@@ -12,6 +12,7 @@ pub mod fmt;
 pub mod adc;
 pub mod crc;
 pub mod dac;
+pub mod dmac;
 pub mod dtc;
 pub mod event_link;
 pub mod gpio;
@@ -246,7 +247,7 @@ pub fn init() -> Peripherals {
             // });
 
             let hoco_freq = system.hococr2().read().hcfrqw();
-            info!(
+            debug!(
                 "HOCO: frequency={}, status={}",
                 hoco_freq,
                 system.hococr().read().hcstp()
@@ -289,7 +290,6 @@ pub fn init() -> Peripherals {
 
             #[cfg(feature = "cache")]
             {
-                trace!("SYSTEM: fcache enabled");
                 let fcache = pac::FCACHE;
                 fcache.fcacheiv().write(|r| r.set_fcacheiv(true));
 
@@ -298,13 +298,15 @@ pub fn init() -> Peripherals {
                 }
 
                 fcache.fcachee().write(|r| r.set_fcacheen(true));
+
+                info!("SYSTEM: fcache enabled");
             }
             #[cfg(not(feature = "cache"))]
             {
-                trace!("SYSTEM: fcache disabled");
                 let fcache = pac::FCACHE;
                 fcache.fcacheiv().write(|r| r.set_fcacheiv(true));
                 fcache.fcachee().write(|r| r.set_fcacheen(false));
+                trace!("SYSTEM: fcache disabled");
             }
 
             // Max frequencies Table 8.2, p130
@@ -371,6 +373,7 @@ pub fn init() -> Peripherals {
         time_driver::init();
         event_link::init();
         dtc::init();
+        dmac::init();
 
         p
     })
@@ -483,19 +486,15 @@ pub fn print_clock_config() {
         let pck_b = clock_config.peripheral_b / 1_000_000;
         let pck_c = clock_config.peripheral_c / 1_000_000;
         let pck_d = clock_config.peripheral_d / 1_000_000;
-        debug!(
-            "SYSTEM: ICLK: {} MHz, FCLK: {} MHz, PCLKA: {} MHz, PCLKB: {} MHz, PCLKC: {} MHz, PCLKD: {} MHz",
-            ick_freq, fck_freq, pck_a, pck_b, pck_c, pck_d
+
+        let system = pac::SYSTEM;
+        let cksel = system.sckscr().read().cksel();
+
+        info!(
+            "SYSTEM: SRC: {}, ICLK: {} MHz, FCLK: {} MHz, PCLKA: {} MHz, PCLKB: {} MHz, PCLKC: {} MHz, PCLKD: {} MHz",
+            cksel, ick_freq, fck_freq, pck_a, pck_b, pck_c, pck_d
         );
     }
-}
-
-/// Returns the system frequency in hertz.
-///
-/// # TODO
-/// * Don't assume system clock is powered by HOCO.
-pub fn system_frequency() -> u32 {
-    clock_config().system
 }
 
 // NOTE: this macro can't be in `embassy-hal-internal` due to the use of `$crate`.

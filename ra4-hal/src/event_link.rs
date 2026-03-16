@@ -382,7 +382,7 @@ pub enum EventSignal {
 #[allow(unused, missing_docs)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[repr(u8)]
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum InterruptEvent {
     None = 0x00,
 

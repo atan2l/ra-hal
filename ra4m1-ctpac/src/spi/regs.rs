@@ -436,6 +436,18 @@ impl Spcr2 {
     pub const fn set_reserved(&mut self, val: u8) {
         self.0 = (self.0 & !(0x07 << 5usize)) | (((val as u8) & 0x07) << 5usize);
     }
+    #[doc = "RSPI Transmit Data Delay"]
+    #[must_use]
+    #[inline(always)]
+    pub const fn sptddl(&self) -> u8 {
+        let val = (self.0 >> 5usize) & 0x07;
+        val as u8
+    }
+    #[doc = "RSPI Transmit Data Delay"]
+    #[inline(always)]
+    pub const fn set_sptddl(&mut self, val: u8) {
+        self.0 = (self.0 & !(0x07 << 5usize)) | (((val as u8) & 0x07) << 5usize);
+    }
 }
 impl Default for Spcr2 {
     #[inline(always)]
@@ -452,6 +464,7 @@ impl core::fmt::Debug for Spcr2 {
             .field("pte", &self.pte())
             .field("sckase", &self.sckase())
             .field("reserved", &self.reserved())
+            .field("sptddl", &self.sptddl())
             .finish()
     }
 }
@@ -460,13 +473,14 @@ impl defmt::Format for Spcr2 {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Spcr2 {{ sppe: {=bool:?}, spoe: {=bool:?}, spiie: {=bool:?}, pte: {=bool:?}, sckase: {=bool:?}, reserved: {=u8:?} }}",
+            "Spcr2 {{ sppe: {=bool:?}, spoe: {=bool:?}, spiie: {=bool:?}, pte: {=bool:?}, sckase: {=bool:?}, reserved: {=u8:?}, sptddl: {=u8:?} }}",
             self.sppe(),
             self.spoe(),
             self.spiie(),
             self.pte(),
             self.sckase(),
-            self.reserved()
+            self.reserved(),
+            self.sptddl()
         )
     }
 }
