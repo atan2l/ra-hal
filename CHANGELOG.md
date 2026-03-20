@@ -18,6 +18,7 @@ and this project will eventually adhere to [Semantic Versioning](https://semver.
   * API for DMAC an DTC backed transfers
   * Example to read from a Bosch BMI-160 sensor with the `mini-sensors` library
 ### Changed
+- embassy: Update to latest published versions
 - pac: Change some SPI enum names around
 - spi:
   * pac: Symbolic variant names
