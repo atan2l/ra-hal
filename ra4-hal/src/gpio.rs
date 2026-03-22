@@ -1,6 +1,6 @@
 //! General Purpose Input/Output (`PORT`).
 
-use core::{future::poll_fn, marker::PhantomData, task::Poll};
+use core::{convert::Infallible, future::poll_fn, marker::PhantomData, task::Poll};
 
 use embassy_hal_internal::{Peri, PeripheralType, impl_peripheral, interrupt::InterruptExt as _};
 use embassy_sync::waitqueue::AtomicWaker;
@@ -1333,5 +1333,47 @@ impl<Pin: InterruptiblePin, Int: InterruptType> InterruptHandler<Int>
     unsafe fn on_interrupt() {
         Int::IRQ.icu_unpend();
         Pin::waker().wake()
+    }
+}
+
+impl<'d, C: ControlKind> embedded_hal_1::digital::ErrorType for Input<'d, C> {
+    type Error = Infallible;
+}
+
+impl<'d, C: ControlKind> embedded_hal_1::digital::InputPin for Input<'d, C> {
+    fn is_high(&mut self) -> Result<bool, Self::Error> {
+        Ok(self.is_high())
+    }
+
+    fn is_low(&mut self) -> Result<bool, Self::Error> {
+        Ok(self.is_low())
+    }
+}
+
+impl<'d, C: ControlKind> embedded_hal_1::digital::ErrorType for Output<'d, C> {
+    type Error = Infallible;
+}
+
+impl<'d, C: ControlKind> embedded_hal_1::digital::OutputPin for Output<'d, C> {
+    fn set_low(&mut self) -> Result<(), Self::Error> {
+        Ok(self.set_low())
+    }
+
+    fn set_high(&mut self) -> Result<(), Self::Error> {
+        Ok(self.set_high())
+    }
+}
+
+impl<'d, C: ControlKind> embedded_hal_1::digital::StatefulOutputPin for Output<'d, C> {
+    fn is_set_high(&mut self) -> Result<bool, Self::Error> {
+        Ok(self.is_set_high())
+    }
+
+    fn is_set_low(&mut self) -> Result<bool, Self::Error> {
+        Ok(self.is_set_low())
+    }
+
+    fn toggle(&mut self) -> Result<(), Self::Error> {
+        Ok(self.toggle())
     }
 }
