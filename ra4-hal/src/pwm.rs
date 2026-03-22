@@ -70,6 +70,17 @@ pub struct Pwm<'d, I: Instance> {
     channel_b: Option<Flex<'d, WithOpenDrain>>,
 }
 
+/// Error type for `Pwm` operations.
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Debug)]
+pub enum PwmError {
+    /// The duty cycle exceeds the width of the timer or the currently set period.
+    InvalidDutyCycle,
+
+    /// Any other kind of error.
+    Unknown,
+}
+
 /// PWM instance
 #[allow(private_bounds)]
 pub trait Instance: SealedInstance + ModuleStop + PeripheralType + 'static + Send {}
@@ -355,6 +366,39 @@ impl<'d, I: Instance> Pwm<'d, I> {
         }
     }
 
+    /// Sets the duty cycle for channel A if it's been assigned to a pin.
+    ///
+    /// # Arguments
+    /// `duty` Raw value, range is `0.0..=period`
+    pub fn set_duty_a(&mut self, duty: u32) -> Result<(), PwmError> {
+        if self.channel_a.is_none() {
+            return Ok(());
+        }
+
+        let pwm = I::regs();
+        let period = pwm.gtpr().read();
+
+        #[cfg(feature = "strict-assert")]
+        assert!(period <= u32::from(u16::MAX));
+        if period > u32::from(u16::MAX) {
+            Err(PwmError::InvalidDutyCycle)?;
+        }
+
+        if duty == 0 {
+            pwm.gtuddtyc().modify(|w| w.set_oadty(Odty::On));
+        } else if duty >= period {
+            pwm.gtuddtyc().modify(|w| w.set_oadty(Odty::Off));
+        } else {
+            // This will center the peak
+
+            pwm.gtuddtyc().modify(|w| w.set_oadty(Odty::CompareMatch));
+            pwm.gtccra().write_value(duty as u32);
+            pwm.gtccrc().write_value(duty as u32);
+        }
+
+        Ok(())
+    }
+
     /// Sets the duty cycle for channel B if it's been assigned to a pin.
     ///
     /// # Arguments
@@ -380,6 +424,39 @@ impl<'d, I: Instance> Pwm<'d, I> {
             pwm.gtccrb().write_value(cmp);
             pwm.gtccre().write_value(cmp);
         }
+    }
+
+    /// Sets the duty cycle for channel B if it's been assigned to a pin.
+    ///
+    /// # Arguments
+    /// `duty` Raw value, range is `0.0..=period`
+    pub fn set_duty_b(&mut self, duty: u32) -> Result<(), PwmError> {
+        if self.channel_b.is_none() {
+            return Ok(());
+        }
+
+        let pwm = I::regs();
+        let period = pwm.gtpr().read();
+
+        #[cfg(feature = "strict-assert")]
+        assert!(period <= u32::from(u16::MAX));
+        if period > u32::from(u16::MAX) {
+            Err(PwmError::InvalidDutyCycle)?;
+        }
+
+        if duty == 0 {
+            pwm.gtuddtyc().modify(|w| w.set_obdty(Odty::On));
+        } else if duty >= period {
+            pwm.gtuddtyc().modify(|w| w.set_obdty(Odty::Off));
+        } else {
+            // This will center the peak
+
+            pwm.gtuddtyc().modify(|w| w.set_obdty(Odty::CompareMatch));
+            pwm.gtccrb().write_value(duty as u32);
+            pwm.gtccre().write_value(duty as u32);
+        }
+
+        Ok(())
     }
 }
 
@@ -452,3 +529,34 @@ gpt_instance!(16, 4, mstpd6);
 gpt_instance!(16, 5, mstpd6);
 gpt_instance!(16, 6, mstpd6);
 gpt_instance!(16, 7, mstpd6);
+
+impl embedded_hal_1::pwm::Error for PwmError {
+    fn kind(&self) -> embedded_hal_1::pwm::ErrorKind {
+        embedded_hal_1::pwm::ErrorKind::Other
+    }
+}
+
+impl<'d, I: Instance> embedded_hal_1::pwm::ErrorType for Pwm<'d, I> {
+    type Error = PwmError;
+}
+
+impl<'d, I: Instance> embedded_hal_1::pwm::SetDutyCycle for Pwm<'d, I> {
+    fn max_duty_cycle(&self) -> u16 {
+        let pwm = I::regs();
+        let period = pwm.gtpr().read();
+        assert!(period <= u32::from(u16::MAX));
+        period as u16
+    }
+
+    fn set_duty_cycle(&mut self, duty: u16) -> Result<(), Self::Error> {
+        if self.channel_a.is_some() {
+            self.set_duty_a(duty as u32)?;
+        }
+
+        if self.channel_b.is_some() {
+            self.set_duty_b(duty as u32)?;
+        }
+
+        Ok(())
+    }
+}

@@ -13,6 +13,8 @@ and this project will eventually adhere to [Semantic Versioning](https://semver.
   * pac: New transforms
   * Transfer API
 - dtc: read (peripheral-to-memory) function
+- gpio: `embedded-hal` input and output traits
+- pwm: `embedded-hal` Pwm trait
 - spi:
   * pac: Add SPI byte access register
   * API for DMAC an DTC backed transfers
