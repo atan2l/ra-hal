@@ -1,6 +1,13 @@
 //! Data Transfer Controller (`DTC`).
 //!
 //! `DTC` is one of two DMA engines on the `RA4M1`.
+//!
+//! # TODO
+//! - Store channels as type erased structs like `DMAC`?
+//!
+//! # Notes
+//! - There are no fixed channels and `DTC` transfers can can occupy any interrupt (`IEL0..=IEL31`).
+//! - Transfer configuration is stored in SRAM and copied to internal registers by the `DTC` peripheral at the start of each transfer.
 
 use core::{marker::PhantomData, task::Poll};
 
@@ -15,6 +22,7 @@ use crate::{
         self,
         typelevel::{Handler as InterruptHandler, Interrupt as InterruptType},
     },
+    module_stop::ModuleStop as _,
     pac,
 };
 
@@ -59,7 +67,6 @@ impl SealedWord for u32 {
 /// Interrupt handler for a `DTC` transfer.
 ///
 /// The interrupt number determines the priority of the transfer. §17.7.
-#[allow(private_bounds)]
 pub struct DtcInterruptHandler<C: Instance> {
     phantom: PhantomData<C>,
 }
@@ -209,11 +216,12 @@ struct VectorTable {
 
 /// `DTC` instance.
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance {}
-
-trait SealedInstance: PeripheralType {
+pub trait Instance: SealedInstance {
+    /// Interrupt associated with the `DTC` instance.  `DTC_CHANn` = `IELn`.
     type Int: interrupt::typelevel::Interrupt;
 }
+
+trait SealedInstance: PeripheralType {}
 
 impl VectorTable {
     const fn new() -> Self {
@@ -253,12 +261,10 @@ impl<'d, C: Instance> Transfer<'d, C> {
 }
 
 pub(crate) fn init() {
-    let system = pac::SYSTEM;
     let dtc = pac::DTC;
 
     // Turn on DMAC and DTC
-    debug!("DTC: stop=false");
-    system.mstpcra().modify(|r| r.set_mstpa22(false));
+    crate::peripherals::DTC::start_module();
 
     let vector_base = unsafe { core::ptr::addr_of!(DTC_VECTOR_TABLE.vectors) as u32 };
     dtc.dtcvbr().write(|r| r.set_dtcvbr(vector_base));
@@ -338,7 +344,7 @@ impl<C: Instance> Channel<C> {
         repeat: bool,
     ) -> Transfer<'d, C> {
         // In normal mode count is a 16-bit counter
-        // In repeat mode count is an  8-bit counter with an 8-bit reload value
+        // In repeat mode count is an 8-bit counter with an 8-bit reload value
         let (transfer_mode, low_count, high_count) = match repeat {
             false => (TransferMode::Normal, source.len() as u8, 0),
             true => (TransferMode::Repeat, source.len() as u8, source.len() as u8),
@@ -354,6 +360,43 @@ impl<C: Instance> Channel<C> {
             .with_interrupt_mode(InterruptMode::OnCompletion)
             .with_source_address(source.as_ptr() as u32)
             .with_dest_address(dest as u32)
+            .with_count_b(0)
+            .with_count_a_low(low_count)
+            .with_count_a_high(high_count)
+            .build();
+        self.update_entry(transfer_entry);
+
+        let mut transfer = Transfer::new(increment_on);
+        transfer.start();
+
+        transfer
+    }
+
+    /// Configures a DTC transfer
+    pub unsafe fn read<'d, W: Word>(
+        &mut self,
+        source: *const W,
+        dest: &'d mut [W],
+        increment_on: InterruptEvent,
+        repeat: bool,
+    ) -> Transfer<'d, C> {
+        // In normal mode count is a 16-bit counter
+        // In repeat mode count is an 8-bit counter with an 8-bit reload value
+        let (transfer_mode, low_count, high_count) = match repeat {
+            false => (TransferMode::Normal, dest.len() as u8, 0),
+            true => (TransferMode::Repeat, dest.len() as u8, dest.len() as u8),
+        };
+
+        let transfer_entry = DtcEntry::builder()
+            .with_chain_mode(ChainMode::Disabled)
+            .with_source_address_mode(AddressMode::Fixed)
+            .with_dest_address_mode(AddressMode::Increment)
+            .with_word_size(W::WORD_SIZE)
+            .with_transfer_mode(transfer_mode)
+            .with_repeat_mode(RepeatMode::Destination)
+            .with_interrupt_mode(InterruptMode::OnCompletion)
+            .with_source_address(source as u32)
+            .with_dest_address(dest.as_ptr() as u32)
             .with_count_b(0)
             .with_count_a_low(low_count)
             .with_count_a_high(high_count)
@@ -404,7 +447,6 @@ impl<C: Instance> InterruptHandler<C::Int> for DtcInterruptHandler<C> {
     unsafe fn on_interrupt() {
         C::Int::IRQ.icu_unpend();
 
-        C::Int::IRQ.set_dtc(false);
         Channel::<C>::waker().wake();
     }
 }
@@ -425,8 +467,6 @@ impl<'d, C: Instance> Future for Transfer<'d, C> {
             return Poll::Ready(());
         }
 
-        let dtc = pac::DTC;
-        info!("{}", dtc.dtcsts().read());
         Poll::Pending
     }
 }
@@ -434,9 +474,11 @@ impl<'d, C: Instance> Future for Transfer<'d, C> {
 macro_rules! dtc_link {
     ($index:literal) => {
         paste::paste! {
-            impl crate::dtc::Instance for crate::peripherals::[< DTC_CHAN $index >] {}
-            impl crate::dtc::SealedInstance for crate::peripherals::[< DTC_CHAN $index >] {
+            impl crate::dtc::Instance for crate::peripherals::[< DTC_CHAN $index >] {
                 type Int = interrupt::typelevel::[< IEL $index >];
+            }
+
+            impl crate::dtc::SealedInstance for crate::peripherals::[< DTC_CHAN $index >] {
             }
         }
     };

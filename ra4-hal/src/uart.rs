@@ -15,18 +15,24 @@ use embassy_hal_internal::{
 };
 use embassy_sync::waitqueue::AtomicWaker;
 use paste::paste;
-use ra4m1_ctpac::sci::{
-    regs::Scr,
-    vals::{ScrCke, SmrCks, SmrPm, Stop},
-};
 
-use crate::interrupt::typelevel::{Handler as InterruptHandler, Interrupt as InterruptType};
 use crate::{
     event_link::{IcuInterrupt, InterruptEvent},
     gpio::{Pin, PortFunction},
     interrupt,
-    interrupt::Interrupt,
-    pac, peripherals,
+    interrupt::{
+        Interrupt,
+        typelevel::{Handler as InterruptHandler, Interrupt as InterruptType},
+    },
+    module_stop::ModuleStop,
+    pac::{
+        self,
+        sci::{
+            regs::Scr,
+            vals::{ScrCke, SmrCks, SmrPm, Stop},
+        },
+    },
+    peripherals,
 };
 
 /// UART configuration
@@ -140,7 +146,7 @@ pub enum UartError {
 ///
 /// Note: On the `RA4M1` only `SCI0` and `SCI1` have FIFOs.
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
+pub trait Instance: SealedInstance + ModuleStop + PeripheralType + 'static + Send {}
 
 pub(crate) trait SealedInstance {
     #[cfg(feature = "defmt")]
@@ -156,16 +162,6 @@ pub(crate) trait SealedInstance {
     const FIFO_DEPTH: u8 = 16;
 
     fn regs() -> pac::sci::Sci;
-
-    /// Turns the `SCI` module on.
-    /// In Renesas speak it turns off "module stop" for the `SCI` instance.
-    /// See §10 of the reference manual.
-    fn start();
-
-    /// Turns the `SCI` module off.
-    /// In Renesas speak it turns on "module stop" for the `SCI` instance.
-    /// See §10 of the reference manual.
-    fn stop();
 
     /// # Returns
     ///
@@ -447,7 +443,7 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         + interrupt::typelevel::Binding<TeInt, TeInterruptHandler<I>>
         + 'd,
     ) -> Self {
-        I::start();
+        I::start_module();
 
         let sci = I::regs();
 
@@ -730,9 +726,7 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
 
 impl<'d, I: Instance> Drop for BufferedUart<'d, I> {
     fn drop(&mut self) {
-        trace!("{}stop=true", I::PERIPHERAL);
-
-        I::stop();
+        I::stop_module();
     }
 }
 
@@ -949,7 +943,7 @@ macro_rules! rx_pin {
 pub(crate) use rx_pin;
 
 macro_rules! instance_impl {
-    ($instance:ident, $mstp:ident, $rx_int:ident, $te_int:ident, $tx_int:ident) => {
+    ($instance:ident, $rx_int:ident, $te_int:ident, $tx_int:ident) => {
         impl Instance for peripherals::$instance {}
 
         paste! {
@@ -962,26 +956,8 @@ macro_rules! instance_impl {
                 const TX_INTERRUPT_EVENT: InterruptEvent = InterruptEvent::$tx_int;
 
                 #[inline]
-                fn regs() -> ra4m1_ctpac::sci::Sci {
+                fn regs() -> crate::pac::sci::Sci {
                     crate::pac::$instance
-                }
-
-                #[inline]
-                fn start() {
-                    debug!("{}stop=false", Self::PERIPHERAL);
-
-                    pac::MSTP.mstpcrb().write(|r| {
-                        r.[< set_ $mstp >](false);
-                    });
-                }
-
-                #[inline]
-                fn stop() {
-                    debug!("{}stop=true", Self::PERIPHERAL);
-
-                    pac::MSTP.mstpcrb().write(|r| {
-                        r.[< set_ $mstp>](true);
-                    });
                 }
 
                 fn rx_buffer() -> &'static RingBuffer {
@@ -1013,7 +989,7 @@ macro_rules! instance_impl {
     };
 }
 
-instance_impl!(SCI0, mstpb31, Sci0Rxi, Sci0Tei, Sci0Txi);
-instance_impl!(SCI1, mstpb30, Sci1Rxi, Sci1Tei, Sci1Txi);
-instance_impl!(SCI2, mstpb29, Sci2Rxi, Sci2Tei, Sci2Txi);
-instance_impl!(SCI9, mstpb22, Sci9Rxi, Sci9Tei, Sci9Txi);
+instance_impl!(SCI0, Sci0Rxi, Sci0Tei, Sci0Txi);
+instance_impl!(SCI1, Sci1Rxi, Sci1Tei, Sci1Txi);
+instance_impl!(SCI2, Sci2Rxi, Sci2Tei, Sci2Txi);
+instance_impl!(SCI9, Sci9Rxi, Sci9Tei, Sci9Txi);

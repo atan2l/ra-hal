@@ -1,0 +1,9 @@
+transforms:
+  - !Rename
+    from: dmac0::(.+)
+    to: dmac::${1}
+    type: All
+  - !Rename
+    from: dmac::Dmac0
+    to: dmac::Dmac
+    type: Block

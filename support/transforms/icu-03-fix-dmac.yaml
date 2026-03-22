@@ -1,0 +1,29 @@
+transforms:
+  - !DeleteRegisters
+    block: icu::Icu
+    from: delsr
+  - !DeleteFieldsets
+    from: icu::regs::Delsr
+  - !Add
+    ir:
+      fieldset/icu::regs::Delsr:
+        description: DMAC Event Link Setting Register
+        fields:
+          - name: dels
+            description: Event selection to DMAC Start request
+            bit_offset: 0
+            bit_size: 9
+          - name: ir
+            description: Interrupt Status Flag for DMAC
+            bit_offset: 16
+            bit_size: 1
+  - !AddRegisters
+    block: icu::Icu
+    registers:
+      - !BlockItem
+        name: delsr
+        description: DMAC Event Link Setting Register
+        fieldset: icu::regs::Delsr
+        byte_offset: 0x280
+        bit_size: 32
+        array: { len: 4, stride: 4 }

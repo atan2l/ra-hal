@@ -7,12 +7,19 @@ use core::marker::PhantomData;
 
 use cortex_m::asm;
 use embassy_hal_internal::{Peri, PeripheralType};
-use ra4m1_ctpac::adc14::{
-    regs::Adans,
-    vals::{AdcCountSelect, Adcs, Adprc},
-};
 
-use crate::{adc::channel::AdcChannel, pac, peripherals::ADC14};
+use crate::{
+    adc::channel::AdcChannel,
+    module_stop::ModuleStop,
+    pac::{
+        self,
+        adc14::{
+            regs::Adans,
+            vals::{AdcCountSelect, Adcs, Adprc},
+        },
+    },
+    peripherals::ADC14,
+};
 
 pub use channel::{AdcInputPin, AdcPin, AdcSequence, Temperature, Vref};
 
@@ -110,7 +117,7 @@ struct AdcChannelConfig {
 
 /// `ADC14` peripheral instance.
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
+pub trait Instance: SealedInstance + ModuleStop + PeripheralType + 'static + Send {}
 
 impl Default for AdcConfig {
     fn default() -> Self {
@@ -129,7 +136,7 @@ trait SealedInstance: PeripheralType {
 }
 
 impl SealedInstance for ADC14 {
-    fn regs() -> ra4m1_ctpac::adc14::Adc14 {
+    fn regs() -> pac::adc14::Adc14 {
         pac::ADC14
     }
 }
@@ -139,14 +146,10 @@ impl Instance for ADC14 {}
 impl<'d, I: Instance> Adc<'d, I> {
     /// Creates a new `ADC14` driver.
     pub fn new(_adc: Peri<'d, I>, config: AdcConfig) -> Self {
-        debug!("ADC14: stop=false");
-
         #[cfg(feature = "strict-assert")]
         assert!(config.sample_time >= 5);
 
-        let mstp = pac::MSTP;
-
-        mstp.mstpcrd().write(|w| w.set_mstpd16(false));
+        I::start_module();
 
         let resolution = match config.resolution {
             Resolution::Low => Adprc::_12bit,
@@ -273,9 +276,6 @@ impl<'d, I: Instance> Adc<'d, I> {
 
 impl<'d, I: Instance> Drop for Adc<'d, I> {
     fn drop(&mut self) {
-        debug!("ADC14: stop=true");
-
-        let mstp = pac::MSTP;
-        mstp.mstpcrd().write(|w| w.set_mstpd16(true));
+        I::stop_module();
     }
 }

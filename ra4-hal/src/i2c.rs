@@ -8,6 +8,13 @@
 
 use core::{future::poll_fn, marker::PhantomData, task::Poll};
 
+use cortex_m::asm;
+use embassy_hal_internal::{
+    Peri, PeripheralType, atomic_ring_buffer::RingBuffer, interrupt::InterruptExt as _,
+};
+use embassy_sync::waitqueue::AtomicWaker;
+use embedded_hal_1::i2c::SevenBitAddress;
+
 use crate::{
     event_link::{IcuInterrupt as _, InterruptEvent},
     gpio::{Flex, Pin, PortFunction, WithOpenDrain},
@@ -16,17 +23,10 @@ use crate::{
         typelevel::{Handler as InterruptHandler, Interrupt as InterruptType},
     },
     mode::{Async, Blocking, Mode},
-    pac,
+    module_stop::ModuleStop,
+    pac::{self, iic::vals::Cks},
     write_protect::ProtectedModify,
 };
-
-use cortex_m::asm;
-use embassy_hal_internal::{
-    Peri, PeripheralType, atomic_ring_buffer::RingBuffer, interrupt::InterruptExt as _,
-};
-use embassy_sync::waitqueue::AtomicWaker;
-use embedded_hal_1::i2c::SevenBitAddress;
-use ra4m1_ctpac::iic::vals::Cks;
 
 /// I2C driver for the `IIC` peripheral.
 ///
@@ -70,7 +70,7 @@ pub struct TeInterruptHandler<I: Instance> {
 
 /// [`I2c`] driver instance.
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
+pub trait Instance: SealedInstance + ModuleStop + PeripheralType + 'static + Send {}
 
 pub(crate) trait SealedInstance {
     #[cfg(feature = "defmt")]
@@ -83,8 +83,6 @@ pub(crate) trait SealedInstance {
     const TX_INTERRUPT_EVENT: InterruptEvent;
 
     fn regs() -> pac::iic::Iic;
-    fn module_stop();
-    fn module_start();
 
     /// Waker for receive data events.
     fn rx_waker() -> &'static AtomicWaker;
@@ -145,20 +143,6 @@ macro_rules! instance_impl {
                 #[inline(always)]
                 fn regs() -> pac::iic::Iic {
                     crate::pac::$instance
-                }
-
-                #[inline(always)]
-                fn module_stop() {
-                    debug!("{}: stop=true", stringify!($instance));
-                    let mstp = pac::MSTP;
-                    mstp.mstpcrb().modify(|w| w.[< set_ $mstp >](true));
-                }
-
-                #[inline(always)]
-                fn module_start() {
-                    debug!("{}: stop=false", stringify!($instance));
-                    let mstp = pac::MSTP;
-                    mstp.mstpcrb().modify(|w| w.[< set_ $mstp >](false));
                 }
 
                 /// Waker for incoming data events.
@@ -544,7 +528,7 @@ impl<'d, M: Mode, I: Instance> I2c<'d, M, I> {
         sda: Peri<'d, D>,
         speed: I2cSpeed,
     ) -> Self {
-        I::module_start();
+        I::start_module();
 
         let iic = I::regs();
 
@@ -593,7 +577,7 @@ impl<'d, M: Mode, I: Instance> I2c<'d, M, I> {
 
 impl<'d, M: Mode, I: Instance> Drop for I2c<'d, M, I> {
     fn drop(&mut self) {
-        I::module_stop();
+        I::stop_module();
     }
 }
 

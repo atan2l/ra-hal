@@ -50,7 +50,7 @@ impl Icu {
     pub const fn selsr0(self) -> crate::common::Reg<regs::Selsr0, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0200usize) as _) }
     }
-    #[doc = "DMAC Event Link Setting Register %s"]
+    #[doc = "DMAC Event Link Setting Register"]
     #[inline(always)]
     pub const fn delsr(self, n: usize) -> crate::common::Reg<regs::Delsr, crate::common::RW> {
         assert!(n < 4usize);

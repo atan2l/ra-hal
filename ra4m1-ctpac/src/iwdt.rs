@@ -16,7 +16,7 @@ impl Iwdt {
     }
     #[doc = "IWDT Refresh Register"]
     #[inline(always)]
-    pub const fn iwdtrr(self) -> crate::common::Reg<regs::Iwdtrr, crate::common::RW> {
+    pub const fn iwdtrr(self) -> crate::common::Reg<u8, crate::common::RW> {
         unsafe { crate::common::Reg::from_ptr(self.ptr.wrapping_add(0x0usize) as _) }
     }
     #[doc = "IWDT Status Register"]

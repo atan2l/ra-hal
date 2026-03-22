@@ -2,46 +2,80 @@
 //!
 //! # Notes
 //!
-//! * Only 16-bit `GPT` instances are currently supported
+//! * 32-bit timers are supported but one instance is used for embassy-time, if support is enabled.
 //! * `GPT` module stop will be disabled on instantiation, but not reenabled on drop.
 
 use core::marker::PhantomData;
 
 use embassy_hal_internal::{Peri, PeripheralType};
-use ra4m1_ctpac::gpt::{
-    regs::{Gtdnsr, Gtupsr},
-    vals::{Ccr, Mode, Tpcs, Ud},
-};
 
-use crate::{event_link::InterruptEvent, peripherals};
+use crate::{
+    event_link::InterruptEvent,
+    module_stop::ModuleStop,
+    pac::gpt::{
+        regs::{Gtdnsr, Gtupsr},
+        vals::{Ccr, Mode, Tpcs, Ud},
+    },
+};
 
 /// An [`InterruptTimer`] instance.
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance {}
+pub trait Instance<Width: TimerWidth>: SealedInstance + ModuleStop + PeripheralType {
+    /// Event link event upon a match with capture/compare value A.
+    const COMP_A_EVENT: crate::event_link::InterruptEvent;
 
-trait SealedInstance: PeripheralType {
+    /// Event link event upon a match with capture/compare value B.
+    const COMP_B_EVENT: crate::event_link::InterruptEvent;
+
+    /// Event link event upon a match with compare value C.
+    const COMP_C_EVENT: crate::event_link::InterruptEvent;
+
+    /// Event link event for an overflow event.
+    const OVERFLOW_EVENT: crate::event_link::InterruptEvent;
+
+    /// Event link event for an underflow event.
+    const UNDERFLOW_EVENT: crate::event_link::InterruptEvent;
+}
+
+pub(crate) trait SealedInstance: PeripheralType {
     const INDEX: usize;
 
     fn regs() -> crate::pac::gpt::Gpt;
-    // fn module_stop();
-    fn module_start();
+}
 
-    fn overflow_interrupt() -> crate::event_link::InterruptEvent;
-    fn underflow_interrupt() -> crate::event_link::InterruptEvent;
+trait TimerWidth: Into<u32> {
+    fn max() -> u64;
+}
+
+impl TimerWidth for u32 {
+    #[inline(always)]
+    fn max() -> u64 {
+        u32::MAX.into()
+    }
+}
+
+impl TimerWidth for u16 {
+    #[inline(always)]
+    fn max() -> u64 {
+        u16::MAX.into()
+    }
 }
 
 /// A timer that fires an [`InterruptEvent`] at a fixed interval.
-pub struct InterruptTimer<'d, I: Instance> {
-    phantom: PhantomData<&'d I>,
+#[allow(private_bounds)]
+pub struct InterruptTimer<'d, W: TimerWidth, I: Instance<W>> {
+    phantom_i: PhantomData<&'d I>,
+    phantom_w: PhantomData<W>,
     triangle: bool,
 }
 
-impl<'d, I: Instance> InterruptTimer<'d, I> {
+#[allow(private_bounds)]
+impl<'d, W: TimerWidth, I: Instance<W>> InterruptTimer<'d, W, I> {
     /// Creates a new timer.
     pub fn new(peri: Peri<'d, I>) -> Self {
         let _ = peri;
 
-        I::module_start();
+        I::start_module();
 
         let gpt = I::regs();
 
@@ -52,7 +86,8 @@ impl<'d, I: Instance> InterruptTimer<'d, I> {
         gpt.gtssr().modify(|r| r.set_cstrt(true));
 
         Self {
-            phantom: PhantomData,
+            phantom_i: PhantomData,
+            phantom_w: PhantomData,
             triangle: false,
         }
     }
@@ -67,9 +102,9 @@ impl<'d, I: Instance> InterruptTimer<'d, I> {
 
         let clocks = crate::clock_config();
 
-        let mut period = (clocks.peripheral_d as u32 / 16) / frequency;
+        let mut period = (clocks.peripheral_d as u64 / 16) / (frequency as u64);
 
-        if period > u32::from(u16::MAX) {
+        if period > W::max() {
             period /= 2;
             self.triangle = true;
             gpt.gtcr().modify(|r| r.set_md(Mode::TrianglePwm1));
@@ -79,16 +114,17 @@ impl<'d, I: Instance> InterruptTimer<'d, I> {
             gpt.gtcr().modify(|r| r.set_md(Mode::SawWaveOneShot));
         }
 
-        // Because we're using a 16-bit timer.
-        assert!(period <= u32::from(u16::MAX));
+        assert!(period <= W::max());
 
-        self.set_period(period as u16);
+        self.set_period(period as u32);
     }
 
     #[inline(always)]
-    fn set_period(&mut self, period: u16) {
+    fn set_period(&mut self, period: u32) {
         let gpt = I::regs();
-        gpt.gtpr().write_value(period as u32);
+
+        // Note: 16-bit instances still use 32-bit registers.
+        gpt.gtpr().write_value(period);
     }
 
     /// Starts the timer and resets the counter and returns the associated [`InterruptEvent`].
@@ -112,9 +148,9 @@ impl<'d, I: Instance> InterruptTimer<'d, I> {
         gpt.gtstr().modify(|r| r.set_cstrt(I::INDEX, true));
 
         if self.triangle {
-            I::underflow_interrupt()
+            I::UNDERFLOW_EVENT
         } else {
-            I::overflow_interrupt()
+            I::OVERFLOW_EVENT
         }
     }
 
@@ -128,7 +164,7 @@ impl<'d, I: Instance> InterruptTimer<'d, I> {
     }
 }
 
-impl<'d, I: Instance> Drop for InterruptTimer<'d, I> {
+impl<'d, W: TimerWidth, I: Instance<W>> Drop for InterruptTimer<'d, W, I> {
     fn drop(&mut self) {
         error!(
             "GPT{}: Drop not yet implemented, module will not be stopped",
@@ -137,42 +173,29 @@ impl<'d, I: Instance> Drop for InterruptTimer<'d, I> {
     }
 }
 
-macro_rules! instance_impl {
-    ($size:ident, $instance:literal, $mstp:ident, $cmpa_int:ident, $cmpb_int:ident, $overflow_int:ident, $underflow_int:ident) => {
-        paste::paste! {
-            impl Instance for peripherals::[< $size _ $instance >] {}
-            impl SealedInstance for peripherals::[< $size _ $instance >] {
-                const INDEX : usize = $instance;
+macro_rules! timer_instance {
+    ($peripheral:ident, $width:ident, $index:literal, $cmpa_int:ident, $cmpb_int:ident, $cmpc_int:ident, $overflow_int:ident, $underflow_int:ident) => {
+        impl crate::timer::Instance<$width> for crate::peripherals::$peripheral {
+            const COMP_A_EVENT: crate::event_link::InterruptEvent =
+                crate::event_link::InterruptEvent::$cmpa_int;
+            const COMP_B_EVENT: crate::event_link::InterruptEvent =
+                crate::event_link::InterruptEvent::$cmpb_int;
+            const COMP_C_EVENT: crate::event_link::InterruptEvent =
+                crate::event_link::InterruptEvent::$cmpc_int;
+            const OVERFLOW_EVENT: crate::event_link::InterruptEvent =
+                crate::event_link::InterruptEvent::$overflow_int;
+            const UNDERFLOW_EVENT: crate::event_link::InterruptEvent =
+                crate::event_link::InterruptEvent::$underflow_int;
+        }
 
-                #[inline(always)]
-                fn regs() -> crate::pac::gpt::Gpt {
-                    crate::pac::[< $size _ $instance >]
-                }
+        impl crate::timer::SealedInstance for crate::peripherals::$peripheral {
+            const INDEX: usize = $index;
 
-                #[inline(always)]
-                fn module_start() {
-                    debug!("{}: stop=false", stringify!([< $size _ $instance >]));
-                    let mstp = crate::pac::MSTP;
-                    mstp.mstpcrd().modify(|r| r.[< set_ $mstp >](false));
-                }
-
-                #[inline(always)]
-                fn overflow_interrupt() -> crate::event_link::InterruptEvent {
-                    crate::event_link::InterruptEvent::$overflow_int
-                }
-
-                #[inline(always)]
-                fn underflow_interrupt() -> crate::event_link::InterruptEvent {
-                    crate::event_link::InterruptEvent::$underflow_int
-                }
+            #[inline(always)]
+            fn regs() -> crate::pac::gpt::Gpt {
+                crate::pac::$peripheral
             }
         }
     };
 }
-
-instance_impl!(GPT16, 2, mstpd6, Gpt2CcmpA, Gpt2CcmpB, Gpt2Ovf, Gpt2Udf);
-instance_impl!(GPT16, 3, mstpd6, Gpt3CcmpA, Gpt3CcmpB, Gpt3Ovf, Gpt3Udf);
-instance_impl!(GPT16, 4, mstpd6, Gpt4CcmpA, Gpt4CcmpB, Gpt4Ovf, Gpt4Udf);
-instance_impl!(GPT16, 5, mstpd6, Gpt5CcmpA, Gpt5CcmpB, Gpt5Ovf, Gpt5Udf);
-instance_impl!(GPT16, 6, mstpd6, Gpt6CcmpA, Gpt6CcmpB, Gpt6Ovf, Gpt6Udf);
-instance_impl!(GPT16, 7, mstpd6, Gpt7CcmpA, Gpt7CcmpB, Gpt7Ovf, Gpt7Udf);
+pub(crate) use timer_instance;

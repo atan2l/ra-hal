@@ -1,4 +1,6 @@
 //! `adc_sequence` — Reads multiple ADC channels sequentially.
+//!
+//! Note: `ADC14` doesn't support arbitrary sequences, instead reads each selected channel in order.
 
 #![no_std]
 #![no_main]
@@ -19,9 +21,13 @@ async fn main(_spawner: Spawner) {
 
     // All of these pins are exposed on the R4 Minima and R4 WiFi, but at different locations.
     let input = [
+        // AN022
         AdcPin::new(p.P100),
+        // AN021
         AdcPin::new(p.P101),
+        // AN020
         AdcPin::new(p.P102),
+        // AN019
         AdcPin::new(p.P103),
     ];
 

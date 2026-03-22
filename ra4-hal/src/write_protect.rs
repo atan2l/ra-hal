@@ -1,6 +1,6 @@
 //! Conveniences for registers that are gated by a write protect flag.
 
-use ra4m1_ctpac::{
+use crate::pac::{
     common::{RW, Reg},
     iic::regs::Icmr3,
     pfs::regs::PmnPfs,
@@ -100,7 +100,7 @@ impl ProtectedPeripheral for crate::pac::system::System {
     where
         F: Fn(),
     {
-        use ra4m1_ctpac::system::vals::Prc0;
+        use crate::pac::system::vals::Prc0;
 
         let protected = self.is_protected();
 
@@ -135,7 +135,7 @@ impl ProtectedPeripheral for crate::pac::gpt::Gpt {
     where
         F: Fn(),
     {
-        use ra4m1_ctpac::gpt::vals::Prkey;
+        use crate::pac::gpt::vals::Prkey;
 
         let protected = self.is_protected();
 

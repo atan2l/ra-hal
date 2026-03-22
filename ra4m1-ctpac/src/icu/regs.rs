@@ -1,31 +1,31 @@
-#[doc = "DMAC Event Link Setting Register %s"]
+#[doc = "DMAC Event Link Setting Register"]
 #[repr(transparent)]
 #[derive(Copy, Clone, Eq, PartialEq)]
-pub struct Delsr(pub u16);
+pub struct Delsr(pub u32);
 impl Delsr {
     #[doc = "Event selection to DMAC Start request"]
     #[must_use]
     #[inline(always)]
-    pub const fn dels(&self) -> u8 {
-        let val = (self.0 >> 0usize) & 0xff;
-        val as u8
+    pub const fn dels(&self) -> u16 {
+        let val = (self.0 >> 0usize) & 0x01ff;
+        val as u16
     }
     #[doc = "Event selection to DMAC Start request"]
     #[inline(always)]
-    pub const fn set_dels(&mut self, val: u8) {
-        self.0 = (self.0 & !(0xff << 0usize)) | (((val as u16) & 0xff) << 0usize);
+    pub const fn set_dels(&mut self, val: u16) {
+        self.0 = (self.0 & !(0x01ff << 0usize)) | (((val as u32) & 0x01ff) << 0usize);
     }
-    #[doc = "These bits are read as 00000000. The write value should be 00000000."]
+    #[doc = "Interrupt Status Flag for DMAC"]
     #[must_use]
     #[inline(always)]
-    pub const fn reserved(&self) -> u8 {
-        let val = (self.0 >> 8usize) & 0xff;
-        val as u8
+    pub const fn ir(&self) -> bool {
+        let val = (self.0 >> 16usize) & 0x01;
+        val != 0
     }
-    #[doc = "These bits are read as 00000000. The write value should be 00000000."]
+    #[doc = "Interrupt Status Flag for DMAC"]
     #[inline(always)]
-    pub const fn set_reserved(&mut self, val: u8) {
-        self.0 = (self.0 & !(0xff << 8usize)) | (((val as u16) & 0xff) << 8usize);
+    pub const fn set_ir(&mut self, val: bool) {
+        self.0 = (self.0 & !(0x01 << 16usize)) | (((val as u32) & 0x01) << 16usize);
     }
 }
 impl Default for Delsr {
@@ -38,7 +38,7 @@ impl core::fmt::Debug for Delsr {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         f.debug_struct("Delsr")
             .field("dels", &self.dels())
-            .field("reserved", &self.reserved())
+            .field("ir", &self.ir())
             .finish()
     }
 }
@@ -47,9 +47,9 @@ impl defmt::Format for Delsr {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "Delsr {{ dels: {=u8:?}, reserved: {=u8:?} }}",
+            "Delsr {{ dels: {=u16:?}, ir: {=bool:?} }}",
             self.dels(),
-            self.reserved()
+            self.ir()
         )
     }
 }

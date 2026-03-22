@@ -38,6 +38,26 @@ struct Interrupts {
     interrupts: Vec<String>,
 }
 
+#[derive(Debug, Copy, Clone, Deserialize)]
+enum MstpPeripheral {
+    A,
+    B,
+    C,
+    D,
+}
+
+#[derive(Debug, Deserialize)]
+struct ModuleStop {
+    #[serde(rename = "mstp")]
+    peri: MstpPeripheral,
+    bit: u8,
+}
+
+#[derive(Debug, Deserialize)]
+struct ModuleStops {
+    stops: HashMap<String, ModuleStop>,
+}
+
 struct Peripheral {
     pub name: String,
     pub conditional: Option<String>,
@@ -159,7 +179,7 @@ fn do_gpt(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
         }
     };
 
-    signals
+    let mut impls = signals
         .iter()
         .filter(|(signal, _)| signal.as_str() == "GTIOCA" || signal.as_str() == "GTIOCB")
         .fold(vec![], |mut acc, (signal, pins)| {
@@ -181,7 +201,34 @@ fn do_gpt(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
             }
 
             acc
-        })
+        });
+
+    if let Some(index) = peripheral.to_string().strip_prefix("GPT16_") {
+        let index = index.parse::<usize>().unwrap();
+
+        let ccmpa = format_ident!("Gpt{index}CcmpA");
+        let ccmpb = format_ident!("Gpt{index}CcmpB");
+        let cmpc = format_ident!("Gpt{index}CmpC");
+        let overflow = format_ident!("Gpt{index}Ovf");
+        let underflow = format_ident!("Gpt{index}Udf");
+        impls.push(quote! {
+            crate::timer::timer_instance!(#peripheral, u16, #index, #ccmpa, #ccmpb, #cmpc, #overflow, #underflow);
+        });
+    }
+    if let Some(index) = peripheral.to_string().strip_prefix("GPT32_") {
+        let index = index.parse::<usize>().unwrap();
+
+        let ccmpa = format_ident!("Gpt{index}CcmpA");
+        let ccmpb = format_ident!("Gpt{index}CcmpB");
+        let cmpc = format_ident!("Gpt{index}CmpC");
+        let overflow = format_ident!("Gpt{index}Ovf");
+        let underflow = format_ident!("Gpt{index}Udf");
+        impls.push(quote! {
+            crate::timer::timer_instance!(#peripheral, u32, #index, #ccmpa, #ccmpb, #cmpc, #overflow, #underflow);
+        });
+    }
+
+    impls
 }
 
 fn do_sci(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
@@ -268,7 +315,7 @@ fn do_spi(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
                     "MISO" => format_ident!("miso_pin"),
                     "MOSI" => format_ident!("mosi_pin"),
                     "RSPCK" => format_ident!("sck_pin"),
-                    "SSL0" => format_ident!("ss_pin"),
+                    "SSL0" => format_ident!("cs_pin"),
                     _ => unreachable!(),
                 };
 
@@ -504,6 +551,7 @@ fn generate_peripherals(
         ("DAC8", ""),
         ("GPT(16|32)(\\d)", "GPT${1}_${2}"),
         ("PORT[0-9]", ""),
+        ("SSIE0", "SSIE"),
         ("TSN", ""),
         ("DMA", ""),
     ]
@@ -629,11 +677,73 @@ fn generate_peripherals(
     Ok(())
 }
 
+fn generate_module_stops(stops: &ModuleStops) -> Result<(), Box<dyn std::error::Error>> {
+    let mstp_impls = stops.stops.iter().fold(vec![], |mut acc, (peri, stop)| {
+        let peri = format_ident!("{peri}");
+        let mstp_peri = match stop.peri {
+            MstpPeripheral::A => format_ident!("SYSTEM"),
+            MstpPeripheral::B => format_ident!("MSTP"),
+            MstpPeripheral::C => format_ident!("MSTP"),
+            MstpPeripheral::D => format_ident!("MSTP"),
+        };
+
+        let field_prefix = match stop.peri {
+            MstpPeripheral::A => "a",
+            MstpPeripheral::B => "b",
+            MstpPeripheral::C => "c",
+            MstpPeripheral::D => "d",
+        };
+
+        let mstp_write = format_ident!("set_mstp{field_prefix}{}", stop.bit);
+        let mstp_read = format_ident!("mstp{field_prefix}{}", stop.bit);
+
+        let mstp_reg = format_ident!("mstpcr{field_prefix}");
+
+        acc.push(quote! {
+            impl crate::module_stop::ModuleStop for crate::peripherals::#peri {
+                #[inline(always)]
+                fn start_module() {
+                    debug!("{}: stop=false", stringify!(#peri));
+                    let mstp = crate::pac::#mstp_peri;
+                    mstp.#mstp_reg().write(|r| r.#mstp_write(false));
+                }
+
+                #[inline(always)]
+                fn stop_module() {
+                    debug!("{}: stop=true", stringify!(#peri));
+                    let mstp = crate::pac::#mstp_peri;
+                    mstp.#mstp_reg().write(|r| r.#mstp_write(true));
+                }
+
+                #[inline(always)]
+                fn active() -> bool {
+                    let mstp = crate::pac::#mstp_peri;
+                    mstp.#mstp_reg().read().#mstp_read()
+                }
+            }
+
+            impl crate::module_stop::SealedModuleStop for crate::peripherals::#peri {}
+        });
+
+        acc
+    });
+
+    let mstp_impls = quote! {
+        #(#mstp_impls)*
+    };
+
+    let out_dir = &PathBuf::from(env::var_os("OUT_DIR").unwrap());
+    fs::write(out_dir.join("module_stops.rs"), mstp_impls.to_string())?;
+
+    Ok(())
+}
+
 fn inner_main() -> Result<(), Box<dyn std::error::Error>> {
     println!("cargo::rerun-if-changed=build.rs");
-    println!("cargo::rerun-if-changed=meta/pinmap.yaml");
-    println!("cargo::rerun-if-changed=meta/peripherals.yaml");
-    println!("cargo::rerun-if-changed=meta/interrupts.yaml");
+
+    for meta_file in &["pinmap", "peripherals", "interrupts", "mstp"] {
+        println!("cargo::rerun-if-changed=meta/{meta_file}.yaml");
+    }
 
     let pin_yaml = std::fs::read_to_string("meta/pinmap.yaml")?;
     let pin_map = serde_yaml::from_str::<PinMap>(&pin_yaml)?;
@@ -644,9 +754,13 @@ fn inner_main() -> Result<(), Box<dyn std::error::Error>> {
     let irq_yaml = std::fs::read_to_string("meta/interrupts.yaml")?;
     let irq_map = serde_yaml::from_str::<Interrupts>(&irq_yaml)?;
 
+    let mstp_yaml = std::fs::read_to_string("meta/mstp.yaml")?;
+    let mstp_map = serde_yaml::from_str::<ModuleStops>(&mstp_yaml)?;
+
     generate_pinmap(&pin_map)?;
     generate_interrupt_mod(&irq_map)?;
     generate_peripherals(&pin_map, &peri_map, &irq_map)?;
+    generate_module_stops(&mstp_map)?;
 
     Ok(())
 }

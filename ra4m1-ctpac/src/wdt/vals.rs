@@ -4,7 +4,7 @@
 pub enum Cks {
     _RESERVED_0 = 0x0,
     #[doc = "PCLK/4"]
-    _0001 = 0x01,
+    PCLKB_4 = 0x01,
     _RESERVED_2 = 0x02,
     _RESERVED_3 = 0x03,
     #[doc = "PCLK/64"]

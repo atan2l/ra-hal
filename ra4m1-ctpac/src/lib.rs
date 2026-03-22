@@ -79,6 +79,8 @@ unsafe impl cortex_m::interrupt::InterruptNumber for Interrupt {
 }
 #[cfg(feature = "rt")]
 mod _vectors;
+#[doc = "Option Setting Memory"]
+pub const OSM: osm::Osm = unsafe { osm::Osm::from_ptr(0x0400usize as _) };
 #[doc = "Factory MCU Information Flash Root Table (FMIFRT)"]
 pub const FMIFRT: fmifrt::Fmifrt = unsafe { fmifrt::Fmifrt::from_ptr(0x0100_3c00usize as _) };
 #[doc = "Bus Master MPU"]
@@ -254,6 +256,7 @@ pub mod kint;
 pub mod mmpu;
 pub mod mstp;
 pub mod opamp;
+pub mod osm;
 pub mod pfs;
 pub mod pmisc;
 pub mod poeg;

@@ -8,13 +8,16 @@ environment:
   SPELLCODE_ARTIFACT: https://s3.sr.ht/builds.sr.ht/artifacts/~az1/1664298/b5e6ccb939fcb2b4/spellcode-cli
 packages:
   - curl
+  - zstd
 tasks:
   - env-setup: |
       echo 'if [ -f "${HOME}/.cargo/env" ]; then source "${HOME}/.cargo/env" && cd "${HOME}/${THE_PROJECT}"; fi' >> ~/.buildenv
-  - install-spellcheck: |
+  - install-tools: |
       curl -LO "${SPELLCODE_ARTIFACT}"
       chmod +x "${HOME}/spellcode-cli"
-  - install-rustup: |
+      curl -LO 'https://archlinux.org/packages/extra/x86_64/cargo-audit/download/'
+      mkdir cargo-audit
+      tar --zstd -C cargo-audit -xvf download
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none
   - install-rust: |
       rustup show active-toolchain
@@ -31,3 +34,5 @@ tasks:
       cargo clip
   - spell-check: |
       "${HOME}/spellcode-cli" --exclude ra4m1-ctpac --exclude ignore --exclude tools --exclude support --exclude meta $(pwd)
+  - audit: |
+      "${HOME}/cargo-audit/usr/bin/cargo-audit" audit --ignore RUSTSEC-2024-0436
