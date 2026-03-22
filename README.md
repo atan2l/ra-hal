@@ -87,7 +87,7 @@ To read the OFS values from a board connected to your computer:
 | ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine                 | Undocumented.                                               |
 | ⬛⬛⬛⬜⬜ | `SCI` Serial Communications Interface              | In progress, Embedded-serial pending.                       |
 | ⬛⬛⬛⬜⬜ | `SPI` Serial Peripheral Interface                  | In progress. Blocking and DMAC via EH 1.0 works.            |
-| ⬜⬜⬜⬜⬜ | `SSIE` Serial Sound Interface Enhanced             |                                                             |
+| ⬜⬜⬜⬜⬜ | `SSIE` Serial Sound Interface Enhanced             | Only on 100-pin variants.                                   |
 | ⬛⬛⬛⬛⬜ | `WDT` Watchdog Timer                               | User defined handlers?                                      |
 
 ## License
