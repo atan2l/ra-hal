@@ -14,6 +14,9 @@ stops:
   CAC:
     mstp: C
     bit: 0
+  CAN0:
+    mstp: B
+    bit: 2
   CRC:
     mstp: C
     bit: 1

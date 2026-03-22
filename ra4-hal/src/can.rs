@@ -7,6 +7,7 @@ use ra4m1_ctpac::can::vals::{Tseg1, Tseg2};
 
 use crate::{
     gpio::{Basic, Flex, Pin, PortFunction},
+    module_stop::ModuleStop,
     pac,
 };
 
@@ -40,12 +41,10 @@ const TIMING: [Timing; 1] = [Timing {
 }];
 
 #[allow(private_bounds)]
-pub trait Instance: SealedInstance + PeripheralType + 'static + Send {}
+pub trait Instance: SealedInstance + ModuleStop + PeripheralType + 'static + Send {}
 
 pub(crate) trait SealedInstance {
     fn regs() -> pac::can::Can;
-    fn module_stop();
-    fn module_start();
 }
 
 #[allow(private_bounds)]
@@ -56,7 +55,6 @@ pub(crate) trait SealedRxPin<I: SealedInstance>: Pin + PeripheralType {
 
     #[inline(always)]
     fn set_as_crx(&self) {
-        trace!("P{}{:02}: CanRxPin::new", self.port(), self.pin());
         self.set_as_pf(Self::PERIPHERAL_FUNC);
     }
 }
@@ -69,7 +67,6 @@ pub(crate) trait SealedTxPin<I: SealedInstance>: Pin + PeripheralType {
 
     #[inline(always)]
     fn set_as_ctx(&self) {
-        trace!("P{}{:02}: CanTxPin::new", self.port(), self.pin());
         self.set_as_pf(Self::PERIPHERAL_FUNC);
     }
 }
@@ -81,7 +78,7 @@ impl<'d, I: Instance> Can<'d, I> {
         tx: Peri<'d, T>,
         _bitrate: Bitrate,
     ) -> Self {
-        I::module_start();
+        I::start_module();
 
         let can = I::regs();
 
@@ -106,7 +103,7 @@ impl<'d, I: Instance> Can<'d, I> {
 
 impl<'d, I: Instance> Drop for Can<'d, I> {
     fn drop(&mut self) {
-        I::module_stop();
+        I::stop_module();
     }
 }
 
@@ -131,7 +128,7 @@ macro_rules! ctx_pin_impl {
 pub(crate) use ctx_pin_impl;
 
 macro_rules! instance_impl {
-    ($instance:ident, $mstp:ident, $rx_int:ident, $te_int:ident, $tx_int:ident) => {
+    ($instance:ident, $rx_int:ident, $te_int:ident, $tx_int:ident) => {
         paste::paste! {
             impl Instance for crate::peripherals::$instance {}
             impl SealedInstance for crate::peripherals::$instance {
@@ -139,23 +136,9 @@ macro_rules! instance_impl {
                 fn regs() -> pac::can::Can {
                     crate::pac::$instance
                 }
-
-                #[inline(always)]
-                fn module_stop() {
-                    debug!("{}: stop=true", stringify!($instance));
-                    let mstp = pac::MSTP;
-                    mstp.mstpcrb().modify(|r| r.[< set_ $mstp >](true));
-                }
-
-                #[inline(always)]
-                fn module_start() {
-                    debug!("{}: stop=false", stringify!($instance));
-                    let mstp = pac::MSTP;
-                    mstp.mstpcrb().modify(|r| r.[< set_ $mstp >](false));
-                }
             }
         }
     };
 }
 
-instance_impl!(CAN0, mstpb2, Can0Rxf, Can0Txf, Can0Txf);
+instance_impl!(CAN0, Can0Rxf, Can0Txf, Can0Txf);
