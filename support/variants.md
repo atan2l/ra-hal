@@ -19,6 +19,7 @@ See <https://todo.sr.ht/~az1/ra4-rs/4/>
 | ## IRQ      | 32              | 32              | 32              | 96              | 64              | 96              | 96              |
 | DTC         | Y               | Y               | Y               | Y               | Y               | Y               | Y               |
 | DMAC        |                 |                 | 4               | 8               | 8               | 8               | 8               |
+| Ext IRQ     | 8               | 8               | 16              | 16              | 16              | 16              | 16              |
 | <td colspan=7 class="subhead">**Timers**</td>                                                                                             |
 | AGT         | 2               |                 | 2               | 6               |                 | 6               | 2               |
 | AGTW        |                 | 2               |                 |                 | 2               |                 |                 |
