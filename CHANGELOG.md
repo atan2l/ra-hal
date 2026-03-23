@@ -21,9 +21,10 @@ and this project will eventually adhere to [Semantic Versioning](https://semver.
   * Example to read from a Bosch BMI-160 sensor with the `mini-sensors` library
 ### Changed
 - embassy: Update to latest published versions
-- pac: Change some SPI enum names around
+- gpt: Rename reserved enum variants
 - spi:
   * pac: Symbolic variant names
+  * pac: Change some SPI enum names around
   * Use more appropriate language for SPI pin names
   * Implement `SpiBus` for blocking and async (DMAC, DTC)
   * Allow specifying arbitrary bit rates

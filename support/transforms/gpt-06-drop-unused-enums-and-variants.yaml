@@ -11,3 +11,6 @@ transforms:
   - !DeleteEnumVariants
     enum: gpt::vals::Odty
     from: _01
+  - !DeleteEnumVariants
+    enum: gpt::vals::Mode
+    from: (_010|_011)

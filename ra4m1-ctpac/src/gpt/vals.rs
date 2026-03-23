@@ -198,10 +198,8 @@ pub enum Mode {
     SawWavePwm = 0x0,
     #[doc = "Saw-wave one-shot pulse mode (fixed buffer operation)"]
     SawWaveOneShot = 0x01,
-    #[doc = "Setting prohibited"]
-    _010 = 0x02,
-    #[doc = "Setting prohibited"]
-    _011 = 0x03,
+    _RESERVED_2 = 0x02,
+    _RESERVED_3 = 0x03,
     #[doc = "Triangle-wave PWM mode 1 (16-bit transfer at crest) (single buffer or double buffer possible)"]
     TrianglePwm1 = 0x04,
     #[doc = "Triangle-wave PWM mode 2 (16-bit transfer at crest and trough) (single buffer or double buffer possible)"]
