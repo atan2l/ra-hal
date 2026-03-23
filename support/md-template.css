@@ -1,0 +1,17 @@
+body {
+  font-family: Helvetica Neue;
+  font-size: 10pt;
+}
+
+code {
+  font-family: Monaco;
+  padding: 2px;
+}
+
+.subhead {
+  background-color: #e8e8e8;
+}
+
+.markdown-body {
+  max-width: 99% !important;
+}
