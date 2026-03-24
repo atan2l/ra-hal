@@ -43,9 +43,9 @@ bind_interrupts!(struct Irqs {
     IEL3 => DmacInterruptHandler<DMAC0>;
     // Rx DMAC channel
     IEL4 => DmacInterruptHandler<DMAC1>;
-    // Tx DMAC channel
+    // Tx DTC channel
     IEL5 => DtcInterruptHandler<DTC_CHAN5>;
-    // Rx DMAC channel
+    // Rx DTC channel
     IEL6 => DtcInterruptHandler<DTC_CHAN6>;
     // SPI transfer finished
     IEL7 => TeInterruptHandler<SPI0>;
