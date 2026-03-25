@@ -14,17 +14,20 @@ and this project will eventually adhere to [Semantic Versioning](https://semver.
   * Transfer API
 - dtc: read (peripheral-to-memory) function
 - gpio: `embedded-hal` input and output traits
-- pwm: `embedded-hal` Pwm trait
+- pwm
+  * `embedded-hal` Pwm trait
+  * Quadrature decoding
 - spi:
   * pac: Add SPI byte access register
   * API for DMAC an DTC backed transfers
   * Example to read from a Bosch BMI-160 sensor with the `mini-sensors` library
 ### Changed
 - embassy: Update to latest published versions
+- pac:
+  * Change some SPI enum names around
+  * Add symbolic variants to GPT debounce fields
 - gpt: Rename reserved enum variants
 - spi:
-  * pac: Symbolic variant names
-  * pac: Change some SPI enum names around
   * Use more appropriate language for SPI pin names
   * Implement `SpiBus` for blocking and async (DMAC, DTC)
   * Allow specifying arbitrary bit rates

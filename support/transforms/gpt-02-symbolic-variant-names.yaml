@@ -7,6 +7,17 @@ transforms:
   - !Rename
     from: gpt::vals::Md
     to: gpt::vals::Mode
+  - !MergeEnums
+    from: gpt::vals::Nfcs[ab]
+    to: gpt::vals::Nfcs
+    main: gpt::vals::Nfcsa
+  - !MapEnumVariants
+    enum: gpt::vals::Nfcs
+    variants:
+      _00: Pclkd1
+      _01: Pclkd4
+      _10: Pclkd16
+      _11: Pclkd64
   - !MapEnumVariants
     enum: gpt::vals::Mode
     variants:

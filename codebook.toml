@@ -94,6 +94,7 @@ words = [
     "pushd",
     "putc",
     "pwm",
+    "qdec",
     "rcksel",
     "reborrow",
     "renesas",

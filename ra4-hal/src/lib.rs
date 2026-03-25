@@ -21,6 +21,7 @@ pub mod mcu_info;
 pub mod module_stop;
 pub mod osm;
 pub mod pwm;
+pub mod qdec;
 #[cfg(feature = "_enable-rtc-beware-of-dragons")]
 pub mod rtc;
 pub mod timer;

@@ -1861,13 +1861,13 @@ impl Gtior {
     #[doc = "Noise Filter A Sampling Clock Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn nfcsa(&self) -> super::vals::Nfcsa {
+    pub const fn nfcsa(&self) -> super::vals::Nfcs {
         let val = (self.0 >> 14usize) & 0x03;
-        super::vals::Nfcsa::from_bits(val as u8)
+        super::vals::Nfcs::from_bits(val as u8)
     }
     #[doc = "Noise Filter A Sampling Clock Select"]
     #[inline(always)]
-    pub const fn set_nfcsa(&mut self, val: super::vals::Nfcsa) {
+    pub const fn set_nfcsa(&mut self, val: super::vals::Nfcs) {
         self.0 = (self.0 & !(0x03 << 14usize)) | (((val.to_bits() as u32) & 0x03) << 14usize);
     }
     #[doc = "GTIOCB Pin Function Select"]
@@ -1969,13 +1969,13 @@ impl Gtior {
     #[doc = "Noise Filter B Sampling Clock Select"]
     #[must_use]
     #[inline(always)]
-    pub const fn nfcsb(&self) -> super::vals::Nfcsb {
+    pub const fn nfcsb(&self) -> super::vals::Nfcs {
         let val = (self.0 >> 30usize) & 0x03;
-        super::vals::Nfcsb::from_bits(val as u8)
+        super::vals::Nfcs::from_bits(val as u8)
     }
     #[doc = "Noise Filter B Sampling Clock Select"]
     #[inline(always)]
-    pub const fn set_nfcsb(&mut self, val: super::vals::Nfcsb) {
+    pub const fn set_nfcsb(&mut self, val: super::vals::Nfcs) {
         self.0 = (self.0 & !(0x03 << 30usize)) | (((val.to_bits() as u32) & 0x03) << 30usize);
     }
 }
