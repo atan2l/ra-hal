@@ -53,7 +53,7 @@ serde_yaml = "0.9.34"
 syn = "2.0.114"
 
 [features]
-default = [ "time-driver", "rt", "diag", "uno_r4", "chrono", "strict-assert" ]
+default = [ "time-driver", "rt", "diag", "uno_r4", "chrono", "strict-assert", "_dmac", "_dtc" ]
 
 ## Enable the `rt` feature of the PAC.
 ## With `rt` enabled the PAC provides interrupt vectors instead of letting [`cortex-m-rt`](https://docs.rs/cortex-m-rt) do that.
@@ -124,6 +124,9 @@ _64pin = [ ]
 
 ## Enables pins and peripherals only available on 100-pin chips.
 _100pin = [ ]
+
+_dmac = [ ]
+_dtc = [ ]
 
 [package.metadata.docs.rs]
 default-target = "thumbv7em-none-eabihf"
