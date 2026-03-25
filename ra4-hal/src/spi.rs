@@ -509,7 +509,9 @@ impl<'d> TransferMode for Dma<'d> {}
 #[cfg(feature = "_dmac")]
 impl<'d> SealedTransferMode for Dma<'d> {}
 
+#[cfg(feature = "_dtc")]
 impl<Rx: DtcInstance, Tx: DtcInstance> TransferMode for Dtc<Rx, Tx> {}
+#[cfg(feature = "_dtc")]
 impl<Rx: DtcInstance, Tx: DtcInstance> SealedTransferMode for Dtc<Rx, Tx> {}
 
 impl<'d, I: Instance, W: Word> Spi<'d, I, W, Blocking> {

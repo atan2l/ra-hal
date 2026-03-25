@@ -12,7 +12,7 @@ use embassy_time::Instant;
 use panic_probe as _;
 use ra4_hal::{
     bind_interrupts,
-    dmac::DmacInterruptHandler,
+    dmac::{self, DmacInterruptHandler},
     dtc::{self, DtcInterruptHandler},
     peripherals::{DMAC0, DMAC1, DTC_CHAN5, DTC_CHAN6, SPI0},
     spi::{self, Spi, TeInterruptHandler},
@@ -55,7 +55,7 @@ async fn benchmark_dma<
     'd,
     const SIZE: usize,
     const SAMPLES: usize,
-    W: spi::Word,
+    W: spi::Word + dmac::Word,
     I: spi::Instance,
 >(
     bus: &mut Spi<'d, I, W, spi::Dma<'d>>,
@@ -81,7 +81,7 @@ async fn benchmark_dtc<
     'd,
     const SIZE: usize,
     const SAMPLES: usize,
-    W: spi::Word,
+    W: spi::Word + dtc::Word,
     I: spi::Instance,
     D1: dtc::Instance,
     D2: dtc::Instance,
