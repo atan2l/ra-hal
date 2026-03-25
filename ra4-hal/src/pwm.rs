@@ -1,10 +1,10 @@
 //! Pulse Width Modulation driver utilizing the General PWM Timer (`GPT`).
 //!
 //! # Notes
-//! * The `RA4M1` has both 16-bit and 32-bit timer instances.
+//! * The `GPT` timer has both 16-bit and 32-bit timer instances.
 //!   Unlike the [`timer`](crate::timer) this driver treats all instances
 //!   as 16-bit for the sake of brevity.
-//! * The default configuration sets the CPU and GPT clocks to 48 MHz,
+//! * `RA4M1`: The default configuration sets the CPU and GPT clocks to 48 MHz,
 //!   however setting the CPU clock to 32 MHz allows for the GPT clock
 //!   to be set to 32 MHz or 64 MHz.
 //! * Two module stop gates are shared across all `GPT` instances.  One
