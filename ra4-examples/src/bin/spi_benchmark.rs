@@ -71,7 +71,7 @@ async fn benchmark_dma<
         let now = Instant::now();
         bus.dma_transfer(&mut input, &output).await.unwrap();
         let elapsed = now.elapsed().as_ticks() as f64;
-        *sample = ((elapsed / clocks.system as f64) * 1_000_000.0) as f32;
+        *sample = ((elapsed / clocks.peripheral_d as f64) * 1_000_000.0) as f32;
     }
 
     durations.iter().fold(0.0, |acc, val| acc + val) / SAMPLES as f32
@@ -99,7 +99,7 @@ async fn benchmark_dtc<
         let now = Instant::now();
         bus.dtc_transfer(&mut input, &output).await.unwrap();
         let elapsed = now.elapsed().as_ticks() as f64;
-        *sample = ((elapsed / clocks.system as f64) * 1_000_000.0) as f32;
+        *sample = ((elapsed / clocks.peripheral_d as f64) * 1_000_000.0) as f32;
     }
 
     durations.iter().fold(0.0, |acc, val| acc + val) / SAMPLES as f32

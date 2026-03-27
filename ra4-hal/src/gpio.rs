@@ -1061,15 +1061,18 @@ impl<'d, I: InterruptiblePin, C: ControlKind> InterruptFlex<'d, I, C> {
     #[inline]
     pub fn new<Int: InterruptType>(
         pin: Peri<'d, I>,
-        irq: Peri<'d, impl GpioIrq<I>>,
-        handler: impl interrupt::typelevel::Binding<Int, InputInterruptHandler<I>>,
+        gpio_irq: Peri<'d, impl GpioIrq<I>>,
+        irq: impl interrupt::typelevel::Binding<Int, InputInterruptHandler<I>>,
     ) -> Self {
+        let _ = gpio_irq;
         let _ = irq;
-        let _ = handler;
 
-        unsafe { Int::IRQ.enable() };
+        // Safety: Interrupt handlers are defined by the irq argument and thus the interrupt is safe to enable.
+        unsafe {
+            Int::IRQ.enable();
+            Int::IRQ.icu_enable(I::INTERRUPT_EVENT);
+        }
 
-        Int::IRQ.icu_enable(I::INTERRUPT_EVENT);
         let pfs = pac::PFS;
         let pin = Flex::new(pin);
 

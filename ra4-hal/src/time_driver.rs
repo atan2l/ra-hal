@@ -76,16 +76,15 @@ impl<I: Instance> GptDriver<I> {
     pub(crate) fn init(&'static self) {
         I::start_module();
 
-        // Enable the interrupts at the NVIC level,
-        // arm the overflow interrupt in the ICU.
-        {
-            unsafe {
-                I::AlarmInterrupt::IRQ.enable();
-                I::OverflowInterrupt::IRQ.enable();
-            };
+        // Safety: These are safe because we've hardcoded interrupt handlers.
+        unsafe {
+            // Enable both interrupts at the NVIC level
+            I::AlarmInterrupt::IRQ.enable();
+            I::OverflowInterrupt::IRQ.enable();
 
+            // Arm the overflow interrupt in the ICU
             I::OverflowInterrupt::IRQ.icu_enable(I::OVERFLOW_EVENT);
-        }
+        };
 
         let timer = I::regs();
 
@@ -177,8 +176,9 @@ impl<I: Instance> GptDriver<I> {
             timer.protected_write(|| {
                 // Load the safe timestamp
                 timer.gtccrc().write_value(safe_timestamp);
-                // Enable the compare interrupt
-                I::AlarmInterrupt::IRQ.icu_enable(I::COMP_C_EVENT);
+
+                // Safety: interrupt handlers are hardcoded and thus it's safe to enable the compare interrupt
+                unsafe { I::AlarmInterrupt::IRQ.icu_enable(I::COMP_C_EVENT) }
             });
         } else {
             // TODO: Uhhhhh

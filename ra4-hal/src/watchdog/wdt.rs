@@ -253,15 +253,18 @@ impl<'d, I: Instance> Watchdog<'d, I> {
     pub fn new_handler<WdtInt: InterruptType>(
         peri: Peri<'d, I>,
         config: Config,
-        irqs: impl interrupt::typelevel::Binding<WdtInt, WdtInterruptHandler<I>>,
+        irq: impl interrupt::typelevel::Binding<WdtInt, WdtInterruptHandler<I>>,
     ) -> Self {
         let _ = peri;
-        let _ = irqs;
+        let _ = irq;
 
         assert_eq!(config.action, Action::Handler);
 
-        unsafe { WdtInt::IRQ.enable() };
-        WdtInt::IRQ.icu_enable(InterruptEvent::WdtNmi);
+        // Safety: The interrupt handler is defined by the irq argument and thus the interrupt is safe to enable.
+        unsafe {
+            WdtInt::IRQ.enable();
+            WdtInt::IRQ.icu_enable(InterruptEvent::WdtNmi);
+        }
 
         Self::new_inner(peri, config)
     }

@@ -136,7 +136,7 @@ ignore_paths = [
     "**/*.hex",
 ]
 ignore_patterns = [
-    "[A-Z]{2,}",
+    "[A-Z]{2,}(ϕ)?",
     "[A-Z]{2,}[n0-9]+",
     "((Crc)?Ccit|CCIT)",
     '(hoco|loco|moco|ofs|sce|ick|fck)(_|\d+)',

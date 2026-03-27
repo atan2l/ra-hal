@@ -10,12 +10,9 @@ use embassy_executor::Spawner;
 use embassy_time::Timer;
 use mini_sensors::bmi160::{self, BoschBmi160, vals::GyroPowerMode};
 use panic_probe as _;
+use ra4_hal::i2c::{I2c, I2cSpeed};
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
-use ra4_hal::{
-    i2c::{I2c, I2cSpeed},
-    mode::Blocking,
-};
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
@@ -24,7 +21,7 @@ async fn main(_spawner: Spawner) {
     let scl = p.P100;
     let sda = p.P101;
 
-    let i2c = I2c::<Blocking, _>::new(p.IIC1, scl, sda, I2cSpeed::Normal);
+    let i2c = I2c::new_blocking(p.IIC1, scl, sda, I2cSpeed::Normal);
     let mut sensor = BoschBmi160::new_i2c(i2c, bmi160::I2cAddress::Alt);
 
     let chip_id = sensor.regs().chip_id().read().unwrap();

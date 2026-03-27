@@ -91,8 +91,12 @@ impl<'d> Channel<'d> {
     ) -> Self {
         let _ = irq;
 
-        unsafe { Int::IRQ.enable() };
-        Int::IRQ.icu_enable(C::INTERRUPT_EVENT);
+        // Safety: Interrupt handlers are defined by the irqs argument and thus the interrupts are safe to enable.
+        unsafe {
+            Int::IRQ.enable();
+            Int::IRQ.icu_enable(C::INTERRUPT_EVENT);
+        }
+
         trace!("DMAC{}, enable={}", C::DMAC_INDEX, C::INTERRUPT_EVENT);
 
         let dmac = C::regs();

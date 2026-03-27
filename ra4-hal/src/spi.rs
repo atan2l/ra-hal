@@ -647,10 +647,12 @@ impl<'d, I: Instance, W: Word + crate::dmac::Word> Spi<'d, I, W, Dma<'d>> {
         + Clone
         + 'd,
     ) -> Self {
-        unsafe { TeInt::IRQ.enable() };
-
-        // Enable in ICU
-        TeInt::IRQ.icu_enable(I::TE_EVENT);
+        // Enable in NVIC and ICU
+        // Safety: Interrupt handlers are defined by the irqs argument and thus the interrupts are safe to enable.
+        unsafe {
+            TeInt::IRQ.enable();
+            TeInt::IRQ.icu_enable(I::TE_EVENT);
+        }
 
         let rx_dma = DmacChannel::new(rx_dmac, irqs.clone());
         let tx_dma = DmacChannel::new(tx_dmac, irqs.clone());
@@ -770,10 +772,12 @@ impl<'d, I: Instance, W: Word + crate::dtc::Word, Rx: DtcInstance, Tx: DtcInstan
         + Clone
         + 'd,
     ) -> Self {
-        unsafe { TeInt::IRQ.enable() };
-
-        // Enable in ICU
-        TeInt::IRQ.icu_enable(I::TE_EVENT);
+        // Safety: Interrupt handlers are defined by the irqs argument and thus the interrupts are safe to enable.
+        unsafe {
+            // Enable in NVIC and ICU
+            TeInt::IRQ.enable();
+            TeInt::IRQ.icu_enable(I::TE_EVENT);
+        };
 
         let rx_dtc = DtcChannel::new(rx_dtc, irqs.clone());
         let tx_dtc = DtcChannel::new(tx_dtc, irqs.clone());

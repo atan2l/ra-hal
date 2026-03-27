@@ -23,10 +23,11 @@ and this project will eventually adhere to [Semantic Versioning](https://semver.
   * Example to read from a Bosch BMI-160 sensor with the `mini-sensors` library
 ### Changed
 - embassy: Update to latest published versions
+- icu: Mark `icu_enable` as unsafe for the same reasons `IRQ.enable` is unsafe
 - pac:
   * Change some SPI enum names around
   * Add symbolic variants to GPT debounce fields
-- gpt: Rename reserved enum variants
+  * gpt: Rename reserved enum variants
 - spi:
   * Use more appropriate language for SPI pin names
   * Implement `SpiBus` for blocking and async (DMAC, DTC)

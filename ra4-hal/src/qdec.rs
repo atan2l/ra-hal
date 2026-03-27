@@ -173,9 +173,10 @@ impl<'d, I: Instance, Int: InterruptType> Qdec<'d, I, Int> {
         pin_b.set_pfunc();
         let pin_b = Flex::new(pin_b);
 
-        unsafe { Int::IRQ.enable() };
-
-        Int::IRQ.icu_enable(I::CAPTURE_COMP_A_EVENT);
+        unsafe {
+            Int::IRQ.enable();
+            Int::IRQ.icu_enable(I::CAPTURE_COMP_A_EVENT)
+        };
 
         pwm.gtcr().modify(|w| w.set_cst(true));
         pwm.gtst().modify(|r| r.set_tcfa(false));
