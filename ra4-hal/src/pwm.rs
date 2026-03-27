@@ -311,7 +311,7 @@ impl<'d, I: Instance> Pwm<'d, I> {
     /// # Arguments
     /// * `frequency` Frequency in hertz
     /// * `pct` Duty cycle percentage, range is `0.0..=1.0`
-    pub fn set_frequency(&mut self, frequency: u32, pct: f32) -> Result<(), ()> {
+    pub fn set_frequency(&mut self, frequency: u32, pct: f32) -> Result<(), PwmError> {
         let pwm = I::regs();
         let clocks = crate::clock_config();
         let divider: Divider = pwm.gtcr().read().tpcs().into();
@@ -337,7 +337,7 @@ impl<'d, I: Instance> Pwm<'d, I> {
                 frequency,
                 (pwm_clk / (divider * 4.0)) as u32,
             );
-            return Err(());
+            return Err(PwmError::InvalidDutyCycle);
         }
 
         pwm.gtpr().write_value(period as u32);
@@ -409,8 +409,8 @@ impl<'d, I: Instance> Pwm<'d, I> {
             // This will center the peak
 
             pwm.gtuddtyc().modify(|w| w.set_oadty(Odty::CompareMatch));
-            pwm.gtccra().write_value(duty as u32);
-            pwm.gtccrc().write_value(duty as u32);
+            pwm.gtccra().write_value(duty);
+            pwm.gtccrc().write_value(duty);
         }
 
         Ok(())
@@ -469,8 +469,8 @@ impl<'d, I: Instance> Pwm<'d, I> {
             // This will center the peak
 
             pwm.gtuddtyc().modify(|w| w.set_obdty(Odty::CompareMatch));
-            pwm.gtccrb().write_value(duty as u32);
-            pwm.gtccre().write_value(duty as u32);
+            pwm.gtccrb().write_value(duty);
+            pwm.gtccre().write_value(duty);
         }
 
         Ok(())

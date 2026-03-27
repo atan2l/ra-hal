@@ -1359,11 +1359,13 @@ impl<'d, C: ControlKind> embedded_hal_1::digital::ErrorType for Output<'d, C> {
 
 impl<'d, C: ControlKind> embedded_hal_1::digital::OutputPin for Output<'d, C> {
     fn set_low(&mut self) -> Result<(), Self::Error> {
-        Ok(self.set_low())
+        self.set_low();
+        Ok(())
     }
 
     fn set_high(&mut self) -> Result<(), Self::Error> {
-        Ok(self.set_high())
+        self.set_high();
+        Ok(())
     }
 }
 
@@ -1377,6 +1379,7 @@ impl<'d, C: ControlKind> embedded_hal_1::digital::StatefulOutputPin for Output<'
     }
 
     fn toggle(&mut self) -> Result<(), Self::Error> {
-        Ok(self.toggle())
+        self.toggle();
+        Ok(())
     }
 }

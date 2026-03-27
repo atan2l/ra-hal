@@ -410,7 +410,7 @@ impl<'d, I: Instance, RxInt: InterruptType, TxDtc: DtcInstance> I2c<'d, I, Dtc<R
         + Clone
         + 'd,
     ) -> Self {
-        let tx_dtc = DtcChannel::new(tx_dtc, irqs.clone());
+        let tx_dtc = DtcChannel::new(tx_dtc, irqs);
         let dtc = Dtc {
             tx_dtc,
             rx_dtc: PhantomData,

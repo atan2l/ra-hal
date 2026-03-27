@@ -30,6 +30,10 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
     }
 
     /// Enables the interrupt in the `ICU`.  Does not modify its status in the `NVIC`.
+    ///
+    /// # Safety
+    ///
+    /// Safe so long as there's an interrupt handler in place.
     #[inline(always)]
     unsafe fn icu_enable(&self, mask: InterruptEvent) {
         let icu = pac::ICU;

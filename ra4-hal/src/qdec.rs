@@ -146,7 +146,7 @@ impl<'d, I: Instance, Int: InterruptType> Qdec<'d, I, Int> {
             r.set_ascafbh(false);
         });
         pwm.gtcr().modify(|w| w.set_tpcs(config.divider.into()));
-        pwm.gtpr().write_value(0xFFFF as u32);
+        pwm.gtpr().write_value(0xFFFF);
 
         // These were taken from the manual § 22.3.10.
         pwm.gtupsr().write_value(Gtupsr(0x6900));

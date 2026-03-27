@@ -654,8 +654,8 @@ impl<'d, I: Instance, W: Word + crate::dmac::Word> Spi<'d, I, W, Dma<'d>> {
             TeInt::IRQ.icu_enable(I::TE_EVENT);
         }
 
-        let rx_dma = DmacChannel::new(rx_dmac, irqs.clone());
-        let tx_dma = DmacChannel::new(tx_dmac, irqs.clone());
+        let rx_dma = DmacChannel::new(rx_dmac, irqs);
+        let tx_dma = DmacChannel::new(tx_dmac, irqs);
         let dma = Dma { rx_dma, tx_dma };
 
         cs.set_pfunc();
@@ -779,8 +779,8 @@ impl<'d, I: Instance, W: Word + crate::dtc::Word, Rx: DtcInstance, Tx: DtcInstan
             TeInt::IRQ.icu_enable(I::TE_EVENT);
         };
 
-        let rx_dtc = DtcChannel::new(rx_dtc, irqs.clone());
-        let tx_dtc = DtcChannel::new(tx_dtc, irqs.clone());
+        let rx_dtc = DtcChannel::new(rx_dtc, irqs);
+        let tx_dtc = DtcChannel::new(tx_dtc, irqs);
         let dtc = Dtc { rx_dtc, tx_dtc };
 
         cs.set_pfunc();
