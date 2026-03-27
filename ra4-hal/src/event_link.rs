@@ -6,9 +6,13 @@
 //! Each `ICU` interrupt can also be used to trigger a variety of different events including DMA transfers and power state changes.
 //! See §13, §18 of the reference manual for more information.
 
-use crate::{module_stop::ModuleStop as _, pac, peripherals::ELC};
-
 use cortex_m::interrupt::InterruptNumber;
+
+use crate::{
+    module_stop::ModuleStop as _,
+    pac::{self, icu::regs::Ielsr},
+    peripherals::ELC,
+};
 
 /// Trait that implements functions allowing inspection and manipulation of the interrupt's `ELC`/`ICU` status.
 ///
@@ -26,8 +30,12 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
     }
 
     /// Enables the interrupt in the `ICU`.  Does not modify its status in the `NVIC`.
+    ///
+    /// # Safety
+    ///
+    /// Safe so long as there's an interrupt handler in place.
     #[inline(always)]
-    fn icu_enable(&self, mask: InterruptEvent) {
+    unsafe fn icu_enable(&self, mask: InterruptEvent) {
         let icu = pac::ICU;
 
         trace!("IEL{}: enable={}", self.number(), mask);
@@ -58,19 +66,28 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
         event
     }
 
-    /// Configures the Data Transfer Controller (`DTC`) activation bit.
+    /// Disables the interrupt in the `ICU` and disables it as a `DTC` activation source.  Does not modify its status in the `NVIC`.
     ///
     /// See §17 of the reference manual for more information.
-    ///
-    /// # Arguments
-    /// * `true` interrupt will trigger `DTC` activation for vector `n` where `n` is the index of this interrupt.
-    /// * `false` interrupt will not trigger `DTC` activation.
     #[inline(always)]
-    fn set_dtc(&self, enabled: bool) {
+    fn dtc_disable(&self) {
         let icu = pac::ICU;
 
-        icu.ielsr(self.number() as _).modify(|w| {
-            w.set_dtce(enabled);
+        icu.ielsr(self.number() as _).write_value(Ielsr(0));
+    }
+
+    /// Links an interrupt to an event and configures `DTC` vector `n` for activation on interrupt where `n` is the index of this interrupt.
+    ///
+    /// See §17 of the reference manual for more information.
+    #[inline(always)]
+    fn dtc_enable(&self, mask: InterruptEvent) {
+        let icu = pac::ICU;
+
+        trace!("IEL{}: enable={}, dtc=true", self.number(), mask);
+
+        icu.ielsr(self.number() as _).write(|r| {
+            r.set_dtce(true);
+            r.set_iels(mask as _);
         });
     }
 

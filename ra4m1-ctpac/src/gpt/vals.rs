@@ -198,10 +198,8 @@ pub enum Mode {
     SawWavePwm = 0x0,
     #[doc = "Saw-wave one-shot pulse mode (fixed buffer operation)"]
     SawWaveOneShot = 0x01,
-    #[doc = "Setting prohibited"]
-    _010 = 0x02,
-    #[doc = "Setting prohibited"]
-    _011 = 0x03,
+    _RESERVED_2 = 0x02,
+    _RESERVED_3 = 0x03,
     #[doc = "Triangle-wave PWM mode 1 (16-bit transfer at crest) (single buffer or double buffer possible)"]
     TrianglePwm1 = 0x04,
     #[doc = "Triangle-wave PWM mode 2 (16-bit transfer at crest and trough) (single buffer or double buffer possible)"]
@@ -236,19 +234,19 @@ impl From<Mode> for u8 {
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Nfcsa {
+pub enum Nfcs {
     #[doc = "PCLK/1"]
-    _00 = 0x0,
+    Pclkd1 = 0x0,
     #[doc = "PCLK/4"]
-    _01 = 0x01,
+    Pclkd4 = 0x01,
     #[doc = "PCLK/16"]
-    _10 = 0x02,
+    Pclkd16 = 0x02,
     #[doc = "PCLK/64"]
-    _11 = 0x03,
+    Pclkd64 = 0x03,
 }
-impl Nfcsa {
+impl Nfcs {
     #[inline(always)]
-    pub const fn from_bits(val: u8) -> Nfcsa {
+    pub const fn from_bits(val: u8) -> Nfcs {
         unsafe { core::mem::transmute(val & 0x03) }
     }
     #[inline(always)]
@@ -256,51 +254,16 @@ impl Nfcsa {
         unsafe { core::mem::transmute(self) }
     }
 }
-impl From<u8> for Nfcsa {
+impl From<u8> for Nfcs {
     #[inline(always)]
-    fn from(val: u8) -> Nfcsa {
-        Nfcsa::from_bits(val)
+    fn from(val: u8) -> Nfcs {
+        Nfcs::from_bits(val)
     }
 }
-impl From<Nfcsa> for u8 {
+impl From<Nfcs> for u8 {
     #[inline(always)]
-    fn from(val: Nfcsa) -> u8 {
-        Nfcsa::to_bits(val)
-    }
-}
-#[repr(u8)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub enum Nfcsb {
-    #[doc = "PCLK/1"]
-    _00 = 0x0,
-    #[doc = "PCLK/4"]
-    _01 = 0x01,
-    #[doc = "PCLK/16"]
-    _10 = 0x02,
-    #[doc = "PCLK/64"]
-    _11 = 0x03,
-}
-impl Nfcsb {
-    #[inline(always)]
-    pub const fn from_bits(val: u8) -> Nfcsb {
-        unsafe { core::mem::transmute(val & 0x03) }
-    }
-    #[inline(always)]
-    pub const fn to_bits(self) -> u8 {
-        unsafe { core::mem::transmute(self) }
-    }
-}
-impl From<u8> for Nfcsb {
-    #[inline(always)]
-    fn from(val: u8) -> Nfcsb {
-        Nfcsb::from_bits(val)
-    }
-}
-impl From<Nfcsb> for u8 {
-    #[inline(always)]
-    fn from(val: Nfcsb) -> u8 {
-        Nfcsb::to_bits(val)
+    fn from(val: Nfcs) -> u8 {
+        Nfcs::to_bits(val)
     }
 }
 #[repr(u8)]

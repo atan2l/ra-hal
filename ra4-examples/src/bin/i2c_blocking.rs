@@ -10,12 +10,9 @@ use embassy_executor::Spawner;
 use embassy_time::Timer;
 use embedded_hal_1::i2c::I2c as _;
 use panic_probe as _;
+use ra4_hal::i2c::{I2c, I2cSpeed};
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
-use ra4_hal::{
-    i2c::{I2c, I2cSpeed},
-    mode::Blocking,
-};
 
 const CHIP_ID: u8 = 0xD1;
 const I2C_ADDRESS: u8 = 0x69;
@@ -49,7 +46,7 @@ async fn main(_spawner: Spawner) {
     // that the pins will be "released" when i2c goes out of scope.
 
     {
-        let mut i2c = I2c::<Blocking, _>::new(p.IIC1, scl, sda, I2cSpeed::Normal);
+        let mut i2c = I2c::new_blocking(p.IIC1, scl, sda, I2cSpeed::Normal);
 
         let mut data = [0_u8; 1];
 

@@ -27,6 +27,7 @@ pub mod mcu_info;
 pub mod module_stop;
 pub mod osm;
 pub mod pwm;
+pub mod qdec;
 #[cfg(feature = "_enable-rtc-beware-of-dragons")]
 pub mod rtc;
 pub mod timer;
@@ -51,31 +52,6 @@ use pac::system::vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, 
 pub(crate) use ra4m1_ctpac as pac;
 
 use crate::{mcu_info::McuInfo, write_protect::ProtectedPeripheral as _};
-
-/// Common peripheral operating modes.
-pub mod mode {
-    trait SealedMode {}
-
-    /// Operating mode for a peripheral.
-    #[allow(private_bounds)]
-    pub trait Mode: SealedMode {}
-
-    macro_rules! impl_mode {
-        ($name:ident) => {
-            impl SealedMode for $name {}
-            impl Mode for $name {}
-        };
-    }
-
-    /// Synchronous mode.
-    pub struct Blocking;
-
-    /// Async mode.
-    pub struct Async;
-
-    impl_mode!(Blocking);
-    impl_mode!(Async);
-}
 
 /// System clock configuration
 ///

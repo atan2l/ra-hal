@@ -79,7 +79,7 @@ To read the OFS values from a board connected to your computer:
 | ⬛⬛⬛⬛⬛ | `CRC` Cyclic Redundancy Check Calculator           | 32-bit CRC only works on multiples of 4 bytes.              |
 | ⬛⬜⬜⬜⬜ | `DAC12` 12-bit D/A Converter                       | In progress.                                                |
 | ⬛⬛⬛⬛⬛ | `FMIFRT` Factory MCU Information Flash Root Table  |                                                             |
-| ⬛⬛⬛⬛⬜ | `GPT` General PWM Timer                            | General PWM support in progress.                            |
+| ⬛⬛⬛⬛⬜ | `GPT` General PWM Timer                            |                                                             |
 | ⬛⬛⬛⬜⬜ | `IIC` I2C Bus                                      | In progress. Slave, MultiMaster, DMA, Error handling TODO.  |
 | ⬛⬛⬛⬛⬜ | `IWDT` Independent Watchdog Timer                  | See WDT.                                                    |
 | ⬛⬛⬛⬛⬜ | `PORT` I/O Ports                                   | In progress.                                                |
@@ -87,7 +87,7 @@ To read the OFS values from a board connected to your computer:
 | ⬜⬜⬜⬜⬜ | `SCE5` Secure Cryptographic Engine                 | Undocumented.                                               |
 | ⬛⬛⬛⬜⬜ | `SCI` Serial Communications Interface              | In progress, Embedded-serial pending.                       |
 | ⬛⬛⬛⬜⬜ | `SPI` Serial Peripheral Interface                  | In progress. Blocking and DMAC via EH 1.0 works.            |
-| ⬜⬜⬜⬜⬜ | `SSIE` Serial Sound Interface Enhanced             |                                                             |
+| ⬜⬜⬜⬜⬜ | `SSIE` Serial Sound Interface Enhanced             | Only on 100-pin variants.                                   |
 | ⬛⬛⬛⬛⬜ | `WDT` Watchdog Timer                               | User defined handlers?                                      |
 
 ## License

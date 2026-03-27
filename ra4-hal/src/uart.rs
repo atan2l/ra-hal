@@ -438,11 +438,13 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         tx_buffer: &'d mut [u8],
         rx_pin: Peri<'d, impl RxPin<I>>,
         rx_buffer: &'d mut [u8],
-        _irqs: impl interrupt::typelevel::Binding<RxInt, RxInterruptHandler<I>>
+        irqs: impl interrupt::typelevel::Binding<RxInt, RxInterruptHandler<I>>
         + interrupt::typelevel::Binding<TxInt, TxInterruptHandler<I>>
         + interrupt::typelevel::Binding<TeInt, TeInterruptHandler<I>>
         + 'd,
     ) -> Self {
+        let _ = irqs;
+
         I::start_module();
 
         let sci = I::regs();
@@ -508,16 +510,19 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         let tx_len = tx_buffer.len();
         unsafe { I::tx_buffer().init(tx_buffer.as_mut_ptr(), tx_len) };
 
-        // Enable interrupts in NVIC. We can largely ignore the NVIC after this as all of the
-        // peripheral interrupts are going to be managed by the ICU and/or ELC.
-        unsafe { RxInt::IRQ.enable() };
-        unsafe { TeInt::IRQ.enable() };
-        unsafe { TxInt::IRQ.enable() };
+        // Safety: Interrupt handlers are defined by the irqs argument and thus the interrupts are safe to enable.
+        unsafe {
+            // Enable interrupts in NVIC. We can largely ignore the NVIC after this as all of the
+            // peripheral interrupts are going to be managed by the ICU and/or ELC.
+            RxInt::IRQ.enable();
+            TeInt::IRQ.enable();
+            TxInt::IRQ.enable();
 
-        // Enable in ICU
-        RxInt::IRQ.icu_enable(I::RX_INTERRUPT_EVENT);
-        TeInt::IRQ.icu_enable(I::TE_INTERRUPT_EVENT);
-        TxInt::IRQ.icu_enable(I::TX_INTERRUPT_EVENT);
+            // Enable in ICU
+            RxInt::IRQ.icu_enable(I::RX_INTERRUPT_EVENT);
+            TeInt::IRQ.icu_enable(I::TE_INTERRUPT_EVENT);
+            TxInt::IRQ.icu_enable(I::TX_INTERRUPT_EVENT);
+        }
 
         Self {
             _phantom: PhantomData,

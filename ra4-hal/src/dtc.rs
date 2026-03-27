@@ -155,7 +155,7 @@ enum TransferMode {
 
 #[bitfield(u128, default = 0)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-struct DtcEntry {
+pub(crate) struct DtcEntry {
     #[bits(0..=15)]
     reserved: u16,
 
@@ -248,8 +248,7 @@ impl<'d, C: Instance> Transfer<'d, C> {
     /// The transfer itself won't start until the associated interrupt is triggered.
     pub fn start(&mut self) {
         trace!("DTC{}: Enable for: {}", C::Int::IRQ.number(), self.event);
-        C::Int::IRQ.icu_enable(self.event);
-        C::Int::IRQ.set_dtc(true);
+        C::Int::IRQ.dtc_enable(self.event);
     }
 
     /// Unlink an interrupt from the DTC.
@@ -372,6 +371,52 @@ impl<C: Instance> Channel<C> {
         transfer
     }
 
+    pub(crate) fn prepare_write<'d, W: Word>(
+        &'d mut self,
+        source: &'d [W],
+        dest: *mut W,
+        last: bool,
+    ) -> DtcEntry {
+        let chain_mode = match last {
+            true => ChainMode::Disabled,
+            false => ChainMode::Penultimate,
+        };
+
+        DtcEntry::builder()
+            .with_chain_mode(chain_mode)
+            .with_source_address_mode(AddressMode::Increment)
+            .with_dest_address_mode(AddressMode::Fixed)
+            .with_word_size(W::WORD_SIZE)
+            .with_transfer_mode(TransferMode::Normal)
+            .with_repeat_mode(RepeatMode::Source)
+            .with_interrupt_mode(InterruptMode::OnCompletion)
+            .with_source_address(source.as_ptr() as u32)
+            .with_dest_address(dest as u32)
+            .with_count_b(0)
+            .with_count_a_low(source.len() as u8)
+            .with_count_a_high(0)
+            .build()
+    }
+
+    /// Configures a DTC transfer
+    pub(crate) unsafe fn write_chain<'d>(
+        &mut self,
+        chain: &'d [DtcEntry],
+        increment_on: InterruptEvent,
+    ) -> Transfer<'d, C> {
+        unsafe { DTC_VECTOR_TABLE.vectors[C::Int::IRQ.number() as usize] = chain.as_ptr() as u32 };
+
+        // Ensure the DTC module re-reads our vector. §17.4.1.
+        let dtc = crate::pac::DTC;
+        dtc.dtccr().modify(|r| r.set_rrs(false));
+        dtc.dtccr().modify(|r| r.set_rrs(true));
+
+        let mut transfer = Transfer::new(increment_on);
+        transfer.start();
+
+        transfer
+    }
+
     /// Configures a DTC transfer
     pub unsafe fn read<'d, W: Word>(
         &mut self,
@@ -424,12 +469,10 @@ impl<C: Instance> Channel<C> {
 
 impl<'d, C: Instance> Drop for Transfer<'d, C> {
     fn drop(&mut self) {
-        let dtc = pac::DTC;
-        let status = dtc.dtcsts().read();
         trace!(
             "DTC{}: Dropping transfer status={}",
             C::Int::IRQ.number(),
-            status
+            pac::DTC.dtcsts().read()
         );
     }
 }
@@ -438,8 +481,7 @@ impl<C: Instance> Drop for Channel<C> {
     fn drop(&mut self) {
         trace!("DTC{}: Drop", C::Int::IRQ.number());
         unsafe { DTC_VECTOR_TABLE.vectors[C::Int::IRQ.number() as usize] = 0 };
-        C::Int::IRQ.set_dtc(false);
-        C::Int::IRQ.icu_disable();
+        C::Int::IRQ.dtc_disable();
     }
 }
 

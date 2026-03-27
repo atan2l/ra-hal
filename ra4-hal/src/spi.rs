@@ -16,9 +16,11 @@ use embassy_hal_internal::{Peri, PeripheralType, interrupt::InterruptExt as _};
 use embassy_sync::waitqueue::AtomicWaker;
 use embedded_hal_1::spi::{ErrorType, MODE_0, Mode};
 
+#[cfg(feature = "_dmac")]
+use crate::dmac::{Channel as DmacChannel, DmacInterruptHandler};
+#[cfg(feature = "_dtc")]
+use crate::dtc::{Channel as DtcChannel, DtcInterruptHandler, Instance as DtcInstance};
 use crate::{
-    dmac::{Channel as DmacChannel, DmacInterruptHandler},
-    dtc::{Channel as DtcChannel, DtcInterruptHandler, Instance as DtcInstance},
     event_link::IcuInterrupt as _,
     gpio::{Basic, Flex, Pin, PortFunction},
     interrupt::{
@@ -93,11 +95,13 @@ struct ClockConfig {
 pub trait TransferMode: SealedTransferMode {}
 trait SealedTransferMode {}
 
+#[cfg(feature = "_dmac")]
 pub struct Dma<'d> {
     rx_dma: DmacChannel<'d>,
     tx_dma: DmacChannel<'d>,
 }
 
+#[cfg(feature = "_dtc")]
 pub struct Dtc<D1: DtcInstance, D2: DtcInstance> {
     rx_dtc: DtcChannel<D1>,
     tx_dtc: DtcChannel<D2>,
@@ -197,7 +201,7 @@ pub struct Config {
 /// The `RA4M1` supports a variety of intermediate word sizes but that's an implementation detail for another day.
 #[allow(private_bounds)]
 #[cfg(feature = "defmt")]
-pub trait Word: SealedWord + crate::dmac::Word + crate::dtc::Word + defmt::Format {}
+pub trait Word: SealedWord + Copy + defmt::Format {}
 
 /// Trait that defines the size of a "word".
 ///
@@ -205,7 +209,7 @@ pub trait Word: SealedWord + crate::dmac::Word + crate::dtc::Word + defmt::Forma
 /// The `RA4M1` supports a variety of intermediate word sizes but that's an implementation detail for another day.
 #[allow(private_bounds)]
 #[cfg(not(feature = "defmt"))]
-pub trait Word: SealedWord + crate::dmac::Word + crate::dtc::Word {}
+pub trait Word: SealedWord + Copy {}
 
 pub(crate) trait SealedWord {
     const BYTE_ACCESS: Spbyt;
@@ -500,10 +504,14 @@ fn calc_dividers(rate: u32) -> Result<ClockConfig, ()> {
 impl TransferMode for Blocking {}
 impl SealedTransferMode for Blocking {}
 
+#[cfg(feature = "_dmac")]
 impl<'d> TransferMode for Dma<'d> {}
+#[cfg(feature = "_dmac")]
 impl<'d> SealedTransferMode for Dma<'d> {}
 
+#[cfg(feature = "_dtc")]
 impl<Rx: DtcInstance, Tx: DtcInstance> TransferMode for Dtc<Rx, Tx> {}
+#[cfg(feature = "_dtc")]
 impl<Rx: DtcInstance, Tx: DtcInstance> SealedTransferMode for Dtc<Rx, Tx> {}
 
 impl<'d, I: Instance, W: Word> Spi<'d, I, W, Blocking> {
@@ -614,7 +622,8 @@ impl<'d, I: Instance, W: Word> Spi<'d, I, W, Blocking> {
     }
 }
 
-impl<'d, I: Instance, W: Word> Spi<'d, I, W, Dma<'d>> {
+#[cfg(feature = "_dmac")]
+impl<'d, I: Instance, W: Word + crate::dmac::Word> Spi<'d, I, W, Dma<'d>> {
     /// Creates a new `Spi` instance with hardware control of the chip select line.
     #[allow(clippy::too_many_arguments)]
     pub fn new_dma<
@@ -638,13 +647,15 @@ impl<'d, I: Instance, W: Word> Spi<'d, I, W, Dma<'d>> {
         + Clone
         + 'd,
     ) -> Self {
-        unsafe { TeInt::IRQ.enable() };
+        // Enable in NVIC and ICU
+        // Safety: Interrupt handlers are defined by the irqs argument and thus the interrupts are safe to enable.
+        unsafe {
+            TeInt::IRQ.enable();
+            TeInt::IRQ.icu_enable(I::TE_EVENT);
+        }
 
-        // Enable in ICU
-        TeInt::IRQ.icu_enable(I::TE_EVENT);
-
-        let rx_dma = DmacChannel::new(rx_dmac, irqs.clone());
-        let tx_dma = DmacChannel::new(tx_dmac, irqs.clone());
+        let rx_dma = DmacChannel::new(rx_dmac, irqs);
+        let tx_dma = DmacChannel::new(tx_dmac, irqs);
         let dma = Dma { rx_dma, tx_dma };
 
         cs.set_pfunc();
@@ -741,7 +752,10 @@ impl<'d, I: Instance, W: Word> Spi<'d, I, W, Dma<'d>> {
     }
 }
 
-impl<'d, I: Instance, W: Word, Rx: DtcInstance, Tx: DtcInstance> Spi<'d, I, W, Dtc<Rx, Tx>> {
+#[cfg(feature = "_dtc")]
+impl<'d, I: Instance, W: Word + crate::dtc::Word, Rx: DtcInstance, Tx: DtcInstance>
+    Spi<'d, I, W, Dtc<Rx, Tx>>
+{
     #[allow(clippy::too_many_arguments)]
     pub fn new_dtc<TeInt: InterruptType>(
         spi: Peri<'d, I>,
@@ -758,13 +772,15 @@ impl<'d, I: Instance, W: Word, Rx: DtcInstance, Tx: DtcInstance> Spi<'d, I, W, D
         + Clone
         + 'd,
     ) -> Self {
-        unsafe { TeInt::IRQ.enable() };
+        // Safety: Interrupt handlers are defined by the irqs argument and thus the interrupts are safe to enable.
+        unsafe {
+            // Enable in NVIC and ICU
+            TeInt::IRQ.enable();
+            TeInt::IRQ.icu_enable(I::TE_EVENT);
+        };
 
-        // Enable in ICU
-        TeInt::IRQ.icu_enable(I::TE_EVENT);
-
-        let rx_dtc = DtcChannel::new(rx_dtc, irqs.clone());
-        let tx_dtc = DtcChannel::new(tx_dtc, irqs.clone());
+        let rx_dtc = DtcChannel::new(rx_dtc, irqs);
+        let tx_dtc = DtcChannel::new(tx_dtc, irqs);
         let dtc = Dtc { rx_dtc, tx_dtc };
 
         cs.set_pfunc();
@@ -1057,7 +1073,8 @@ impl<'d, I: Instance, W: Word + 'static> embedded_hal_1::spi::SpiBus<W>
     }
 }
 
-impl<'d, I: Instance, W: Word + 'static> embedded_hal_async::spi::SpiBus<W>
+#[cfg(feature = "_dmac")]
+impl<'d, I: Instance, W: Word + crate::dmac::Word + 'static> embedded_hal_async::spi::SpiBus<W>
     for Spi<'d, I, W, Dma<'d>>
 {
     async fn read(&mut self, _words: &mut [W]) -> Result<(), Self::Error> {

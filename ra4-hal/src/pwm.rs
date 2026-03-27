@@ -1,22 +1,25 @@
-//! Pulse Width Modulation (`PWM`) driver utilizing the General PWM Timer (`GPT`).
+//! Pulse Width Modulation driver utilizing the General PWM Timer (`GPT`).
 //!
 //! # Notes
-//! * The `RA4M1` has both 16-bit and 32-bit timer instances.
-//!   This driver treats all instances as 16-bit for the sake of brevity.
-//! * The default configuration sets the CPU and GPT clocks to 48 MHz,
+//! * The `GPT` timer has both 16-bit and 32-bit timer instances.
+//!   Unlike the [`timer`](crate::timer) this driver treats all instances
+//!   as 16-bit for the sake of brevity.
+//! * `RA4M1`: The default configuration sets the CPU and GPT clocks to 48 MHz,
 //!   however setting the CPU clock to 32 MHz allows for the GPT clock
 //!   to be set to 32 MHz or 64 MHz.
-//! * Two clocks are shared across all `GPT` instances.  One for 16-bit
-//!   and one for 32-bit instances.  Currently they are not disabled
-//!   on `Drop` as we're not refcounting `GPT` usage and `time-driver`
-//!   uses `GPT32_0`.  Pins are returned to input state on drop.
+//! * Two module stop gates are shared across all `GPT` instances.  One
+//!   for 16-bit and one for 32-bit instances.  Currently they are not
+//!   disabled on `Drop` as we're not refcounting `GPT` usage and
+//!   `time-driver` uses `GPT32_0`.  Pins are returned to input state on drop.
 
 use core::marker::PhantomData;
 
 use embassy_hal_internal::{Peri, PeripheralType};
+use embassy_sync::waitqueue::AtomicWaker;
 use paste::paste;
 
 use crate::{
+    event_link::InterruptEvent,
     gpio::{Flex, Pin, PortFunction, WithOpenDrain},
     module_stop::ModuleStop,
     pac::{
@@ -26,6 +29,7 @@ use crate::{
 };
 
 /// PWM configuration
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[non_exhaustive]
 pub struct Config {
     /// Timer prescaler. §22.2.12.
@@ -42,6 +46,7 @@ pub struct Config {
 }
 
 /// PWM clock divider
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Divider {
     /// `PCLKD/1`
     Div1,
@@ -91,7 +96,17 @@ pub(crate) trait SealedInstance {
     #[cfg(not(feature = "defmt"))]
     const PERIPHERAL: () = ();
 
+    const CAPTURE_COMP_A_EVENT: InterruptEvent;
+
+    #[allow(dead_code)]
+    const CAPTURE_COMP_B_EVENT: InterruptEvent;
+
+    #[allow(dead_code)]
+    const COMP_C_EVENT: InterruptEvent;
+
     fn regs() -> pac::gpt::Gpt;
+
+    fn cmpa_waker() -> &'static AtomicWaker;
 }
 
 pub(crate) trait PwmChannel {}
@@ -227,7 +242,9 @@ impl<'d, I: Instance> Pwm<'d, I> {
     /// # Returns
     ///
     /// A `PWM` driver with no output pins assigned and whose counter is initialized to `0` but has not been started.
-    pub fn new(_peri: Peri<'d, I>, config: Config) -> Self {
+    pub fn new(peri: Peri<'d, I>, config: Config) -> Self {
+        let _ = peri;
+
         I::start_module();
 
         let pwm = I::regs();
@@ -294,7 +311,7 @@ impl<'d, I: Instance> Pwm<'d, I> {
     /// # Arguments
     /// * `frequency` Frequency in hertz
     /// * `pct` Duty cycle percentage, range is `0.0..=1.0`
-    pub fn set_frequency(&mut self, frequency: u32, pct: f32) -> Result<(), ()> {
+    pub fn set_frequency(&mut self, frequency: u32, pct: f32) -> Result<(), PwmError> {
         let pwm = I::regs();
         let clocks = crate::clock_config();
         let divider: Divider = pwm.gtcr().read().tpcs().into();
@@ -320,7 +337,7 @@ impl<'d, I: Instance> Pwm<'d, I> {
                 frequency,
                 (pwm_clk / (divider * 4.0)) as u32,
             );
-            return Err(());
+            return Err(PwmError::InvalidDutyCycle);
         }
 
         pwm.gtpr().write_value(period as u32);
@@ -392,8 +409,8 @@ impl<'d, I: Instance> Pwm<'d, I> {
             // This will center the peak
 
             pwm.gtuddtyc().modify(|w| w.set_oadty(Odty::CompareMatch));
-            pwm.gtccra().write_value(duty as u32);
-            pwm.gtccrc().write_value(duty as u32);
+            pwm.gtccra().write_value(duty);
+            pwm.gtccrc().write_value(duty);
         }
 
         Ok(())
@@ -452,8 +469,8 @@ impl<'d, I: Instance> Pwm<'d, I> {
             // This will center the peak
 
             pwm.gtuddtyc().modify(|w| w.set_obdty(Odty::CompareMatch));
-            pwm.gtccrb().write_value(duty as u32);
-            pwm.gtccre().write_value(duty as u32);
+            pwm.gtccrb().write_value(duty);
+            pwm.gtccre().write_value(duty);
         }
 
         Ok(())
@@ -491,6 +508,7 @@ macro_rules! pwm_pin {
             for crate::peripherals::$pin
         {
         }
+
         impl crate::pwm::SealedPwmPin<crate::peripherals::$instance, crate::pwm::$chan>
             for crate::peripherals::$pin
         {
@@ -504,31 +522,33 @@ declare_pwm_channel!(A);
 declare_pwm_channel!(B);
 
 macro_rules! gpt_instance {
-    ($size:literal, $instance:literal, $mstp:ident) => {
-        paste! {
-            impl Instance for crate::peripherals::[< GPT $size _ $instance >] {}
-            impl SealedInstance for crate::peripherals::[< GPT $size _ $instance >]{
-                #[cfg(feature = "defmt")]
-                const PERIPHERAL: &'static str = concat!("GPT", stringify!($size), "_", stringify!($instance), ": ");
+    ($peripheral:ident, $ccmpa:ident, $ccmpb:ident, $cmpc:ident, $overflow:ident, $underflow:ident) => {
+        impl crate::pwm::Instance for crate::peripherals::$peripheral {}
+        impl crate::pwm::SealedInstance for crate::peripherals::$peripheral {
+            #[cfg(feature = "defmt")]
+            const PERIPHERAL: &'static str = concat!(stringify!($peripheral), ": ");
 
-                #[inline(always)]
-                fn regs() -> crate::pac::gpt::Gpt {
-                    crate::pac::[< GPT $size _ $instance >]
-                }
+            const CAPTURE_COMP_A_EVENT: crate::event_link::InterruptEvent =
+                crate::event_link::InterruptEvent::$ccmpa;
+            const CAPTURE_COMP_B_EVENT: crate::event_link::InterruptEvent =
+                crate::event_link::InterruptEvent::$ccmpb;
+            const COMP_C_EVENT: crate::event_link::InterruptEvent =
+                crate::event_link::InterruptEvent::$cmpc;
+
+            #[inline(always)]
+            fn regs() -> crate::pac::gpt::Gpt {
+                crate::pac::$peripheral
+            }
+
+            fn cmpa_waker() -> &'static embassy_sync::waitqueue::AtomicWaker {
+                static WAKER: embassy_sync::waitqueue::AtomicWaker =
+                    embassy_sync::waitqueue::AtomicWaker::new();
+                &WAKER
             }
         }
     };
 }
-
-gpt_instance!(32, 0, mstpd5);
-gpt_instance!(32, 1, mstpd5);
-
-gpt_instance!(16, 2, mstpd6);
-gpt_instance!(16, 3, mstpd6);
-gpt_instance!(16, 4, mstpd6);
-gpt_instance!(16, 5, mstpd6);
-gpt_instance!(16, 6, mstpd6);
-gpt_instance!(16, 7, mstpd6);
+pub(crate) use gpt_instance;
 
 impl embedded_hal_1::pwm::Error for PwmError {
     fn kind(&self) -> embedded_hal_1::pwm::ErrorKind {

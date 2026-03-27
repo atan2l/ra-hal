@@ -213,6 +213,7 @@ fn do_gpt(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
         let underflow = format_ident!("Gpt{index}Udf");
         impls.push(quote! {
             crate::timer::timer_instance!(#peripheral, u16, #index, #ccmpa, #ccmpb, #cmpc, #overflow, #underflow);
+            crate::pwm::gpt_instance!(#peripheral, #ccmpa, #ccmpb, #cmpc, #overflow, #underflow);
         });
     }
     if let Some(index) = peripheral.to_string().strip_prefix("GPT32_") {
@@ -225,6 +226,7 @@ fn do_gpt(peripheral: &str, signals: &PinEntry) -> Vec<TokenStream> {
         let underflow = format_ident!("Gpt{index}Udf");
         impls.push(quote! {
             crate::timer::timer_instance!(#peripheral, u32, #index, #ccmpa, #ccmpb, #cmpc, #overflow, #underflow);
+            crate::pwm::gpt_instance!(#peripheral, #ccmpa, #ccmpb, #cmpc, #overflow, #underflow);
         });
     }
 

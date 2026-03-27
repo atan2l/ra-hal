@@ -37,9 +37,9 @@ macro_rules! pins {
 }
 
 bind_interrupts!(struct Irqs {
-    // Tx DMAC channel
+    // Tx DTC channel
     IEL3 => DtcInterruptHandler<DTC_CHAN3>;
-    // Rx DMAC channel
+    // Rx DTC channel
     IEL4 => DtcInterruptHandler<DTC_CHAN4>;
     // SPI transfer finished
     IEL5 => TeInterruptHandler<SPI0>;

@@ -1,4 +1,4 @@
-//! `pulse` Pulses the onboard LED of an Arduino Uno R4.
+//! `pulse` Pulses the onboard LED of an Arduino Uno R4 using a GPT timer.
 
 #![no_std]
 #![no_main]

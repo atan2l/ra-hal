@@ -12,7 +12,7 @@ use embassy_time::Instant;
 use panic_probe as _;
 use ra4_hal::{
     bind_interrupts,
-    dmac::DmacInterruptHandler,
+    dmac::{self, DmacInterruptHandler},
     dtc::{self, DtcInterruptHandler},
     peripherals::{DMAC0, DMAC1, DTC_CHAN5, DTC_CHAN6, SPI0},
     spi::{self, Spi, TeInterruptHandler},
@@ -43,9 +43,9 @@ bind_interrupts!(struct Irqs {
     IEL3 => DmacInterruptHandler<DMAC0>;
     // Rx DMAC channel
     IEL4 => DmacInterruptHandler<DMAC1>;
-    // Tx DMAC channel
+    // Tx DTC channel
     IEL5 => DtcInterruptHandler<DTC_CHAN5>;
-    // Rx DMAC channel
+    // Rx DTC channel
     IEL6 => DtcInterruptHandler<DTC_CHAN6>;
     // SPI transfer finished
     IEL7 => TeInterruptHandler<SPI0>;
@@ -55,7 +55,7 @@ async fn benchmark_dma<
     'd,
     const SIZE: usize,
     const SAMPLES: usize,
-    W: spi::Word,
+    W: spi::Word + dmac::Word,
     I: spi::Instance,
 >(
     bus: &mut Spi<'d, I, W, spi::Dma<'d>>,
@@ -71,7 +71,7 @@ async fn benchmark_dma<
         let now = Instant::now();
         bus.dma_transfer(&mut input, &output).await.unwrap();
         let elapsed = now.elapsed().as_ticks() as f64;
-        *sample = ((elapsed / clocks.system as f64) * 1_000_000.0) as f32;
+        *sample = ((elapsed / clocks.peripheral_d as f64) * 1_000_000.0) as f32;
     }
 
     durations.iter().fold(0.0, |acc, val| acc + val) / SAMPLES as f32
@@ -81,7 +81,7 @@ async fn benchmark_dtc<
     'd,
     const SIZE: usize,
     const SAMPLES: usize,
-    W: spi::Word,
+    W: spi::Word + dtc::Word,
     I: spi::Instance,
     D1: dtc::Instance,
     D2: dtc::Instance,
@@ -99,7 +99,7 @@ async fn benchmark_dtc<
         let now = Instant::now();
         bus.dtc_transfer(&mut input, &output).await.unwrap();
         let elapsed = now.elapsed().as_ticks() as f64;
-        *sample = ((elapsed / clocks.system as f64) * 1_000_000.0) as f32;
+        *sample = ((elapsed / clocks.peripheral_d as f64) * 1_000_000.0) as f32;
     }
 
     durations.iter().fold(0.0, |acc, val| acc + val) / SAMPLES as f32

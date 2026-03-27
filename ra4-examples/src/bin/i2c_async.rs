@@ -13,7 +13,6 @@ use panic_probe as _;
 use ra4_hal::{
     bind_interrupts,
     i2c::{I2c, I2cSpeed, RxInterruptHandler, TeInterruptHandler, TxInterruptHandler},
-    mode::Async,
     peripherals::IIC1,
 };
 #[allow(unused)]
@@ -55,8 +54,7 @@ async fn main(_spawner: Spawner) {
 
     {
         let mut tx_buf = [0_u8; 16];
-        let mut i2c =
-            I2c::<Async, _>::new_async(p.IIC1, scl, sda, I2cSpeed::Fast, &mut tx_buf, Irqs);
+        let mut i2c = I2c::new_async(p.IIC1, scl, sda, I2cSpeed::Fast, &mut tx_buf, Irqs);
 
         let mut data = [0_u8; 1];
 
