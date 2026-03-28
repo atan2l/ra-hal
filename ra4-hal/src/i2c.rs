@@ -184,9 +184,8 @@ pub trait SclPin<I: Instance>: SealedSclPin<I> {}
 pub(crate) trait SealedSclPin<I: SealedInstance>: Pin + PeripheralType {
     const PERIPHERAL_FUNC: PortFunction;
 
-    #[inline(always)]
+    #[inline]
     fn set_as_scl(&self) {
-        trace!("P{}{:02}: SclPin::new", self.port(), self.pin());
         self.set_as_pf(Self::PERIPHERAL_FUNC);
     }
 }
@@ -198,9 +197,8 @@ pub trait SdaPin<I: Instance>: SealedSdaPin<I> {}
 pub(crate) trait SealedSdaPin<I: SealedInstance>: Pin {
     const PERIPHERAL_FUNC: PortFunction;
 
-    #[inline(always)]
+    #[inline]
     fn set_as_sda(&self) {
-        trace!("P{}{:02}: SdaPin::new", self.port(), self.pin());
         self.set_as_pf(Self::PERIPHERAL_FUNC);
     }
 }
@@ -215,7 +213,7 @@ impl Instance for crate::peripherals::IIC0 {}
 impl Instance for crate::peripherals::IIC1 {}
 
 macro_rules! instance_impl {
-    ($instance:ident, $mstp:ident, $rx_int:ident, $te_int:ident, $tx_int:ident) => {
+    ($instance:ident, $rx_int:ident, $te_int:ident, $tx_int:ident) => {
         paste::paste! {
             impl SealedInstance for crate::peripherals::$instance {
                 #[cfg(feature = "defmt")]
@@ -257,8 +255,8 @@ macro_rules! instance_impl {
     };
 }
 
-instance_impl!(IIC0, mstpb9, Iic0Rxi, Iic0Tei, Iic0Txi);
-instance_impl!(IIC1, mstpb8, Iic1Rxi, Iic1Tei, Iic1Txi);
+instance_impl!(IIC0, Iic0Rxi, Iic0Tei, Iic0Txi);
+instance_impl!(IIC1, Iic1Rxi, Iic1Tei, Iic1Txi);
 
 impl<'d, I: Instance> I2c<'d, I, Blocking> {
     /// Creates a new blocking `I2c` driver.
