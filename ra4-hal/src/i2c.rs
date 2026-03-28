@@ -1,10 +1,15 @@
 //! I2C Bus Interface (`IIC`).
 //!
+//! The `IIC` peripheral provides hardware support for NXP's I2C at both Normal (100 kbps) and Fast (400 kbps) rates.
+//!
 //! # Notes
 //! Is it really worth allocating a buffer and grabbing an interrupt to make up for the lack of built-in FIFO?
+//!
 //! # TODO
 //! * Error checking and handling
 //! * Clock config for arbitrary rates
+//! * SMBus mode
+//! * Subnode mode
 
 use core::{future::poll_fn, marker::PhantomData, task::Poll};
 
@@ -28,7 +33,7 @@ use crate::{
     write_protect::ProtectedModify,
 };
 
-/// Represents one of the possible modes of transfer e.g. spin-wait), interrupt, or DMA.
+/// Represents one of the possible modes of transfer e.g. spin-wait (blocking), interrupt, or DMA.
 #[allow(private_bounds)]
 pub trait TransferMode: SealedTransferMode {}
 trait SealedTransferMode {}
@@ -397,7 +402,7 @@ impl<'d, I: Instance, RxInt: InterruptType, TxDtc: DtcInstance> I2c<'d, I, Dtc<R
     /// * `irqs` interrupts bound with the [`bind_interrupts!`](crate::bind_interrupts) macro.
     ///
     /// # Notes
-    /// This uses DTC for transmission and interrupts for reception.
+    /// This uses `DTC` for transmission and interrupts for reception.
     /// Due to limitations with the `IIC` peripheral DMA/DTC reception offers little, if any, benefit.
     pub fn new_dtc<C: SclPin<I>, D: SdaPin<I>>(
         iic: Peri<'d, I>,
