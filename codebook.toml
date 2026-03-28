@@ -51,6 +51,7 @@ words = [
     "irqs",
     "isel",
     "iwdt",
+    "kbps",
     "kint",
     "libm",
     "lms",
@@ -178,5 +179,6 @@ ignore_patterns = [
     "Udf",
     "Ovf",
     "vergen-gitcl",
+    "NXP('s)?",
 ]
 use_global = false
