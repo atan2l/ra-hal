@@ -3,7 +3,11 @@
 //! The `IIC` peripheral provides hardware support for NXP's I2C at both Normal (100 kbps) and Fast (400 kbps) rates.
 //!
 //! # Notes
-//! Is it really worth allocating a buffer and grabbing an interrupt to make up for the lack of built-in FIFO?
+//! * Is it really worth allocating a buffer and grabbing an interrupt to make up for the lack of built-in FIFO?
+//! * The `RA4M1` does not provide any pull-up resistors for use with `I2C`.
+//!   While there are internal pull-up resistors on the pins attached to the `IIC` peripherals they do *not* function in peripheral mode.
+//! * The exact speeds you will see depend on the capacitive load and resistors used.
+//! * If you need to set the clocks more precisely use `I2cSpeed::Manual`.
 //!
 //! # TODO
 //! * Error checking and handling
@@ -71,10 +75,6 @@ impl<RxInt: InterruptType, TxDtc: DtcInstance> TransferMode for Dtc<RxInt, TxDtc
 impl<RxInt: InterruptType, TxDtc: DtcInstance> SealedTransferMode for Dtc<RxInt, TxDtc> {}
 
 /// I2C driver for the `IIC` peripheral.
-///
-/// # Notes
-///
-/// While there are internal pull-up resistors on the pins attached to the `IIC` peripherals they do *not* function in peripheral mode.
 #[allow(private_bounds)]
 pub struct I2c<'d, I: Instance, M: TransferMode> {
     _instance: PhantomData<&'d I>,
@@ -113,6 +113,10 @@ pub enum Divider {
     Div128 = 0x07,
 }
 
+/// Pre-baked clock configuration.
+///
+/// Due to the nature of I2C, timing depends on the bus capacitance.
+/// If more precise control is needed, use the Manual variant.
 /// Max supported speed is 400 kHz § 29.1
 #[derive(Debug, Copy, Clone, Default)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
@@ -123,6 +127,9 @@ pub enum I2cSpeed {
 
     /// 400 kHz
     Fast,
+
+    /// Set the clock configuration explicitly, see § 29.2.16.
+    Manual(ClockConfig),
 }
 
 /// Interrupt handler that handles incoming data for an [`I2c`] instance.
@@ -262,10 +269,6 @@ impl<'d, I: Instance> I2c<'d, I, Blocking> {
     /// * `sda` A [`Pin`] that can be connected to the [data line](trait@SdaPin).
     /// * `speed` Bitrate.
     ///
-    /// # Notes
-    /// The `RA4M1` does not provide any pull-up resistors for use with `I2C`.
-    /// The exact speeds you will see depend on the capacitive load and resistors used.
-    /// If you need to set the clocks more precisely use [`new_with_clock_config`](Self::new_with_clock_config).
     #[inline]
     pub fn new_blocking<C: SclPin<I>, D: SdaPin<I>>(
         iic: Peri<'d, I>,
@@ -831,33 +834,14 @@ impl<'d, I: Instance, M: TransferMode> I2c<'d, I, M> {
             ClockConfig { divider: Divider::Div2, low: 18, high: 9 },
         ];
 
-        let config = match speed {
+        let clocks = match speed {
             // Tlow ≥ 4.7 µs, Thigh ≥ 4.0 µs, UM10204 Table 11
             I2cSpeed::Normal => clk_config[0],
             // Tlow ≥ 1.3 µs, Thigh ≥ 0.6 µs, UM10204 Table 11
             I2cSpeed::Fast => clk_config[1],
+            I2cSpeed::Manual(clk_config) => clk_config,
         };
 
-        Self::new_with_clock_config(iic, scl, sda, config, mode)
-    }
-    /// Creates a new blocking `I2c` driver with specific clock timing.
-    /// # Arguments
-    /// * `iic` An [`IIC`](trait@Instance) peripheral.
-    /// * `scl` A [`Pin`] that can be connected to the [clock line](trait@SclPin).
-    /// * `sda` A [`Pin`] that can be connected to the [data line](trait@SdaPin).
-    /// * `clocks` Clock configuration.
-    ///
-    /// # Notes
-    /// From UM10204, Table 11.
-    /// For normal mode, aim for: Tlow ≥ 4.7 µs, Thigh ≥ 4.0 µs.
-    /// For fast mode, aim for: Tlow ≥ 1.3 µs, Thigh ≥ 0.6 µs.
-    fn new_with_clock_config<C: SclPin<I>, D: SdaPin<I>>(
-        iic: Peri<'d, I>,
-        scl: Peri<'d, C>,
-        sda: Peri<'d, D>,
-        clocks: ClockConfig,
-        mode: M,
-    ) -> Self {
         let _ = iic;
         I::start_module();
 
