@@ -1,4 +1,13 @@
 //! `watchdog` blinks an LED until the watchdog underflows
+//!
+//! This example enables the watchdog timer (`WDT`) at runtime but does not feed it. Execution
+//! will halt once the `WDT` counter underflows.
+//!
+//! # Further Reading
+//!
+//! `WDT` can also be configured and enabled at reset time via the Option Setting Memory (`OSM`)
+//! which is configured at compile time.  This is also the *only* way the independent watchdog timer
+//! (`IWDT`) can be configured and enabled.
 
 #![no_std]
 #![no_main]

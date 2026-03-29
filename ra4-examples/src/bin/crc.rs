@@ -1,4 +1,8 @@
 //! `crc` demonstrates use of the CRC calculator
+//!
+//! This example will run through twelve polynomials and then stop.  For each polynomial: on success
+//! a message will be logged and execution will proceed to the next polynomial.  On error execution
+//! will halt. After the last CRC is calculated execution will stop.
 
 #![no_std]
 #![no_main]

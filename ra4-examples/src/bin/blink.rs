@@ -1,4 +1,11 @@
 //! `blink` hello world example
+//!
+//! This example will blink an onboard LED, toggling the state every 333 milliseconds.
+//!
+//! # Further Reading
+//! There are multiple ways to accomplish this.  The loop could contain explicitly set the output
+//! level high and then low.  Or, the loop could read the current output state and set it
+//! accordingly.
 
 #![no_std]
 #![no_main]

@@ -1,4 +1,7 @@
 //! `qdec` quadrature decoding example
+//!
+//! This example will use a `GPT` instance to decode the output of a quadrature encoder.  It will
+//! asynchronously wait for an event and log the direction of rotation for each change.
 
 #![no_std]
 #![no_main]
@@ -16,16 +19,7 @@ use ra4_hal::{
 #[allow(unused)]
 use ra4_hal::{debug, error, info, trace, warn};
 
-// Define the pins we want on the R4 Minima
-#[cfg(feature = "uno-r4-minima")]
-macro_rules! pins {
-    ($p:ident) => {
-        $p.P111
-    };
-}
-
-// Define the pins we want on the R4 WiFi
-#[cfg(feature = "uno-r4-wifi")]
+#[cfg(any(feature = "uno-r4-wifi", feature = "uno-r4-minima"))]
 macro_rules! pins {
     ($p:ident) => {
         ($p.GPT16_2, $p.P103, $p.P102)

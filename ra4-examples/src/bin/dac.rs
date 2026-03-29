@@ -1,4 +1,4 @@
-//! `dac_output` Uses DTC to send different waveforms to the DAC.
+//! `dac_output` Uses DTC to send different waveforms to the DAC in a loop.
 
 #![no_std]
 #![no_main]
@@ -26,10 +26,9 @@ use ra4_hal::{debug, error, info, trace, warn};
 
 bind_interrupts!(struct Irqs {
     IEL2 => DtcInterruptHandler<DTC_CHAN2>;
-    // IEL3 => DtcInterruptHandler<DTC_CHAN3>;
 });
 
-/// Max value for our 12-bit DAC
+/// Max value for our 12-bit DAC (4095)
 const DAC_MAX: f32 = ((1 << 12) - 1) as f32;
 
 const SPACING: u64 = 2000;

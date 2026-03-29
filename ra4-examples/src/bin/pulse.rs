@@ -1,4 +1,8 @@
 //! `pulse` Pulses the onboard LED of an Arduino Uno R4 using a GPT timer.
+//!
+//! Slightly more advanced than the blink example, the pulse example uses PWM to control the
+//! brightness of the onboard LED. Combined with an easing function this gives the LED a somewhat
+//! organic pulsating appearance.
 
 #![no_std]
 #![no_main]
