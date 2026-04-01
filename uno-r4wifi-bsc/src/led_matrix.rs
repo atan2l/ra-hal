@@ -1,6 +1,6 @@
 use embassy_hal_internal::Peri;
 use embassy_time::Timer;
-use ra4_hal::{
+use ra_hal::{
     gpio::{AnyPin, Flex, Pin},
     peripherals::{P003, P004, P011, P012, P013, P015, P204, P205, P206, P212, P213},
 };
@@ -148,8 +148,8 @@ impl<'d> LedMatrix {
     }
 
     pub fn blocking_set_pixel(&self, idx: u8, state: bool) {
-        let port0 = ra4_hal::pac::PORT0;
-        let port2 = ra4_hal::pac::PORT2;
+        let port0 = ra_hal::pac::PORT0;
+        let port2 = ra_hal::pac::PORT2;
 
         port0.pcntr1().write(|w| {
             for pin in [3, 4, 11, 12, 13, 15] {

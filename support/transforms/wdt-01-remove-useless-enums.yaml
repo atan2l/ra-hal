@@ -1,4 +1,0 @@
-transforms:
-  # Only 0x00 and 0xFF are valid values, perhaps this really should be an enum?
-  - !DeleteFieldsets
-    from: wdt::regs::Wdtrr

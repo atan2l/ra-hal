@@ -1,8 +1,9 @@
 .DS_Store
-/target
+target
 /ignore
 legacy
 svd-playground
 .idea
 *.pack
 /support/pack
+cargo-config.toml

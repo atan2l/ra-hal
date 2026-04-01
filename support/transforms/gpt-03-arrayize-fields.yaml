@@ -1,5 +1,0 @@
-transforms:
-  - !MakeFieldArray
-    fieldsets: gpt::regs::(Gtstr|Gtstp|Gtclr)
-    from: (cstrt|cstop|cclr)\d+
-    to: ${1}

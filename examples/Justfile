@@ -1,0 +1,31 @@
+[private]
+default:
+  @just --list
+
+# Runs a cargo command for the `RA2A1`.
+ra2a1 cargo_command *cargo_arguments:
+  cargo {{cargo_command}} --target thumbv8m.base-none-eabi --package ra2a1 {{cargo_arguments}}
+
+# Runs a cargo command for the `RA2L1`.
+ra2l1 cargo_command *cargo_arguments:
+  cargo {{cargo_command}} --target thumbv8m.base-none-eabi --package ra2l1 {{cargo_arguments}}
+
+# Runs a cargo command for the `RA2L2`.
+ra2l2 cargo_command *cargo_arguments:
+  cargo {{cargo_command}} --target thumbv8m.base-none-eabi --package ra2l2 {{cargo_arguments}}
+
+# Runs a cargo command for the `RA4L1`.
+ra4l1 cargo_command *cargo_arguments:
+  cargo {{cargo_command}} --target thumbv8m.main-none-eabihf --package ra4l1 {{cargo_arguments}}
+
+# Runs a cargo command for the `RA4M1`.
+ra4m1 cargo_command *cargo_arguments:
+  cargo {{cargo_command}} --target thumbv7em-none-eabihf --package ra4m1 {{cargo_arguments}}
+
+# Runs a cargo command for the `RA6M5`.
+ra6m5 cargo_command *cargo_arguments:
+  cargo {{cargo_command}} --target thumbv8m.main-none-eabihf --package ra6m5 {{cargo_arguments}}
+
+# Runs a cargo command for the `RA8M1`.
+ra8m1 cargo_command *cargo_arguments:
+  cargo {{cargo_command}} --target thumbv8m.main-none-eabihf --package ra8m1 {{cargo_arguments}}

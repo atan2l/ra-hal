@@ -1,7 +1,9 @@
 [toolchain]
-channel = "1.91"
+channel = "1.95"
 profile = "minimal"
 components = [ "rust-src", "rustfmt", "llvm-tools", "rust-analyzer" ]
 targets = [
     "thumbv7em-none-eabihf",
+    "thumbv8m.base-none-eabi",
+    "thumbv8m.main-none-eabihf",
 ]

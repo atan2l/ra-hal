@@ -1,0 +1,43 @@
+image: debian/trixie
+secrets:
+  - f317af3f-6c5f-49d4-8602-78651225c9d2
+sources:
+  - git@git.sr.ht:~az1/ra-hal#metapac
+environment:
+  THE_PROJECT: ra-hal
+  SPELLCODE_ARTIFACT: https://s3.sr.ht/builds.sr.ht/artifacts/~az1/1664298/b5e6ccb939fcb2b4/spellcode-cli
+packages:
+  - curl
+  - zstd
+tasks:
+  - env-setup: |
+      echo 'export PATH=${PATH}:${HOME}/local/usr/bin' >> ~/.buildenv
+      echo 'if [ -f "${HOME}/.cargo/env" ]; then source "${HOME}/.cargo/env" && cd "${HOME}/${THE_PROJECT}"; fi' >> ~/.buildenv
+  - install-tools: |
+      curl -LO "${SPELLCODE_ARTIFACT}"
+      chmod +x "${HOME}/spellcode-cli"
+      curl -L 'https://archlinux.org/packages/extra/x86_64/cargo-audit/download/' -o cargo-audit.tar.xz
+      curl -L 'https://archlinux.org/packages/extra/x86_64/just/download/' -o 'just.tar.xz'
+      mkdir local
+      tar --zstd -C local -xvf cargo-audit.tar.xz usr/bin/cargo-audit
+      tar --zstd -C local -xvf just.tar.xz usr/bin/just
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none
+  - install-rust: |
+      rustup show active-toolchain
+      rustup component add clippy
+  - build-ra2a1: |
+      just examples ra2a1 build --release
+  - build-ra4l1: |
+      just examples ra4l1 build --release
+  - build-ra4m1: |
+      just examples ra4m1 build --release
+  - build-ra6m5: |
+      just examples ra6m5 build --release
+  - doc-ra2a1: |
+      just doc-ra2a1
+  - doc-ra4l1: |
+      just doc-ra4l1
+  - doc-ra4m1: |
+      just doc-ra4m1
+  - doc-ra6m5: |
+      just doc-ra6m5

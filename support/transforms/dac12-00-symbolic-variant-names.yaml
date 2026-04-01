@@ -1,8 +1,0 @@
-transforms:
-  - !MapEnumVariants
-    enum: dac12::vals::Ref
-    variants:
-      _000: None
-      _001: Avcc0
-      _011: Internal
-      _110: Vref

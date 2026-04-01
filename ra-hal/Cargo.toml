@@ -1,0 +1,224 @@
+[package]
+name = "ra-hal"
+version = "0.3.0-dev"
+description = "Hardware Abstraction Layer (HAL) for the Renesas RA family of MCUs."
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+homepage.workspace = true
+license.workspace = true
+
+[lib]
+test = false
+doctest = false
+bench = false
+
+[dependencies]
+defmt = { workspace = true, optional = true }
+cortex-m = { workspace = true }
+cortex-m-rt = { workspace = true }
+critical-section = { workspace = true }
+
+embedded-hal-1 = { workspace = true }
+embedded-hal-async = { workspace = true }
+
+embassy-hal-internal = { workspace = true }
+embassy-futures = { workspace = true }
+embedded-io = { workspace = true }
+embedded-io-async = { workspace = true }
+embedded-serial = { workspace = true }
+embassy-sync = { workspace = true }
+embassy-time = { workspace = true, optional = true }
+embassy-time-driver = { workspace = true, optional = true }
+embassy-time-queue-utils = { workspace = true, optional = true }
+embassy-usb-driver = { workspace = true, optional = true }
+
+ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac" }
+
+arbitrary-int = "2.1.1"
+bitbybit = "2.0.0"
+chrono = { version = "^0.4", default-features = false, optional = true }
+document-features = { workspace = true }
+paste = "1"
+fugit = { version = "0.3.9" }
+
+[build-dependencies]
+anyhow = "1.0.102"
+convert_case = "0.11.0"
+indexmap = { version = "2.13.0", features = [ "serde" ] }
+prettyplease = "0.2.37"
+proc-macro2 = "1.0.106"
+quote = "1.0.44"
+ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", features = [ "metadata" ] }
+regex = "1.12.3"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_derive = "1.0.228"
+serde_yaml = "0.9.34"
+syn = "2.0.114"
+
+[features]
+default = [ "rt", "diag", "chrono", "strict-assert" ]
+
+## Enable the `rt` feature of the PAC.
+## With `rt` enabled the PAC provides interrupt vectors instead of letting [`cortex-m-rt`](https://docs.rs/cortex-m-rt) do that.
+## See <https://docs.rs/cortex-m-rt/latest/cortex_m_rt/#device> for more info.
+rt = [ "ra-metapac/rt" ]
+
+## Enable the flash cache. The cache is invalidated after each `DMAC` / `DTC` operation. See: §44.3.
+cache = [ ]
+
+## Enable dependency on [`chrono`](https://docs.rs/chrono) and expose methods that work with chrono structures.
+chrono = [ "dep:chrono" ]
+
+## Use [`defmt`](https://docs.rs/defmt/latest/defmt/) for logging.
+defmt = [ "dep:defmt", "ra-metapac/defmt", "embassy-time/defmt", "embassy-time/defmt-timestamp-uptime", "fugit/defmt" ]
+
+## Log the reset reason during initialization. Only useful in conjunction with `defmt` feature.
+diag = [ ]
+
+## Allow access to pins normally used for JTAG/SWD debugging
+swd-as-gpio = [ ]
+
+## Re-export the PAC at `ra_hal::pac`.
+## This is unstable because minor HAL updates may depend on major PAC updates.
+unstable-pac = [ ]
+
+## Extra runtime assertions.
+strict-assert = [ ]
+
+## Don't set `OSM` registers in the HAL, instead define them in your application.
+skip-osm = [ ]
+
+#! ### Time features
+
+## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver.
+time-driver-gpt = [ "time-driver", "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils" ]
+time-driver-agt = [ "time-driver", "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time/tick-hz-32_768" ]
+time-driver = [ ]
+
+#! ### On-Chip Oscillator Configuration
+#! Consult your reference manual for valid frequencies.
+#! TODO: Decouple this from the embassy tick rate.
+
+## Sets the high speed on-chip oscillator (`HOCO`) to 16 MHz.
+hoco_16mhz = [ "ra-metapac/hoco_20mhz" ]
+
+## Sets the high speed on-chip oscillator (`HOCO`) to 18 MHz.
+hoco_18mhz = [ "ra-metapac/hoco_20mhz" ]
+
+## Sets the high speed on-chip oscillator (`HOCO`) to 20 MHz.
+hoco_20mhz = [ "ra-metapac/hoco_20mhz" ]
+
+## Sets the high speed on-chip oscillator (`HOCO`) to 32 MHz.
+hoco_32mhz = [ "ra-metapac/hoco_32mhz" ]
+
+## Sets the high speed on-chip oscillator (`HOCO`) to 40 MHz.
+hoco_40mhz = [ "ra-metapac/hoco_48mhz" ]
+
+## Sets the high speed on-chip oscillator (`HOCO`) to 48 MHz.
+hoco_48mhz = [ "ra-metapac/hoco_48mhz" ]
+
+## Sets the high speed on-chip oscillator (`HOCO`) to 64 MHz.
+hoco_64mhz = [ "ra-metapac/hoco_64mhz" ]
+
+## Sets the high speed on-chip oscillator (`HOCO`) to 80 MHz.
+hoco_80mhz = [ "ra-metapac/hoco_80mhz"]
+
+
+#! ### Chip Features
+
+## RA2A1
+ra2a1 = [ "ra-metapac/ra2a1" ]
+
+## RA4L1
+ra4l1 = [ "ra-metapac/ra4l1", "skip-osm" ]
+
+## RA4M1
+ra4m1 = [ "ra-metapac/ra4m1" ]
+
+## RA6M5
+ra6m5 = [ "ra-metapac/ra6m5", "skip-osm" ]
+
+## RA8M1
+ra8m1 = [ "ra-metapac/ra8m1", "skip-osm" ]
+
+#! ### Memory Configuration
+#! Consult the reference manual for valid configurations for your chip. 
+
+## 64K RAM, 256K flash
+mem_ram64k_flash256k = [ "ra-metapac/mem_ram64k_flash256k" ]
+
+## 64K RAM, 512K flash
+mem_ram64k_flash512k = [ "ra-metapac/mem_ram64k_flash512k" ]
+
+## 512K RAM, 1024K flash
+mem_ram512k_flash1024k = [ "ra-metapac/mem_ram512k_flash1024k" ]
+
+## 512K RAM, 1536K flash
+mem_ram512k_flash1536k = [ "ra-metapac/mem_ram512k_flash1536k" ]
+
+## 512K RAM, 2048K flash
+mem_ram512k_flash2048k = [ "ra-metapac/mem_ram512k_flash2048k" ]
+
+## 896K RAM, 2016K flash
+mem_ram896k_flash2016k = [ "ra-metapac/mem_ram896k_flash2016k" ]
+
+#! ### Chip Package
+#! Consult the reference manual for valid packages for your chip. 
+
+## 32-pin LQFP
+32lqfp = [ ]
+
+## 36-pin BGA
+36bga = [ ]
+
+## 40-pin QFN
+40qfn = [ ]
+
+## 48-pin LQFP
+48lqfp = [ ]
+
+## 48-pin QFN
+48qfn = [ ]
+
+## 64-pin BGA
+64bga = [ ]
+
+## 64-pin LQFP
+64lqfp = [ ]
+
+## 64-pin QFN
+64qfn = [ ]
+
+## 100-pin BGA
+100bga = [ ]
+
+## 100-pin LGA
+100lga = [ ]
+
+## 100-pin LQFP
+100lqfp = [ ]
+
+## 144-pin BGA
+144bga = [ ]
+
+## 144-pin LQFP
+144lqfp = [ ]
+
+## 176-pin BGA
+176bga = [ ]
+
+## 176-pin LQFP
+176lqfp = [ ]
+
+## 224-pin BGA
+224bga = [ ]
+
+_doc_ra2a1 = [ "ra2a1", "hoco_48mhz", "64lqfp", "time-driver-gpt" ]
+_doc_ra4l1 = [ "ra4l1", "mem_ram64k_flash512k", "100lqfp", "time-driver-gpt" ]
+_doc_ra4m1 = [ "ra4m1", "hoco_48mhz", "64lqfp", "time-driver-gpt" ]
+_doc_ra6m5 = [ "ra6m5", "mem_ram512k_flash2048k", "176lqfp", "time-driver-gpt" ]
+_doc_ra8m1 = [ "ra8m1", "mem_ram896k_flash2016k", "224bga", "time-driver-gpt" ]
+
+[package.metadata.docs.rs]
+default-target = "thumbv7em-none-eabihf"

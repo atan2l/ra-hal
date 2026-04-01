@@ -1,4 +1,4 @@
-# Changelog for `ra4-hal` and `ra4m1-ctpac`
+# Changelog for `ra-hal`
 
 All notable changes to this project will be documented in this file.
 

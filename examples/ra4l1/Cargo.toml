@@ -1,0 +1,53 @@
+[package]
+name = "ra4l1"
+description = "HAL examples for the Renesas RA4L1 group of MCUs."
+license = "GPL-3.0-or-later"
+publish = false
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+homepage.workspace = true
+version.workspace = true
+
+[dependencies]
+## Core dependencies
+cortex-m = { workspace = true }
+cortex-m-rt = { workspace = true }
+defmt = { workspace = true, optional = true }
+defmt-rtt = { workspace = true, optional = true }
+panic-probe = { workspace = true }
+critical-section = { workspace = true }
+
+## Embassy dependencies
+embassy-executor = { workspace = true }
+embassy-time = { workspace = true }
+embedded-hal-1 = { workspace = true }
+embedded-hal-async = { workspace = true }
+embedded-io = { workspace = true }
+embedded-io-async = { workspace = true }
+
+## Board stuff
+ra-hal = { workspace = true, features = [ "ra4l1" ] }
+
+## Third party stuff
+micromath = { workspace = true }
+# For a signal generator micromath isn't precise enough but libm adds +10K
+libm = { workspace = true }
+
+[build-dependencies]
+vergen-gitcl = { version = "9" }
+
+[features]
+default = [ "defmt", "strict-assert", "ek-ra4l1" ]
+defmt = [
+  "dep:defmt",
+  "dep:defmt-rtt",
+  "embassy-executor/defmt",
+  "embassy-time/defmt",
+  "embassy-time/defmt-timestamp-uptime",
+  "panic-probe/print-defmt",
+  "ra-hal/defmt",
+]
+strict-assert = [ "ra-hal/strict-assert" ]
+ek-ra4l1 = [ "ra-hal/mem_ram64k_flash512k", "ra-hal/100lqfp", "ra-hal/time-driver-agt" ]
+# ek-ra4l1 = [ "ra-hal/mem_ram64k_flash512k", "ra-hal/100lqfp", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-20_000_000" ]

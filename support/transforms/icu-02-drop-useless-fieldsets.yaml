@@ -1,4 +1,0 @@
-transforms:
-  # NOTE: Only values 1..=217 are valid, but 217 variants seems more than excessive
-  - !DeleteEnums
-    from: icu::vals::(Dels|Iels|Sels)

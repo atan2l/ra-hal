@@ -1,0 +1,68 @@
+[package]
+name = "ra4m1"
+description = "HAL examples for the Renesas RA4M1 group of MCUs."
+license = "GPL-3.0-or-later"
+publish = false
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+homepage.workspace = true
+version.workspace = true
+
+[[bin]]
+name = "rtc"
+required-features = [ "_enable-rtc-beware-of-dragons" ]
+
+[dependencies]
+## Core dependencies
+cortex-m = { workspace = true }
+cortex-m-rt = { workspace = true }
+defmt = { workspace = true, optional = true }
+defmt-rtt = { workspace = true, optional = true }
+panic-probe = { workspace = true }
+critical-section = { workspace = true }
+
+## Embassy dependencies
+# embassy-embedded-hal = { version = "0.5.0", default-features = false }
+embassy-executor = { workspace = true }
+embassy-time = { workspace = true }
+# embassy-futures = { version = "0.1.2" }
+embedded-hal-1 = { workspace = true }
+embedded-hal-async = { workspace = true }
+embedded-io = { workspace = true }
+embedded-io-async = { workspace = true }
+
+## Board stuff
+ra-hal = { workspace = true, features = [ "unstable-pac", "ra4m1" ] }
+uno-r4wifi-bsc = { path = "../../uno-r4wifi-bsc" }
+
+## Third party stuff
+atomic_float = { version = "1.1.0", default-features = false }
+heapless = { version = "0.9.2" }
+micromath = { workspace = true }
+# For a signal generator micromath isn't precise enough but libm adds +10K
+libm = { workspace = true }
+
+## For the I2C and SPI examples.
+mini-sensors = { git = "https://git.sr.ht/~az1/mini-sensors" }
+
+[build-dependencies]
+vergen-gitcl = { version = "9" }
+
+[features]
+default = [ "defmt", "strict-assert", "uno-r4-wifi" ]
+defmt = [
+  "dep:defmt",
+  "dep:defmt-rtt",
+  "panic-probe/print-defmt",
+  "embassy-executor/defmt",
+  "embassy-time/defmt",
+  "embassy-time/defmt-timestamp-uptime",
+  "ra-hal/defmt",
+  # "uno-r4wifi-bsc/defmt",
+  "mini-sensors/defmt"
+]
+strict-assert = [ "ra-hal/strict-assert" ]
+uno-r4-minima = [ "ra-hal/64lqfp", "ra-hal/hoco_48mhz", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-48_000_000" ]
+uno-r4-wifi = [ "ra-hal/64lqfp", "ra-hal/hoco_48mhz", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-48_000_000" ]
+ek-ra4m1 = [ "ra-hal/100lqfp", "ra-hal/hoco_48mhz", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-48_000_000" ]

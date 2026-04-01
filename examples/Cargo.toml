@@ -2,8 +2,11 @@
 resolver = "3"
 
 members = [
-  "ra-hal",
-  # "uno-r4wifi-bsc",
+  "ra2a1",
+  "ra4l1",
+  "ra4m1",
+  "ra6m5",
+  "ra8m1",
 ]
 
 exclude = [
@@ -15,12 +18,14 @@ edition = "2024"
 rust-version = "1.95"
 license = "LGPL-3.0-or-later"
 homepage = "https://sr.ht/~az1/ra-rs/"
+version = "0.3.0-dev"
 
 [workspace.dependencies]
 cortex-m = { version = "0.7.7", features = [ "inline-asm", "critical-section-single-core" ] }
 cortex-m-rt = { version = "0.7.3" }
 critical-section = { version = "1.2" }
 defmt = { version = "1" }
+defmt-rtt = { version = "1.0.0" }
 document-features = { version = "0.2.12" }
 embassy-executor = { version = "0.10.0", features = [ "platform-cortex-m", "executor-thread", "executor-interrupt" ] }
 embassy-futures = { version = "0.1.2" }
@@ -35,6 +40,10 @@ embedded-hal-async = { version = "1.0" }
 embedded-io = { version = "0.6.1" }
 embedded-io-async = { version = "0.6.1" }
 embedded-serial = { version = "0.5.0" }
+micromath = { version = "2.1" }
+libm = { version = "0.2.16" }
+panic-probe = { version = "1.0.0" }
+ra-hal = { path = "../ra-hal" }
 
 [profile.release]
 opt-level = "z"
