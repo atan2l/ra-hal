@@ -263,18 +263,14 @@ pub(crate) fn init() {
 
 #[interrupt]
 fn IEL0() {
-    let icu = pac::ICU;
-
-    icu.ielsr(0).modify(|r| r.set_ir(false));
+    crate::interrupt::IEL0.icu_unpend();
 
     DRIVER.interrupted_overflow();
 }
 
 #[interrupt]
 fn IEL1() {
-    let icu = pac::ICU;
-
-    icu.ielsr(1).modify(|r| r.set_ir(false));
+    crate::interrupt::IEL1.icu_unpend();
 
     DRIVER.interrupted_alarm();
 }

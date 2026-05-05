@@ -178,29 +178,29 @@ fn trust_zone_init() {
     });
 
     {
-        let cpscu = pac::CPSCU;
-        debug!(
-            r#"
-===== Current security attributions:
-  DMAC: {}
-  DTC: {}
-  BUS: {}, {}
-  SRAM: {}
-  CACHE: {}
-  BMPU: {}, {}
-  TZ_FILTER: {}
-=====
-"#,
-            cpscu.dmacsar().read(),
-            cpscu.dtcsar().read(),
-            cpscu.bussara().read(),
-            cpscu.bussarb().read(),
-            cpscu.sramsar().read(),
-            cpscu.csar().read(),
-            cpscu.mmpusara().read(),
-            cpscu.mmpusarb().read(),
-            cpscu.tzfsar().read(),
-        );
+        //         let cpscu = pac::CPSCU;
+        //         debug!(
+        //             r#"
+        // ===== Current security attributions:
+        //   DMAC: {}
+        //   DTC: {}
+        //   BUS: {}, {}
+        //   SRAM: {}
+        //   CACHE: {}
+        //   BMPU: {}, {}
+        //   TZ_FILTER: {}
+        // =====
+        // "#,
+        //             cpscu.dmacsar().read(),
+        //             cpscu.dtcsar().read(),
+        //             cpscu.bussara().read(),
+        //             cpscu.bussarb().read(),
+        //             cpscu.sramsar().read(),
+        //             cpscu.csar().read(),
+        //             cpscu.mmpusara().read(),
+        //             cpscu.mmpusarb().read(),
+        //             cpscu.tzfsar().read(),
+        //         );
 
         // debug!(r#"ICU: {}"#, cpscu.icusarg().read());
         // debug!(r#"ICU: {}"#, cpscu.icusarh().read());

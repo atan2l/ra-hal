@@ -173,11 +173,27 @@ impl<'d, I: Instance> Watchdog<'d, I> {
         match config.action {
             Action::Interrupt => {
                 debug!("WDT: Enabling NMI");
-                let icu = pac::ICU;
-                icu.nmicr().write(|r| r.set_nflten(false));
-                icu.nmicr().write(|r| r.set_nmimd(true));
-                icu.nmiclr().write(|r| r.set_nmiclr(true));
-                icu.nmier().write(|r| r.set_wdten(true));
+
+                cfg_select! {
+                    not(ra8m1) => {
+                        let icu = pac::ICU;
+
+                        icu.nmicr().write(|r| r.set_nflten(false));
+                        icu.nmicr().write(|r| r.set_nmimd(true));
+                        icu.nmiclr().write(|r| r.set_nmiclr(true));
+                        icu.nmier().write(|r| r.set_wdten(true));
+                    },
+                    ra8m1 => {
+                        let icu = pac::ICU;
+                        let icu_common = pac::ICU_COMMON;
+
+                        icu_common.nmicr().write(|r| r.set_nflten(false));
+                        icu_common.nmicr().write(|r| r.set_nmimd(true));
+                        icu.nmiclr().write(|r| r.set_nmiclr(true));
+                        icu.nmier().write(|r| r.set_wdten(true));
+                    },
+                    _ => compile_error!("TODO")
+                }
             }
             Action::Reset => {
                 reset = true;

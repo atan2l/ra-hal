@@ -136,6 +136,8 @@ impl<'d> Channel<'d> {
     ) -> Transfer<'_> {
         let dmac = self.channel.regs();
         let icu = pac::ICU;
+        #[cfg(ra8m1)]
+        let dma = pac::DMA;
 
         dmac.dmamd().write(|r| {
             r.set_sm(Sm::Increment);
@@ -148,9 +150,15 @@ impl<'d> Channel<'d> {
             r.set_dctg(Dctg::Interrupts);
         });
 
+        #[cfg(not(ra8m1))]
         icu.delsr(self.channel.dmac_index as _).write(|r| {
             r.set_dels(event as u16);
         });
+        #[cfg(ra8m1)]
+        dma.delsr(self.channel.dmac_index as _).write(|r| {
+            r.set_dels(event as u16);
+        });
+
         dmac.dmsar().write_value(src.as_ptr() as u32);
         dmac.dmdar().write_value(dest as u32);
         assert!(src.len() < usize::from(u16::MAX));
@@ -184,6 +192,8 @@ impl<'d> Channel<'d> {
     ) -> Transfer<'_> {
         let dmac = self.channel.regs();
         let icu = pac::ICU;
+        #[cfg(ra8m1)]
+        let dma = pac::DMA;
 
         dmac.dmamd().write(|r| {
             r.set_sm(Sm::Fixed);
@@ -196,9 +206,15 @@ impl<'d> Channel<'d> {
             r.set_dctg(Dctg::Interrupts);
         });
 
+        #[cfg(not(ra8m1))]
         icu.delsr(self.channel.dmac_index as _).write(|r| {
             r.set_dels(event as u16);
         });
+        #[cfg(ra8m1)]
+        dma.delsr(self.channel.dmac_index as _).write(|r| {
+            r.set_dels(event as u16);
+        });
+
         dmac.dmsar().write_value(src as u32);
         dmac.dmdar().write_value(dest.as_mut_ptr() as u32);
         assert!(dest.len() < usize::from(u16::MAX));
@@ -243,9 +259,14 @@ impl<'d> Future for Transfer<'d> {
 
 impl<'d> Drop for Channel<'d> {
     fn drop(&mut self) {
-        let icu = pac::ICU;
+        #[cfg(not(ra8m1))]
+        let block = pac::ICU;
+        #[cfg(ra8m1)]
+        let block = pac::DMA;
+
         let index = self.channel.dmac_index;
-        icu.delsr(index as _).write(|r| r.set_dels(0));
+
+        block.delsr(index as _).write(|r| r.set_dels(0));
     }
 }
 

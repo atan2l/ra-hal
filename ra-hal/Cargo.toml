@@ -33,7 +33,7 @@ embassy-time-driver = { workspace = true, optional = true }
 embassy-time-queue-utils = { workspace = true, optional = true }
 embassy-usb-driver = { workspace = true, optional = true }
 
-ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac" }
+ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", version = "0.3.0-dev0" }
 
 arbitrary-int = "2.1.1"
 bitbybit = "2.0.0"

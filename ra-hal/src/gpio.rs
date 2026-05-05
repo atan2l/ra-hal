@@ -1113,7 +1113,10 @@ impl<'d, I: InterruptiblePin, C: ControlKind> InterruptFlex<'d, I, C> {
     ///
     /// §13.2.1
     pub fn set_trigger(&mut self, trigger: GpioTrigger) {
+        #[cfg(not(ra8m1))]
         let icu = pac::ICU;
+        #[cfg(ra8m1)]
+        let icu = pac::ICU_COMMON;
 
         // GROSS
         let reg = icu.irqcr((I::INTERRUPT_EVENT as u8 - 1) as _);
@@ -1129,7 +1132,10 @@ impl<'d, I: InterruptiblePin, C: ControlKind> InterruptFlex<'d, I, C> {
     ///
     /// §13.2.1, §13.4.3
     pub fn set_debounce(&mut self, debounce: Debounce) {
+        #[cfg(not(ra8m1))]
         let icu = pac::ICU;
+        #[cfg(ra8m1)]
+        let icu = pac::ICU_COMMON;
 
         // GROSS
         let reg = icu.irqcr((I::INTERRUPT_EVENT as u8 - 1) as _);
