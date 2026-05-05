@@ -5,7 +5,6 @@
 
 #![no_std]
 #![no_main]
-#![warn(missing_docs)]
 
 use cortex_m::asm;
 #[cfg(feature = "defmt")]
@@ -51,7 +50,7 @@ fn query<I: ra_hal::uart::Instance>(uart: &mut BufferedUart<I>, cmd: &[u8]) {
 async fn main(_spawner: Spawner) {
     let p = ra_hal::init(ClockConfig::default());
 
-    // Using small buffers to ensure we test the multiple iterations  path
+    // Using small buffers to ensure we test the multiple iterations path
     let tx_buf = &mut [0u8; 8];
     let rx_buf = &mut [0u8; 8];
 

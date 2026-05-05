@@ -1,3 +1,5 @@
+use core::ops::RangeInclusive;
+
 use cortex_m::asm;
 use fugit::{HertzU32, MegahertzU32, RateExtU32 as _};
 
@@ -17,17 +19,23 @@ use crate::{
     write_protect::ProtectedPeripheral as _,
 };
 
-// Max PLL output is 200 MHz
-const PLL_INPUT_MIN: HertzU32 = MegahertzU32::from_raw(8).convert();
-const PLL_INPUT_MAX: HertzU32 = MegahertzU32::from_raw(24).convert();
-const PLL_OUTPUT_MIN: HertzU32 = MegahertzU32::from_raw(120).convert();
-const PLL_OUTPUT_MAX: HertzU32 = MegahertzU32::from_raw(200).convert();
+const PLL_INPUT_RANGE: RangeInclusive<HertzU32> = RangeInclusive::new(
+    MegahertzU32::from_raw(8).convert(),
+    MegahertzU32::from_raw(24).convert(),
+);
+const PLL_OUTPUT_RANGE: RangeInclusive<HertzU32> = RangeInclusive::new(
+    MegahertzU32::from_raw(120).convert(),
+    MegahertzU32::from_raw(200).convert(),
+);
 
-// Max PLL2 output is 240 MHz
-const PLL2_INPUT_MIN: HertzU32 = MegahertzU32::from_raw(8).convert();
-const PLL2_INPUT_MAX: HertzU32 = MegahertzU32::from_raw(24).convert();
-const PLL2_OUTPUT_MIN: HertzU32 = MegahertzU32::from_raw(120).convert();
-const PLL2_OUTPUT_MAX: HertzU32 = MegahertzU32::from_raw(240).convert();
+const PLL2_INPUT_RANGE: RangeInclusive<HertzU32> = RangeInclusive::new(
+    MegahertzU32::from_raw(8).convert(),
+    MegahertzU32::from_raw(24).convert(),
+);
+const PLL2_OUTPUT_RANGE: RangeInclusive<HertzU32> = RangeInclusive::new(
+    MegahertzU32::from_raw(120).convert(),
+    MegahertzU32::from_raw(240).convert(),
+);
 
 const OUTPUT_FACTOR: u32 = 10;
 
@@ -237,8 +245,8 @@ fn pll_status(
 fn calc_pll_frequency(
     pll_config: &PllConfig,
     config: &ClockConfig,
-    input_range: [HertzU32; 2],
-    output_range: [HertzU32; 2],
+    input_range: RangeInclusive<HertzU32>,
+    output_range: RangeInclusive<HertzU32>,
 ) -> HertzU32 {
     let output_mul: u32 = pll_config.mul as u32;
 
@@ -254,27 +262,15 @@ fn calc_pll_frequency(
     } / input_div;
 
     assert!(
-        pll_input_frequency >= input_range[0],
-        "Invalid PLL configuration, input too slow {pll_input_frequency} < {}",
-        input_range[0]
-    );
-    assert!(
-        pll_input_frequency <= input_range[1],
-        "Invalid PLL configuration, input too fast {pll_input_frequency} > {}",
-        input_range[1]
+        input_range.contains(&pll_input_frequency),
+        "Invalid PLL configuration, input frequency ({pll_input_frequency}) not within range. "
     );
 
     let pll_output = (pll_input_frequency * output_mul) / OUTPUT_FACTOR;
 
     assert!(
-        pll_output >= output_range[0],
-        "Invalid PLL configuration, output too slow {pll_output} < {}",
-        output_range[0]
-    );
-    assert!(
-        pll_output <= output_range[1],
-        "Invalid PLL configuration, output too fast {pll_output} > {}",
-        output_range[1]
+        output_range.contains(&pll_output),
+        "Invalid PLL configuration, output frequency ({pll_output}) not within range."
     );
 
     pll_output
@@ -285,13 +281,13 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
 
     debug!("HOCO: status={}", system.hococr().read());
 
-    // Sanity check PLL config
+    // Sanity check PLL and PLL2 configs
     let pll_frequency = match config.pll {
         Some(ref pll_config) => Some(calc_pll_frequency(
             pll_config,
             &config,
-            [PLL_INPUT_MIN, PLL_INPUT_MAX],
-            [PLL_OUTPUT_MIN, PLL_OUTPUT_MAX],
+            PLL_INPUT_RANGE,
+            PLL_OUTPUT_RANGE,
         )),
         None => None,
     };
@@ -299,8 +295,8 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
         Some(ref pll_config) => Some(calc_pll_frequency(
             pll_config,
             &config,
-            [PLL2_INPUT_MIN, PLL2_INPUT_MAX],
-            [PLL2_OUTPUT_MIN, PLL2_OUTPUT_MAX],
+            PLL2_INPUT_RANGE,
+            PLL2_OUTPUT_RANGE,
         )),
         None => None,
     };
@@ -313,6 +309,11 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
             system.sosccr().modify(|r| r.set_sostp(false));
             // TODO: Set oscillator stabilization time.
             while system.sosccr().read().sostp() {}
+        }
+
+        if config.mosc.is_some() {
+            system.mosccr().modify(|r| r.set_mostp(false));
+            while !system.oscsf().read().moscsf() {}
         }
 
         // Writing to the HOCOCR2 is prohibited when the HOCOCR.HCSTP bit is 0 (the HOCO operates).
@@ -365,7 +366,7 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
 
         while system.opccr().read().opcmtsf() {}
 
-        let master_frequency;
+        let root_frequency;
         match config.system {
             SystemClockSource::Mosc => todo!(),
             SystemClockSource::Sosc => todo!(),
@@ -384,7 +385,7 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                 for _ in 0..100 {
                     asm::nop()
                 }
-                master_frequency =
+                root_frequency =
                     pll_frequency.expect("Pll selected as clock source but not configured");
             }
         };
@@ -393,8 +394,8 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
         // For now we assume that we want to run at top speed.
         let (ick_div, pcka_div, pckb_div, pckc_div, pckd_div, fck_div, bck_div) = {
             let ick_div = Ick::Div1;
-            let _50mhz = master_frequency.to_Hz().div_ceil(50_000_000);
-            let _100mhz = master_frequency.to_Hz().div_ceil(100_000_000);
+            let _50mhz = root_frequency.to_Hz().div_ceil(50_000_000);
+            let _100mhz = root_frequency.to_Hz().div_ceil(100_000_000);
 
             let (pckb_div, pckc_div, fck_div, bck_div) = match _50mhz {
                 1 => (Pckb::Div1, Pckc::Div1, Fck::Div1, Bck::Div1),
@@ -423,24 +424,24 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
         };
 
         let ick_frq = match ick_div {
-            Ick::Div1 => master_frequency / 1,
-            Ick::Div2 => master_frequency / 2,
-            Ick::Div4 => master_frequency / 4,
-            Ick::Div8 => master_frequency / 8,
-            Ick::Div16 => master_frequency / 16,
-            Ick::Div32 => master_frequency / 32,
-            Ick::Div64 => master_frequency / 64,
+            Ick::Div1 => root_frequency / 1,
+            Ick::Div2 => root_frequency / 2,
+            Ick::Div4 => root_frequency / 4,
+            Ick::Div8 => root_frequency / 8,
+            Ick::Div16 => root_frequency / 16,
+            Ick::Div32 => root_frequency / 32,
+            Ick::Div64 => root_frequency / 64,
             Ick::_RESERVED_7 => todo!(),
         };
 
         let bck_frq = match bck_div {
-            Bck::Div1 => master_frequency / 1,
-            Bck::Div2 => master_frequency / 2,
-            Bck::Div4 => master_frequency / 4,
-            Bck::Div8 => master_frequency / 8,
-            Bck::Div16 => master_frequency / 16,
-            Bck::Div32 => master_frequency / 32,
-            Bck::Div64 => master_frequency / 64,
+            Bck::Div1 => root_frequency / 1,
+            Bck::Div2 => root_frequency / 2,
+            Bck::Div4 => root_frequency / 4,
+            Bck::Div8 => root_frequency / 8,
+            Bck::Div16 => root_frequency / 16,
+            Bck::Div32 => root_frequency / 32,
+            Bck::Div64 => root_frequency / 64,
             Bck::_RESERVED_7 => todo!(),
         };
 
@@ -497,10 +498,10 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
         let system = pac::SYSTEM;
         let hoco = system.hococr2().read().hcfrq0();
         let hoco: HertzU32 = match hoco {
-            Hcfrq0::_16mhz => 16_u32.MHz(),
-            Hcfrq0::_18mhz => 18_u32.MHz(),
-            Hcfrq0::_20mhz => 20_u32.MHz(),
-            _ => unimplemented!(),
+            Hcfrq0::_16mhz => 16.MHz(),
+            Hcfrq0::_18mhz => 18.MHz(),
+            Hcfrq0::_20mhz => 20.MHz(),
+            Hcfrq0::_RESERVED_3 => unimplemented!(),
         };
 
         let pll_running = !system.pllcr().read().pllstp();

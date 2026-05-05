@@ -20,6 +20,7 @@ critical-section = { workspace = true }
 
 ## Embassy dependencies
 embassy-executor = { workspace = true }
+embassy-hal-internal = { workspace = true }
 embassy-time = { workspace = true }
 embedded-hal-1 = { workspace = true }
 embedded-hal-async = { workspace = true }
@@ -30,6 +31,7 @@ embedded-io-async = { workspace = true }
 ra-hal = { workspace = true, features = [ "ra4l1" ] }
 
 ## Third party stuff
+assign-resources = { workspace = true }
 micromath = { workspace = true }
 # For a signal generator micromath isn't precise enough but libm adds +10K
 libm = { workspace = true }
@@ -49,5 +51,5 @@ defmt = [
   "ra-hal/defmt",
 ]
 strict-assert = [ "ra-hal/strict-assert" ]
-ek-ra4l1 = [ "ra-hal/mem_ram64k_flash512k", "ra-hal/100lqfp", "ra-hal/time-driver-agt" ]
-# ek-ra4l1 = [ "ra-hal/mem_ram64k_flash512k", "ra-hal/100lqfp", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-20_000_000" ]
+ek-ra4l1 = [ "ra-hal/mem_ram64k_flash512k", "ra-hal/100lqfp", "ra-hal/time-driver-agt", "ra-hal/secure" ]
+# ek-ra4l1 = [ "ra-hal/mem_ram64k_flash512k", "ra-hal/100lqfp", "ra-hal/time-driver-gpt0", "embassy-time/tick-hz-20_000_000" ]

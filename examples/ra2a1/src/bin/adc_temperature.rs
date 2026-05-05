@@ -2,7 +2,6 @@
 
 #![no_std]
 #![no_main]
-#![warn(missing_docs)]
 
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
@@ -12,7 +11,7 @@ use panic_probe as _;
 use ra_hal::{
     adc::{Adc, AdcConfig},
     clock::ClockConfig,
-    exit
+    exit,
 };
 #[allow(unused)]
 use ra_hal::{debug, error, info, trace, warn};

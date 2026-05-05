@@ -21,6 +21,7 @@ critical-section = { workspace = true }
 ## Embassy dependencies
 # embassy-embedded-hal = { version = "0.5.0", default-features = false }
 embassy-executor = { workspace = true }
+embassy-hal-internal = { workspace = true }
 embassy-time = { workspace = true }
 # embassy-futures = { version = "0.1.2" }
 embedded-hal-1 = { workspace = true }
@@ -32,6 +33,7 @@ embedded-io-async = { workspace = true }
 ra-hal = { workspace = true, features = [ "unstable-pac", "ra2a1" ] }
 
 ## Third party libraries
+assign-resources = { workspace = true }
 micromath = { workspace = true }
 
 [build-dependencies]
@@ -49,4 +51,4 @@ defmt = [
   "ra-hal/defmt",
 ]
 strict-assert = [ "ra-hal/strict-assert" ]
-ek-ra2a1 = [ "ra-hal/64lqfp", "ra-hal/hoco_48mhz", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-48_000_000" ]
+ek-ra2a1 = [ "ra-hal/64lqfp", "ra-hal/hoco_48mhz", "ra-hal/time-driver-gpt0", "embassy-time/tick-hz-48_000_000" ]

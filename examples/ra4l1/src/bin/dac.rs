@@ -2,7 +2,6 @@
 
 #![no_std]
 #![no_main]
-#![warn(missing_docs)]
 
 use core::f32::consts::PI;
 
@@ -137,7 +136,7 @@ async fn main(_spawner: Spawner) {
             trigger.fire();
 
             // Wait for transfer to finish
-            transfer.await;
+            transfer.await.unwrap();
 
             // Wait a bit to stretch out the waveform
             while now.elapsed() < Duration::from_nanos(250_000) {

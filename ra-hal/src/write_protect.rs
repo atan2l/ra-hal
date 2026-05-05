@@ -7,7 +7,7 @@ use crate::pac::iic;
 use crate::pac::{
     common::{RW, Reg},
     pfs::regs::Pin,
-    system::vals::Prc0,
+    system::vals::{Prc0, Prc1},
 };
 
 /// Manages write protection at the peripheral level.
@@ -67,7 +67,12 @@ impl ProtectedModify<Pin> for Reg<Pin, RW> {
     #[inline]
     fn is_protected(&self) -> bool {
         let pfs = crate::pac::PFS;
-        !pfs.pwpr().read().pfswe()
+        let pwpr = cfg_select! {
+          all(trust_zone_v2, secure) => pfs.pwpr_s(),
+          _ => pfs.pwpr()
+        };
+
+        !pwpr.read().pfswe()
     }
 
     fn protected_modify(&self, func: impl FnOnce(&mut Pin)) {
@@ -76,25 +81,30 @@ impl ProtectedModify<Pin> for Reg<Pin, RW> {
         let pfs = crate::pac::PFS;
         let protected = self.is_protected();
 
+        let pwpr = cfg_select! {
+          all(trust_zone_v2, secure) => pfs.pwpr_s(),
+          _ => pfs.pwpr()
+        };
+
         if protected {
             trace!("PFS WriteProt: {}", pfs.pwpr().read());
 
-            pfs.pwpr().modify(|w| w.set_b0wi(false));
-            pfs.pwpr().modify(|w| w.set_pfswe(true));
+            pwpr.modify(|w| w.set_b0wi(false));
+            pwpr.modify(|w| w.set_pfswe(true));
 
             #[cfg(feature = "strict-assert")]
-            assert!(pfs.pwpr().read().pfswe());
+            assert!(pwpr.read().pfswe());
         }
 
         self.modify(func);
 
         if protected {
-            pfs.pwpr().modify(|w| w.set_b0wi(false));
-            pfs.pwpr().modify(|w| w.set_pfswe(false));
+            pwpr.modify(|w| w.set_b0wi(false));
+            pwpr.modify(|w| w.set_pfswe(false));
 
             #[cfg(feature = "strict-assert")]
-            assert!(!pfs.pwpr().read().pfswe());
-            trace!("PFS WriteProt: {}", pfs.pwpr().read());
+            assert!(!pwpr.read().pfswe());
+            trace!("PFS WriteProt: {}", pwpr.read());
         }
     }
 }
@@ -106,30 +116,43 @@ impl ProtectedPeripheral for crate::pac::system::System {
     {
         use crate::pac::system::vals::Prc0;
 
+        let prcr = cfg_select! {
+            all(trust_zone_v2, secure) => self.prcr_s(),
+            _ => self.prcr()
+        };
+
         let protected = self.is_protected();
 
         if protected {
-            trace!("SYSTEM WriteProt: {}", self.prcr().read());
-            self.prcr().write(|w| {
+            trace!("SYSTEM WriteProt: {}", prcr.read());
+            prcr.write(|w| {
                 w.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
                 w.set_prc0(Prc0::NotProtected);
+                w.set_prc1(Prc1::NotProtected);
             });
         }
 
         func();
 
         if protected {
-            self.prcr().write(|w| {
+            prcr.write(|w| {
                 w.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
                 w.set_prc0(Prc0::Protected);
+                w.set_prc1(Prc1::Protected);
             });
-            trace!("SYSTEM WriteProt: {}", self.prcr().read());
+            trace!("SYSTEM WriteProt: {}", prcr.read());
         }
     }
 
     #[inline]
     fn is_protected(&self) -> bool {
-        self.prcr().read().prc0() == Prc0::Protected
+        let prcr = cfg_select! {
+            all(trust_zone_v2, secure) => self.prcr_s(),
+            _ => self.prcr()
+        };
+
+        let status = prcr.read();
+        status.prc0() == Prc0::Protected || status.prc1() == Prc1::Protected
     }
 }
 

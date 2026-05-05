@@ -1,6 +1,6 @@
 //! Driver for [`embassy-time`](https://docs.embassy.dev/embassy-time).
 //!
-//! Currently hardcoded to take up `GPT32_0`, `IEL0`, and `IEL1`.
+//! Can hardcoded to consume `IEL0` and `IEL1` and can be configured to use `GPT32_0` or `GPT32_1`.
 //!
 //! # TODO
 //! * Allow use of a different `GPT` instance
@@ -21,14 +21,10 @@ use crate::{
     event_link::IcuInterrupt,
     interrupt,
     interrupt::typelevel::Interrupt,
-    pac::{
-        self,
-        gpt::{
-            regs::{Gtdnsr, Gtupsr},
-            vals::{Mode, Tpcs, Ud},
-        },
+    pac::gpt::{
+        regs::{Gtdnsr, Gtupsr},
+        vals::{Mode, Tpcs, Ud},
     },
-    peripherals::GPT32_0,
     write_protect::ProtectedPeripheral as _,
 };
 
@@ -47,21 +43,35 @@ impl AlarmState {
 }
 
 trait Instance: crate::timer_gpt::Instance<u32> + Send + Sync + 'static {
+    const PERIPHERAL: &'static str;
+    const GPT_INDEX: usize;
     type AlarmInterrupt: interrupt::typelevel::Interrupt;
     type OverflowInterrupt: interrupt::typelevel::Interrupt;
 }
 
-impl Instance for crate::peripherals::GPT32_0 {
-    type AlarmInterrupt = crate::interrupt::typelevel::IEL1;
-    type OverflowInterrupt = crate::interrupt::typelevel::IEL0;
+cfg_select! {
+    feature = "time-driver-gpt0" => {
+        type TimerPeripheral = crate::peripherals::GPT32_0;
+        impl Instance for crate::peripherals::GPT32_0 {
+            const PERIPHERAL: &'static str = "GPT32_0";
+            const GPT_INDEX: usize = 0;
+            type AlarmInterrupt = crate::interrupt::typelevel::IEL1;
+            type OverflowInterrupt = crate::interrupt::typelevel::IEL0;
+        }
+    }
+    feature = "time-driver-gpt1" => {
+        type TimerPeripheral = crate::peripherals::GPT32_1;
+        impl Instance for crate::peripherals::GPT32_1 {
+            const PERIPHERAL: &'static str = "GPT32_1";
+            const GPT_INDEX: usize = 1;
+            type AlarmInterrupt = crate::interrupt::typelevel::IEL1;
+            type OverflowInterrupt = crate::interrupt::typelevel::IEL0;
+        }
+    }
+    _ => {
+        compil_error!("TODO: impl Instance for all 32-bit GPT instances.");
+    }
 }
-
-// TODO: impl Instance for all 32-bit GPT instances.
-
-// impl Instance for crate::peripherals::GPT32_1 {
-//     type AlarmInterrupt = crate::interrupt::typelevel::IEL1;
-//     type OverflowInterrupt = crate::interrupt::typelevel::IEL0;
-// }
 
 struct GptDriver<I: Instance> {
     /// Number of 2^32 periods elapsed since boot.
@@ -147,15 +157,15 @@ impl<I: Instance> GptDriver<I> {
 
         // This is faster??
         timer.gtssr().write(|r| r.set_cstrt(true));
-        timer.gtstr().write(|r| r.set_cstrt(0, true));
+        timer.gtstr().write(|r| r.set_cstrt(I::GPT_INDEX, true));
 
         let mhz: HertzU32 = 1_u32.MHz();
         if tick >= mhz {
             let tick: MegahertzU32 = tick.convert();
-            info!("GPT32_0: Time driver attached, tick={}", tick);
+            info!("{}: Time driver attached, tick={}", I::PERIPHERAL, tick);
         } else {
             let tick: KilohertzU32 = tick.convert();
-            info!("GPT32_0: Time driver attached, tick={}", tick);
+            info!("{}: Time driver attached, tick={}", I::PERIPHERAL, tick);
         }
     }
 
@@ -250,7 +260,7 @@ impl<I: Instance> Driver for GptDriver<I> {
     }
 }
 
-embassy_time_driver::time_driver_impl!(static DRIVER: GptDriver<GPT32_0> = GptDriver {
+embassy_time_driver::time_driver_impl!(static DRIVER: GptDriver<TimerPeripheral> = GptDriver {
     period:AtomicU32::new(0),
     queue:Mutex::new(RefCell::new(Queue::new())),
     alarms:Mutex::new(AlarmState::new()),
@@ -263,18 +273,14 @@ pub(crate) fn init() {
 
 #[interrupt]
 fn IEL0() {
-    let icu = pac::ICU;
-
-    icu.ielsr(0).modify(|r| r.set_ir(false));
+    crate::interrupt::IEL0.icu_unpend();
 
     DRIVER.interrupted_overflow();
 }
 
 #[interrupt]
 fn IEL1() {
-    let icu = pac::ICU;
-
-    icu.ielsr(1).modify(|r| r.set_ir(false));
+    crate::interrupt::IEL1.icu_unpend();
 
     DRIVER.interrupted_alarm();
 }

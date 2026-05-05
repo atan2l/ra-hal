@@ -462,7 +462,7 @@ impl<'d, I: Instance, RxInt: InterruptType, TxDtc: DtcInstance> I2c<'d, I, Dtc<R
 
         iic.iccr2().modify(|r| r.set_st(true));
 
-        tx.await;
+        tx.await.expect("DTC transfer failed");
 
         // This shouldn't take long and isn't worth the overhead of an interrupt
         while !iic.icsr2().read().tend() {}

@@ -33,7 +33,7 @@ embassy-time-driver = { workspace = true, optional = true }
 embassy-time-queue-utils = { workspace = true, optional = true }
 embassy-usb-driver = { workspace = true, optional = true }
 
-ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac" }
+ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", rev = "v0.3.0-dev3" }
 
 arbitrary-int = "2.1.1"
 bitbybit = "2.0.0"
@@ -41,6 +41,7 @@ chrono = { version = "^0.4", default-features = false, optional = true }
 document-features = { workspace = true }
 paste = "1"
 fugit = { version = "0.3.9" }
+micromath = { workspace = true }
 
 [build-dependencies]
 anyhow = "1.0.102"
@@ -49,7 +50,7 @@ indexmap = { version = "2.13.0", features = [ "serde" ] }
 prettyplease = "0.2.37"
 proc-macro2 = "1.0.106"
 quote = "1.0.44"
-ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", features = [ "metadata" ] }
+ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", rev = "v0.3.0-dev3", features = [ "metadata" ] }
 regex = "1.12.3"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_derive = "1.0.228"
@@ -91,9 +92,18 @@ skip-osm = [ ]
 
 #! ### Time features
 
-## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver.
-time-driver-gpt = [ "time-driver", "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils" ]
+## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver using a 32-bit GPT instance (`GPT32_0`).
+time-driver-gpt0 = [ "time-driver", "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils" ]
+
+## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver using a 32-bit GPT instance (`GPT32_1`).
+time-driver-gpt1 = [ "time-driver", "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils" ]
+
+## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver using a 32-bit AGTW instance.
 time-driver-agt = [ "time-driver", "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time/tick-hz-32_768" ]
+
+## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver using a 32-bit ULPT instance.
+time-driver-ulpt = [ "time-driver", "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time/tick-hz-32_768" ]
+
 time-driver = [ ]
 
 #! ### On-Chip Oscillator Configuration
@@ -214,11 +224,14 @@ mem_ram896k_flash2016k = [ "ra-metapac/mem_ram896k_flash2016k" ]
 ## 224-pin BGA
 224bga = [ ]
 
-_doc_ra2a1 = [ "ra2a1", "hoco_48mhz", "64lqfp", "time-driver-gpt" ]
-_doc_ra4l1 = [ "ra4l1", "mem_ram64k_flash512k", "100lqfp", "time-driver-gpt" ]
-_doc_ra4m1 = [ "ra4m1", "hoco_48mhz", "64lqfp", "time-driver-gpt" ]
-_doc_ra6m5 = [ "ra6m5", "mem_ram512k_flash2048k", "176lqfp", "time-driver-gpt" ]
-_doc_ra8m1 = [ "ra8m1", "mem_ram896k_flash2016k", "224bga", "time-driver-gpt" ]
+_doc_ra2a1 = [ "ra2a1", "hoco_48mhz", "64lqfp", "time-driver-gpt0" ]
+_doc_ra4l1 = [ "ra4l1", "mem_ram64k_flash512k", "100lqfp", "time-driver-gpt0", "secure" ]
+_doc_ra4m1 = [ "ra4m1", "hoco_48mhz", "64lqfp", "time-driver-gpt0" ]
+_doc_ra6m5 = [ "ra6m5", "mem_ram512k_flash2048k", "176lqfp", "time-driver-gpt0", "non_secure" ]
+_doc_ra8m1 = [ "ra8m1", "mem_ram896k_flash2016k", "224bga", "time-driver-gpt1", "secure" ]
+
+secure = [ "ra-metapac/secure" ]
+non_secure = [ "ra-metapac/non_secure" ]
 
 [package.metadata.docs.rs]
 default-target = "thumbv7em-none-eabihf"

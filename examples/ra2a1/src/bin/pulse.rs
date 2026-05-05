@@ -1,4 +1,4 @@
-//! `pulse` Pulses the onboard LED. 
+//! `pulse` Pulses the onboard LED.
 //!
 //! Slightly more advanced than the blink example, the pulse example uses PWM to control the
 //! brightness of the onboard LED. Combined with an easing function this gives the LED a somewhat
@@ -6,33 +6,41 @@
 
 #![no_std]
 #![no_main]
-#![warn(missing_docs)]
 
+use assign_resources::assign_resources;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
+use embassy_hal_internal::Peri;
 use embassy_time::Timer;
-use micromath::F32Ext;
+use micromath::F32Ext as _;
 use panic_probe as _;
 use ra_hal::{
     clock::ClockConfig,
+    peripherals,
     pwm::{self, Pwm, PwmChansetter as _},
 };
 #[allow(unused)]
 use ra_hal::{debug, error, info, trace, warn};
 
-// Define the pins we want on the RA2A1 Eval Kit
-#[cfg(feature = "ek-ra2a1")]
-macro_rules! pins {
-    ($p:ident) => {
-        ($p.GPT16_3, $p.P205)
-    };
-}
-
 const MAX_DUTY_CYCLE: f32 = 0.50;
 const MIN_DUTY_CYCLE: f32 = 0.15;
 const STEP: f32 = 0.00625;
 const DELAY_MS: f32 = 4000.0 * STEP;
+
+#[cfg(not(feature = "ek-ra2a1"))]
+compile_error!(
+    "Ensure the pin and timer assignments are correct for your board before continuing."
+);
+
+// Define the pins we want on the RA2A1 Eval Kit
+#[cfg(feature = "ek-ra2a1")]
+assign_resources! {
+    pulse: PulseResources {
+        led: P205,
+        timer: GPT16_3,
+    }
+}
 
 fn ease(mut t: f32) -> f32 {
     t *= 2.0;
@@ -49,15 +57,14 @@ fn ease(mut t: f32) -> f32 {
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let p = ra_hal::init(ClockConfig::default());
+    let r = split_resources!(p);
 
     let mut duty_cycle: f32 = 0.00;
     let mut direction_up = true;
     let delay_ms = DELAY_MS.round() as u64;
     let pwm_config = pwm::Config::default();
 
-    let (timer, pin) = pins!(p);
-
-    let mut pwm = Pwm::new(timer, pwm_config).with_channel(pin);
+    let mut pwm = Pwm::new(r.pulse.timer, pwm_config).with_channel(r.pulse.led);
     pwm.set_frequency(5000, 0.0).unwrap();
     pwm.start();
 

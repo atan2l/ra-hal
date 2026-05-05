@@ -109,7 +109,10 @@ pub(crate) trait SealedInstance {
     fn cmpa_waker() -> &'static AtomicWaker;
 }
 
-pub(crate) trait PwmChannel {}
+#[allow(private_bounds)]
+pub trait PwmChannel: SealedPwmChannel {}
+
+pub(crate) trait SealedPwmChannel {}
 
 /// PWM output pin trait.
 #[allow(private_bounds)]
@@ -493,6 +496,7 @@ macro_rules! declare_pwm_channel {
             #[allow(missing_docs)]
             pub enum [< Chan $chan >]  {}
             impl PwmChannel for [< Chan $chan >] {}
+            impl SealedPwmChannel for [< Chan $chan >] {}
         }
     };
 }

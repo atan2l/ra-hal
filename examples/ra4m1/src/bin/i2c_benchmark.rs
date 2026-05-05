@@ -2,7 +2,6 @@
 
 #![no_std]
 #![no_main]
-#![warn(missing_docs)]
 
 use cortex_m::asm;
 #[cfg(feature = "defmt")]

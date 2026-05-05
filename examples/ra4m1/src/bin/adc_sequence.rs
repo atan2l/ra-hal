@@ -4,7 +4,6 @@
 
 #![no_std]
 #![no_main]
-#![warn(missing_docs)]
 
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;

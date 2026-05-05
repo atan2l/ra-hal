@@ -7,3 +7,4 @@ svd-playground
 *.pack
 /support/pack
 cargo-config.toml
+Cargo.lock

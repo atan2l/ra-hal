@@ -1,4 +1,5 @@
 image: debian/trixie
+oauth: pages.sr.ht/PAGES:RW
 secrets:
   - f317af3f-6c5f-49d4-8602-78651225c9d2
 sources:
@@ -18,26 +19,44 @@ tasks:
       chmod +x "${HOME}/spellcode-cli"
       curl -L 'https://archlinux.org/packages/extra/x86_64/cargo-audit/download/' -o cargo-audit.tar.xz
       curl -L 'https://archlinux.org/packages/extra/x86_64/just/download/' -o 'just.tar.xz'
+      curl -L 'https://archlinux.org/packages/extra/x86_64/hut/download/' -o 'hut.tar.xz'
       mkdir local
       tar --zstd -C local -xvf cargo-audit.tar.xz usr/bin/cargo-audit
       tar --zstd -C local -xvf just.tar.xz usr/bin/just
+      tar --zstd -C local -xvf hut.tar.xz usr/bin/hut
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none
   - install-rust: |
       rustup show active-toolchain
       rustup component add clippy
-  - build-ra2a1: |
+  - build-examples-ra2a1: |
       just examples ra2a1 build --release
-  - build-ra4l1: |
+  - build-examples-ra4l1: |
       just examples ra4l1 build --release
-  - build-ra4m1: |
+  - build-examples-ra4l1-rtic: |
+      just examples ra4l1-rtic build --release
+  - build-examples-ra4m1: |
       just examples ra4m1 build --release
-  - build-ra6m5: |
+  - build-examples-ra6m5: |
       just examples ra6m5 build --release
-  - doc-ra2a1: |
-      just doc-ra2a1
+  - build-examples-ra8m1: |
+      just examples ra8m1 build --release
+  - doc-prep: |
+      rm -f doc-all.tar.gz
+  # - doc-ra2a1: |
+  #     just doc ra2a1
   - doc-ra4l1: |
-      just doc-ra4l1
+      just doc ra4l1
+      tar -C target/doc-ra4l1/thumb*eabi*/doc/ --transform 's/^.\//ra4l1\//' -rvf doc-all.tar .
   - doc-ra4m1: |
-      just doc-ra4m1
+      just doc ra4m1
+      tar -C target/doc-ra4m1/thumb*eabi*/doc/ --transform 's/^.\//ra4m1\//' -rvf doc-all.tar .
   - doc-ra6m5: |
-      just doc-ra6m5
+      just doc ra6m5
+      tar -C target/doc-ra6m5/thumb*eabi*/doc/ --transform 's/^.\//ra6m5\//' -rvf doc-all.tar .
+  - doc-ra8m1: |
+      just doc ra8m1
+      tar -C target/doc-ra8m1/thumb*eabi*/doc/ --transform 's/^.\//ra8m1\//' -rvf doc-all.tar .
+  - doc-publish: |
+      gzip doc-all.tar
+      hut pages publish -d az1.srht.site doc-all.tar.gz
+ 

@@ -43,7 +43,7 @@ pub(crate) trait SealedInstance: PeripheralType {
     fn regs() -> crate::pac::gpt::Gpt;
 }
 
-pub(crate) trait TimerWidth: Into<u32> {
+pub(crate) trait TimerWidth: Into<u32> + Send + Sync + 'static {
     fn max() -> u64;
 }
 

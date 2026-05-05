@@ -5,20 +5,38 @@
 
 #![no_std]
 #![no_main]
-#![warn(missing_docs)]
 
+use assign_resources::assign_resources;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
+use embassy_hal_internal::Peri;
 use panic_probe as _;
 use ra_hal::{
     bind_interrupts,
     clock::ClockConfig,
-    peripherals::GPT16_2,
+    peripherals::{self, GPT16_2},
     qdec::{self, Qdec, QdecInterruptHandler},
 };
 #[allow(unused)]
 use ra_hal::{debug, error, info, trace, warn};
+
+cfg_select! {
+    any(feature = "uno-r4-minima", feature = "uno-r4-wifi") => {
+        assign_resources! {
+            qdec: DecoderResources {
+                chan_a: P103,
+                chan_b: P102,
+                timer: GPT16_2,
+            }
+        }
+    }
+    _ => {
+        compile_error!(
+            "Ensure the pin and timer assignments are correct for your board before continuing."
+        );
+    }
+}
 
 #[cfg(any(feature = "uno-r4-wifi", feature = "uno-r4-minima"))]
 macro_rules! pins {
@@ -34,9 +52,15 @@ bind_interrupts!(struct Irqs {
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let p = ra_hal::init(ClockConfig::default());
-    let (timer, chan_a, chan_b) = pins!(p);
+    let r = split_resources!(p);
 
-    let qdec = Qdec::new(timer, chan_a, chan_b, qdec::Config::default(), Irqs);
+    let qdec = Qdec::new(
+        r.qdec.timer,
+        r.qdec.chan_a,
+        r.qdec.chan_b,
+        qdec::Config::default(),
+        Irqs,
+    );
 
     loop {
         info!("{}", qdec.read().await);

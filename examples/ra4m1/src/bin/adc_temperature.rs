@@ -2,7 +2,6 @@
 
 #![no_std]
 #![no_main]
-#![warn(missing_docs)]
 
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
@@ -10,7 +9,7 @@ use embassy_executor::Spawner;
 use embassy_time::Timer;
 use panic_probe as _;
 use ra_hal::{
-    adc::{Adc, Resolution, AdcConfig},
+    adc::{Adc, AdcConfig, Resolution},
     clock::ClockConfig,
     exit,
 };

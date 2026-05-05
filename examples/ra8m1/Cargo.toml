@@ -20,6 +20,7 @@ critical-section = { workspace = true }
 
 ## Embassy dependencies
 embassy-executor = { workspace = true }
+embassy-hal-internal = { workspace = true }
 embassy-time = { workspace = true }
 # embassy-futures = { version = "0.1.2" }
 embedded-hal-1 = { workspace = true }
@@ -28,9 +29,10 @@ embedded-io = { workspace = true }
 embedded-io-async = { workspace = true }
 
 ## Board stuff
-ra-hal = { workspace = true, features = [ "unstable-pac", "ra8m1", ] }
+ra-hal = { workspace = true, features = [ "unstable-pac", "ra8m1" ] }
 
 ## Third party stuff
+assign-resources = { workspace = true }
 micromath = { workspace = true }
 
 [build-dependencies]
@@ -48,4 +50,7 @@ defmt = [
   "ra-hal/defmt",
 ]
 strict-assert = [ "ra-hal/strict-assert" ]
-ek-ra8m1 = [ "ra-hal/mem_ram896k_flash2016k", "ra-hal/224bga", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-100_000_000" ]
+
+# ek-ra8m1 = [ "ra-hal/mem_ram896k_flash2016k", "ra-hal/224bga", "ra-hal/time-driver-agt", "ra-hal/secure" ]
+# ek-ra8m1 = [ "ra-hal/mem_ram896k_flash2016k", "ra-hal/224bga", "ra-hal/time-driver-ulpt", "ra-hal/secure" ]
+ek-ra8m1 = [ "ra-hal/mem_ram896k_flash2016k", "ra-hal/224bga", "ra-hal/time-driver-gpt1", "embassy-time/tick-hz-30_000_000", "ra-hal/secure" ]

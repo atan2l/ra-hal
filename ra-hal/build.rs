@@ -14,8 +14,9 @@ use regex::Regex;
 static RE_PACKAGE_FEATURE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r#"^(?<count>\d+)(?<package>BGA|LGA|LQFP|QFN|QFP)$"#).unwrap());
 
-static RE_PERIPHERAL_INSTANCE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r#"^(?<kind>[A-Z]+(\d{2})?)(_?(?<instance>\d+))?$"#).unwrap());
+static RE_PERIPHERAL_INSTANCE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r#"^(?<kind>[A-Z_]+(\d{2})?)(_?(?<instance>\d+))?(?<insecure>_NS)?$"#).unwrap()
+});
 
 static RE_SCI_RX_TX_SIGNAL: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r#"^SCI(?<instance>\d)_(?<signal>RX|TX)D$"#).unwrap());
@@ -372,6 +373,9 @@ fn generate_peripherals(metadata: &Metadata, package: String) -> anyhow::Result<
             .iter()
             .find(|p| p.name == peripheral)
             .unwrap();
+        if peripheral.name.ends_with("_NS") {
+            continue;
+        }
         let captures = RE_PERIPHERAL_INSTANCE
             .captures(peripheral.name)
             .unwrap_or_else(|| panic!("No captures for {}", peripheral.name));
@@ -696,8 +700,6 @@ fn set_cfgs(metadata: &Metadata, features: &Features) -> anyhow::Result<()> {
 
     let common = ra_metapac::common_metadata::COMMON_METADATA;
 
-    println!("cargo::rustc-check-cfg=cfg(trust_zone)");
-
     for variant in common.cores.iter() {
         println!("cargo::rustc-check-cfg=cfg({variant})");
     }
@@ -708,6 +710,10 @@ fn set_cfgs(metadata: &Metadata, features: &Features) -> anyhow::Result<()> {
 
     for extra in common.extras.iter() {
         println!("cargo::rustc-check-cfg=cfg({extra})");
+    }
+
+    for n in ([2, 4, 6, 8]).iter() {
+        println!("cargo::rustc-check-cfg=cfg(ra{n})");
     }
 
     let chip_feature = features
@@ -722,16 +728,13 @@ fn set_cfgs(metadata: &Metadata, features: &Features) -> anyhow::Result<()> {
         .get_one("MCU model")?
         .to_lowercase();
 
+    let family_feature = &chip_feature[0..3];
+
     println!("cargo::rustc-cfg={chip_feature}");
-    if cfg_debug {
-        println!("cargo::warning=CHIP_FEATURE={chip_feature}");
-    }
+    println!("cargo::rustc-cfg={family_feature}");
 
     for extra in metadata.extras {
         println!("cargo::rustc-cfg={extra}");
-        if cfg_debug {
-            println!("cargo::warning=EXTRA_FEATURE={extra}");
-        }
     }
 
     let drivers = metadata
@@ -759,6 +762,14 @@ fn set_cfgs(metadata: &Metadata, features: &Features) -> anyhow::Result<()> {
             println!("cargo::warning=DRIVER_FEATURE={feature}");
         }
     }
+
+    println!("cargo::rustc-check-cfg=cfg(secure)");
+
+    if features.iter().any(|feature| feature == "SECURE") {
+        println!("cargo::rustc-cfg=secure");
+    }
+
+    println!("cargo::rustc-check-cfg=cfg(trust_zone)");
 
     if metadata.trust_zone {
         println!("cargo::rustc-cfg=trust_zone");
@@ -865,7 +876,21 @@ fn inner_main() -> anyhow::Result<()> {
             .iter()
             .any(|driver| *driver == "agt" || *driver == "agtw");
         let agt_time_driver = features.iter().any(|feature| *feature == "TIME_DRIVER_AGT");
-        assert!(!agt_time_driver || has_agt);
+        assert!(
+            !agt_time_driver || has_agt,
+            "agt_time_driver={agt_time_driver}, has_agt={has_agt}"
+        );
+    }
+
+    {
+        let has_ulpt = common.drivers.contains(&"ulpt");
+        let ulpt_time_driver = features
+            .iter()
+            .any(|feature| *feature == "TIME_DRIVER_ULPT");
+        assert!(
+            !ulpt_time_driver || has_ulpt,
+            "ulpt_time_driver={ulpt_time_driver}, has_ulpt={has_ulpt}"
+        );
     }
 
     {

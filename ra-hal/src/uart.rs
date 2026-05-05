@@ -15,6 +15,8 @@ use embassy_hal_internal::{
     Peri, PeripheralType, atomic_ring_buffer::RingBuffer, interrupt::InterruptExt as _,
 };
 use embassy_sync::waitqueue::AtomicWaker;
+use fugit::HertzU32;
+use micromath::F32Ext as _;
 
 use crate::{
     event_link::{IcuInterrupt, InterruptEvent},
@@ -33,6 +35,14 @@ use crate::{
         },
     },
 };
+
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Debug, Copy, Clone)]
+struct BaudGenConfig {
+    small_n: u32,
+    big_n: u32,
+    err: f32,
+}
 
 /// UART configuration
 #[non_exhaustive]
@@ -79,16 +89,6 @@ pub enum DataBits {
 
     /// 9 bits.
     DataBits9,
-}
-
-/// Baud rate generator configuration for fixed speeds, rates that use "baud rate modulation" may achieve more precise timing.
-/// Derived from the formula listed in Table 28.19.
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-struct SpeedEntry {
-    baud: u32,
-    small_n: u8,
-    big_n: u8,
-    modulation: u8,
 }
 
 /// Parity bit
@@ -209,53 +209,6 @@ pub(crate) trait SealedTxPin<I: SealedInstance>: Pin + PeripheralType {
     }
 }
 
-// TODO: Change this to be based on SCI clock speed at runtime instead of
-// ƒHOCO at compile time.  Assumptions about the peripheral clocks don't
-// hold true across different chips.
-
-#[rustfmt::skip]
-fn speed_entries() -> &'static [SpeedEntry] {
-    let clock_config = crate::clock::clock_status();
-    match clock_config.hoco.to_MHz() {
-        32 | 64 => {
-            &[
-                SpeedEntry { baud: 300,    small_n: 3, big_n: 52,  modulation: 0 },
-                SpeedEntry { baud: 1200,   small_n: 2, big_n: 12,  modulation: 0 },
-                SpeedEntry { baud: 2400,   small_n: 2, big_n: 25,  modulation: 0 },
-                SpeedEntry { baud: 4800,   small_n: 1, big_n: 12,  modulation: 0 },
-                SpeedEntry { baud: 9600,   small_n: 1, big_n: 25,  modulation: 0 },
-                SpeedEntry { baud: 19200,  small_n: 1, big_n: 12,  modulation: 0 },
-                SpeedEntry { baud: 38400,  small_n: 0, big_n: 25,  modulation: 0 },
-            ]
-        },
-        48 => {
-            &[
-                SpeedEntry { baud: 300,    small_n: 3, big_n: 77,  modulation: 0 },
-                SpeedEntry { baud: 1200,   small_n: 2, big_n: 77,  modulation: 0 },
-                SpeedEntry { baud: 2400,   small_n: 2, big_n: 38,  modulation: 0 },
-                SpeedEntry { baud: 4800,   small_n: 1, big_n: 77,  modulation: 0 },
-                SpeedEntry { baud: 9600,   small_n: 1, big_n: 38,  modulation: 0 },
-                // SpeedEntry { baud: 9600,   small_n: 0, big_n: 140, modulation: 231 },
-                SpeedEntry { baud: 19200,  small_n: 0, big_n: 77,  modulation: 0 },
-                SpeedEntry { baud: 38400,  small_n: 0, big_n: 38,  modulation: 0 },
-                SpeedEntry { baud: 115200, small_n: 0, big_n: 12,  modulation: 0 },
-            ]            
-        },
-        80 => {
-            &[
-                SpeedEntry { baud: 300,    small_n: 3, big_n: 52,  modulation: 0 },
-                SpeedEntry { baud: 1200,   small_n: 2, big_n: 12,  modulation: 0 },
-                SpeedEntry { baud: 2400,   small_n: 2, big_n: 25,  modulation: 0 },
-                SpeedEntry { baud: 4800,   small_n: 1, big_n: 12,  modulation: 0 },
-                SpeedEntry { baud: 9600,   small_n: 1, big_n: 25,  modulation: 0 },
-                SpeedEntry { baud: 19200,  small_n: 1, big_n: 12,  modulation: 0 },
-                SpeedEntry { baud: 38400,  small_n: 0, big_n: 25,  modulation: 0 },
-            ]
-        },
-        _ => unimplemented!()
-    }
-}
-
 impl Default for Config {
     fn default() -> Self {
         Self {
@@ -268,6 +221,57 @@ impl Default for Config {
 }
 
 impl<'d, I: Instance> BufferedUart<'d, I> {
+    fn calc_baud_gen(baud: u32, clock: HertzU32) -> Option<BaudGenConfig> {
+        let semr = 64.0;
+        let mut big_n = 0_u32;
+        let mut small_n = 3_u32;
+
+        let mut best: Option<BaudGenConfig> = None;
+
+        loop {
+            let mut last_config: Option<BaudGenConfig> = None;
+
+            for _ in 0..256 {
+                let new_error = (clock.to_Hz() as f32
+                    / (baud as f32
+                        * semr
+                        * (2_f32.powi(2 * small_n as i32 - 1))
+                        * (big_n as f32 + 1.0)))
+                    - 1.0;
+
+                if let Some(last_config) = last_config {
+                    if new_error.abs() > last_config.err.abs() {
+                        break;
+                    }
+                }
+
+                last_config = Some(BaudGenConfig {
+                    small_n,
+                    big_n,
+                    err: new_error,
+                });
+                big_n += 1;
+            }
+
+            if let Some(ref mut best) = best {
+                if last_config.unwrap().err.abs() < best.err.abs() {
+                    *best = last_config.unwrap();
+                }
+            } else {
+                best = last_config;
+            }
+
+            if small_n == 0 {
+                break;
+            } else {
+                small_n -= 1;
+                big_n = 0;
+            }
+        }
+
+        best
+    }
+
     /// Sets the number of bits in a byte.
     ///
     /// Note:
@@ -372,20 +376,17 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
     ///
     /// Note:
     /// * This will disable the transmitter and temporarily disable the receiver (§28.2.9 note 4).
-    /// * Currently only works with `PCLKA` set to 48 MHz.
+    /// * Currently depends on micromath. Pending <https://github.com/rust-lang/rust/issues/137578>.
     ///
     /// # Arguments
     /// * `baud_rate` - Desired baud rate.
-    ///   Currently only 300, 1200, 2400, 4800, 9600, 19200, 3840, and 115200 baud are supported.
-    ///
-    /// # TODO
-    /// * Support arbitrary baud rates
-    /// * Support arbitrary `PCLKA` rates
     pub fn set_baud_rate(&mut self, baud_rate: u32) {
-        let speed = speed_entries()
-            .iter()
-            .find(|e| e.baud == baud_rate)
-            .unwrap();
+        let clock_config = crate::clock::clock_status();
+
+        #[cfg(ra2)]
+        let brr_config = Self::calc_baud_gen(baud_rate, clock_config.peripheral_b).unwrap();
+        #[cfg(not(ra2))]
+        let brr_config = Self::calc_baud_gen(baud_rate, clock_config.peripheral_a).unwrap();
 
         let sci = I::regs();
 
@@ -394,26 +395,32 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
             r.set_te(false);
         });
 
-        Self::set_baud_from_entry(speed);
+        debug!(
+            "{}Baud rate: {}, Config: {}",
+            I::PERIPHERAL,
+            baud_rate,
+            brr_config
+        );
+
+        Self::set_baud_from_config(&brr_config);
 
         sci.scr().modify(|r| r.set_re(true));
     }
 
-    fn set_baud_from_entry(speed: &SpeedEntry) {
+    fn set_baud_from_config(brr_config: &BaudGenConfig) {
         let sci = I::regs();
 
-        sci.brr().write_value(speed.big_n);
+        sci.brr()
+            .write_value(u8::try_from(brr_config.big_n).expect("SCI big_n > 255"));
 
-        if speed.modulation != 0 {
-            sci.mddr().write_value(speed.modulation);
-            sci.semr().modify(|r| r.set_brme(true));
-        } else {
-            sci.mddr().write_value(0);
-            sci.semr().modify(|r| r.set_brme(false));
-        }
+        sci.mddr().write_value(0);
+        sci.semr().modify(|r| r.set_brme(false));
 
-        sci.smr()
-            .modify(|r| r.set_cks(SmrCks::from_bits(speed.small_n)));
+        sci.smr().modify(|r| {
+            r.set_cks(SmrCks::from_bits(
+                u8::try_from(brr_config.small_n).expect("SCI small_n > 255"),
+            ))
+        });
 
         sci.scr().modify(|r| r.set_re(true));
     }
@@ -432,17 +439,22 @@ impl<'d, I: Instance> BufferedUart<'d, I> {
         + 'd,
         config: Config,
     ) -> Self {
+        info!("{}{}", I::PERIPHERAL, config);
+
+        let clock_config = crate::clock::clock_status();
         let mut this = Self::new_inner(tx_pin, tx_buffer, rx_pin, rx_buffer, irqs);
 
         this.set_data_bits_inner(config.data_bits);
         this.set_parity_inner(config.parity);
         this.set_stop_bits_inner(config.stop_bits);
 
-        let speed = speed_entries()
-            .iter()
-            .find(|e| e.baud == config.baud_rate)
-            .unwrap();
-        Self::set_baud_from_entry(speed);
+        #[cfg(ra2)]
+        let brr_config = Self::calc_baud_gen(config.baud_rate, clock_config.peripheral_b).unwrap();
+        #[cfg(not(ra2))]
+        let brr_config = Self::calc_baud_gen(config.baud_rate, clock_config.peripheral_a).unwrap();
+
+        info!("{}{}", I::PERIPHERAL, brr_config);
+        Self::set_baud_from_config(&brr_config);
 
         let sci = I::regs();
 
@@ -867,12 +879,10 @@ impl<I: Instance, TxInt: InterruptType> InterruptHandler<TxInt> for TxInterruptH
 
             tx_reader.pop_done(fifo_available);
         } else {
-            for byte in out_buf[0..out_len - 1].iter() {
+            for byte in out_buf[0..out_len].iter() {
                 sci.ftdrl().write_value(*byte);
-                // Should we clear TDFE per Fig 28.14?
+                // Should we clear TDFE per Fig 28.14? (RA4M1)
             }
-
-            sci.ftdrl().write_value(out_buf[out_len - 1]);
 
             sci.scr().modify(|r| {
                 r.set_teie(true);

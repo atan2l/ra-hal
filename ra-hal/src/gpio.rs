@@ -12,14 +12,19 @@ use crate::{
     pac::{
         self,
         common::RW,
-        icu::vals::{Fclksel, Irqmd},
         pfs::Pfs,
         pfs::vals::{OutputType, PortDirection, PortMode},
     },
     write_protect::ProtectedModify as _,
 };
 
-#[cfg(pfs_port_drive)]
+// This needs to be updated to deal with other RA8 variants and variants with multiple processors.
+#[cfg(not(ra8))]
+use crate::pac::icu::vals::{Fclksel, Irqmd};
+#[cfg(ra8)]
+use crate::pac::icu_common::vals::{Fclksel, Irqmd};
+
+#[cfg(any(pfs_ra8, pfs_port_drive))]
 use crate::pac::pfs::vals::PortDrive;
 
 /// Uniquely identifies a pin.
@@ -272,7 +277,7 @@ pub(crate) trait SealedPin {
     }
 
     #[inline]
-    #[cfg(pfs_port_drive)]
+    #[cfg(any(pfs_ra8, pfs_port_drive))]
     fn set_drive_capacity(&self, drive_capacity: DriveCapacity) {
         let pfs = pac::PFS;
         let port_num = self._port() as _;
@@ -703,12 +708,12 @@ impl<'d> Output<'d, Basic> {
     pub fn new_basic(
         pin: Peri<'d, impl Pin>,
         initial: Level,
-        #[cfg(pfs_port_drive)] drive_capacity: DriveCapacity,
+        #[cfg(any(pfs_ra8, pfs_port_drive))] drive_capacity: DriveCapacity,
     ) -> Self {
         Self::new(
             pin,
             initial,
-            #[cfg(pfs_port_drive)]
+            #[cfg(any(pfs_ra8, pfs_port_drive))]
             drive_capacity,
         )
     }
@@ -725,13 +730,13 @@ impl<'d> Output<'d, WithOpenDrain> {
     pub fn new_with_open_drain(
         pin: Peri<'d, impl Pin>,
         initial: Level,
-        #[cfg(pfs_port_drive)] drive_capacity: DriveCapacity,
+        #[cfg(any(pfs_ra8, pfs_port_drive))] drive_capacity: DriveCapacity,
         output_mode: OutputMode,
     ) -> Self {
         let mut this = Self::new(
             pin,
             initial,
-            #[cfg(pfs_port_drive)]
+            #[cfg(any(pfs_ra8, pfs_port_drive))]
             drive_capacity,
         );
 
@@ -758,13 +763,13 @@ impl<'d, C: ControlKind> Output<'d, C> {
     pub(crate) fn new(
         pin: Peri<'d, impl Pin>,
         initial: Level,
-        #[cfg(pfs_port_drive)] drive_capacity: DriveCapacity,
+        #[cfg(any(pfs_ra8, pfs_port_drive))] drive_capacity: DriveCapacity,
     ) -> Self {
         let mut this = Flex::new(pin);
 
         this.set_as_output();
         this.set_level(initial);
-        #[cfg(pfs_port_drive)]
+        #[cfg(any(pfs_ra8, pfs_port_drive))]
         this.set_drive_capacity(drive_capacity);
 
         Self { pin: this }
@@ -776,7 +781,7 @@ impl<'d, C: ControlKind> Output<'d, C> {
     ///
     /// Be aware of the maximum permissible combined current output for all pins, see [`DriveCapacity`] for more information.
     #[inline]
-    #[cfg(pfs_port_drive)]
+    #[cfg(any(pfs_ra8, pfs_port_drive))]
     pub fn set_drive_capacity(&mut self, drive_capacity: DriveCapacity) {
         self.pin.set_drive_capacity(drive_capacity)
     }
@@ -973,7 +978,7 @@ impl<'d, C: ControlKind> Flex<'d, C> {
     ///
     /// Note: be aware of the maximum permissible combined current output for all pins, see [`DriveCapacity`] for more information.
     #[inline]
-    #[cfg(pfs_port_drive)]
+    #[cfg(any(pfs_ra8, pfs_port_drive))]
     pub fn set_drive_capacity(&mut self, drive_capacity: DriveCapacity) {
         self.pin.set_drive_capacity(drive_capacity)
     }
@@ -1113,7 +1118,10 @@ impl<'d, I: InterruptiblePin, C: ControlKind> InterruptFlex<'d, I, C> {
     ///
     /// §13.2.1
     pub fn set_trigger(&mut self, trigger: GpioTrigger) {
+        #[cfg(not(ra8m1))]
         let icu = pac::ICU;
+        #[cfg(ra8m1)]
+        let icu = pac::ICU_COMMON;
 
         // GROSS
         let reg = icu.irqcr((I::INTERRUPT_EVENT as u8 - 1) as _);
@@ -1129,7 +1137,10 @@ impl<'d, I: InterruptiblePin, C: ControlKind> InterruptFlex<'d, I, C> {
     ///
     /// §13.2.1, §13.4.3
     pub fn set_debounce(&mut self, debounce: Debounce) {
+        #[cfg(not(ra8m1))]
         let icu = pac::ICU;
+        #[cfg(ra8m1)]
+        let icu = pac::ICU_COMMON;
 
         // GROSS
         let reg = icu.irqcr((I::INTERRUPT_EVENT as u8 - 1) as _);
@@ -1250,7 +1261,7 @@ impl<'d, I: InterruptiblePin, C: ControlKind> InterruptFlex<'d, I, C> {
     ///
     /// Note: be aware of the maximum permissible combined current output for all pins, see [`DriveCapacity`] for more information.
     #[inline]
-    #[cfg(pfs_port_drive)]
+    #[cfg(any(pfs_ra8, pfs_port_drive))]
     pub fn set_drive_capacity(&mut self, drive_capacity: DriveCapacity) {
         self.pin.set_drive_capacity(drive_capacity)
     }

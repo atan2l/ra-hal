@@ -26,44 +26,41 @@ pub(crate) trait SealedInstance: PeripheralType {
     fn regs() -> crate::pac::agtw::Agtw;
 }
 
-#[cfg(agtw)]
-impl Instance<u32> for crate::peripherals::AGTW0 {
-    const COMP_A_EVENT: crate::event_link::InterruptEvent =
-        crate::event_link::InterruptEvent::Agt0CompareA;
+macro_rules! timer_instance {
+    ($peri:ident, $peri_mod:ident::$peri_type:ident, $instance:literal, $width:ident) => {
+        paste::paste! {
+            impl Instance<$width> for crate::peripherals::[< $peri $instance >] {
+                const COMP_A_EVENT: crate::event_link::InterruptEvent =
+                    crate::event_link::InterruptEvent::[< Agt $instance CompareA >];
 
-    const COMP_B_EVENT: crate::event_link::InterruptEvent =
-        crate::event_link::InterruptEvent::Agt0CompareB;
+                const COMP_B_EVENT: crate::event_link::InterruptEvent =
+                    crate::event_link::InterruptEvent::[< Agt $instance CompareB >];
 
-    const UNDERFLOW_EVENT: crate::event_link::InterruptEvent =
-        crate::event_link::InterruptEvent::Agt0Int;
+                const UNDERFLOW_EVENT: crate::event_link::InterruptEvent =
+                    crate::event_link::InterruptEvent::[< Agt $instance Int >];
+            }
+
+            impl SealedInstance for crate::peripherals::[< $peri $instance >] {
+                const INDEX: usize = [< $instance >];
+
+                fn regs() -> crate::pac::$peri_mod::$peri_type {
+                    crate::pac::[< $peri $instance >]
+                }
+            }
+        }
+    };
 }
 
-#[cfg(agtw)]
-impl SealedInstance for crate::peripherals::AGTW0 {
-    const INDEX: usize = 0;
-
-    fn regs() -> crate::pac::agtw::Agtw {
-        crate::pac::AGTW0
-    }
-}
-
-#[cfg(agtw)]
-impl Instance<u32> for crate::peripherals::AGTW1 {
-    const COMP_A_EVENT: crate::event_link::InterruptEvent =
-        crate::event_link::InterruptEvent::Agt1CompareA;
-
-    const COMP_B_EVENT: crate::event_link::InterruptEvent =
-        crate::event_link::InterruptEvent::Agt1CompareB;
-
-    const UNDERFLOW_EVENT: crate::event_link::InterruptEvent =
-        crate::event_link::InterruptEvent::Agt1Int;
-}
-
-#[cfg(agtw)]
-impl SealedInstance for crate::peripherals::AGTW1 {
-    const INDEX: usize = 1;
-
-    fn regs() -> crate::pac::agtw::Agtw {
-        crate::pac::AGTW1
+cfg_select! {
+    agt => {
+        timer_instance!(AGT, agt::Agt, 0, u16);
+        timer_instance!(AGT, agt::Agt, 1, u16);
+    },
+    agtw => {
+        timer_instance!(AGTW, agtw::Agtw, 0, u32);
+        timer_instance!(AGTW, agtw::Agtw, 1, u32);
+    },
+    _ => {
+        compile_error!("AGT timer enabled, but no AGT/AGTW hardware found");
     }
 }

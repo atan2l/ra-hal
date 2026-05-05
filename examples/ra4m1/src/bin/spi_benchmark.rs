@@ -2,12 +2,13 @@
 
 #![no_std]
 #![no_main]
-#![warn(missing_docs)]
 
+use assign_resources::assign_resources;
 use cortex_m::asm;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
+use embassy_hal_internal::Peri;
 use embassy_time::Instant;
 use panic_probe as _;
 use ra_hal::{
@@ -15,28 +16,47 @@ use ra_hal::{
     clock::ClockConfig,
     dmac::{self, DmacInterruptHandler},
     dtc::{self, DtcInterruptHandler},
-    peripherals::{DMAC0, DMAC1, DTC_CHAN5, DTC_CHAN6, SPI0},
+    peripherals::{self, DMAC0, DMAC1, DTC_CHAN5, DTC_CHAN6, SPI0},
     spi::{self, Spi, TeInterruptHandler},
 };
 #[allow(unused)]
 use ra_hal::{debug, error, info, trace, warn};
 
-// Define the pins we want on the R4 Minima
-// Note: SPI1 will not work without the "swd-as-gpio" feature.
-// Note: SPI0 will work with alternative pins that are not at the locations Arduino labels as "SPI".
-#[cfg(feature = "uno-r4-minima")]
-macro_rules! pins {
-    ($p:ident) => {
-        ($p.SPI0, $p.P102, $p.P101, $p.P100, $p.P103)
-    };
-}
+const SAMPLES: usize = 1000;
+const SIZE: usize = 228;
 
-// Define the pins we want on the R4 WiFi
-#[cfg(feature = "uno-r4-wifi")]
-macro_rules! pins {
-    ($p:ident) => {
-        ($p.SPI0, $p.P102, $p.P411, $p.P410, $p.P103)
-    };
+cfg_select! {
+    feature = "uno-r4-minima" => {
+        // Define the pins we want on the R4 Minima
+        // Note: SPI1 will not work without the "swd-as-gpio" feature.
+        // Note: SPI0 will work with alternative pins that are not at the locations Arduino labels as "SPI".
+        assign_resources! {
+            spi: SpiResources {
+                peri: SPI0,
+                sck: P102,
+                mosi: P101,
+                miso: P100,
+                cs: P103,
+            }
+        }
+    },
+    feature = "uno-r4-wifi" => {
+        // Define the pins we want on the R4 WiFi
+        assign_resources! {
+            spi: SpiResources {
+                peri: SPI0,
+                sck: P102,
+                mosi: P411,
+                miso: P410,
+                cs: P103,
+            }
+        }
+    }
+    _ => {
+        compile_error!(
+            "Ensure the pin and timer assignments are correct for your board before continuing."
+        );
+    }
 }
 
 bind_interrupts!(struct Irqs {
@@ -106,17 +126,21 @@ async fn benchmark_dtc<
     durations.iter().fold(0.0, |acc, val| acc + val) / SAMPLES as f32
 }
 
-const SAMPLES: usize = 1000;
-const SIZE: usize = 228;
-
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let mut p = ra_hal::init(ClockConfig::default());
+    let r = split_resources!(p);
 
     let mut config = spi::Config::default();
     config.bit_rate = 24_000_000;
 
-    let (mut spi, mut sck, mut mosi, mut miso, mut ss) = pins!(p);
+    let SpiResources {
+        peri: mut spi,
+        mut sck,
+        mut mosi,
+        mut miso,
+        mut cs,
+    } = r.spi;
 
     info!(
         "n={}, bytes={}, bit_rate={}",
@@ -131,7 +155,7 @@ async fn main(_spawner: Spawner) {
             sck.reborrow(),
             mosi.reborrow(),
             miso.reborrow(),
-            ss.reborrow(),
+            cs.reborrow(),
             config,
             p.DMAC0.reborrow(),
             p.DMAC1.reborrow(),
@@ -148,7 +172,7 @@ async fn main(_spawner: Spawner) {
             sck.reborrow(),
             mosi.reborrow(),
             miso.reborrow(),
-            ss.reborrow(),
+            cs.reborrow(),
             config,
             p.DMAC0.reborrow(),
             p.DMAC1.reborrow(),
@@ -165,7 +189,7 @@ async fn main(_spawner: Spawner) {
             sck.reborrow(),
             mosi.reborrow(),
             miso.reborrow(),
-            ss.reborrow(),
+            cs.reborrow(),
             config,
             p.DMAC0.reborrow(),
             p.DMAC1.reborrow(),
@@ -184,7 +208,7 @@ async fn main(_spawner: Spawner) {
             sck.reborrow(),
             mosi.reborrow(),
             miso.reborrow(),
-            ss.reborrow(),
+            cs.reborrow(),
             config,
             p.DTC_CHAN5.reborrow(),
             p.DTC_CHAN6.reborrow(),
@@ -201,7 +225,7 @@ async fn main(_spawner: Spawner) {
             sck.reborrow(),
             mosi.reborrow(),
             miso.reborrow(),
-            ss.reborrow(),
+            cs.reborrow(),
             config,
             p.DTC_CHAN5.reborrow(),
             p.DTC_CHAN6.reborrow(),
@@ -218,7 +242,7 @@ async fn main(_spawner: Spawner) {
             sck.reborrow(),
             mosi.reborrow(),
             miso.reborrow(),
-            ss.reborrow(),
+            cs.reborrow(),
             config,
             p.DTC_CHAN5.reborrow(),
             p.DTC_CHAN6.reborrow(),

@@ -58,10 +58,25 @@ impl<'d, I: Instance> Watchdog<'d, I> {
         match action {
             Action::Interrupt => {
                 debug!("IWDT: Enabling NMI");
-                let icu = pac::ICU;
-                icu.nmicr().write(|r| r.set_nflten(false));
-                icu.nmicr().write(|r| r.set_nmimd(true));
-                icu.nmiclr().write(|r| r.set_nmiclr(true));
+
+                cfg_select! {
+                    not(ra8m1) => {
+                        let icu = pac::ICU;
+
+                        icu.nmicr().write(|r| r.set_nflten(false));
+                        icu.nmicr().write(|r| r.set_nmimd(true));
+                        icu.nmiclr().write(|r| r.set_nmiclr(true));
+                    },
+                    ra8m1 => {
+                        let icu = pac::ICU;
+                        let icu_common = pac::ICU_COMMON;
+
+                        icu_common.nmicr().write(|r| r.set_nflten(false));
+                        icu_common.nmicr().write(|r| r.set_nmimd(true));
+                        icu.nmiclr().write(|r| r.set_nmiclr(true));
+                    },
+                }
+
                 icu.nmier().write(|r| r.set_iwdten(true));
             }
             Action::Reset => {}

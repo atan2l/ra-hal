@@ -8,45 +8,55 @@
 
 #![no_std]
 #![no_main]
-#![warn(missing_docs)]
 
+use assign_resources::assign_resources;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
+use embassy_hal_internal::Peri;
 use panic_probe as _;
 use ra_hal::{
     clock::ClockConfig,
     gpio::{DriveCapacity, Input, Level, Output},
+    peripherals,
 };
 #[allow(unused)]
 use ra_hal::{debug, error, info, trace, warn};
 
-// Define the pins we want on the R4 Minima
-#[cfg(feature = "uno-r4-minima")]
-macro_rules! pins {
-    ($p:ident) => {
-        ($p.P110, $p.P111)
-    };
-}
-
-// Define the pins we want on the R4 WiFi
-#[cfg(feature = "uno-r4-wifi")]
-macro_rules! pins {
-    ($p:ident) => {
-        ($p.P410, $p.P102)
-    };
+cfg_select! {
+    feature = "uno-r4-minima" => {
+        // Define the pins we want on the R4 Minima
+        assign_resources! {
+            gpio: GpioResources {
+                button: P110,
+                led: P111,
+            }
+        }
+    },
+    feature = "uno-r4-wifi" => {
+        // Define the pins we want on the R4 WiFi
+        assign_resources! {
+            gpio: GpioResources {
+                button: P410,
+                led: P102,
+            }
+        }
+    }
+    _ => {
+        compile_error!(
+            "Ensure the pin and timer assignments are correct for your board before continuing."
+        );
+    }
 }
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let p = ra_hal::init(ClockConfig::default());
+    let r = split_resources!(p);
 
-    // Grab D12 and the LED pins
-    let (button, led) = pins!(p);
+    let mut button = Input::new_with_pull_up(r.gpio.button, true);
 
-    let mut button = Input::new_with_pull_up(button, true);
-
-    let mut led = Output::new_basic(led, Level::Low, DriveCapacity::Low);
+    let mut led = Output::new_basic(r.gpio.led, Level::Low, DriveCapacity::Low);
 
     loop {
         // The button pulls the line to ground so is_high() == false when the button is pressed.
