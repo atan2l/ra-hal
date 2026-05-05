@@ -33,6 +33,8 @@ tasks:
       just examples ra4m1 build --release
   - build-ra6m5: |
       just examples ra6m5 build --release
+  - build-ra8m1: |
+      just examples ra8m1 build --release
   - doc-ra2a1: |
       just doc-ra2a1
   - doc-ra4l1: |
@@ -41,3 +43,5 @@ tasks:
       just doc-ra4m1
   - doc-ra6m5: |
       just doc-ra6m5
+  - doc-ra8m1: |
+      just doc-ra8m1
