@@ -114,24 +114,50 @@ pub struct ClockConfig {
     pll2: Option<PllConfig>,
 }
 
-#[cfg(all(pll, not(ra4m1)))]
-pub use _clock::PllInDiv;
-#[cfg(ra4m1)]
-pub use _clock::PllOutDiv;
-#[cfg(any(pll, pll2))]
-pub use _clock::{PllInput, PllOutMul};
+cfg_select! {
+    not(ra8m1) => {
+        #[cfg(all(pll, not(ra4m1)))]
+        pub use _clock::PllInDiv;
+        #[cfg(ra4m1)]
+        pub use _clock::PllOutDiv;
+        #[cfg(any(pll, pll2))]
+        pub use _clock::{PllInput, PllOutMul};
 
-/// Configuration for a Phase Locked Loop.
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
-#[cfg(any(pll, pll2))]
-#[derive(Debug, Clone)]
-pub struct PllConfig {
-    input: PllInput,
-    #[cfg(not(ra4m1))]
-    div: PllInDiv,
-    #[cfg(ra4m1)]
-    div: PllOutDiv,
-    mul: PllOutMul,
+        /// Configuration for a Phase Locked Loop.
+        #[cfg_attr(feature = "defmt", derive(defmt::Format))]
+        #[cfg(any(pll, pll2))]
+        #[derive(Debug, Clone)]
+        pub struct PllConfig {
+            input: PllInput,
+            #[cfg(not(ra4m1))]
+            div: PllInDiv,
+            #[cfg(ra4m1)]
+            div: PllOutDiv,
+            mul: PllOutMul,
+        }
+    },
+    ra8m1 => {
+        pub use _clock::PllInDiv;
+        pub use _clock::{PllInput, PllPDiv, PllQDiv, PllRDiv, PllOutMul};
+
+        /// Configuration for a Phase Locked Loop.
+        #[cfg_attr(feature = "defmt", derive(defmt::Format))]
+        #[derive(Debug, Clone)]
+        pub struct PllConfig {
+            /// Reference clock
+            input: PllInput,
+            /// Input clock divider
+            div: PllInDiv,
+            /// Multiplication ratio
+            mul: PllOutMul,
+            /// Output clock divider
+            div_p: PllPDiv,
+            /// Output clock divider
+            div_q: PllQDiv,
+            /// Output clock divider
+            div_r: PllRDiv,
+        }
+    }
 }
 
 /// Returns the active state of the clock tree.
