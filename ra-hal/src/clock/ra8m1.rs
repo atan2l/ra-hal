@@ -1,6 +1,6 @@
-use fugit::{HertzU32, MegahertzU32};
+use fugit::{HertzU32, MegahertzU32, RateExtU32 as _};
 
-use crate::clock::ClockConfig;
+use crate::clock::{ClockConfig, HocoFrequency, PllConfig, SystemClockSource};
 
 // Max PLL output is 480 MHz
 
@@ -93,6 +93,20 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
 impl Default for ClockConfig {
     /// Config assumes EK-RA8M1.
     fn default() -> Self {
-        todo!()
+        Self {
+            system: SystemClockSource::Pll1P,
+            hoco: HocoFrequency::_48mhz,
+            mosc: Some(20.MHz()),
+            sosc: true,
+            pll: Some(PllConfig {
+                input: PllInput::Hoco,
+                div: PllInDiv::Div1,
+                mul: PllOutMul::Mul26_0,
+                div_p: PllPDiv::Div2,
+                div_q: PllQDiv::Div2,
+                div_r: PllRDiv::Div2,
+            }),
+            pll2: None,
+        }
     }
 }

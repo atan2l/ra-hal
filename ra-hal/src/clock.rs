@@ -85,9 +85,12 @@ pub enum SystemClockSource {
     /// System clock source is the 32.768 kHz Low-speed On Chip Oscillator (`LOCO`).
     Loco,
 
-    #[cfg(pll)]
+    #[cfg(all(not(ra8m1), pll))]
     /// System clock source is `PLL`.
     Pll,
+
+    #[cfg(ra8m1)]
+    Pll1P,
 }
 
 /// Intended clock configuration.
