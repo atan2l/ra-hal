@@ -135,9 +135,11 @@ impl<'d> Channel<'d> {
         event: InterruptEvent,
     ) -> Transfer<'_> {
         let dmac = self.channel.regs();
-        let icu = pac::ICU;
-        #[cfg(ra8m1)]
-        let dma = pac::DMA;
+
+        let ctrl_block = cfg_select! {
+            ra8m1 => pac::DMA,
+            _ => pac::ICU,
+        };
 
         dmac.dmamd().write(|r| {
             r.set_sm(Sm::Increment);
@@ -150,12 +152,7 @@ impl<'d> Channel<'d> {
             r.set_dctg(Dctg::Interrupts);
         });
 
-        #[cfg(not(ra8m1))]
-        icu.delsr(self.channel.dmac_index as _).write(|r| {
-            r.set_dels(event as u16);
-        });
-        #[cfg(ra8m1)]
-        dma.delsr(self.channel.dmac_index as _).write(|r| {
+        ctrl_block.delsr(self.channel.dmac_index as _).write(|r| {
             r.set_dels(event as u16);
         });
 
@@ -191,9 +188,10 @@ impl<'d> Channel<'d> {
         event: InterruptEvent,
     ) -> Transfer<'_> {
         let dmac = self.channel.regs();
-        let icu = pac::ICU;
-        #[cfg(ra8m1)]
-        let dma = pac::DMA;
+        let ctrl_block = cfg_select! {
+            ra8m1 => pac::DMA,
+            _ => pac::ICU,
+        };
 
         dmac.dmamd().write(|r| {
             r.set_sm(Sm::Fixed);
@@ -206,12 +204,7 @@ impl<'d> Channel<'d> {
             r.set_dctg(Dctg::Interrupts);
         });
 
-        #[cfg(not(ra8m1))]
-        icu.delsr(self.channel.dmac_index as _).write(|r| {
-            r.set_dels(event as u16);
-        });
-        #[cfg(ra8m1)]
-        dma.delsr(self.channel.dmac_index as _).write(|r| {
+        ctrl_block.delsr(self.channel.dmac_index as _).write(|r| {
             r.set_dels(event as u16);
         });
 

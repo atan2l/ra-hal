@@ -14,8 +14,9 @@ use regex::Regex;
 static RE_PACKAGE_FEATURE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r#"^(?<count>\d+)(?<package>BGA|LGA|LQFP|QFN|QFP)$"#).unwrap());
 
-static RE_PERIPHERAL_INSTANCE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r#"^(?<kind>[A-Z_]+(\d{2})?)(_?(?<instance>\d+))?$"#).unwrap());
+static RE_PERIPHERAL_INSTANCE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r#"^(?<kind>[A-Z_]+(\d{2})?)(_?(?<instance>\d+))?(?<insecure>_NS)?$"#).unwrap()
+});
 
 static RE_SCI_RX_TX_SIGNAL: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r#"^SCI(?<instance>\d)_(?<signal>RX|TX)D$"#).unwrap());

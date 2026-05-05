@@ -12,12 +12,17 @@ use crate::{
     pac::{
         self,
         common::RW,
-        icu::vals::{Fclksel, Irqmd},
         pfs::Pfs,
         pfs::vals::{OutputType, PortDirection, PortMode},
     },
     write_protect::ProtectedModify as _,
 };
+
+// This needs to be updated to deal with other RA8 variants and variants with multiple processors.
+#[cfg(not(ra8m1))]
+use crate::pac::icu::vals::{Fclksel, Irqmd};
+#[cfg(ra8m1)]
+use crate::pac::icu_common::vals::{Fclksel, Irqmd};
 
 #[cfg(pfs_port_drive)]
 use crate::pac::pfs::vals::PortDrive;
