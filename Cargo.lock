@@ -535,7 +535,7 @@ dependencies = [
 [[package]]
 name = "ra-metapac"
 version = "0.3.0-dev0"
-source = "git+https://git.sr.ht/~az1/ra-metapac?rev=84b78fe0a75c67416740f81ee9d46924f1c3dc5d#84b78fe0a75c67416740f81ee9d46924f1c3dc5d"
+source = "git+https://git.sr.ht/~az1/ra-metapac?rev=d8769454cf83522ea1fc49601359429a704c4e56#d8769454cf83522ea1fc49601359429a704c4e56"
 dependencies = [
  "anyhow",
  "cortex-m",

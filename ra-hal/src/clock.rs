@@ -165,7 +165,9 @@ cfg_select! {
 
 /// Returns the active state of the clock tree.
 pub fn clock_status() -> &'static ClockStatus {
-    CLOCK_STATUS.try_get().unwrap()
+    CLOCK_STATUS
+        .try_get()
+        .expect("CLOCK_STATUS not initialized")
 }
 
 #[cfg(feature = "defmt")]
