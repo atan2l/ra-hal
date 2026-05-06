@@ -49,5 +49,5 @@ defmt = [
   "ra-hal/defmt",
 ]
 strict-assert = [ "ra-hal/strict-assert" ]
-ek-ra4l1 = [ "ra-hal/mem_ram64k_flash512k", "ra-hal/100lqfp", "ra-hal/time-driver-agt" ]
+ek-ra4l1 = [ "ra-hal/mem_ram64k_flash512k", "ra-hal/100lqfp", "ra-hal/time-driver-agt", "ra-hal/secure" ]
 # ek-ra4l1 = [ "ra-hal/mem_ram64k_flash512k", "ra-hal/100lqfp", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-20_000_000" ]

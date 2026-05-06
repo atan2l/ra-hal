@@ -48,4 +48,4 @@ defmt = [
   "ra-hal/defmt",
 ]
 strict-assert = [ "ra-hal/strict-assert" ]
-ek-ra6m5 = [ "ra-hal/mem_ram512k_flash2048k", "ra-hal/176lqfp", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-100_000_000" ]
+ek-ra6m5 = [ "ra-hal/mem_ram512k_flash2048k", "ra-hal/176lqfp", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-100_000_000", "ra-hal/non_secure" ]

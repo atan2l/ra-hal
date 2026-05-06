@@ -33,7 +33,7 @@ embassy-time-driver = { workspace = true, optional = true }
 embassy-time-queue-utils = { workspace = true, optional = true }
 embassy-usb-driver = { workspace = true, optional = true }
 
-ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", rev = "b32b3e05042333ffff0ba4ff226d0121d9485be6", version = "0.3.0-dev0" }
+ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", rev = "b411257b85c0f53d2485a9661c1953b20e411eef", version = "0.3.0-dev0" }
 
 arbitrary-int = "2.1.1"
 bitbybit = "2.0.0"
@@ -49,7 +49,7 @@ indexmap = { version = "2.13.0", features = [ "serde" ] }
 prettyplease = "0.2.37"
 proc-macro2 = "1.0.106"
 quote = "1.0.44"
-ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", rev = "b32b3e05042333ffff0ba4ff226d0121d9485be6", features = [ "metadata" ] }
+ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", rev = "b411257b85c0f53d2485a9661c1953b20e411eef", features = [ "metadata" ] }
 regex = "1.12.3"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_derive = "1.0.228"
@@ -215,10 +215,13 @@ mem_ram896k_flash2016k = [ "ra-metapac/mem_ram896k_flash2016k" ]
 224bga = [ ]
 
 _doc_ra2a1 = [ "ra2a1", "hoco_48mhz", "64lqfp", "time-driver-gpt" ]
-_doc_ra4l1 = [ "ra4l1", "mem_ram64k_flash512k", "100lqfp", "time-driver-gpt" ]
+_doc_ra4l1 = [ "ra4l1", "mem_ram64k_flash512k", "100lqfp", "time-driver-gpt", "secure" ]
 _doc_ra4m1 = [ "ra4m1", "hoco_48mhz", "64lqfp", "time-driver-gpt" ]
-_doc_ra6m5 = [ "ra6m5", "mem_ram512k_flash2048k", "176lqfp", "time-driver-gpt" ]
-_doc_ra8m1 = [ "ra8m1", "mem_ram896k_flash2016k", "224bga", "time-driver-gpt" ]
+_doc_ra6m5 = [ "ra6m5", "mem_ram512k_flash2048k", "176lqfp", "time-driver-gpt", "non_secure" ]
+_doc_ra8m1 = [ "ra8m1", "mem_ram896k_flash2016k", "224bga", "time-driver-gpt", "secure" ]
+
+secure = [ "ra-metapac/secure" ]
+non_secure = [ "ra-metapac/non_secure" ]
 
 [package.metadata.docs.rs]
 default-target = "thumbv7em-none-eabihf"
