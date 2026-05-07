@@ -144,35 +144,38 @@ fn trust_zone_init() {
             .write(cortex_m::peripheral::sau::Ctrl(0x02))
     };
 
-    let idau_region = {
-        let mut i = [1];
-        let tt =
-            cortex_m::cmse::TestTarget::check(i.as_mut_ptr(), cortex_m::cmse::AccessType::Current);
-        tt.idau_region().map(IdauRegion::from)
-    };
-    let pscu = pac::PSCU;
-    let life_cycle = pscu.dlmmon().read().dlmmon();
-    let secure_mode = idau_region == Some(IdauRegion::SecureSram);
+    // let idau_region = {
+    //     let mut i = [1];
+    //     let tt =
+    //         cortex_m::cmse::TestTarget::check(i.as_mut_ptr(), cortex_m::cmse::AccessType::Current);
+    //     tt.idau_region().map(IdauRegion::from)
+    // };
+    // let pscu = pac::PSCU;
+    // let life_cycle = pscu.dlmmon().read().dlmmon();
+    // let secure_mode = idau_region == Some(IdauRegion::SecureSram);
 
-    info!(
-        "TrustZone: secure_mode={}, region={} life_cycle={}",
-        secure_mode, idau_region, life_cycle
-    );
+    // info!(
+    //     "TrustZone: secure_mode={}, region={} life_cycle={}",
+    //     secure_mode, idau_region, life_cycle
+    // );
 
     let cpscu = pac::CPSCU;
     let system = pac::SYSTEM;
-    system.prcr().modify(|r| {
+    let prcr = cfg_select! {
+        all(trust_zone_v2, secure) => system.prcr_s(),
+        _ => system.prcr()
+    };
+    prcr.modify(|r| {
         r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
         r.set_prc4(Prc4::NotProtected);
     });
 
-    if secure_mode {
-        cpscu
-            .dtcsar()
-            .write(|r| r.set_dtcstsa(SecurityAttribution::Secure));
-    }
+    #[cfg(secure)]
+    cpscu
+        .dtcsar()
+        .write(|r| r.set_dtcstsa(SecurityAttribution::Secure));
 
-    system.prcr().modify(|r| {
+    prcr.modify(|r| {
         r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
         r.set_prc4(Prc4::Protected);
     });

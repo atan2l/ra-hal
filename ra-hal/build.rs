@@ -373,6 +373,9 @@ fn generate_peripherals(metadata: &Metadata, package: String) -> anyhow::Result<
             .iter()
             .find(|p| p.name == peripheral)
             .unwrap();
+        if peripheral.name.ends_with("_NS") {
+            continue;
+        }
         let captures = RE_PERIPHERAL_INSTANCE
             .captures(peripheral.name)
             .unwrap_or_else(|| panic!("No captures for {}", peripheral.name));
@@ -761,7 +764,7 @@ fn set_cfgs(metadata: &Metadata, features: &Features) -> anyhow::Result<()> {
 
     println!("cargo::rustc-check-cfg=cfg(secure)");
 
-    if features.iter().any(|feature| feature == "secure") {
+    if features.iter().any(|feature| feature == "SECURE") {
         println!("cargo::rustc-cfg=secure");
     }
 

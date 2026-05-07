@@ -39,8 +39,12 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
 
             let cpscu = pac::CPSCU;
             let system = pac::SYSTEM;
+            let prcr = cfg_select! {
+                all(trust_zone_v2, secure) => system.prcr_s(),
+                _ => system.prcr()
+            };
 
-            system.prcr().modify(|r| {
+            prcr.modify(|r| {
                 r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
                 r.set_prc4(Prc4::NotProtected);
             });
@@ -49,7 +53,7 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
                 .icusarg()
                 .modify(|r| r.set_saielsr(self.number() as _, SecurityAttribution::NonSecure));
 
-            system.prcr().modify(|r| {
+            prcr.modify(|r| {
                 r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
                 r.set_prc4(Prc4::Protected);
             });
@@ -82,7 +86,12 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
             let cpscu = pac::CPSCU;
             let system = pac::SYSTEM;
 
-            system.prcr().modify(|r| {
+            let prcr = cfg_select! {
+                all(trust_zone_v2, secure) => system.prcr_s(),
+                _ => system.prcr()
+            };
+
+            prcr.modify(|r| {
                 r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
                 r.set_prc4(Prc4::NotProtected);
             });
@@ -91,7 +100,7 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
                 .icusarg()
                 .modify(|r| r.set_saielsr(self.number() as _, SecurityAttribution::Secure));
 
-            system.prcr().modify(|r| {
+            prcr.modify(|r| {
                 r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
                 r.set_prc4(Prc4::Protected);
             });

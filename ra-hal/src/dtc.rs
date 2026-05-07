@@ -284,8 +284,16 @@ pub(crate) fn init() {
         _ => dtc.dtcvbr().write_value(vector_base),
     }
 
-    dtc.dtccr().modify(|r| r.set_rrs(false));
-    dtc.dtcst().modify(|r| r.set_dtcst(true));
+    cfg_select! {
+        all(trust_zone_v2, secure) => {
+            dtc.dtccr_sec().modify(|r| r.set_rrs(false));
+            dtc.dtcst().modify(|r| r.set_dtcst(true));
+        },
+        _ => {
+            dtc.dtccr().modify(|r| r.set_rrs(false));
+            dtc.dtcst().modify(|r| r.set_dtcst(true));
+        }
+    }
 }
 
 impl<C: Instance> Channel<C> {

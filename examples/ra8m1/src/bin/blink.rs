@@ -13,11 +13,11 @@ use ra_hal::{
     gpio::{DriveCapacity, Level, Output},
 };
 
-// Define the pins we want on the RA6M5 Eval Kit
+// Define the pins we want on the RA8M1 Eval Kit
 #[cfg(feature = "ek-ra8m1")]
 macro_rules! pins {
     ($p:ident) => {
-        $p.P006
+        $p.P600
     };
 }
 

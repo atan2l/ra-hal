@@ -67,7 +67,12 @@ impl ProtectedModify<Pin> for Reg<Pin, RW> {
     #[inline]
     fn is_protected(&self) -> bool {
         let pfs = crate::pac::PFS;
-        !pfs.pwpr().read().pfswe()
+        let pwpr = cfg_select! {
+          all(trust_zone_v2, secure) => pfs.pwpr_s(),
+          _ => pfw.pwpr()
+        };
+
+        !pwpr.read().pfswe()
     }
 
     fn protected_modify(&self, func: impl FnOnce(&mut Pin)) {
@@ -76,25 +81,30 @@ impl ProtectedModify<Pin> for Reg<Pin, RW> {
         let pfs = crate::pac::PFS;
         let protected = self.is_protected();
 
+        let pwpr = cfg_select! {
+          all(trust_zone_v2, secure) => pfs.pwpr_s(),
+          _ => pfw.pwpr()
+        };
+
         if protected {
             trace!("PFS WriteProt: {}", pfs.pwpr().read());
 
-            pfs.pwpr().modify(|w| w.set_b0wi(false));
-            pfs.pwpr().modify(|w| w.set_pfswe(true));
+            pwpr.modify(|w| w.set_b0wi(false));
+            pwpr.modify(|w| w.set_pfswe(true));
 
             #[cfg(feature = "strict-assert")]
-            assert!(pfs.pwpr().read().pfswe());
+            assert!(pwpr.read().pfswe());
         }
 
         self.modify(func);
 
         if protected {
-            pfs.pwpr().modify(|w| w.set_b0wi(false));
-            pfs.pwpr().modify(|w| w.set_pfswe(false));
+            pwpr.modify(|w| w.set_b0wi(false));
+            pwpr.modify(|w| w.set_pfswe(false));
 
             #[cfg(feature = "strict-assert")]
-            assert!(!pfs.pwpr().read().pfswe());
-            trace!("PFS WriteProt: {}", pfs.pwpr().read());
+            assert!(!pwpr.read().pfswe());
+            trace!("PFS WriteProt: {}", pwpr.read());
         }
     }
 }

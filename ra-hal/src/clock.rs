@@ -14,6 +14,7 @@ use fugit::{HertzU32, KilohertzU32, MegahertzU32};
 use crate::pac;
 
 static CLOCK_STATUS: OnceLock<ClockStatus> = OnceLock::new();
+const _1MHZ: HertzU32 = MegahertzU32::from_raw(1).convert();
 
 /// Current state of the clocks.
 pub struct ClockStatus {
@@ -181,14 +182,13 @@ pub fn clock_status() -> &'static ClockStatus {
         .expect("CLOCK_STATUS not initialized")
 }
 
-#[cfg(all(any(pll, pll2), feature = "defmt"))]
-fn print_pll(fmt: defmt::Formatter, label: &str, pll: HertzU32) {
-    let _1mhz: HertzU32 = 1_u32.MHz();
-    if pll < _1mhz {
-        let pll: KilohertzU32 = pll.convert();
+#[cfg(feature = "defmt")]
+fn print_frequency(fmt: defmt::Formatter, label: &str, frequency: HertzU32) {
+    if frequency < _1MHZ {
+        let pll: KilohertzU32 = frequency.convert();
         defmt::write!(fmt, ", {}: {}", label, pll);
     } else {
-        let pll: MegahertzU32 = pll.convert();
+        let pll: MegahertzU32 = frequency.convert();
         defmt::write!(fmt, ", {}: {}", label, pll);
     }
 }
@@ -224,11 +224,9 @@ impl defmt::Format for ClockStatus {
             mosc,
         } = clock_status();
 
-        let _1mhz: HertzU32 = 1_u32.MHz();
-
         defmt::write!(fmt, "SYSTEM: ");
 
-        if hoco < _1mhz {
+        if hoco < _1MHZ {
             let hoco: KilohertzU32 = hoco.convert();
             defmt::write!(fmt, "HOCO: {}", hoco);
         } else {
@@ -239,13 +237,7 @@ impl defmt::Format for ClockStatus {
 
         match mosc {
             Some(mosc) => {
-                if mosc < _1mhz {
-                    let mosc: KilohertzU32 = mosc.convert();
-                    defmt::write!(fmt, ", MOSC: {}", mosc);
-                } else {
-                    let mosc: MegahertzU32 = mosc.convert();
-                    defmt::write!(fmt, ", MOSC: {}", mosc);
-                }
+                print_frequency(fmt, "MOSC", mosc.convert());
             }
             None => {
                 defmt::write!(fmt, ", MOSC: None");
@@ -256,16 +248,16 @@ impl defmt::Format for ClockStatus {
         cfg_select! {
             not(ra8m1) => {
                 match pll {
-                    Some(pll) => print_pll(fmt, "PLL", pll),
+                    Some(pll) => print_frequency(fmt, "PLL", pll),
                     None => defmt::write!(fmt, ", PLL: OFF"),
                 }
             }
             ra8m1 => {
                 match pll {
                     Some((pll_p, pll_q, pll_r)) => {
-                        print_pll(fmt, "PLL.P", pll_p);
-                        print_pll(fmt, "PLL.Q", pll_q);
-                        print_pll(fmt, "PLL.R", pll_r);
+                        print_frequency(fmt, "PLL.P", pll_p);
+                        print_frequency(fmt, "PLL.Q", pll_q);
+                        print_frequency(fmt, "PLL.R", pll_r);
                     }
                     None => defmt::write!(fmt, ", PLL: OFF"),
                 }
@@ -276,16 +268,16 @@ impl defmt::Format for ClockStatus {
         cfg_select! {
             not(ra8m1) => {
                 match pll2 {
-                    Some(pll) => print_pll(fmt, "PLL2", pll),
+                    Some(pll) => print_frequency(fmt, "PLL2", pll),
                     None => defmt::write!(fmt, ", PLL2: OFF"),
                 }
             }
             ra8m1 => {
                 match pll2 {
                     Some((pll_p, pll_q, pll_r)) => {
-                        print_pll(fmt, "PLL2.P", pll_p);
-                        print_pll(fmt, "PLL2.Q", pll_q);
-                        print_pll(fmt, "PLL2.R", pll_r);
+                        print_frequency(fmt, "PLL2.P", pll_p);
+                        print_frequency(fmt, "PLL2.Q", pll_q);
+                        print_frequency(fmt, "PLL2.R", pll_r);
                     }
                     None => defmt::write!(fmt, ", PLL2: OFF"),
                 }
@@ -294,75 +286,26 @@ impl defmt::Format for ClockStatus {
 
         defmt::write!(fmt, ", ROOT: {}", cksel);
 
-        if system < _1mhz {
-            let iclk: KilohertzU32 = system.convert();
-            defmt::write!(fmt, ", ICLK: {}", iclk);
-        } else {
-            let iclk: MegahertzU32 = system.convert();
-            defmt::write!(fmt, ", ICLK: {}", iclk);
-        }
-
-        if flash < _1mhz {
-            let fclk: KilohertzU32 = flash.convert();
-            defmt::write!(fmt, ", FCLK: {}", fclk);
-        } else {
-            let fclk: MegahertzU32 = flash.convert();
-            defmt::write!(fmt, ", FCLK: {}", fclk);
-        }
+        print_frequency(fmt, "ICLK", system.convert());
+        print_frequency(fmt, "FCLK", flash.convert());
 
         #[cfg(bclk)]
-        if bus_clock < _1mhz {
-            let bclk: KilohertzU32 = bus_clock.convert();
-            defmt::write!(fmt, ", BCLK: {}", bclk);
-        } else {
-            let bclk: MegahertzU32 = bus_clock.convert();
-            defmt::write!(fmt, ", BCLK: {}", bclk);
-        }
+        print_frequency(fmt, "BCLK", bus_clock.convert());
 
         #[cfg(pclka)]
-        if peripheral_a < _1mhz {
-            let pclk_a: KilohertzU32 = peripheral_a.convert();
-            defmt::write!(fmt, ", PCLKA: {}", pclk_a);
-        } else {
-            let pclk_a: MegahertzU32 = peripheral_a.convert();
-            defmt::write!(fmt, ", PCLKA: {}", pclk_a);
-        }
+        print_frequency(fmt, "PCLKA", peripheral_a.convert());
 
         #[cfg(pclkb)]
-        if peripheral_b < _1mhz {
-            let pclk_b: KilohertzU32 = peripheral_b.convert();
-            defmt::write!(fmt, ", PCLKB: {}", pclk_b);
-        } else {
-            let pclk_b: MegahertzU32 = peripheral_b.convert();
-            defmt::write!(fmt, ", PCLKB: {}", pclk_b);
-        }
+        print_frequency(fmt, "PCLKB", peripheral_b.convert());
 
         #[cfg(pclkc)]
-        if peripheral_c < _1mhz {
-            let pclk_c: KilohertzU32 = peripheral_c.convert();
-            defmt::write!(fmt, ", PCLKC: {}", pclk_c);
-        } else {
-            let pclk_c: MegahertzU32 = peripheral_c.convert();
-            defmt::write!(fmt, ", PCLKC: {}", pclk_c);
-        }
+        print_frequency(fmt, "PCLKC", peripheral_c.convert());
 
         #[cfg(pclkd)]
-        if peripheral_d < _1mhz {
-            let pclk_d: KilohertzU32 = peripheral_d.convert();
-            defmt::write!(fmt, ", PCLKD: {}", pclk_d);
-        } else {
-            let pclk_d: MegahertzU32 = peripheral_d.convert();
-            defmt::write!(fmt, ", PCLKD: {}", pclk_d);
-        }
+        print_frequency(fmt, "PCLKD", peripheral_d.convert());
 
         #[cfg(pclke)]
-        if peripheral_e < _1mhz {
-            let pclk_e: KilohertzU32 = peripheral_d.convert();
-            defmt::write!(fmt, ", PCLKE: {}", pclk_e);
-        } else {
-            let pclk_e: MegahertzU32 = peripheral_d.convert();
-            defmt::write!(fmt, ", PCLKE: {}", pclk_e);
-        }
+        print_frequency(fmt, "PCLKE", peripheral_e.convert());
     }
 }
 
