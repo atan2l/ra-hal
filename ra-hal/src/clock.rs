@@ -181,6 +181,7 @@ pub fn clock_status() -> &'static ClockStatus {
         .expect("CLOCK_STATUS not initialized")
 }
 
+#[cfg(all(any(pll, pll2), feature = "defmt"))]
 fn print_pll(fmt: defmt::Formatter, label: &str, pll: HertzU32) {
     let _1mhz: HertzU32 = 1_u32.MHz();
     if pll < _1mhz {
