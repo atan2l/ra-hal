@@ -69,7 +69,7 @@ impl ProtectedModify<Pin> for Reg<Pin, RW> {
         let pfs = crate::pac::PFS;
         let pwpr = cfg_select! {
           all(trust_zone_v2, secure) => pfs.pwpr_s(),
-          _ => pfw.pwpr()
+          _ => pfs.pwpr()
         };
 
         !pwpr.read().pfswe()
@@ -83,7 +83,7 @@ impl ProtectedModify<Pin> for Reg<Pin, RW> {
 
         let pwpr = cfg_select! {
           all(trust_zone_v2, secure) => pfs.pwpr_s(),
-          _ => pfw.pwpr()
+          _ => pfs.pwpr()
         };
 
         if protected {
