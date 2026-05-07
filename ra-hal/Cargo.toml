@@ -33,7 +33,7 @@ embassy-time-driver = { workspace = true, optional = true }
 embassy-time-queue-utils = { workspace = true, optional = true }
 embassy-usb-driver = { workspace = true, optional = true }
 
-ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", rev = "da64114f28fa5f1fda4076f8f2479c00cf4b4519", version = "0.3.0-dev0" }
+ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", rev = "b67da5b5f5de183d169f6f4e07cbfbe6cd3ab8bd", version = "0.3.0-dev0" }
 
 arbitrary-int = "2.1.1"
 bitbybit = "2.0.0"
@@ -49,7 +49,7 @@ indexmap = { version = "2.13.0", features = [ "serde" ] }
 prettyplease = "0.2.37"
 proc-macro2 = "1.0.106"
 quote = "1.0.44"
-ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", rev = "da64114f28fa5f1fda4076f8f2479c00cf4b4519", features = [ "metadata" ] }
+ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", rev = "b67da5b5f5de183d169f6f4e07cbfbe6cd3ab8bd", features = [ "metadata" ] }
 regex = "1.12.3"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_derive = "1.0.228"
