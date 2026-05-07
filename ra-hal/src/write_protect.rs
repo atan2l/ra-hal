@@ -7,7 +7,7 @@ use crate::pac::iic;
 use crate::pac::{
     common::{RW, Reg},
     pfs::regs::Pin,
-    system::vals::Prc0,
+    system::vals::{Prc0, Prc1},
 };
 
 /// Manages write protection at the peripheral level.
@@ -106,30 +106,43 @@ impl ProtectedPeripheral for crate::pac::system::System {
     {
         use crate::pac::system::vals::Prc0;
 
+        let prcr = cfg_select! {
+            all(trust_zone_v2, secure) => self.prcr_s(),
+            _ => self.prcr()
+        };
+
         let protected = self.is_protected();
 
         if protected {
-            trace!("SYSTEM WriteProt: {}", self.prcr().read());
-            self.prcr().write(|w| {
+            trace!("SYSTEM WriteProt: {}", prcr.read());
+            prcr.write(|w| {
                 w.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
                 w.set_prc0(Prc0::NotProtected);
+                w.set_prc1(Prc1::NotProtected);
             });
         }
 
         func();
 
         if protected {
-            self.prcr().write(|w| {
+            prcr.write(|w| {
                 w.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
                 w.set_prc0(Prc0::Protected);
+                w.set_prc1(Prc1::Protected);
             });
-            trace!("SYSTEM WriteProt: {}", self.prcr().read());
+            trace!("SYSTEM WriteProt: {}", prcr.read());
         }
     }
 
     #[inline]
     fn is_protected(&self) -> bool {
-        self.prcr().read().prc0() == Prc0::Protected
+        let prcr = cfg_select! {
+            all(trust_zone_v2, secure) => self.prcr_s(),
+            _ => self.prcr()
+        };
+
+        let status = prcr.read();
+        status.prc0() == Prc0::Protected || status.prc1() == Prc1::Protected
     }
 }
 

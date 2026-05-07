@@ -30,12 +30,18 @@ pub struct ClockStatus {
     pub hoco: HertzU32,
 
     /// PLL frequency (if enabled).
-    #[cfg(pll)]
+    #[cfg(all(pll, not(ra8m1)))]
     pub pll: Option<HertzU32>,
+    /// PLL frequencies (if enabled).
+    #[cfg(all(pll, ra8m1))]
+    pub pll: Option<(HertzU32, HertzU32, HertzU32)>,
 
     /// PLL2 frequency (if enabled).
-    #[cfg(pll2)]
+    #[cfg(all(pll2, not(ra8m1)))]
     pub pll2: Option<HertzU32>,
+    /// PLL2 frequencies (if enabled).
+    #[cfg(all(pll2, ra8m1))]
+    pub pll2: Option<(HertzU32, HertzU32, HertzU32)>,
 
     #[cfg(bclk)]
     pub bus_clock: HertzU32,
@@ -61,6 +67,10 @@ pub struct ClockStatus {
     /// Peripheral Clock "D" (`PCLKD`).
     #[cfg(pclkd)]
     pub peripheral_d: HertzU32,
+
+    /// Peripheral Clock "E" (`PCLKE`).
+    #[cfg(pclke)]
+    pub peripheral_e: HertzU32,
 }
 
 /// Indicates what clock source the system clock (`ICLK`) should derive from.
@@ -83,6 +93,7 @@ pub enum SystemClockSource {
     Moco,
 
     /// System clock source is the 32.768 kHz Low-speed On Chip Oscillator (`LOCO`).
+    #[cfg(not(ra8m1))]
     Loco,
 
     #[cfg(all(not(ra8m1), pll))]
@@ -170,6 +181,17 @@ pub fn clock_status() -> &'static ClockStatus {
         .expect("CLOCK_STATUS not initialized")
 }
 
+fn print_pll(fmt: defmt::Formatter, label: &str, pll: HertzU32) {
+    let _1mhz: HertzU32 = 1_u32.MHz();
+    if pll < _1mhz {
+        let pll: KilohertzU32 = pll.convert();
+        defmt::write!(fmt, ", {}: {}", label, pll);
+    } else {
+        let pll: MegahertzU32 = pll.convert();
+        defmt::write!(fmt, ", {}: {}", label, pll);
+    }
+}
+
 #[cfg(feature = "defmt")]
 impl defmt::Format for ClockStatus {
     fn format(&self, fmt: defmt::Formatter) {
@@ -188,6 +210,8 @@ impl defmt::Format for ClockStatus {
             peripheral_c,
             #[cfg(pclkd)]
             peripheral_d,
+            #[cfg(pclke)]
+            peripheral_e,
             hoco,
             #[cfg(pll)]
             pll,
@@ -228,34 +252,42 @@ impl defmt::Format for ClockStatus {
         }
 
         #[cfg(pll)]
-        match pll {
-            Some(pll) => {
-                if pll < _1mhz {
-                    let pll: KilohertzU32 = pll.convert();
-                    defmt::write!(fmt, ", PLL: {}", pll);
-                } else {
-                    let pll: MegahertzU32 = pll.convert();
-                    defmt::write!(fmt, ", PLL: {}", pll);
+        cfg_select! {
+            not(ra8m1) => {
+                match pll {
+                    Some(pll) => print_pll(fmt, "PLL", pll),
+                    None => defmt::write!(fmt, ", PLL: OFF"),
                 }
             }
-            None => {
-                defmt::write!(fmt, ", PLL: OFF");
+            ra8m1 => {
+                match pll {
+                    Some((pll_p, pll_q, pll_r)) => {
+                        print_pll(fmt, "PLL.P", pll_p);
+                        print_pll(fmt, "PLL.Q", pll_q);
+                        print_pll(fmt, "PLL.R", pll_r);
+                    }
+                    None => defmt::write!(fmt, ", PLL: OFF"),
+                }
             }
         }
 
         #[cfg(pll2)]
-        match pll2 {
-            Some(pll) => {
-                if pll < _1mhz {
-                    let pll: KilohertzU32 = pll.convert();
-                    defmt::write!(fmt, ", PLL2: {}", pll);
-                } else {
-                    let pll: MegahertzU32 = pll.convert();
-                    defmt::write!(fmt, ", PLL2: {}", pll);
+        cfg_select! {
+            not(ra8m1) => {
+                match pll2 {
+                    Some(pll) => print_pll(fmt, "PLL2", pll),
+                    None => defmt::write!(fmt, ", PLL2: OFF"),
                 }
             }
-            None => {
-                defmt::write!(fmt, ", PLL2: OFF");
+            ra8m1 => {
+                match pll2 {
+                    Some((pll_p, pll_q, pll_r)) => {
+                        print_pll(fmt, "PLL2.P", pll_p);
+                        print_pll(fmt, "PLL2.Q", pll_q);
+                        print_pll(fmt, "PLL2.R", pll_r);
+                    }
+                    None => defmt::write!(fmt, ", PLL2: OFF"),
+                }
             }
         }
 
@@ -320,6 +352,15 @@ impl defmt::Format for ClockStatus {
         } else {
             let pclk_d: MegahertzU32 = peripheral_d.convert();
             defmt::write!(fmt, ", PCLKD: {}", pclk_d);
+        }
+
+        #[cfg(pclke)]
+        if peripheral_e < _1mhz {
+            let pclk_e: KilohertzU32 = peripheral_d.convert();
+            defmt::write!(fmt, ", PCLKE: {}", pclk_e);
+        } else {
+            let pclk_e: MegahertzU32 = peripheral_d.convert();
+            defmt::write!(fmt, ", PCLKE: {}", pclk_e);
         }
     }
 }

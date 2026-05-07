@@ -697,8 +697,6 @@ fn set_cfgs(metadata: &Metadata, features: &Features) -> anyhow::Result<()> {
 
     let common = ra_metapac::common_metadata::COMMON_METADATA;
 
-    println!("cargo::rustc-check-cfg=cfg(trust_zone)");
-
     for variant in common.cores.iter() {
         println!("cargo::rustc-check-cfg=cfg({variant})");
     }
@@ -760,6 +758,14 @@ fn set_cfgs(metadata: &Metadata, features: &Features) -> anyhow::Result<()> {
             println!("cargo::warning=DRIVER_FEATURE={feature}");
         }
     }
+
+    println!("cargo::rustc-check-cfg=cfg(secure)");
+
+    if features.iter().any(|feature| feature == "secure") {
+        println!("cargo::rustc-cfg=secure");
+    }
+
+    println!("cargo::rustc-check-cfg=cfg(trust_zone)");
 
     if metadata.trust_zone {
         println!("cargo::rustc-cfg=trust_zone");

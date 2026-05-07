@@ -365,7 +365,7 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
 
         while system.opccr().read().opcmtsf() {}
 
-        let master_frequency;
+        let root_frequency;
         match config.system {
             SystemClockSource::Mosc => todo!(),
             SystemClockSource::Sosc => todo!(),
@@ -384,7 +384,7 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                 for _ in 0..100 {
                     asm::nop()
                 }
-                master_frequency =
+                root_frequency =
                     pll_frequency.expect("Pll selected as clock source but not configured");
             }
         };
@@ -393,8 +393,8 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
         // For now we assume that we want to run at top speed.
         let (ick_div, pcka_div, pckb_div, pckc_div, pckd_div, fck_div, bck_div) = {
             let ick_div = Ick::Div1;
-            let _50mhz = master_frequency.to_Hz().div_ceil(50_000_000);
-            let _100mhz = master_frequency.to_Hz().div_ceil(100_000_000);
+            let _50mhz = root_frequency.to_Hz().div_ceil(50_000_000);
+            let _100mhz = root_frequency.to_Hz().div_ceil(100_000_000);
 
             let (pckb_div, pckc_div, fck_div, bck_div) = match _50mhz {
                 1 => (Pckb::Div1, Pckc::Div1, Fck::Div1, Bck::Div1),
@@ -423,24 +423,24 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
         };
 
         let ick_frq = match ick_div {
-            Ick::Div1 => master_frequency / 1,
-            Ick::Div2 => master_frequency / 2,
-            Ick::Div4 => master_frequency / 4,
-            Ick::Div8 => master_frequency / 8,
-            Ick::Div16 => master_frequency / 16,
-            Ick::Div32 => master_frequency / 32,
-            Ick::Div64 => master_frequency / 64,
+            Ick::Div1 => root_frequency / 1,
+            Ick::Div2 => root_frequency / 2,
+            Ick::Div4 => root_frequency / 4,
+            Ick::Div8 => root_frequency / 8,
+            Ick::Div16 => root_frequency / 16,
+            Ick::Div32 => root_frequency / 32,
+            Ick::Div64 => root_frequency / 64,
             Ick::_RESERVED_7 => todo!(),
         };
 
         let bck_frq = match bck_div {
-            Bck::Div1 => master_frequency / 1,
-            Bck::Div2 => master_frequency / 2,
-            Bck::Div4 => master_frequency / 4,
-            Bck::Div8 => master_frequency / 8,
-            Bck::Div16 => master_frequency / 16,
-            Bck::Div32 => master_frequency / 32,
-            Bck::Div64 => master_frequency / 64,
+            Bck::Div1 => root_frequency / 1,
+            Bck::Div2 => root_frequency / 2,
+            Bck::Div4 => root_frequency / 4,
+            Bck::Div8 => root_frequency / 8,
+            Bck::Div16 => root_frequency / 16,
+            Bck::Div32 => root_frequency / 32,
+            Bck::Div64 => root_frequency / 64,
             Bck::_RESERVED_7 => todo!(),
         };
 
@@ -497,10 +497,10 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
         let system = pac::SYSTEM;
         let hoco = system.hococr2().read().hcfrq0();
         let hoco: HertzU32 = match hoco {
-            Hcfrq0::_16mhz => 16_u32.MHz(),
-            Hcfrq0::_18mhz => 18_u32.MHz(),
-            Hcfrq0::_20mhz => 20_u32.MHz(),
-            _ => unimplemented!(),
+            Hcfrq0::_16mhz => 16.MHz(),
+            Hcfrq0::_18mhz => 18.MHz(),
+            Hcfrq0::_20mhz => 20.MHz(),
+            Hcfrq0::_RESERVED_3 => unimplemented!(),
         };
 
         let pll_running = !system.pllcr().read().pllstp();
