@@ -36,9 +36,6 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
     fn icu_disable(&self) {
         let icu = pac::ICU;
 
-        #[cfg(all(trust_zone, secure))]
-        self.set_security_attribution(SecurityAttribution::NonSecure);
-
         icu.ielsr(self.number() as _).modify(|w| w.set_iels(0));
         trace!("IEL{}: disable", self.number());
     }
@@ -58,9 +55,6 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
         let icu = pac::ICU;
 
         trace!("IEL{}: enable={}", self.number(), mask);
-
-        #[cfg(all(trust_zone, secure))]
-        self.set_security_attribution(SecurityAttribution::Secure);
 
         icu.ielsr(self.number() as _).modify(|w| {
             w.set_iels(mask as _);
@@ -106,9 +100,6 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
         let icu = pac::ICU;
 
         trace!("IEL{}: enable={}, dtc=true", self.number(), mask);
-
-        #[cfg(all(trust_zone, secure))]
-        self.set_security_attribution(SecurityAttribution::Secure);
 
         icu.ielsr(self.number() as _).write(|r| {
             r.set_dtce(true);

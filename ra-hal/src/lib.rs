@@ -137,7 +137,10 @@ fn trust_zone_init() {
     // is, after setting SAU_CTRL register to 0x2, the address space security attribution
     // becomes as shown in Table 48.6.
     // TODO: Handle the SAU in RA8
-    use pac::{cpscu::vals::SecurityAttribution, system::vals::Prc4};
+    use pac::system::vals::Prc4;
+
+    #[cfg(secure)]
+    use pac::cpscu::{regs::Icusar, vals::SecurityAttribution};
 
     unsafe {
         (*cortex_m::peripheral::SAU::PTR)
@@ -166,20 +169,39 @@ fn trust_zone_init() {
         all(trust_zone_v2, secure) => system.prcr_s(),
         _ => system.prcr()
     };
-    prcr.modify(|r| {
-        r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
-        r.set_prc4(Prc4::NotProtected);
-    });
 
     #[cfg(secure)]
-    cpscu
-        .dtcsar()
-        .write(|r| r.set_dtcstsa(SecurityAttribution::Secure));
+    {
+        prcr.modify(|r| {
+            r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
+            r.set_prc4(Prc4::NotProtected);
+        });
 
-    prcr.modify(|r| {
-        r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
-        r.set_prc4(Prc4::Protected);
-    });
+        cpscu
+            .dtcsar()
+            .write(|r| r.set_dtcstsa(SecurityAttribution::Secure));
+
+        // RA4L1 § 12.2.7 The Secure Attribute managed within the Arm CPU NVIC must match the security
+        // attribution of the IELSEn (0..=31). NVIC internal registers are in NVIC_ITNSn[31::0].
+        // The initial values of NVIC_ITNSn and ICUSARn are different.  NVIC_ITNSn is secure and ICUSARn
+        // is non-secure. Polarity has the same meaning so program these to match.
+        //
+        // The most helpful tidbit is conspicuously missing from the RA8M1 manual…
+        //
+        // Until we move off of cortex-m 0.7 we can't even access NVIC_ITNS sooooooo.
+        cpscu.icusarg().write_value(Icusar(0x0000_0000));
+
+        #[cfg(any(ra6, ra8))]
+        {
+            cpscu.icusarh().write_value(Icusar(0x0000_0000));
+            cpscu.icusari().write_value(Icusar(0x0000_0000));
+        }
+
+        prcr.modify(|r| {
+            r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
+            r.set_prc4(Prc4::Protected);
+        });
+    }
 
     {
         //         let cpscu = pac::CPSCU;
