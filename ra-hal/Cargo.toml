@@ -91,9 +91,15 @@ skip-osm = [ ]
 
 #! ### Time features
 
-## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver.
+## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver using a 32-bit GPT instance.
 time-driver-gpt = [ "time-driver", "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils" ]
+
+## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver using a 32-bit AGTW instance.
 time-driver-agt = [ "time-driver", "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time/tick-hz-32_768" ]
+
+## Enables support for [`embassy-time`](https://docs.embassy.dev/embassy-time/) and provides a time driver using a 32-bit ULPT instance.
+time-driver-ulpt = [ "time-driver", "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time/tick-hz-32_768" ]
+
 time-driver = [ ]
 
 #! ### On-Chip Oscillator Configuration

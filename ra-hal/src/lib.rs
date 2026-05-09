@@ -48,12 +48,13 @@ cfg_select! {
     feature = "time-driver" => {
         #[cfg_attr(feature = "time-driver-agt", path = "time_driver_agt.rs")]
         #[cfg_attr(feature = "time-driver-gpt", path = "time_driver_gpt.rs")]
+        #[cfg_attr(feature = "time-driver-ulpt", path = "time_driver_ulpt.rs")]
         pub mod time_driver;
     }
     _ => {}
 }
 
-#[cfg(not(sci_v2))]
+#[cfg(not(sci_b))]
 pub mod uart;
 pub mod write_protect;
 

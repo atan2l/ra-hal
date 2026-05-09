@@ -15,7 +15,10 @@ use crate::{
 };
 
 #[cfg(trust_zone)]
-use crate::pac::system::vals::Prc4;
+use pac::{
+    cpscu::vals::SecurityAttribution,
+    system::vals::{Prc4, Prkey},
+};
 
 /// Trait that implements functions allowing inspection and manipulation of the interrupt's `ELC`/`ICU` status.
 ///
@@ -33,31 +36,8 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
     fn icu_disable(&self) {
         let icu = pac::ICU;
 
-        #[cfg(trust_zone)]
-        {
-            use pac::cpscu::vals::SecurityAttribution;
-
-            let cpscu = pac::CPSCU;
-            let system = pac::SYSTEM;
-            let prcr = cfg_select! {
-                all(trust_zone_v2, secure) => system.prcr_s(),
-                _ => system.prcr()
-            };
-
-            prcr.modify(|r| {
-                r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
-                r.set_prc4(Prc4::NotProtected);
-            });
-
-            cpscu
-                .icusarg()
-                .modify(|r| r.set_saielsr(self.number() as _, SecurityAttribution::NonSecure));
-
-            prcr.modify(|r| {
-                r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
-                r.set_prc4(Prc4::Protected);
-            });
-        }
+        #[cfg(all(trust_zone, secure))]
+        self.set_security_attribution(SecurityAttribution::NonSecure);
 
         icu.ielsr(self.number() as _).modify(|w| w.set_iels(0));
         trace!("IEL{}: disable", self.number());
@@ -79,32 +59,8 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
 
         trace!("IEL{}: enable={}", self.number(), mask);
 
-        #[cfg(trust_zone)]
-        {
-            use pac::cpscu::vals::SecurityAttribution;
-
-            let cpscu = pac::CPSCU;
-            let system = pac::SYSTEM;
-
-            let prcr = cfg_select! {
-                all(trust_zone_v2, secure) => system.prcr_s(),
-                _ => system.prcr()
-            };
-
-            prcr.modify(|r| {
-                r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
-                r.set_prc4(Prc4::NotProtected);
-            });
-
-            cpscu
-                .icusarg()
-                .modify(|r| r.set_saielsr(self.number() as _, SecurityAttribution::Secure));
-
-            prcr.modify(|r| {
-                r.set_prkey(crate::pac::system::vals::Prkey::ProtectKey);
-                r.set_prc4(Prc4::Protected);
-            });
-        }
+        #[cfg(all(trust_zone, secure))]
+        self.set_security_attribution(SecurityAttribution::Secure);
 
         icu.ielsr(self.number() as _).modify(|w| {
             w.set_iels(mask as _);
@@ -150,6 +106,9 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
         let icu = pac::ICU;
 
         trace!("IEL{}: enable={}, dtc=true", self.number(), mask);
+
+        #[cfg(all(trust_zone, secure))]
+        self.set_security_attribution(SecurityAttribution::Secure);
 
         icu.ielsr(self.number() as _).write(|r| {
             r.set_dtce(true);
@@ -206,6 +165,37 @@ pub unsafe trait IcuInterrupt: InterruptNumber + Copy {
         let ielsr = icu.ielsr(number as _);
         let status = ielsr.read();
         trace!("IEL{}: ir={}, dtce={}", number, status.ir(), status.dtce());
+    }
+
+    #[cfg(trust_zone)]
+    fn set_security_attribution(&self, attribution: SecurityAttribution) {
+        let cpscu = pac::CPSCU;
+        let system = pac::SYSTEM;
+
+        let prcr = cfg_select! {
+            all(trust_zone_v2, secure) => system.prcr_s(),
+            _ => system.prcr()
+        };
+
+        prcr.modify(|r| {
+            r.set_prkey(Prkey::ProtectKey);
+            r.set_prc4(Prc4::NotProtected);
+        });
+
+        // TODO G is only for N=0..32
+        cpscu
+            .icusarg()
+            .modify(|r| r.set_saielsr(self.number() as _, attribution));
+
+        info!(
+            "ICUSARG: {}",
+            cpscu.icusarg().read().saielsr(self.number() as _)
+        );
+
+        prcr.modify(|r| {
+            r.set_prkey(Prkey::ProtectKey);
+            r.set_prc4(Prc4::Protected);
+        });
     }
 }
 

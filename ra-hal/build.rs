@@ -712,6 +712,10 @@ fn set_cfgs(metadata: &Metadata, features: &Features) -> anyhow::Result<()> {
         println!("cargo::rustc-check-cfg=cfg({extra})");
     }
 
+    for n in (&[2, 4, 6, 8]).iter() {
+        println!("cargo::rustc-check-cfg=cfg(ra{n})");
+    }
+
     let chip_feature = features
         .iter()
         .filter_map(|feature| {
@@ -724,16 +728,13 @@ fn set_cfgs(metadata: &Metadata, features: &Features) -> anyhow::Result<()> {
         .get_one("MCU model")?
         .to_lowercase();
 
+    let family_feature = &chip_feature[0..3];
+
     println!("cargo::rustc-cfg={chip_feature}");
-    if cfg_debug {
-        println!("cargo::warning=CHIP_FEATURE={chip_feature}");
-    }
+    println!("cargo::rustc-cfg={family_feature}");
 
     for extra in metadata.extras {
         println!("cargo::rustc-cfg={extra}");
-        if cfg_debug {
-            println!("cargo::warning=EXTRA_FEATURE={extra}");
-        }
     }
 
     let drivers = metadata
@@ -875,7 +876,21 @@ fn inner_main() -> anyhow::Result<()> {
             .iter()
             .any(|driver| *driver == "agt" || *driver == "agtw");
         let agt_time_driver = features.iter().any(|feature| *feature == "TIME_DRIVER_AGT");
-        assert!(!agt_time_driver || has_agt);
+        assert!(
+            !agt_time_driver || has_agt,
+            "agt_time_driver={agt_time_driver}, has_agt={has_agt}"
+        );
+    }
+
+    {
+        let has_ulpt = common.drivers.iter().any(|driver| *driver == "ulpt");
+        let ulpt_time_driver = features
+            .iter()
+            .any(|feature| *feature == "TIME_DRIVER_ULPT");
+        assert!(
+            !ulpt_time_driver || has_ulpt,
+            "ulpt_time_driver={ulpt_time_driver}, has_ulpt={has_ulpt}"
+        );
     }
 
     {

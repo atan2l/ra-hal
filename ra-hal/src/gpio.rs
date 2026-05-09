@@ -19,9 +19,9 @@ use crate::{
 };
 
 // This needs to be updated to deal with other RA8 variants and variants with multiple processors.
-#[cfg(not(ra8m1))]
+#[cfg(not(ra8))]
 use crate::pac::icu::vals::{Fclksel, Irqmd};
-#[cfg(ra8m1)]
+#[cfg(ra8)]
 use crate::pac::icu_common::vals::{Fclksel, Irqmd};
 
 #[cfg(any(pfs_ra8, pfs_port_drive))]

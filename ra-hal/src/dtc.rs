@@ -517,8 +517,9 @@ impl<C: Instance> InterruptHandler<C::Int> for DtcInterruptHandler<C> {
     }
 }
 
+// Note: MCUs without TrustZone don't have an error register in the DTC peripheral.
 impl<'d, C: Instance> Future for Transfer<'d, C> {
-    type Output = ();
+    type Output = Result<(), ()>;
 
     fn poll(
         self: core::pin::Pin<&mut Self>,
@@ -526,11 +527,25 @@ impl<'d, C: Instance> Future for Transfer<'d, C> {
     ) -> Poll<Self::Output> {
         Channel::<C>::waker().register(ctx.waker());
 
+        #[cfg(dtc_sec)]
+        {
+            let dtc = crate::pac::DTC;
+
+            let err = dtc.dtevr().read();
+            if err.dtesta() && u16::from(err.dtev()) == C::Int::IRQ.number() {
+                error!("DTC Error: {}", err);
+
+                let bus = pac::BUS;
+
+                return Poll::Ready(Err(()));
+            }
+        }
+
         // §17.3 On completion of a specified round of data transfer, the ICU.IELSRn.DTCE bit is
         // set to 0 and an interrupt request is sent to the CPU.
         if !C::Int::IRQ.is_dtc() {
             C::Int::IRQ.icu_disable();
-            return Poll::Ready(());
+            return Poll::Ready(Ok(()));
         }
 
         Poll::Pending
