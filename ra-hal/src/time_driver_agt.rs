@@ -4,7 +4,7 @@
 //!
 //! # Notes
 //! This driver is hardcoded to use a 32.768 kHz clock source.  If the sub-clock oscillator
-//! is installed it will use that.  Otherwise the low-speed on chip oscillator (`LOCO`) will.
+//! is installed it will use that.  Otherwise the Low-speed On Chip Oscillator (`LOCO`) will.
 //! be used. Note that `LOCO` is accurate to within ±15% and it may be more appropriate to use
 //! the `GPT` based time driver.
 
@@ -21,16 +21,19 @@ use embassy_time_queue_utils::Queue;
 use fugit::{HertzU32, KilohertzU32, MegahertzU32, RateExtU32 as _};
 
 use crate::{
-    event_link::IcuInterrupt,
-    interrupt,
-    interrupt::typelevel::Interrupt,
-    pac::{
-        self,
-        agtw::{
-            regs::Agtcr,
-            vals::{Cks, Lpm, Tck, Tmod},
-        },
-    },
+    event_link::IcuInterrupt, interrupt, interrupt::typelevel::Interrupt, pac,
+    timer_gpt::TimerWidth,
+};
+
+#[cfg(agt)]
+use pac::agt::{
+    regs::Agtcr,
+    vals::{Cks, Lpm, Tck, Tmod},
+};
+#[cfg(agtw)]
+use pac::agtw::{
+    regs::Agtcr,
+    vals::{Cks, Lpm, Tck, Tmod},
 };
 
 /// If timestamps are enabled in defmt `now()` can get called before the timer is actually
@@ -89,16 +92,20 @@ impl TimerPause for TimerPeripheral {
     }
 }
 
-trait Instance: crate::timer_agt::Instance<u32> + Send + Sync + 'static {
+trait Instance: crate::timer_agt::Instance<Self::Width> + Send + Sync + 'static {
     type AlarmInterrupt: interrupt::typelevel::Interrupt;
     type UnderflowInterrupt: interrupt::typelevel::Interrupt;
+    type Width: TimerWidth;
+    const PERIPHERAL: &'static str;
 }
 
 macro_rules! driver_instance {
-    ($peri:ident) => {
+    ($peri:ident, $width:ident) => {
         impl Instance for crate::peripherals::$peri {
             type AlarmInterrupt = crate::interrupt::typelevel::IEL1;
             type UnderflowInterrupt = crate::interrupt::typelevel::IEL0;
+            type Width = $width;
+            const PERIPHERAL: &'static str = stringify!($peri);
         }
     };
 }
@@ -107,13 +114,17 @@ macro_rules! driver_instance {
 cfg_select! {
     agt => {
         use crate::peripherals::AGT1;
-        driver_instance!(AGT1);
+        driver_instance!(AGT1, u16);
         type TimerPeripheral = crate::pac::agt::Agt;
+        const PERIOD : u16 = u16::MAX;
+        const WIDTH : usize = 16;
     },
     agtw => {
         use crate::peripherals::AGTW1;
-        driver_instance!(AGTW1);
+        driver_instance!(AGTW1, u32);
         type TimerPeripheral = crate::pac::agtw::Agtw;
+        const PERIOD : u32 = u32::MAX;
+        const WIDTH : usize = 32;
     }
 }
 
@@ -145,7 +156,8 @@ impl<I: Instance> AgtDriver<I> {
             }
             false => {
                 warn!(
-                    "Sub-clock Oscillator not installed/configured. Using Low-speed On Chip Oscillator (±15%)."
+                    "{}: Sub-clock Oscillator not installed/configured. Using Low-speed On Chip Oscillator (±15%).",
+                    I::PERIPHERAL
                 );
                 Tck::Agtlclk
             }
@@ -181,7 +193,7 @@ impl<I: Instance> AgtDriver<I> {
             r.set_cks(Cks::Div1);
             r.set_lpm(Lpm::Normal);
         });
-        timer.agt().write_value(u32::MAX);
+        timer.agt().write_value(PERIOD);
         timer.agtcr().modify(|r| {
             r.set_tedgf(false);
             r.set_tundf(false);
@@ -196,17 +208,22 @@ impl<I: Instance> AgtDriver<I> {
 
         let mhz: HertzU32 = 1_u32.MHz();
         let tick: HertzU32 = (embassy_time_driver::TICK_HZ as u32).Hz();
-        let peri = cfg_select! {
-            agtw => "AGTW1",
-            agt => "AGT1",
-            _ => unreachable!()
-        };
         if tick >= mhz {
             let tick: MegahertzU32 = tick.convert();
-            info!("{}: Time driver attached, tick={}", peri, tick);
+            info!(
+                "{}: Time driver attached, tick={}, width={}",
+                I::PERIPHERAL,
+                tick,
+                WIDTH
+            );
         } else {
             let tick: KilohertzU32 = tick.convert();
-            info!("{}: Time driver attached, tick={}", peri, tick);
+            info!(
+                "{}: Time driver attached, tick={}, width={}",
+                I::PERIPHERAL,
+                tick,
+                WIDTH
+            );
         }
     }
 
@@ -232,14 +249,6 @@ impl<I: Instance> AgtDriver<I> {
         critical_section::with(|_cs| {
             let mut timer = I::regs();
 
-            timer.while_paused(|timer| {
-                timer.agt().write_value(u32::MAX);
-
-                for _ in 0..4 {
-                    timer.agtcr().read();
-                }
-            });
-
             let _period = self
                 .period
                 .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |p| Some(p + 1))
@@ -248,6 +257,15 @@ impl<I: Instance> AgtDriver<I> {
 
                     p
                 });
+
+            timer.while_paused(|timer| {
+                timer.agt().write_value(PERIOD);
+
+                for _ in 0..500 {
+                    timer.agtcr().read();
+                }
+            });
+            timer.agtcmsr().modify(|r| r.set_tcmea(true));
         });
     }
 
@@ -268,15 +286,15 @@ impl<I: Instance> AgtDriver<I> {
             return false;
         }
 
-        let safe_timestamp = (timestamp.max(t + Self::FUDGE_FACTOR) & 0xFFFF_FFFF) as u32;
+        let safe_timestamp = (timestamp.max(t + Self::FUDGE_FACTOR) & u64::from(PERIOD)) as u32;
 
         let diff = timestamp - t;
 
         let cur = timer.agt().read();
-        if diff < u64::from(u32::MAX) {
-            let desired = u32::MAX
+        if diff < u64::from(PERIOD) {
+            let desired = (PERIOD as u32)
                 .checked_sub(safe_timestamp)
-                .expect("safe_timestamp > u32::MAX");
+                .expect("safe_timestamp > PERIOD");
 
             // If we update the counter while the compare register is valid we have to wait for underflow for the new value to take effect.
             timer.while_paused(|timer| {
@@ -288,21 +306,20 @@ impl<I: Instance> AgtDriver<I> {
 
                 timer.agt().write_value(cur);
 
-                timer.agtcma().write_value(desired);
+                timer.agtcma().write_value(desired as _);
             });
 
             timer.agtcmsr().modify(|r| r.set_tcmea(true));
-        } else {
-            // TODO: Uhhhhh
-            // If alarm must trigger some time after the current period, too far in the future,
-            // don't setup the alarm enable yet. It will be setup later by `next_period`.
         }
+        // If alarm must trigger some time after the current period, too far in the future,
+        // don't setup the alarm enable yet. It will be setup later by `next_period`.
 
         true
     }
 }
 
 impl<I: Instance> Driver for AgtDriver<I> {
+    // impl<I: Instance> Driver for AgtDriver<I> {
     fn now(&self) -> u64 {
         let timer = I::regs();
 
@@ -312,15 +329,18 @@ impl<I: Instance> Driver for AgtDriver<I> {
 
         let period = self.period.load(Ordering::Acquire);
         let count = timer.agt().read();
-        let count = u32::MAX.checked_sub(count).unwrap();
-        ((period as u64) << 32) + (count as u64)
+        let count = PERIOD.checked_sub(count).unwrap();
+
+        ((period as u64) << WIDTH) + (count as u64)
     }
 
     fn schedule_wake(&self, at: u64, waker: &core::task::Waker) {
         critical_section::with(|cs| {
             let mut queue = self.queue.borrow(cs).borrow_mut();
+
             if queue.schedule_wake(at, waker) {
                 let mut next = queue.next_expiration(self.now());
+
                 while !self.set_alarm(&cs, next) {
                     next = queue.next_expiration(self.now());
                 }
@@ -329,12 +349,20 @@ impl<I: Instance> Driver for AgtDriver<I> {
     }
 }
 
+#[cfg(agt)]
+embassy_time_driver::time_driver_impl!(static DRIVER: AgtDriver<AGT1> = AgtDriver {
+    period:AtomicU32::new(0),
+    queue:Mutex::new(RefCell::new(Queue::new())),
+    alarms:Mutex::new(AlarmState::new()),
+    phantom: PhantomData,
+});
+
 #[cfg(agtw)]
 embassy_time_driver::time_driver_impl!(static DRIVER: AgtDriver<AGTW1> = AgtDriver {
     period:AtomicU32::new(0),
     queue:Mutex::new(RefCell::new(Queue::new())),
     alarms:Mutex::new(AlarmState::new()),
-    phantom: PhantomData
+    phantom: PhantomData,
 });
 
 pub(crate) fn init() {

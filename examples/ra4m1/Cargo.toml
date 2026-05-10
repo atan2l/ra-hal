@@ -65,4 +65,5 @@ defmt = [
 strict-assert = [ "ra-hal/strict-assert" ]
 uno-r4-minima = [ "ra-hal/64lqfp", "ra-hal/hoco_48mhz", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-48_000_000" ]
 uno-r4-wifi = [ "ra-hal/64lqfp", "ra-hal/hoco_48mhz", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-48_000_000" ]
+# ek-ra4m1 = [ "ra-hal/100lqfp", "ra-hal/hoco_48mhz", "ra-hal/time-driver-agt" ]
 ek-ra4m1 = [ "ra-hal/100lqfp", "ra-hal/hoco_48mhz", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-48_000_000" ]
