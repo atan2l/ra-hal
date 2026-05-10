@@ -23,7 +23,11 @@ use crate::{
     },
     peripherals,
     usbfs::{DmPin, DpPin, VbusPin},
+    write_protect::ProtectedPeripheral as _,
 };
+
+#[cfg(not(ra4m1))]
+use pac::system::vals::Usbcksel;
 
 use super::{
     regs,
@@ -36,15 +40,24 @@ static USB_BRDYENB_SHADOW: AtomicU16 = AtomicU16::new(0);
 static USB_NRDYENB_SHADOW: AtomicU16 = AtomicU16::new(0);
 static USB_BEMPENB_SHADOW: AtomicU16 = AtomicU16::new(0);
 
+#[derive(Clone, Copy, Debug, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub enum UsbClockSource {
+    Hoco,
+    Pll,
+}
+
 #[derive(Clone, Copy, Debug)]
 pub struct Config {
     pub force_reset_on_init: bool,
+    pub clock_source: UsbClockSource,
 }
 
 impl Default for Config {
     fn default() -> Self {
         Self {
             force_reset_on_init: true,
+            clock_source: UsbClockSource::Pll,
         }
     }
 }
@@ -91,6 +104,47 @@ impl<'d, I: Instance + 'static> Driver<'d, I> {
         dm_pin: Peri<'d, Dm>,
         dp_pin: Peri<'d, Dp>,
     ) -> Result<Self, Error> {
+        cfg_select! {
+            ra4m1 => {
+                let system = pac::SYSTEM;
+
+                let clock_sel = config.clock_source == UsbClockSource::Hoco;
+
+                // TODO: Check that PLL is configured if it's the USB clock.
+
+                system.protected_write(|| {
+                    info!("USB: {}", system.usbckcr().read());
+                    system.usbckcr().write(|r| r.set_usbclksel(clock_sel));
+                    info!("USB: {}", system.usbckcr().read());
+                });
+            },
+            _ => {
+                let system = pac::SYSTEM;
+
+                match config.clock_source {
+                    UsbClockSource::Hoco => {
+                        todo!()
+                    },
+                    UsbClockSource::Pll => {
+                        system.protected_write(|| {
+                            info!("USB: {}", system.usbckcr().read());
+
+                            system.usbckcr().modify(|r| r.set_usbcksreq(true));
+                            while !system.usbckcr().read().usbcksrdy() {}
+
+                            system.usbckcr().modify(|r| r.set_usbcksel(Usbcksel::_101));
+
+                            system.usbckcr().modify(|r| r.set_usbcksreq(false));
+                            trace!("Waiting for clock to switch");
+                            while system.usbckcr().read().usbcksrdy() {}
+
+                            debug!("USB: {}", system.usbckcr().read());
+                        });
+                    }
+                }
+            }
+        }
+
         I::start_module();
 
         vbus_pin.set_as_pf(PortFunction::UsbFs);

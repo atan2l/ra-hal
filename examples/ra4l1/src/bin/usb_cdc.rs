@@ -9,6 +9,7 @@
 
 use core::{
     cell::UnsafeCell,
+    fmt::Write as _,
     mem::MaybeUninit,
     sync::atomic::{AtomicBool, AtomicU8, Ordering},
 };
@@ -16,9 +17,16 @@ use core::{
 use cortex_m::asm;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
-use embassy_time::{block_for, Duration};
+use embassy_time::{Duration, block_for};
+use heapless::String;
 use panic_probe as _;
-use ra_hal::{bind_interrupts, clock::ClockConfig, pac, peripherals::USBFS, usbfs};
+use ra_hal::{
+    bind_interrupts,
+    clock::ClockConfig,
+    pac,
+    peripherals::USBFS,
+    usbfs::{self, UsbClockSource},
+};
 #[allow(unused)]
 use ra_hal::{debug, error, info, trace, warn};
 use usb_device::{
@@ -71,18 +79,6 @@ fn decode_state(code: u8) -> Option<UsbDeviceState> {
     }
 }
 
-fn unlock_prcr() {
-    pac::SYSTEM
-        .prcr()
-        .write_value(pac::system::regs::Prcr(0xA503));
-}
-
-fn lock_prcr() {
-    pac::SYSTEM
-        .prcr()
-        .write_value(pac::system::regs::Prcr(0xA500));
-}
-
 fn boot_pause() {
     // asm::delay(4_800_000);
     block_for(Duration::from_millis(100));
@@ -90,25 +86,6 @@ fn boot_pause() {
 
 fn attach_settle_pause() {
     block_for(Duration::from_millis(10));
-}
-
-fn select_usb_clock_hoco() {
-    use pac::system::vals::Usbcksel;
-    let system = pac::SYSTEM;
-
-    unlock_prcr();
-    info!("USB: {}", system.usbckcr().read());
-
-    system.usbckcr().modify(|r| r.set_usbcksreq(true));
-    while !system.usbckcr().read().usbcksrdy() {}
-    system.usbckcr().modify(|r| r.set_usbcksel(Usbcksel::_101));
-    system.usbckcr().modify(|r| r.set_usbcksreq(false));
-    info!("Waiting for clock to switch");
-    while system.usbckcr().read().usbcksrdy() {}
-
-    info!("USB: {}", system.usbckcr().read());
-
-    lock_prcr();
 }
 
 fn log_state(state: UsbDeviceState) {
@@ -124,34 +101,45 @@ use embassy_executor::Spawner;
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let p = ra_hal::init(ClockConfig::default());
-    select_usb_clock_hoco();
     boot_pause();
 
-    let driver = usbfs::Driver::new(
-        p.USBFS,
-        Irqs,
-        usbfs::Config {
-            force_reset_on_init: false,
-        },
-        p.P407,
-        p.P815,
-        p.P814,
-    )
-    .unwrap();
+    let usb_config = usbfs::Config {
+        force_reset_on_init: false,
+        clock_source: UsbClockSource::Pll,
+    };
+
+    let driver = usbfs::Driver::new(p.USBFS, Irqs, usb_config, p.P407, p.P815, p.P814).unwrap();
     let bus = usbfs::Bus::new(driver);
     let usb_bus = init_usb_bus_allocator(bus);
 
     boot_pause();
     let mut serial = SerialPort::new(usb_bus);
 
+    let mcu_info = ra_hal::mcu_info::McuInfo::info();
+    assert!(mcu_info.ok());
+
+    let mut sn: String<35> = String::new();
+    write!(
+        sn,
+        "{:08x}-{:08x}-{:08x}-{:08x}",
+        (mcu_info.uid() >> 96) & 0xFFFFFFFF,
+        (mcu_info.uid() >> 64) & 0xFFFFFFFF,
+        (mcu_info.uid() >> 32) & 0xFFFFFFFF,
+        mcu_info.uid() & 0xFFFFFFFF
+    )
+    .unwrap();
+
+    let mut product: String<13> = String::new();
+    write!(product, "{} Example", ra_hal::CONFIGURED_MCU).unwrap();
+
     let mut usb_dev = UsbDeviceBuilder::new(usb_bus, UsbVidPid(0x1209, 0x4d31))
         .composite_with_iads()
         .max_packet_size_0(64)
         .unwrap()
         .strings(&[StringDescriptors::new(usb_device::LangID::EN_US)
-            .manufacturer("ra4-hal")
-            .product("ra4-examples usb_cdc")
-            .serial_number("ra4-examples-usb-cdc")])
+            .manufacturer("ra-hal")
+            .product(&product)
+            .serial_number(&sn)])
         .unwrap()
         .build();
 
@@ -165,7 +153,6 @@ async fn main(_spawner: Spawner) {
     let mut echo_buf = [0u8; 64];
     let mut echo_len = 0usize;
     let mut echo_off = 0usize;
-
 
     loop {
         usb_dev.poll(&mut [&mut serial]);

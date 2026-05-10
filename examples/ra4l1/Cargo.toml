@@ -33,9 +33,10 @@ usb-device = { version = "0.3.2" }
 usbd-serial = { version = "0.2.2" }
 
 ## Third party stuff
-micromath = { workspace = true }
+heapless = { workspace = true }
 # For a signal generator micromath isn't precise enough but libm adds +10K
 libm = { workspace = true }
+micromath = { workspace = true }
 
 [build-dependencies]
 vergen-gitcl = { version = "9" }

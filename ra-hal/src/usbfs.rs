@@ -16,7 +16,7 @@ use crate::gpio::Pin;
 
 pub use self::{
     bus::Bus,
-    driver::{Config, Driver, Instance, InterruptHandler},
+    driver::{Config, Driver, Instance, InterruptHandler, UsbClockSource},
     types::{BusState, Error, PipeBinding, UsbEventSnapshot, UsbIrqEvent, UsbIrqLocalState},
 };
 

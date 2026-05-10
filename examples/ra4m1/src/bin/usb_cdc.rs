@@ -1,4 +1,3 @@
-
 //! `usb_cdc` demonstrates a USB CDC ACM serial port using `usbd-serial`.
 //!
 //! The example uses the same proven USB bring-up sequence as the working
@@ -10,17 +9,24 @@
 
 use core::{
     cell::UnsafeCell,
-    mem::MaybeUninit,
     fmt::Write as _,
+    mem::MaybeUninit,
     sync::atomic::{AtomicBool, AtomicU8, Ordering},
 };
 
 use cortex_m::asm;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
-use embassy_time::{block_for, Duration};
+use embassy_executor::Spawner;
+use embassy_time::{Duration, block_for};
+use heapless::String;
 use panic_probe as _;
-use ra_hal::{bind_interrupts, clock::ClockConfig, pac, peripherals::USBFS, usbfs};
+use ra_hal::{
+    bind_interrupts,
+    clock::ClockConfig,
+    peripherals::USBFS,
+    usbfs::{self, UsbClockSource},
+};
 #[allow(unused)]
 use ra_hal::{debug, error, info, trace, warn};
 use usb_device::{
@@ -28,7 +34,6 @@ use usb_device::{
     device::{StringDescriptors, UsbDeviceBuilder, UsbVidPid},
     prelude::UsbDeviceState,
 };
-use heapless::String;
 use usbd_serial::SerialPort;
 
 bind_interrupts!(struct Irqs {
@@ -74,18 +79,6 @@ fn decode_state(code: u8) -> Option<UsbDeviceState> {
     }
 }
 
-fn unlock_prcr() {
-    pac::SYSTEM
-        .prcr()
-        .write_value(pac::system::regs::Prcr(0xA503));
-}
-
-fn lock_prcr() {
-    pac::SYSTEM
-        .prcr()
-        .write_value(pac::system::regs::Prcr(0xA500));
-}
-
 fn boot_pause() {
     // asm::delay(4_800_000);
     block_for(Duration::from_millis(100));
@@ -93,27 +86,6 @@ fn boot_pause() {
 
 fn attach_settle_pause() {
     block_for(Duration::from_millis(10));
-}
-
-fn select_usb_clock_hoco() {
-    // use pac::system::vals::Usbcksel;
-    let system = pac::SYSTEM;
-
-    unlock_prcr();
-    info!("USB: {}", system.usbckcr().read());
-
-    // system.usbckcr().modify(|r| r.set_usbcksreq(true));
-    // while !system.usbckcr().read().usbcksrdy() {}
-    // system.usbckcr().modify(|r| r.set_usbcksel(Usbcksel::_101));
-    // system.usbckcr().modify(|r| r.set_usbcksreq(false));
-    // info!("Waiting for clock to switch");
-    // while system.usbckcr().read().usbcksrdy() {}
-
-    system.usbckcr().write(|r| r.set_usbclksel(true));
-
-    info!("USB: {}", system.usbckcr().read());
-
-    lock_prcr();
 }
 
 fn log_state(state: UsbDeviceState) {
@@ -124,25 +96,18 @@ fn log_state(state: UsbDeviceState) {
         UsbDeviceState::Suspend => info!("usb state=Suspend"),
     }
 }
-use embassy_executor::Spawner;
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let p = ra_hal::init(ClockConfig::default());
-    select_usb_clock_hoco();
     boot_pause();
 
-    let driver = usbfs::Driver::new(
-        p.USBFS,
-        Irqs,
-        usbfs::Config {
-            force_reset_on_init: false,
-        },
-        p.P407,
-        p.P915,
-        p.P914,
-    )
-    .unwrap();
+    let usb_config = usbfs::Config {
+        force_reset_on_init: false,
+        clock_source: UsbClockSource::Hoco,
+    };
+
+    let driver = usbfs::Driver::new(p.USBFS, Irqs, usb_config, p.P407, p.P915, p.P914).unwrap();
     let bus = usbfs::Bus::new(driver);
     let usb_bus = init_usb_bus_allocator(bus);
 
@@ -153,11 +118,15 @@ async fn main(_spawner: Spawner) {
     assert!(mcu_info.ok());
 
     let mut sn: String<35> = String::new();
-    write!(sn, "{:08x}-{:08x}-{:08x}-{:08x}",
+    write!(
+        sn,
+        "{:08x}-{:08x}-{:08x}-{:08x}",
         (mcu_info.uid() >> 96) & 0xFFFFFFFF,
         (mcu_info.uid() >> 64) & 0xFFFFFFFF,
         (mcu_info.uid() >> 32) & 0xFFFFFFFF,
-        mcu_info.uid() & 0xFFFFFFFF).unwrap();
+        mcu_info.uid() & 0xFFFFFFFF
+    )
+    .unwrap();
 
     let mut product: String<13> = String::new();
     write!(product, "{} Example", ra_hal::CONFIGURED_MCU).unwrap();
