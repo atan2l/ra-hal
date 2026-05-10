@@ -49,5 +49,6 @@ defmt = [
 ]
 strict-assert = [ "ra-hal/strict-assert" ]
 
+# ek-ra8m1 = [ "ra-hal/mem_ram896k_flash2016k", "ra-hal/224bga", "ra-hal/time-driver-agt", "ra-hal/secure" ]
 # ek-ra8m1 = [ "ra-hal/mem_ram896k_flash2016k", "ra-hal/224bga", "ra-hal/time-driver-ulpt", "ra-hal/secure" ]
 ek-ra8m1 = [ "ra-hal/mem_ram896k_flash2016k", "ra-hal/224bga", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-30_000_000", "ra-hal/secure" ]

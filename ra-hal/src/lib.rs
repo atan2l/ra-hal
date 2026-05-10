@@ -37,6 +37,8 @@ pub mod qdec;
 pub mod timer_agt;
 #[cfg(gpt)]
 pub mod timer_gpt;
+#[cfg(ulpt)]
+pub mod timer_ulpt;
 pub mod watchdog;
 // pub mod sce5;
 #[cfg(ra4m1)]
