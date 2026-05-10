@@ -132,8 +132,30 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
             "Invalid PLL configuration, output too fast {pll_output}"
         );
 
-        // let pll_output: MegahertzU32 = pll_output.convert();
-        // Some(pll_output)
+        let pll_src = match pll_config.input {
+            PllInput::Hoco => Plsrcsel::Hoco,
+            PllInput::Mosc => Plsrcsel::Mosc,
+        };
+
+        system.protected_write(|| {
+            system.pllcr().modify(|r| r.set_pllstp(true));
+            while system.oscsf().read().pllsf() {}
+
+            if pll_src == Plsrcsel::Mosc {
+                system.mosccr().modify(|r| r.set_mostp(false));
+                while !system.oscsf().read().moscsf() {}
+            }
+
+            // TODO: Don't hardcode DIV + MUL
+            system.pllccr().modify(|r| {
+                r.set_plsrcsel(pll_src);
+                r.set_plidiv(Plidiv::Div1);
+                r.set_pllmul(Pllmul::Mul6_0);
+            });
+
+            system.pllcr().modify(|r| r.set_pllstp(false));
+            while !system.oscsf().read().pllsf() {}
+        });
     }
 
     system.protected_write(|| {
@@ -308,7 +330,7 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
             Pckd::_RESERVED_7 => unimplemented!("Invalid sckdivcr.pckd"),
         };
 
-        let pll_status = system.pllcr().read().pllstp();
+        let pll_status = !system.pllcr().read().pllstp();
         let pll = match pll_status {
             true => {
                 let pllccr = system.pllccr().read();

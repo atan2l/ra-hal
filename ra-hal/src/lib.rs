@@ -45,6 +45,8 @@ pub mod watchdog;
 pub mod spi;
 #[cfg(trust_zone)]
 pub mod trust_zone;
+#[cfg(usbfs)]
+pub mod usbfs;
 
 // This uses cfg_select explicitly so we can avoid defining a time_driver module if the feature
 // isn't enabled, but still fail if we don't enable a specific time driver.
@@ -210,6 +212,7 @@ macro_rules! bind_interrupts {
     }
 }
 
+include!(concat!(env!("OUT_DIR"), "/misc.rs"));
 include!(concat!(env!("OUT_DIR"), "/interrupts.rs"));
 include!(concat!(env!("OUT_DIR"), "/peripherals.rs"));
 include!(concat!(env!("OUT_DIR"), "/module_stops.rs"));

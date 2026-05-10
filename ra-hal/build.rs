@@ -626,6 +626,40 @@ fn generate_peripherals(metadata: &Metadata, package: String) -> anyhow::Result<
                     }
                 }
             }
+            ("USBFS", _driver) => {
+                for signal in peripheral.signals.iter() {
+                    let signal_ident = match *signal {
+                        "USBFS_VBUS" => format_ident!("usbfs_vbus_pin"),
+                        "USBFS_DM" => format_ident!("usbfs_dm_pin"),
+                        "USBFS_DP" => format_ident!("usbfs_dp_pin"),
+                        _ => continue,
+                    };
+
+                    let pins = &metadata.signals[signal];
+
+                    let pins = pins
+                        .iter()
+                        .filter(|pin| metadata.pins[pin.pin].packages.contains(&package.as_str()));
+
+                    for pin_config in pins {
+                        let pin_ident = format_ident!("{}", pin_config.pin);
+                        let pfunc = format_ident!(
+                            "{}",
+                            pin_config
+                                .pfunc
+                                // The 4L1 doesn't specify a peripheral function.
+                                // Jokes on Renesas, the 4M1 does *but refuses to honor the USB_FS pfunc*. smdh.
+                                .unwrap_or("USB_FS")
+                                .to_string()
+                                .to_case(Case::Pascal)
+                        );
+
+                        contents.extend(quote! {
+                            crate::usbfs::#signal_ident!(#peripheral_ident, #pin_ident, #pfunc);
+                        });
+                    }
+                }
+            }
             (_kind, _driver) => {
                 // println!(
                 //     "cargo::warning=Skipping peri={}, class={kind}, driver={driver}",
@@ -918,6 +952,36 @@ fn inner_main() -> anyhow::Result<()> {
 
         let out_dir = &PathBuf::from(env::var_os("OUT_DIR").unwrap());
         fs::write(out_dir.join("constants.rs"), tokens)?;
+    }
+
+    {
+        let mut contents = quote! {};
+
+        let chip_feature = features
+            .iter()
+            .filter_map(|feature| {
+                if RE_CHIP_MATCH.is_match(feature) {
+                    Some(feature.to_owned())
+                } else {
+                    None
+                }
+            })
+            .get_one("MCU model")?
+            .to_lowercase();
+
+        let family_feature = &chip_feature[0..3];
+
+        contents.extend(quote! {
+            /// MCU group e.g. RA4M1 that this firmware was configured/built for.
+            pub const CONFIGURED_MCU : &'static str = #chip_feature;
+
+            /// MCU family e.g. RA4 that this firmware was configured/built for.
+            pub const CONFIGURED_FAMILY : &'static str = #family_feature;
+        });
+
+        let contents = pretty_print(&contents);
+        let out_dir = &PathBuf::from(env::var_os("OUT_DIR").unwrap());
+        fs::write(out_dir.join("misc.rs"), contents)?;
     }
 
     generate_hoco_rs(&metadata)?;

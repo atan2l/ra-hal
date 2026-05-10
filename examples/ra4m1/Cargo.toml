@@ -36,6 +36,9 @@ embedded-io-async = { workspace = true }
 ra-hal = { workspace = true, features = [ "unstable-pac", "ra4m1" ] }
 uno-r4wifi-bsc = { path = "../../uno-r4wifi-bsc" }
 
+usb-device = { version = "0.3.2" }
+usbd-serial = { version = "0.2.2" }
+
 ## Third party stuff
 atomic_float = { version = "1.1.0", default-features = false }
 heapless = { version = "0.9.2" }

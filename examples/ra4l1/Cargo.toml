@@ -27,7 +27,10 @@ embedded-io = { workspace = true }
 embedded-io-async = { workspace = true }
 
 ## Board stuff
-ra-hal = { workspace = true, features = [ "ra4l1" ] }
+ra-hal = { workspace = true, features = [ "ra4l1", "unstable-pac" ] }
+
+usb-device = { version = "0.3.2" }
+usbd-serial = { version = "0.2.2" }
 
 ## Third party stuff
 micromath = { workspace = true }
@@ -50,4 +53,4 @@ defmt = [
 ]
 strict-assert = [ "ra-hal/strict-assert" ]
 ek-ra4l1 = [ "ra-hal/mem_ram64k_flash512k", "ra-hal/100lqfp", "ra-hal/time-driver-agt", "ra-hal/secure" ]
-# ek-ra4l1 = [ "ra-hal/mem_ram64k_flash512k", "ra-hal/100lqfp", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-20_000_000" ]
+# ek-ra4l1 = [ "ra-hal/mem_ram64k_flash512k", "ra-hal/100lqfp", "ra-hal/time-driver-gpt", "embassy-time/tick-hz-20_000_000", "ra-hal/secure" ]

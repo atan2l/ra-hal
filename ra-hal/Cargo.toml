@@ -32,6 +32,7 @@ embassy-time = { workspace = true, optional = true }
 embassy-time-driver = { workspace = true, optional = true }
 embassy-time-queue-utils = { workspace = true, optional = true }
 embassy-usb-driver = { workspace = true, optional = true }
+usb-device = { version = "0.3.2", optional = true }
 
 ra-metapac = { git = "https://git.sr.ht/~az1/ra-metapac", rev = "db646eab96d199f73bef220565a7e08e812bf511" }
 
@@ -137,10 +138,10 @@ hoco_80mhz = [ "ra-metapac/hoco_80mhz"]
 ra2a1 = [ "ra-metapac/ra2a1" ]
 
 ## RA4L1
-ra4l1 = [ "ra-metapac/ra4l1", "skip-osm" ]
+ra4l1 = [ "ra-metapac/ra4l1", "skip-osm", "_usb" ]
 
 ## RA4M1
-ra4m1 = [ "ra-metapac/ra4m1" ]
+ra4m1 = [ "ra-metapac/ra4m1", "_usb" ]
 
 ## RA6M5
 ra6m5 = [ "ra-metapac/ra6m5", "skip-osm" ]
@@ -228,6 +229,8 @@ _doc_ra8m1 = [ "ra8m1", "mem_ram896k_flash2016k", "224bga", "time-driver-gpt", "
 
 secure = [ "ra-metapac/secure" ]
 non_secure = [ "ra-metapac/non_secure" ]
+
+_usb = [ "dep:usb-device" ]
 
 [package.metadata.docs.rs]
 default-target = "thumbv7em-none-eabihf"

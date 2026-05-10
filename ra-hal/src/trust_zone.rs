@@ -117,6 +117,9 @@ pub fn init() {
             .dtcsar()
             .write(|r| r.set_dtcstsa(SecurityAttribution::Secure));
 
+        pscu.psarb().modify(|r| r.set_psarb11(false));
+        info!("USB: {}", pscu.psarb().read());
+
         // RA4L1 § 12.2.7 The Secure Attribute managed within the Arm CPU NVIC must match the security
         // attribution of the IELSEn (0..=31). NVIC internal registers are in NVIC_ITNSn[31::0].
         // The initial values of NVIC_ITNSn and ICUSARn are different.  NVIC_ITNSn is secure and ICUSARn
