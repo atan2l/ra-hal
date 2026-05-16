@@ -21,7 +21,6 @@ critical-section = { workspace = true }
 ## Embassy dependencies
 # embassy-embedded-hal = { version = "0.5.0", default-features = false }
 embassy-executor = { workspace = true }
-embassy-hal-internal = { workspace = true }
 embassy-time = { workspace = true }
 # embassy-futures = { version = "0.1.2" }
 embedded-hal-1 = { workspace = true }

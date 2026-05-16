@@ -13,9 +13,9 @@ use assign_resources::assign_resources;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
-use embassy_hal_internal::Peri;
 use panic_probe as _;
 use ra_hal::{
+    Peri,
     clock::ClockConfig,
     gpio::{DriveCapacity, Input, Level, Output},
     peripherals,

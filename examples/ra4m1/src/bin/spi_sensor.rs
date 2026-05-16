@@ -7,11 +7,11 @@ use assign_resources::assign_resources;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
-use embassy_hal_internal::Peri;
 use embassy_time::Timer;
 use mini_sensors::bmi160::{BoschBmi160, vals::GyroPowerMode};
 use panic_probe as _;
 use ra_hal::{
+    Peri,
     clock::ClockConfig,
     peripherals,
     spi::{self, Spi},

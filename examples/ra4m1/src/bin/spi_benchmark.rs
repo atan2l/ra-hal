@@ -8,11 +8,10 @@ use cortex_m::asm;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
-use embassy_hal_internal::Peri;
 use embassy_time::Instant;
 use panic_probe as _;
 use ra_hal::{
-    bind_interrupts,
+    Peri, bind_interrupts,
     clock::ClockConfig,
     dmac::{self, DmacInterruptHandler},
     dtc::{self, DtcInterruptHandler},

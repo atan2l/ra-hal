@@ -66,6 +66,8 @@ pub mod write_protect;
 #[cfg(feature = "chrono")]
 pub use chrono;
 
+pub use embassy_hal_internal::Peri;
+
 cfg_select! {
     feature = "unstable-pac" => {
         pub use ra_metapac as pac;

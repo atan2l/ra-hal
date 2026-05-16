@@ -9,12 +9,11 @@
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
-use embassy_hal_internal::{Peri, PeripheralType};
 use embassy_time::Timer;
 use embedded_io_async::{Read, Write};
 use panic_probe as _;
 use ra_hal::{
-    bind_interrupts,
+    Peri, bind_interrupts,
     clock::ClockConfig,
     gpio::{AnyPin, DriveCapacity, Level, Output},
     peripherals::SCI0,

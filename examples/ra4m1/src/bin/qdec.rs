@@ -10,10 +10,9 @@ use assign_resources::assign_resources;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
-use embassy_hal_internal::Peri;
 use panic_probe as _;
 use ra_hal::{
-    bind_interrupts,
+    Peri, bind_interrupts,
     clock::ClockConfig,
     peripherals::{self, GPT16_2},
     qdec::{self, Qdec, QdecInterruptHandler},
