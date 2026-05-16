@@ -6,6 +6,7 @@
 #![no_std]
 #![no_main]
 
+use assign_resources::assign_resources;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
@@ -16,7 +17,7 @@ use ra_hal::{
     Peri, bind_interrupts,
     clock::ClockConfig,
     gpio::{AnyPin, DriveCapacity, Level, Output},
-    peripherals::SCI0,
+    peripherals::{self, SCI0},
     uart::{BufferedUart, Config, RxInterruptHandler, TeInterruptHandler, TxInterruptHandler},
 };
 #[allow(unused)]
@@ -29,11 +30,22 @@ bind_interrupts!(struct Irqs {
     IEL4 => TeInterruptHandler<SCI0>;
 });
 
+#[cfg(not(feature = "ek-ra6m5"))]
+compile_error!(
+    "Ensure the pin and timer assignments are correct for your board before continuing."
+);
+
+// Define the pins we want on the RA6M5 Eval Kit
 #[cfg(feature = "ek-ra6m5")]
-macro_rules! peripherals {
-    ($p:ident) => {
-        ($p.P006, $p.SCI0, $p.P411, $p.P410)
-    };
+assign_resources! {
+    uart: UartResources {
+        peri: SCI0,
+        tx: P411,
+        rx: P410,
+    }
+    blink: BlinkResources {
+        led: P006,
+    }
 }
 
 #[embassy_executor::task]
@@ -49,9 +61,9 @@ async fn blink(pin: Peri<'static, AnyPin>) {
 #[embassy_executor::main]
 async fn main(spawner: Spawner) {
     let p = ra_hal::init(ClockConfig::default());
-    let (led, sci, tx_pin, rx_pin) = peripherals!(p);
+    let r = split_resources!(p);
 
-    spawner.spawn(blink(led.into()).unwrap());
+    spawner.spawn(blink(r.blink.led.into()).unwrap());
 
     let tx_buf = &mut [0u8; 48];
     let rx_buf = &mut [0u8; 48];
@@ -59,7 +71,15 @@ async fn main(spawner: Spawner) {
     let mut uart_config = Config::default();
     uart_config.baud_rate = 300;
 
-    let mut uart = BufferedUart::new(sci, tx_pin, tx_buf, rx_pin, rx_buf, Irqs, uart_config);
+    let mut uart = BufferedUart::new(
+        r.uart.peri,
+        r.uart.tx,
+        tx_buf,
+        r.uart.rx,
+        rx_buf,
+        Irqs,
+        uart_config,
+    );
 
     loop {
         uart.write(b"All work and no play makes Jack a dull boy.\r\n")

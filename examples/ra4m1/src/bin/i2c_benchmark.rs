@@ -3,6 +3,7 @@
 #![no_std]
 #![no_main]
 
+use assign_resources::assign_resources;
 use cortex_m::asm;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
@@ -12,11 +13,11 @@ use embedded_hal_1::i2c::I2c as _;
 use embedded_hal_async::i2c::I2c as _;
 use panic_probe as _;
 use ra_hal::{
-    bind_interrupts,
+    Peri, bind_interrupts,
     clock::ClockConfig,
     dtc::DtcInterruptHandler,
     i2c::{self, I2c, I2cSpeed},
-    peripherals::{DTC_CHAN5, DTC_CHAN6, IIC1},
+    peripherals::{self, DTC_CHAN5, DTC_CHAN6, IIC1},
 };
 #[allow(unused)]
 use ra_hal::{debug, error, info, trace, warn};
@@ -24,6 +25,23 @@ use ra_hal::{debug, error, info, trace, warn};
 const SAMPLES: usize = 1000;
 const ADDRESS: u8 = 0x69;
 const BYTES: [u8; 1] = [0x00];
+
+cfg_select! {
+    any(feature = "uno-r4-minima", feature = "uno-r4-wifi") => {
+        assign_resources! {
+            i2c: I2cResources {
+                peri: IIC1,
+                scl: P100,
+                sda: P101,
+            }
+        }
+    },
+    _ => {
+        compile_error!(
+            "Ensure the pin and timer assignments are correct for your board before continuing."
+        );
+    }
+}
 
 bind_interrupts!(struct Irqs {
     IEL2 => i2c::TxInterruptHandler<IIC1>;
@@ -38,14 +56,15 @@ bind_interrupts!(struct Irqs {
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let mut p = ra_hal::init(ClockConfig::default());
+    let mut r = split_resources!(p);
 
     for speed in [I2cSpeed::Normal, I2cSpeed::Fast] {
         warn!("I2C: {}", speed);
 
         {
-            let iic = p.IIC1.reborrow();
-            let scl = p.P100.reborrow();
-            let sda = p.P101.reborrow();
+            let iic = r.i2c.peri.reborrow();
+            let scl = r.i2c.scl.reborrow();
+            let sda = r.i2c.sda.reborrow();
             let mut i2c = I2c::new_blocking(iic, scl, sda, speed);
 
             let mut samples: [f32; SAMPLES] = [0.0; SAMPLES];
@@ -62,9 +81,9 @@ async fn main(_spawner: Spawner) {
         }
 
         {
-            let iic = p.IIC1.reborrow();
-            let scl = p.P100.reborrow();
-            let sda = p.P101.reborrow();
+            let iic = r.i2c.peri.reborrow();
+            let scl = r.i2c.scl.reborrow();
+            let sda = r.i2c.sda.reborrow();
             let mut tx_buf = [0_u8; 16];
             let mut i2c = I2c::new_async(iic, scl, sda, speed, &mut tx_buf, Irqs);
 
@@ -82,9 +101,9 @@ async fn main(_spawner: Spawner) {
         }
 
         {
-            let iic = p.IIC1.reborrow();
-            let scl = p.P100.reborrow();
-            let sda = p.P101.reborrow();
+            let iic = r.i2c.peri.reborrow();
+            let scl = r.i2c.scl.reborrow();
+            let sda = r.i2c.sda.reborrow();
 
             let mut i2c = I2c::new_dtc(iic, scl, sda, speed, p.DTC_CHAN5.reborrow(), Irqs);
 

@@ -31,7 +31,7 @@ compile_error!(
 #[cfg(feature = "ek-ra4l1")]
 assign_resources! {
     uart: UartResources {
-        uart: SCI3,
+        peri: SCI3,
         tx: P409,
         rx: P408,
     }
@@ -57,7 +57,7 @@ async fn main(_spawner: Spawner) {
     config.baud_rate = 300;
 
     let mut uart = BufferedUart::new(
-        r.uart.uart,
+        r.uart.peri,
         r.uart.tx,
         tx_buf,
         r.uart.rx,

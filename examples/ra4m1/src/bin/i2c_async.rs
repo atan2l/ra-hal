@@ -3,6 +3,7 @@
 #![no_std]
 #![no_main]
 
+use assign_resources::assign_resources;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use embassy_executor::Spawner;
@@ -10,13 +11,30 @@ use embassy_time::Timer;
 use embedded_hal_async::i2c::I2c as _;
 use panic_probe as _;
 use ra_hal::{
-    bind_interrupts,
+    Peri, bind_interrupts,
     clock::ClockConfig,
     i2c::{I2c, I2cSpeed, RxInterruptHandler, TeInterruptHandler, TxInterruptHandler},
-    peripherals::IIC1,
+    peripherals::{self, IIC1},
 };
 #[allow(unused)]
 use ra_hal::{debug, error, info, trace, warn};
+
+cfg_select! {
+    any(feature = "uno-r4-minima", feature = "uno-r4-wifi") => {
+        assign_resources! {
+            i2c: I2cResources {
+                peri: IIC1,
+                scl: P100,
+                sda: P101,
+            }
+        }
+    },
+    _ => {
+        compile_error!(
+            "Ensure the pin and timer assignments are correct for your board before continuing."
+        );
+    }
+}
 
 const CHIP_ID: u8 = 0xD1;
 const I2C_ADDRESS: u8 = 0x69;
@@ -48,13 +66,18 @@ bind_interrupts!(struct Irqs {
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let p = ra_hal::init(ClockConfig::default());
-
-    let scl = p.P100;
-    let sda = p.P101;
+    let r = split_resources!(p);
 
     {
         let mut tx_buf = [0_u8; 16];
-        let mut i2c = I2c::new_async(p.IIC1, scl, sda, I2cSpeed::Fast, &mut tx_buf, Irqs);
+        let mut i2c = I2c::new_async(
+            r.i2c.peri,
+            r.i2c.scl,
+            r.i2c.sda,
+            I2cSpeed::Fast,
+            &mut tx_buf,
+            Irqs,
+        );
 
         let mut data = [0_u8; 1];
 

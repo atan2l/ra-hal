@@ -22,6 +22,9 @@ use ra_hal::{
 #[allow(unused)]
 use ra_hal::{debug, error, info, trace, warn};
 
+#[cfg(not(feature = "uno-r4-wifi"))]
+compile_error!("This example is only designed to work with the Arduino Uno R4 WiFi.");
+
 bind_interrupts!(struct Irqs {
     IEL2 => RxInterruptHandler<SCI1>;
     IEL3 => TxInterruptHandler<SCI1>;
