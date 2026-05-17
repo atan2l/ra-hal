@@ -59,4 +59,3 @@ tasks:
   - doc-publish: |
       gzip doc-all.tar
       hut pages publish -d az1.srht.site doc-all.tar.gz
- 
