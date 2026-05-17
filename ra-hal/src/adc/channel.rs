@@ -82,6 +82,7 @@ pub(super) trait SealedAdcChannel<R> {
     fn enable<I: super::Instance>(&self, config: AdcChannelConfig);
     fn disable<I: super::Instance>(&self);
     fn read_one<I: super::Instance>(&self) -> R;
+    fn address<I: super::Instance>(&self) -> *const R;
 }
 
 #[allow(private_bounds)]
@@ -189,6 +190,11 @@ impl<const N: usize> SealedAdcChannel<[u16; N]> for AdcSequence<N> {
 
         self.channels.map(|chan| adc.addr(chan as _).read())
     }
+
+    #[inline]
+    fn address<I: super::Instance>(&self) -> *const [u16; N] {
+        todo!()
+    }
 }
 
 impl AdcChannel<u16> for AdcPin {}
@@ -248,6 +254,12 @@ impl SealedAdcChannel<u16> for AdcPin {
         trace!("ADC14: read_one({})", self.adc_channel);
 
         adc.addr(self.adc_channel as _).read()
+    }
+
+    #[inline]
+    fn address<I: super::Instance>(&self) -> *const u16 {
+        let adc = I::regs();
+        adc.addr(self.adc_channel as _).as_ptr()
     }
 }
 
@@ -388,6 +400,12 @@ impl SealedAdcChannel<u16> for Temperature {
         trace!("ADC14: read_one(TEMPERATURE)");
         adc.adtsdr().read()
     }
+
+    #[inline]
+    fn address<I: super::Instance>(&self) -> *const u16 {
+        let adc = I::regs();
+        adc.adtsdr().as_ptr()
+    }
 }
 
 impl AdcChannel<u16> for Vref {}
@@ -431,6 +449,12 @@ impl SealedAdcChannel<u16> for Vref {
 
         trace!("ADC14: read_one(VREF)");
         adc.adocdr().read()
+    }
+
+    #[inline]
+    fn address<I: super::Instance>(&self) -> *const u16 {
+        let adc = I::regs();
+        adc.adocdr().as_ptr()
     }
 }
 

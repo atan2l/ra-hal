@@ -118,6 +118,71 @@ impl<'d> Channel<'d> {
         }
     }
 
+    /// Configures the fixed DMA registers for a repeated peripheral-to-memory transfer.
+    ///
+    /// Sets up DMAMD, DMTMD, DELSR, and DMSAR once; only DMDAR and DMCRA need updating
+    /// on each re-arm (via [`rearm`](Self::rearm)).
+    pub(crate) fn configure_peripheral_read<W: Word>(&mut self, src: *const W, event: InterruptEvent) {
+        let dmac = self.channel.regs();
+        let ctrl_block = cfg_select! {
+            ra8m1 => pac::DMA,
+            _ => pac::ICU,
+        };
+
+        dmac.dmamd().write(|r| {
+            r.set_sm(Sm::Fixed);
+            r.set_dm(Dm::Increment);
+        });
+        dmac.dmtmd().write(|r| {
+            r.set_sz(W::DMA_WIDTH);
+            r.set_md(Md::Normal);
+            r.set_dts(Dts::RepeatDestination);
+            r.set_dctg(Dctg::Interrupts);
+        });
+
+        ctrl_block.delsr(self.channel.dmac_index as _).write(|r| {
+            r.set_dels(event as u16);
+        });
+
+        dmac.dmsar().write_value(src as u32);
+    }
+
+    /// Re-arms the DMA channel to transfer `len` words into `dest`, then enables it.
+    ///
+    /// Call after the previous transfer completes (DTIF) to start the next one without
+    /// re-programming the fixed registers set by [`configure_peripheral_read`](Self::configure_peripheral_read).
+    pub(crate) fn rearm<W: Word>(&mut self, dest: *mut W, len: usize) {
+        let dmac = self.channel.regs();
+        dmac.dmdar().write_value(dest as u32);
+        assert!(len <= usize::from(u16::MAX));
+        dmac.dmcra().write(|r| {
+            r.set_dmcrah(len as u16);
+            r.set_dmcral(len as u16);
+        });
+        dmac.dmcnt().write(|r| r.set_dte(true));
+    }
+
+    /// Disables the DMA channel (clears DTE).
+    pub(crate) fn disable_dte(&mut self) {
+        self.channel.regs().dmcnt().write(|r| r.set_dte(false));
+    }
+
+    /// Registers a waker to be woken on the next DTIF interrupt for this channel.
+    pub(crate) fn register_waker(&self, waker: &core::task::Waker) {
+        DMAC_WAKERS[usize::from(self.channel.dmac_index)].register(waker);
+    }
+
+    /// Returns `true` if DTIF is set and clears it. Returns `false` if not yet set.
+    pub(crate) fn take_dtif(&self) -> bool {
+        let dmac = self.channel.regs();
+        if dmac.dmsts().read().dtif() {
+            dmac.dmsts().modify(|r| r.set_dtif(false));
+            true
+        } else {
+            false
+        }
+    }
+
     /// Configures a `DMAC` transfer that reads from an address incremented by the specified [`InterruptEvent`] and writes to a fixed address.
     /// e.g. memory-to-peripheral.
     ///
