@@ -2,8 +2,8 @@
 resolver = "3"
 
 members = [
-  "ra-hal",
-  # "uno-r4wifi-bsc",
+    "ra-hal",
+    # "uno-r4wifi-bsc",
 ]
 
 exclude = [
@@ -17,14 +17,14 @@ license = "LGPL-3.0-or-later"
 homepage = "https://sr.ht/~az1/ra-rs/"
 
 [workspace.dependencies]
-cortex-m = { version = "0.7.7", features = [ "inline-asm", "critical-section-single-core" ] }
+cortex-m = { version = "0.7.7", features = ["inline-asm", "critical-section-single-core"] }
 cortex-m-rt = { version = "0.7.3" }
 critical-section = { version = "1.2" }
 defmt = { version = "1" }
 document-features = { version = "0.2.12" }
-embassy-executor = { version = "0.10.0", features = [ "platform-cortex-m", "executor-thread", "executor-interrupt" ] }
+embassy-executor = { version = "0.10.0", features = ["platform-cortex-m", "executor-thread", "executor-interrupt"] }
 embassy-futures = { version = "0.1.2" }
-embassy-hal-internal = { version = "0.5.0", features = [ "cortex-m", "prio-bits-4" ] }
+embassy-hal-internal = { version = "0.5.0", features = ["cortex-m", "prio-bits-4"] }
 embassy-sync = { version = "0.8.0" }
 embassy-time = { version = "0.5.1" }
 embassy-time-driver = { version = "0.2.2" }

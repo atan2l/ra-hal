@@ -62,6 +62,9 @@ cfg_select! {
 pub mod uart;
 pub mod write_protect;
 
+#[cfg(feature = "embassy-usb-driver")]
+pub mod usb;
+
 // Re-exports
 #[cfg(feature = "chrono")]
 pub use chrono;

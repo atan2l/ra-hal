@@ -626,6 +626,43 @@ fn generate_peripherals(metadata: &Metadata, package: String) -> anyhow::Result<
                     }
                 }
             }
+            ("USBFS", _driver) => {
+                for signal in peripheral.signals.iter() {
+                    let pins = &metadata.signals.get(signal);
+                    let pins = if pins.is_some() {
+                        pins.unwrap()
+                    } else {
+                        continue;
+                    };
+                    let pins = pins
+                        .iter()
+                        .filter(|pin| metadata.pins[pin.pin].packages.contains(&package.as_str()));
+
+                    for pin_config in pins {
+                        let pin_ident = format_ident!("{}", pin_config.pin);
+                        let pfunc = format_ident!(
+                            "{}",
+                            pin_config
+                                .pfunc
+                                .unwrap()
+                                .to_string()
+                                .remove_boundaries(&[Boundary::DigitUpper])
+                                .to_case(Case::Pascal)
+                        );
+
+                        let signal_ident = match signal.split_once("_").unwrap().1 {
+                            "DM" => format_ident!("dm_pin"),
+                            "DP" => format_ident!("dp_pin"),
+                            "VBUS" => format_ident!("vbus_pin"),
+                            _ => continue,
+                        };
+
+                        contents.extend(quote! {
+                            crate::usb::#signal_ident!(#peripheral_ident, #pin_ident, #pfunc);
+                        });
+                    }
+                }
+            }
             (_kind, _driver) => {
                 // println!(
                 //     "cargo::warning=Skipping peri={}, class={kind}, driver={driver}",
