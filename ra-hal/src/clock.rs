@@ -72,6 +72,9 @@ pub struct ClockStatus {
     /// Peripheral Clock "E" (`PCLKE`).
     #[cfg(pclke)]
     pub peripheral_e: HertzU32,
+
+    /// USB Clock (`UCLK`)
+    pub usb: Option<HertzU32>,
 }
 
 /// Indicates what clock source the system clock (`ICLK`) should derive from.
@@ -222,6 +225,7 @@ impl defmt::Format for ClockStatus {
             bus_clock,
             sosc,
             mosc,
+            usb,
         } = clock_status();
 
         defmt::write!(fmt, "SYSTEM: ");
@@ -306,6 +310,13 @@ impl defmt::Format for ClockStatus {
 
         #[cfg(pclke)]
         print_frequency(fmt, "PCLKE", peripheral_e.convert());
+
+        if let Some(usb) = usb {
+            let usb: MegahertzU32 = usb.convert();
+            defmt::write!(fmt, ", USB: {}", usb);
+        } else {
+            defmt::write!(fmt, ", USB: OFF");
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 //! RA4M1 specific clock configuration.
 
-use fugit::MegahertzU32;
+use fugit::{HertzU32, MegahertzU32};
 
 use crate::clock::{CLOCK_STATUS, ClockConfig, ClockStatus, HocoFrequency, SystemClockSource};
 use crate::pac::{
@@ -202,20 +202,24 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                 // 32 MHz
                 w.set_pckd(Pckd::Div1);
             }),
-            Hcfrq1::_48mhz => system.sckdivcr().modify(|w| {
-                // 48 MHz
-                w.set_ick(Ick::Div1);
-                // 24 MHz
-                w.set_fck(Fck::Div2);
-                // 48 MHz
-                w.set_pcka(Pcka::Div1);
-                // 24 MHz
-                w.set_pckb(Pckb::Div2);
-                // 48 MHz
-                w.set_pckc(Pckc::Div1);
-                // 48 MHz
-                w.set_pckd(Pckd::Div1);
-            }),
+            Hcfrq1::_48mhz => {
+                system.sckdivcr().modify(|w| {
+                    // 48 MHz
+                    w.set_ick(Ick::Div1);
+                    // 24 MHz
+                    w.set_fck(Fck::Div2);
+                    // 48 MHz
+                    w.set_pcka(Pcka::Div1);
+                    // 24 MHz
+                    w.set_pckb(Pckb::Div2);
+                    // 48 MHz
+                    w.set_pckc(Pckc::Div1);
+                    // 48 MHz
+                    w.set_pckd(Pckd::Div1);
+                });
+                // Also use HOCO as USB clock source.
+                system.usbckcr().write(|w| w.set_usbclksel(true));
+            }
             // Faster peripheral clocks, slower CPU clock
             Hcfrq1::_64mhz => system.sckdivcr().modify(|w| {
                 // 32 MHz
@@ -316,6 +320,12 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
             Pckd::_RESERVED_7 => unimplemented!("Invalid sckdivcr.pckd"),
         };
 
+        let usb = if hoco == MegahertzU32::from_raw(48) {
+            Some(hoco)
+        } else {
+            None
+        };
+
         CLOCK_STATUS
             .init(ClockStatus {
                 hoco,
@@ -329,6 +339,7 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                 pll: None,
                 mosc: config.mosc,
                 sosc: config.sosc,
+                usb,
             })
             .or(Err(()))
     }
