@@ -9,7 +9,6 @@ runner = "probe-rs run"
 
 [alias]
 dup = [ "tree", "-f", "{p} {f}", "-d" ]
-clip = [ "clippy", "--quiet", "--no-deps", "--workspace" ]
 haldoc = [ "doc", "--no-deps", "-p", "ra-hal" ]
 
 [env]
