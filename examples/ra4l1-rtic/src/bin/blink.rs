@@ -12,7 +12,7 @@ use assign_resources::assign_resources;
 #[cfg(feature = "defmt")]
 use defmt_rtt as _;
 use panic_probe as _;
-use ra_hal::peripherals;
+use ra_hal::{Peri, peripherals};
 use rtic_monotonics::systick::prelude::*;
 
 pub mod pac {
