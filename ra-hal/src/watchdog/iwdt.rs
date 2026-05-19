@@ -42,7 +42,7 @@ impl<'d, I: Instance> Watchdog<'d, I> {
     /// Creates a new `IWDT` driver.
     ///
     /// # Notes
-    /// `IWDT` can only be configured via [`OFS0`](module@crate::osm::ofs0) and cannot be configured or enabled at runtime.
+    /// `IWDT` can only be configured via `OFS0` and cannot be configured or enabled at runtime.
     pub fn new(peri: Peri<'d, I>, action: Action) -> Self {
         let _ = peri;
 

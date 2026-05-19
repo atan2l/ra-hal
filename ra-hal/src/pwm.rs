@@ -109,6 +109,7 @@ pub(crate) trait SealedInstance {
     fn cmpa_waker() -> &'static AtomicWaker;
 }
 
+/// A pin configured to be used as a single PWM channel.
 #[allow(private_bounds)]
 pub trait PwmChannel: SealedPwmChannel {}
 

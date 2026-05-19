@@ -256,7 +256,7 @@ impl<'d, I: Instance> Watchdog<'d, I> {
     /// - A new driver instance.
     /// # Notes
     /// - If configured to generate an NMI, by default `cortex-m-rt` provides a handler that silently halts execution.
-    /// - If [`OFS0`](module@crate::osm::ofs0) is configured to auto-start `WDT` runtime changes to configuration will be silently ignored.
+    /// - If `OFS0` is configured to auto-start `WDT` runtime changes to configuration will be silently ignored.
     #[inline]
     pub fn new(peri: Peri<'d, I>, config: Config) -> Self {
         Self::new_inner(peri, config)

@@ -37,13 +37,6 @@ cfg_select! {
     }
 }
 
-#[cfg(any(feature = "uno-r4-wifi", feature = "uno-r4-minima"))]
-macro_rules! pins {
-    ($p:ident) => {
-        ($p.GPT16_2, $p.P103, $p.P102)
-    };
-}
-
 bind_interrupts!(struct Irqs {
     IEL2 => QdecInterruptHandler<GPT16_2>;
 });

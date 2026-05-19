@@ -7,25 +7,25 @@ default:
 
 # Runs clippy for a given chip.
 [arg('chip', pattern='(ra[02468][adelmpt][1-9])')]
-clippy chip:
-    @just clippy-{{ chip }}
+clippy chip *args:
+    @just clippy-{{ chip }} {{ args }}
 
 [private]
-clippy-ra2a1:
-    cargo clippy --target thumbv8m.base-none-eabi --no-deps --package ra-hal --features _doc_ra2a1,defmt
+clippy-ra2a1 *args:
+    cargo clippy --target thumbv8m.base-none-eabi --no-deps --package ra-hal --features _doc_ra2a1,defmt {{ args }}
 
 [private]
-clippy-ra4l1:
-    cargo clippy --target thumbv8m.main-none-eabihf --no-deps --package ra-hal --features _doc_ra4l1,defmt
+clippy-ra4l1 *args:
+    cargo clippy --target thumbv8m.main-none-eabihf --no-deps --package ra-hal --features _doc_ra4l1,defmt {{ args }}
 
 [private]
-clippy-ra4m1:
-    cargo clippy --target thumbv7em-none-eabihf --features _doc_ra4m1,defmt
+clippy-ra4m1 *args:
+    cargo clippy --target thumbv7em-none-eabihf --features _doc_ra4m1,defmt {{ args }}
 
 [private]
-clippy-ra6m5:
-    cargo clippy --target thumbv8m.main-none-eabihf --no-deps --package ra-hal --features _doc_ra6m5,defmt
+clippy-ra6m5 *args:
+    cargo clippy --target thumbv8m.main-none-eabihf --no-deps --package ra-hal --features _doc_ra6m5,defmt {{ args}}
 
 [private]
-clippy-ra8m1:
-    cargo clippy --target thumbv8m.main-none-eabihf --no-deps --package ra-hal --features _doc_ra8m1,defmt
+clippy-ra8m1 *args:
+    cargo clippy --target thumbv8m.main-none-eabihf --no-deps --package ra-hal --features _doc_ra8m1,defmt {{ args }}

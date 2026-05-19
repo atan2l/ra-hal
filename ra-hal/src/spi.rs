@@ -807,7 +807,7 @@ impl<'d, I: Instance, W: Word + crate::dtc::Word, Rx: DtcInstance, Tx: DtcInstan
 
         spi.spcr().modify(|r| r.set_spe(true));
 
-        tx.await;
+        tx.await.or(Err(SpiError::Dma))?;
 
         spi.spcr2().modify(|r| r.set_spiie(true));
         poll_fn(|ctx| {
@@ -855,7 +855,9 @@ impl<'d, I: Instance, W: Word + crate::dtc::Word, Rx: DtcInstance, Tx: DtcInstan
 
         spi.spcr().modify(|r| r.set_spe(true));
 
-        join(tx, rx).await;
+        let (tx_result, rx_result) = join(tx, rx).await;
+        tx_result.or(Err(SpiError::Dma))?;
+        rx_result.or(Err(SpiError::Dma))?;
 
         spi.spcr2().modify(|r| r.set_spiie(true));
         poll_fn(|ctx| {
@@ -1011,15 +1013,17 @@ impl Default for Config {
 #[derive(Debug, PartialEq, Eq, Copy, Clone)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum SpiError {
-    Unknown,
+    Dma,
     Overrun,
+    Unknown,
 }
 
 impl core::fmt::Display for SpiError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
-            SpiError::Unknown => write!(f, "Unknown"),
+            SpiError::Dma => write!(f, "DMAC/DTC"),
             SpiError::Overrun => write!(f, "Overrun"),
+            SpiError::Unknown => write!(f, "Unknown"),
         }
     }
 }
@@ -1029,8 +1033,9 @@ impl core::error::Error for SpiError {}
 impl embedded_hal_1::spi::Error for SpiError {
     fn kind(&self) -> embedded_hal_1::spi::ErrorKind {
         match *self {
-            SpiError::Unknown => embedded_hal_1::spi::ErrorKind::Other,
+            SpiError::Dma => embedded_hal_1::spi::ErrorKind::Other,
             SpiError::Overrun => embedded_hal_1::spi::ErrorKind::Overrun,
+            SpiError::Unknown => embedded_hal_1::spi::ErrorKind::Other,
         }
     }
 }

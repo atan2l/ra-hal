@@ -264,7 +264,6 @@ impl<'d, I: Instance> I2c<'d, I, Blocking> {
     /// # Notes
     /// The `RA4M1` does not provide any pull-up resistors for use with `I2C`.
     /// The exact speeds you will see depend on the capacitive load and resistors used.
-    /// If you need to set the clocks more precisely use [`new_with_clock_config`](Self::new_with_clock_config).
     #[inline]
     pub fn new_blocking<C: SclPin<I>, D: SdaPin<I>>(
         iic: Peri<'d, I>,
