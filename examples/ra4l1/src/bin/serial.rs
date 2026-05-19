@@ -11,7 +11,7 @@ use assign_resources::assign_resources;
 use defmt_rtt as _;
 use embassy_executor::Spawner;
 use embassy_time::Timer;
-use embedded_io_async::{Read, Write};
+use embedded_io_async::Write;
 use panic_probe as _;
 use ra_hal::{
     Peri, bind_interrupts,
@@ -66,8 +66,14 @@ async fn main(_spawner: Spawner) {
         config,
     );
 
-    loop {
+    for _ in 0..100 {
         uart.blocking_write(b"All work and no play makes Jack a dull boy.\r\n");
         Timer::after_millis(333).await;
+    }
+
+    loop {
+        uart.write(b"All work and no play makes Jack a dull boy.\r\n").await.unwrap();
+        Timer::after_millis(333).await;
+        
     }
 }
