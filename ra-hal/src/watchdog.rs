@@ -1,8 +1,8 @@
 //! Watchdog drivers.
 //!
 //! The `RA4M1` has two watchdog timers available for use: Independent Watchdog Timer ([`IWDT`](iwdt)) and Watchdog Timer ([`WDT`](wdt)).
-//! `IWDT` is driven by a wholly independent clock and can only be configured at reset-time via [`OSM`](module@crate::osm).
-//! `WDT` is driven by [`PCLKB`](struct@crate::ClockConfig) and can be configured either at reset-time via `OSM` or at runtime via its registers.
+//! `IWDT` is driven by a wholly independent clock and can only be configured at reset-time via `OSM`.
+//! `WDT` is driven by [`PCLKB`](struct@crate::clock::ClockStatus) and can be configured either at reset-time via `OSM` or at runtime via its registers.
 
 pub mod iwdt;
 pub mod wdt;

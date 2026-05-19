@@ -9,20 +9,26 @@ use crate::pac::{
 };
 use crate::write_protect::ProtectedPeripheral as _;
 
+/// PLL input source.
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Debug, Clone)]
 pub enum PllInput {
+    /// Main Clock Oscillator
     Mosc,
 }
 
+/// PLL frequency divider. § 8.6.3, § 8.6
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[allow(missing_docs)]
 #[derive(Debug, Clone)]
 pub enum PllOutDiv {
     Div2,
     Div4,
 }
 
+/// PLL frequency multiplier. § 8.6.3, § 8.6
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[allow(missing_docs)]
 #[derive(Debug, Clone)]
 #[repr(u32)]
 pub enum PllOutMul {
