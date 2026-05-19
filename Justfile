@@ -29,3 +29,7 @@ clippy-ra6m5 *args:
 [private]
 clippy-ra8m1 *args:
     cargo clippy --target thumbv8m.main-none-eabihf --no-deps --package ra-hal --features _doc_ra8m1,defmt {{ args }}
+
+[private]
+publish-crate *args:
+    cargo publish --package ra-hal --features _doc_ra4m1 --target thumbv7em-none-eabihf {{ args }}
