@@ -422,7 +422,7 @@ pub(crate) trait SealedPin {
 
         trace!("P{}{:02}: → Output", port_num, pin_num);
 
-        // TODO: §19.5.7
+        // TODO: RA4M1 §19.5.7
         // When P914 and P915 are used as GPIO pins, their operation is affected by the pull-up /
         // pull-down function of the USBFS registers. Therefore, before using the GPIO function,
         // disable the pull-up and pull-down control of the USBFS registers using the SYSCFG.DMRPU,
