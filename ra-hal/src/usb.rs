@@ -1,34 +1,44 @@
-pub mod bus;
-pub mod control_pipe;
-pub mod endpoint;
+//! USB Full-Speed 2.0 peripheral.
 
-use crate::{
-    event_link::IcuInterrupt,
-    gpio::{Pin, PortFunction},
-    interrupt::typelevel::Handler as InterruptHandler,
-    interrupt::typelevel::Interrupt as InterruptType,
-    module_stop::ModuleStop,
-    pac,
-    peripherals::USBFS,
-    usb::bus::BusEvent,
-};
 use core::{
     marker::PhantomData,
     sync::atomic::{AtomicBool, AtomicU8, AtomicU32, Ordering},
 };
-use embassy_hal_internal::interrupt::InterruptExt;
-use embassy_hal_internal::{Peri, PeripheralType};
+
+use embassy_hal_internal::{Peri, PeripheralType, interrupt::InterruptExt};
 use embassy_sync::waitqueue::AtomicWaker;
 use embassy_usb_driver::{
-    Direction, Driver as DriverDriver, EndpointAddress, EndpointAllocError, EndpointInfo,
-    EndpointType,
-};
-use ra_metapac::usbfs::vals::Pipesel;
-use ra_metapac::{
-    usbfs::Usbfs,
-    usbfs::vals::{Dvsq, Type},
+    Direction, Driver, EndpointAddress, EndpointAllocError, EndpointInfo, EndpointType,
 };
 
+use crate::{
+    event_link::{IcuInterrupt, InterruptEvent},
+    gpio::{Pin, PortFunction},
+    interrupt::typelevel::{Binding, Handler as InterruptHandler, Interrupt as InterruptType},
+    module_stop::ModuleStop,
+    pac::{
+        self,
+        usbfs::vals::{Dvsq, Pipesel, Type},
+    },
+    peripherals::USBFS,
+    usb::{
+        bus::{Bus, BusEvent},
+        control_pipe::ControlPipe,
+        endpoint::{EndpointIn, EndpointOut},
+    },
+};
+
+pub mod bus;
+pub mod control_pipe;
+pub mod endpoint;
+
+#[derive(Clone, Copy)]
+struct PipeConfig {
+    ep_addr: EndpointAddress,
+    ep_type: EndpointType,
+    max_packet: u16,
+    interval_ms: u8,
+}
 struct State {
     /// The bus waker
     bus_waker: AtomicWaker,
@@ -49,6 +59,19 @@ struct State {
     pipe_enabled: AtomicU32,
 }
 
+/// Interrupt handler for `USBFS` interrupts.
+pub struct UsbInterruptHandler<I: Instance> {
+    _phantom: PhantomData<I>,
+}
+
+/// `embassy-usb-driver` implementation for the USBFS peripheral.
+pub struct Usbfs<'a, I: Instance> {
+    _phantom: PhantomData<&'a I>,
+    pipes: [Option<PipeConfig>; 9],
+    next_ep_in: u8,
+    next_ep_out: u8,
+}
+
 impl State {
     const fn new() -> Self {
         Self {
@@ -66,6 +89,7 @@ impl State {
 }
 
 static STATE: State = State::new();
+
 /// Per-pipe endpoint address table populated during `start()`.
 /// Index 0 = pipe 1, index 8 = pipe 9. 0xFF means unallocated.
 static EP_ADDR: [AtomicU8; 9] = [const { AtomicU8::new(0xFF) }; 9];
@@ -79,7 +103,7 @@ pub(crate) trait SealedInstance {
 }
 
 pub(crate) trait SealedDpPin<I: SealedInstance>: Pin + PeripheralType {
-    const PERIPHERAL_FUNC: PortFunction;
+    // const PERIPHERAL_FUNC: PortFunction;
 
     #[inline(always)]
     fn set_pfunc(&self) {
@@ -99,19 +123,21 @@ pub(crate) trait SealedDpPin<I: SealedInstance>: Pin + PeripheralType {
 #[allow(private_bounds)]
 pub trait DpPin<I: Instance>: SealedDpPin<I> {}
 
+#[allow(unused)]
 macro_rules! dp_pin {
     ($instance:ident, $pin:ident, $pfunc:ident) => {
         impl crate::usb::DpPin<crate::peripherals::$instance> for crate::peripherals::$pin {}
         impl crate::usb::SealedDpPin<crate::peripherals::$instance> for crate::peripherals::$pin {
-            const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
+            // const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
         }
     };
 }
 
+#[cfg(not(ra6m5))]
 pub(crate) use dp_pin;
 
 pub(crate) trait SealedDmPin<I: SealedInstance>: Pin + PeripheralType {
-    const PERIPHERAL_FUNC: PortFunction;
+    // const PERIPHERAL_FUNC: PortFunction;
 
     #[inline(always)]
     fn set_pfunc(&self) {
@@ -131,15 +157,17 @@ pub(crate) trait SealedDmPin<I: SealedInstance>: Pin + PeripheralType {
 #[allow(private_bounds)]
 pub trait DmPin<I: Instance>: SealedDmPin<I> {}
 
+#[allow(unused)]
 macro_rules! dm_pin {
     ($instance:ident, $pin:ident, $pfunc:ident) => {
         impl crate::usb::DmPin<crate::peripherals::$instance> for crate::peripherals::$pin {}
         impl crate::usb::SealedDmPin<crate::peripherals::$instance> for crate::peripherals::$pin {
-            const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
+            // const PERIPHERAL_FUNC: crate::gpio::PortFunction = crate::gpio::PortFunction::$pfunc;
         }
     };
 }
 
+#[cfg(not(ra6m5))]
 pub(crate) use dm_pin;
 
 pub(crate) trait SealedVbusPin<I: SealedInstance>: Pin + PeripheralType {
@@ -164,25 +192,15 @@ macro_rules! vbus_pin {
     };
 }
 
-use crate::event_link::InterruptEvent;
-use crate::interrupt::typelevel::Binding;
-use crate::usb::bus::Bus;
-use crate::usb::control_pipe::ControlPipe;
-use crate::usb::endpoint::{EndpointIn, EndpointOut};
 pub(crate) use vbus_pin;
 
 impl SealedInstance for USBFS {
-    fn regs() -> Usbfs {
-        let instance_ptr = pac::USBFS.as_ptr();
-        unsafe { Usbfs::from_ptr(instance_ptr) }
+    fn regs() -> pac::usbfs::Usbfs {
+        pac::USBFS
     }
 }
 
 impl Instance for USBFS {}
-
-pub struct UsbInterruptHandler<I: Instance> {
-    _phantom: PhantomData<I>,
-}
 
 impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for UsbInterruptHandler<I> {
     unsafe fn on_interrupt() {
@@ -191,7 +209,7 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for UsbInterruptHand
 
         let sts = r.intsts0().read();
         trace!(
-            "USB IRQ: vbint={} dvst={} resm={} ctrt={} valid={} brdy={} bemp={}",
+            "USBFS IRQ: vbint={} dvst={} resm={} ctrt={} valid={} brdy={} bemp={}",
             sts.vbint(),
             sts.dvst(),
             sts.resm(),
@@ -205,12 +223,12 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for UsbInterruptHand
         if sts.vbint() {
             r.intsts0().modify(|r| r.set_vbint(false));
             if sts.vbsts() {
-                debug!("USB IRQ: VBUS detected");
+                debug!("USBFS IRQ: VBUS detected");
                 STATE
                     .pending_bus
                     .fetch_or(BusEvent::PowerDetected as _, Ordering::Release);
             } else {
-                debug!("USB IRQ: VBUS removed");
+                debug!("USBFS IRQ: VBUS removed");
                 STATE
                     .pending_bus
                     .fetch_or(BusEvent::PowerRemoved as _, Ordering::Release);
@@ -223,21 +241,21 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for UsbInterruptHand
             r.intsts0().modify(|r| r.set_dvst(false));
             match sts.dvsq() {
                 Dvsq::Default => {
-                    debug!("USB IRQ: bus reset (DVSQ=Default)");
+                    debug!("USBFS IRQ: bus reset (DVSQ=Default)");
                     STATE
                         .pending_bus
                         .fetch_or(BusEvent::Reset as _, Ordering::Release);
                     STATE.bus_waker.wake();
                 }
                 Dvsq::Suspend4 | Dvsq::Suspend5 | Dvsq::Suspend6 | Dvsq::Suspend7 => {
-                    debug!("USB IRQ: suspend (DVSQ={:04b})", sts.dvsq().to_bits());
+                    debug!("USBFS IRQ: suspend (DVSQ={:04b})", sts.dvsq().to_bits());
                     STATE
                         .pending_bus
                         .fetch_or(BusEvent::Suspend as _, Ordering::Release);
                     STATE.bus_waker.wake();
                 }
                 other => {
-                    trace!("USB IRQ: DVST dvsq={:04b}", other.to_bits());
+                    trace!("USBFS IRQ: DVST dvsq={:04b}", other.to_bits());
                 }
             }
         }
@@ -245,7 +263,7 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for UsbInterruptHand
         // Resume
         if sts.resm() {
             r.intsts0().modify(|r| r.set_resm(false));
-            debug!("USB IRQ: resume");
+            debug!("USBFS IRQ: resume");
             STATE
                 .pending_bus
                 .fetch_or(BusEvent::Resume as _, Ordering::Release);
@@ -268,7 +286,7 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for UsbInterruptHand
                 let hi = idx.windex() as u32 | ((len.wlentuh() as u32) << 16);
 
                 debug!(
-                    "USB IRQ: SETUP bmrt={:08b} req={:#04x} val={:#06x} idx={:#06x} len={}",
+                    "USBFS IRQ: SETUP bmrt={:08b} req={:#04x} val={:#06x} idx={:#06x} len={}",
                     req.bmrequesttype(),
                     req.brequest(),
                     val.wvalue(),
@@ -283,7 +301,7 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for UsbInterruptHand
                 r.intsts0().modify(|r| r.set_valid(false));
                 STATE.ep_wakers[0].wake();
             } else {
-                trace!("USB IRQ: CTRT without VALID (status stage)");
+                trace!("USBFS IRQ: CTRT without VALID (status stage)");
             }
         }
 
@@ -298,7 +316,7 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for UsbInterruptHand
                     mask |= 1 << i;
                 }
             }
-            trace!("USB IRQ: BRDY pipes={:010b}", mask);
+            trace!("USBFS IRQ: BRDY pipes={:010b}", mask);
             STATE.pipe_brdy.fetch_or(mask, Ordering::Release);
             for i in 0..10usize {
                 if mask & (1 << i) != 0 {
@@ -317,7 +335,7 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for UsbInterruptHand
                     mask |= 1 << i;
                 }
             }
-            trace!("USB IRQ: BEMP pipes={:010b}", mask);
+            trace!("USBFS IRQ: BEMP pipes={:010b}", mask);
             STATE.pipe_bemp.fetch_or(mask, Ordering::Release);
             for i in 0..10usize {
                 if mask & (1 << i) != 0 {
@@ -328,31 +346,31 @@ impl<I: Instance, Int: InterruptType> InterruptHandler<Int> for UsbInterruptHand
     }
 }
 
-/// `embassy-usb-driver` implementation for the USBFS peripheral.
-///
-/// Using USBFS requires a 48MHz clock to be configured for the peripheral to work.
-pub struct Driver<'a, I: Instance> {
-    _phantom: PhantomData<&'a I>,
-    pipes: [Option<PipeConfig>; 9],
-    next_ep_in: u8,
-    next_ep_out: u8,
-}
-
-impl<'a, I: Instance> Driver<'a, I> {
-    pub fn new<Int: InterruptType, P: DpPin<I>, M: DmPin<I>, V: VbusPin<I>>(
+// TODO: Come up with a better way to gate the dedicated dp/dm pins.
+impl<'a, I: Instance> Usbfs<'a, I> {
+    /// Creates a new USB driver.
+    pub fn new<
+        Int: InterruptType,
+        #[cfg(not(ra6m5))] P: DpPin<I>,
+        #[cfg(not(ra6m5))] M: DmPin<I>,
+        V: VbusPin<I>,
+    >(
         _usb: Peri<'a, I>,
-        dp: Peri<'a, P>,
-        dm: Peri<'a, M>,
+        #[cfg(not(ra6m5))] dp: Peri<'a, P>,
+        #[cfg(not(ra6m5))] dm: Peri<'a, M>,
         vbus: Peri<'a, V>,
         irqs: impl Binding<Int, UsbInterruptHandler<I>> + 'a,
     ) -> Self {
         let _ = irqs;
 
         // Manual section 27.4.1: Releasing the module-stop state enables access to the registers.
-        <I>::start_module();
+        I::start_module();
 
-        dp.set_pfunc();
-        dm.set_pfunc();
+        #[cfg(not(ra6m5))]
+        {
+            dp.set_pfunc();
+            dm.set_pfunc();
+        }
         vbus.set_pfunc();
 
         // Safety: interrupt handler is bound above.
@@ -361,7 +379,7 @@ impl<'a, I: Instance> Driver<'a, I> {
             Int::IRQ.icu_enable(InterruptEvent::UsbfsInt);
         }
 
-        info!("USB: driver created, interrupt enabled");
+        info!("USBFS: driver created, interrupt enabled");
 
         Self {
             _phantom: PhantomData,
@@ -372,7 +390,7 @@ impl<'a, I: Instance> Driver<'a, I> {
     }
 }
 
-impl<'a, I: Instance> DriverDriver<'a> for Driver<'a, I> {
+impl<'a, I: Instance> Driver<'a> for Usbfs<'a, I> {
     type EndpointOut = EndpointOut<'a, I>;
     type EndpointIn = EndpointIn<'a, I>;
     type ControlPipe = ControlPipe<'a, I>;
@@ -461,7 +479,7 @@ impl<'a, I: Instance> DriverDriver<'a> for Driver<'a, I> {
     fn start(self, control_max_packet_size: u16) -> (Self::Bus, Self::ControlPipe) {
         let r = I::regs();
 
-        info!("USB: start (ctrl max_packet={})", control_max_packet_size);
+        info!("USBFS: start (ctrl max_packet={})", control_max_packet_size);
         /*
          * Section 27.3.1.1: Enable the USB clock gate first (SCKE=1). When SCKE=0, only SYSCFG
          * may be written (Section 27.2.1, `SCKE` bit).
@@ -469,13 +487,13 @@ impl<'a, I: Instance> DriverDriver<'a> for Driver<'a, I> {
         r.syscfg().modify(|r| r.set_scke(true));
 
         // Brief spin to let the clock stabilise before touching other USB regs.
-        for _ in 0..200u32 {
+        for _ in 0..200 {
             cortex_m::asm::nop();
         }
 
         // Section 27.2.1 Note 2: Read and confirm SCKE=1
         if !r.syscfg().read().scke() {
-            panic!("USB: SCKE=0 after SCKE=1 write");
+            panic!("USBFS: SCKE=0 after SCKE=1 write");
         }
 
         /*
@@ -486,27 +504,26 @@ impl<'a, I: Instance> DriverDriver<'a> for Driver<'a, I> {
          *
          * Note: This depends on the hardware design (see Figure 27.2). `VCC_USB` and `VCC_USB_LDO`
          * can be connected together to `VCC` when `VCC` is between 3.0V and 3.6V.
-         *
-         * FIXME: USBMC is at USBFS offset 0xCC and not exposed by the PAC, so it's accessed
-         * directly. VDCEN=1 (b7), b1 (reserved) is read as 1 and must be written as 1.
          */
-        unsafe {
-            let usbmc = (r.as_ptr() as usize + 0xCC) as *mut u16;
-            usbmc.write_volatile(0x0082u16);
+        #[cfg(usbfs_4m1)]
+        {
+            r.usbmc().modify(|r| {
+                r.set_vdcen(true);
+            });
+            debug!("USBFS: USBMC written (VDCEN=1)");
         }
-        info!("USB: USBMC written (VDCEN=1)");
 
         // Errata note: the PAC exposes `USBFS.UCKSEL`. This register doesn't appear in the manual.
 
         // Allow the LDO output to stabilise before enabling the transceiver.
-        for _ in 0..1000u32 {
+        for _ in 0..1000 {
             cortex_m::asm::nop();
         }
 
         r.syscfg().modify(|r| r.set_usbe(true));
         // Device mode, not host
         r.syscfg().modify(|r| r.set_dcfm(false));
-        info!("USB: SYSCFG after init={:?}", r.syscfg().read());
+        debug!("USBFS: SYSCFG after init={:?}", r.syscfg().read());
 
         // Default control pipe max packet size
         r.dcpmaxp()
@@ -518,7 +535,7 @@ impl<'a, I: Instance> DriverDriver<'a> for Driver<'a, I> {
             let pipe = (idx + 1) as u8;
 
             info!(
-                "USB: pipe {} epnum={} dir={} type={:02b} mxps={}",
+                "USBFS: pipe {} epnum={} dir={} type={:02b} mxps={}",
                 pipe,
                 cfg.ep_addr.index(),
                 cfg.ep_addr.is_in(),
@@ -565,12 +582,12 @@ impl<'a, I: Instance> DriverDriver<'a> for Driver<'a, I> {
 
         // Enable global interrupt sources
         r.intenb0().modify(|r| {
-            r.set_vbse(true);
-            r.set_dvse(true);
-            r.set_rsme(true);
-            r.set_ctre(true);
             r.set_brdye(true);
             r.set_bempe(true);
+            r.set_ctre(true);
+            r.set_dvse(true);
+            r.set_rsme(true);
+            r.set_vbse(true);
         });
 
         // Enable BEMP for pipe 0 (DCP) so the control pipe write path works
@@ -597,9 +614,9 @@ impl<'a, I: Instance> DriverDriver<'a> for Driver<'a, I> {
             // Use majority vote; if two of the three agree, we have a stable reading.
             (c || a) && b || (a && c)
         };
-        info!("USB: VBSTS={}", vbsts);
+        debug!("USBFS: VBSTS={}", vbsts);
         if vbsts {
-            info!("USB: VBUS already present, synthesizing PowerDetected");
+            info!("USBFS: VBUS already present, synthesizing PowerDetected");
             STATE
                 .pending_bus
                 .fetch_or(BusEvent::PowerDetected as _, Ordering::Release);
@@ -616,14 +633,6 @@ impl<'a, I: Instance> DriverDriver<'a> for Driver<'a, I> {
             },
         )
     }
-}
-
-#[derive(Clone, Copy)]
-struct PipeConfig {
-    ep_addr: EndpointAddress,
-    ep_type: EndpointType,
-    max_packet: u16,
-    interval_ms: u8,
 }
 
 /// Return the pipe number (1-9) suitable for the requested transfer type, or
@@ -647,6 +656,7 @@ fn find_free_pipe(pipes: &[Option<PipeConfig>; 9], ep_type: EndpointType) -> Opt
     None
 }
 
+// Because of orphan rules
 fn pipe_type(ep_type: EndpointType) -> Type {
     match ep_type {
         EndpointType::Bulk => Type::_01,

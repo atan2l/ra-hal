@@ -515,7 +515,7 @@ pub(crate) trait SealedPin {
         #[cfg(feature = "strict-assert")]
         {
             let status = pfs_reg.read();
-            assert_eq!(status.pmr(), PortMode::Peripheral, "PSEL was ignored");
+            assert_eq!(status.pmr(), PortMode::Peripheral, "PMR was ignored");
             assert_eq!(status.psel(), port_func.into(), "PSEL was ignored");
         }
     }

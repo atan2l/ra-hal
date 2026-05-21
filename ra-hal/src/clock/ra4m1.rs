@@ -1,6 +1,6 @@
 //! RA4M1 specific clock configuration.
 
-use fugit::{HertzU32, MegahertzU32};
+use fugit::MegahertzU32;
 
 use crate::clock::{CLOCK_STATUS, ClockConfig, ClockStatus, HocoFrequency, SystemClockSource};
 use crate::pac::{
@@ -8,6 +8,13 @@ use crate::pac::{
     system::vals::{Cksel, Fck, Hcfrq1, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd, Sodrv},
 };
 use crate::write_protect::ProtectedPeripheral as _;
+
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Debug, Clone)]
+pub enum UsbClockSource {
+    Pll,
+    Hoco,
+}
 
 /// PLL input source.
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
@@ -67,6 +74,7 @@ impl Default for ClockConfig {
             mosc: None,
             sosc: false,
             pll: None,
+            usb: Some(UsbClockSource::Hoco),
         }
     }
 }
@@ -208,24 +216,20 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                 // 32 MHz
                 w.set_pckd(Pckd::Div1);
             }),
-            Hcfrq1::_48mhz => {
-                system.sckdivcr().modify(|w| {
-                    // 48 MHz
-                    w.set_ick(Ick::Div1);
-                    // 24 MHz
-                    w.set_fck(Fck::Div2);
-                    // 48 MHz
-                    w.set_pcka(Pcka::Div1);
-                    // 24 MHz
-                    w.set_pckb(Pckb::Div2);
-                    // 48 MHz
-                    w.set_pckc(Pckc::Div1);
-                    // 48 MHz
-                    w.set_pckd(Pckd::Div1);
-                });
-                // Also use HOCO as USB clock source.
-                system.usbckcr().write(|w| w.set_usbclksel(true));
-            }
+            Hcfrq1::_48mhz => system.sckdivcr().modify(|w| {
+                // 48 MHz
+                w.set_ick(Ick::Div1);
+                // 24 MHz
+                w.set_fck(Fck::Div2);
+                // 48 MHz
+                w.set_pcka(Pcka::Div1);
+                // 24 MHz
+                w.set_pckb(Pckb::Div2);
+                // 48 MHz
+                w.set_pckc(Pckc::Div1);
+                // 48 MHz
+                w.set_pckd(Pckd::Div1);
+            }),
             // Faster peripheral clocks, slower CPU clock
             Hcfrq1::_64mhz => system.sckdivcr().modify(|w| {
                 // 32 MHz
@@ -242,6 +246,11 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                 w.set_pckd(Pckd::Div1);
             }),
             _ => unimplemented!(),
+        }
+
+        if let Some(UsbClockSource::Hoco) = config.usb {
+            // Also use HOCO as USB clock source.
+            system.usbckcr().write(|w| w.set_usbclksel(true));
         }
     });
 
@@ -326,10 +335,13 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
             Pckd::_RESERVED_7 => unimplemented!("Invalid sckdivcr.pckd"),
         };
 
-        let usb = if hoco == MegahertzU32::from_raw(48) {
-            Some(hoco)
-        } else {
-            None
+        // TODO: Calculate PLL status
+        let pll = None;
+
+        let usb = match config.usb {
+            Some(UsbClockSource::Hoco) => Some(hoco),
+            Some(UsbClockSource::Pll) => pll,
+            None => None,
         };
 
         CLOCK_STATUS
@@ -342,7 +354,7 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                 peripheral_c,
                 peripheral_d,
                 master: hoco,
-                pll: None,
+                pll,
                 mosc: config.mosc,
                 sosc: config.sosc,
                 usb,

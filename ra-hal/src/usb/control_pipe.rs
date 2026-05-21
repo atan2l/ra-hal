@@ -1,10 +1,15 @@
-use crate::usb::{Instance, STATE};
-use core::marker::PhantomData;
-use core::sync::atomic::Ordering;
-use core::task::Poll;
-use embassy_usb_driver::{ControlPipe as DriverControlPipe, EndpointError};
-use ra_metapac::usbfs::vals::{CfifoselCurpipe, DcpctrPid};
+//! USB Control Pipe, for operations that work on the control endpoint (EP0).
 
+use core::{marker::PhantomData, sync::atomic::Ordering, task::Poll};
+
+use embassy_usb_driver::{ControlPipe as DriverControlPipe, EndpointError};
+
+use crate::{
+    pac::usbfs::vals::{CfifoselCurpipe, DcpctrPid},
+    usb::{Instance, STATE},
+};
+
+/// USB control endpoint IN+OUT.
 pub struct ControlPipe<'a, I: Instance> {
     pub(crate) _phantom: PhantomData<&'a I>,
     pub(crate) max_packet_size: u16,
@@ -18,6 +23,7 @@ impl<'a, I: Instance> DriverControlPipe for ControlPipe<'a, I> {
     async fn setup(&mut self) -> [u8; 8] {
         let pkt = core::future::poll_fn(|cx| {
             STATE.ep_wakers[0].register(cx.waker());
+
             if STATE.setup_ready.load(Ordering::Acquire) {
                 STATE.setup_ready.store(false, Ordering::Release);
                 let lo = STATE.setup_lo.load(Ordering::Acquire);
@@ -49,8 +55,8 @@ impl<'a, I: Instance> DriverControlPipe for ControlPipe<'a, I> {
     async fn data_out(
         &mut self,
         buf: &mut [u8],
-        first: bool,
-        last: bool,
+        _first: bool,
+        _last: bool,
     ) -> Result<usize, EndpointError> {
         trace!("USB: ctrl data_out waiting (buf={})", buf.len());
         let r = I::regs();
@@ -104,7 +110,12 @@ impl<'a, I: Instance> DriverControlPipe for ControlPipe<'a, I> {
         Ok(read_len)
     }
 
-    async fn data_in(&mut self, data: &[u8], first: bool, last: bool) -> Result<(), EndpointError> {
+    async fn data_in(
+        &mut self,
+        data: &[u8],
+        _first: bool,
+        last: bool,
+    ) -> Result<(), EndpointError> {
         trace!("USB: ctrl data_in {} bytes, last={}", data.len(), last);
         let r = I::regs();
 

@@ -10,7 +10,7 @@ use crate::{
         self,
         system::vals::{
             Cksel, Fck, Hcfrq0, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd, Plidiv, Pllmul, Plsrcsel,
-            Sodrv,
+            Sodrv, Usbcksel,
         },
     },
     write_protect::ProtectedPeripheral as _,
@@ -29,6 +29,13 @@ const PLL_OUTPUT_RANGE: RangeInclusive<HertzU32> = RangeInclusive::new(
 );
 
 const OUTPUT_FACTOR: u32 = 10;
+
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Debug, Clone)]
+pub enum UsbClockSource {
+    Pll,
+    Hoco,
+}
 
 /// Input source for PLL or PLL2.
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
@@ -96,6 +103,7 @@ impl Default for ClockConfig {
                 div: PllInDiv::Div1,
                 mul: PllOutMul::Mul6_0,
             }),
+            usb: Some(UsbClockSource::Pll),
         }
     }
 }
@@ -281,6 +289,19 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
             _ => unreachable!(),
         }
         system.sckscr().write(|w| w.set_cksel(Cksel::Hoco));
+
+        match config.usb {
+            Some(UsbClockSource::Pll) => {
+                system.usbckcr().modify(|r| r.set_usbcksreq(true));
+                while !system.usbckcr().read().usbcksrdy() {}
+                system.usbckcr().modify(|r| r.set_usbcksel(Usbcksel::_101));
+                system.usbckcr().modify(|r| r.set_usbcksreq(false));
+                info!("Waiting for clock to switch");
+                while system.usbckcr().read().usbcksrdy() {}
+            }
+            Some(UsbClockSource::Hoco) => todo!(),
+            None => {}
+        }
     });
 
     {
@@ -425,6 +446,12 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
             false => None,
         };
 
+        let usb = match config.usb {
+            Some(UsbClockSource::Hoco) => Some(hoco),
+            Some(UsbClockSource::Pll) => pll,
+            None => None,
+        };
+
         CLOCK_STATUS
             .init(ClockStatus {
                 master,
@@ -438,6 +465,7 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                 pll,
                 sosc: config.sosc,
                 mosc: config.mosc,
+                usb,
             })
             .or(Err(()))
     }

@@ -43,10 +43,12 @@ embedded-hal-async = { version = "1.0" }
 embedded-io = { version = "0.6.1" }
 embedded-io-async = { version = "0.6.1" }
 embedded-serial = { version = "0.5.0" }
-micromath = { version = "2.1" }
+heapless = { version = "0.9.2" }
 libm = { version = "0.2.16" }
+micromath = { version = "2.1" }
 panic-probe = { version = "1.0.0" }
 ra-hal = { path = "../ra-hal" }
+static_cell = { version = "2.1.1" }
 
 [profile.release]
 opt-level = "z"

@@ -1,15 +1,21 @@
-use crate::usb::{EP_ADDR, Instance as UsbInstance, STATE};
+//! USB Bus, for operations that work at the bus level.
+
 use core::{
     marker::PhantomData,
     ops::{BitAnd, Not},
     sync::atomic::Ordering,
     task::Poll,
 };
+
 use embassy_time::Timer;
 use embassy_usb_driver::{Bus as DriverBus, EndpointAddress, Event, Unsupported};
-use ra_metapac::usbfs::vals::{DcpctrPid, PipectrPid};
 
-// Bus event flags
+use crate::{
+    pac::usbfs::vals::{DcpctrPid, PipectrPid},
+    usb::{EP_ADDR, Instance as UsbInstance, STATE},
+};
+
+/// Bus event flags.
 pub(crate) enum BusEvent {
     PowerDetected = 1 << 0,
     PowerRemoved = 1 << 1,
@@ -18,6 +24,7 @@ pub(crate) enum BusEvent {
     Resume = 1 << 4,
 }
 
+/// USB bus.
 pub struct Bus<'a, I: UsbInstance> {
     pub(crate) _phantom: PhantomData<&'a I>,
 }
@@ -40,9 +47,15 @@ impl Not for BusEvent {
 
 impl<'a, I: UsbInstance> DriverBus for Bus<'a, I> {
     async fn enable(&mut self) {
-        let r = I::regs();
         info!("USB: bus enable D+ pullup");
-        r.syscfg().modify(|r| r.set_dprpu(true));
+
+        let r = I::regs();
+
+        r.syscfg().modify(|r| {
+            r.set_usbe(true);
+            r.set_dprpu(true);
+        });
+
         // Per the manual `LNST[1:0]` bits must be read after connection processing SYSCFG.DPRPU = 1
         let lnst = r.syssts0().read().lnst();
         let syscfg = r.syscfg().read();
@@ -50,10 +63,12 @@ impl<'a, I: UsbInstance> DriverBus for Bus<'a, I> {
     }
 
     async fn disable(&mut self) {
-        let r = I::regs();
         info!("USB: disable");
+
+        let r = I::regs();
         r.syscfg().modify(|r| r.set_dprpu(false));
         r.syscfg().modify(|r| r.set_usbe(false));
+
         // Call I::stop_module()? Maybe?
     }
 
@@ -202,19 +217,23 @@ impl<'a, I: UsbInstance> DriverBus for Bus<'a, I> {
             let pid = r.pipectr(pipectr_idx).read().pid();
             return matches!(pid, PipectrPid::Stall2 | PipectrPid::Stall3);
         }
+
         false
     }
 
     #[cfg(feature = "time-driver")]
     async fn remote_wakeup(&mut self) -> Result<(), Unsupported> {
         let r = I::regs();
+
         r.dvstctr0().modify(|r| {
             r.set_rwupe(true);
             r.set_wkup(true);
         });
+
         // Hold WKUP for >= 1 ms as per USB spec
         Timer::after_millis(2).await;
         r.dvstctr0().modify(|r| r.set_wkup(false));
+
         Ok(())
     }
 

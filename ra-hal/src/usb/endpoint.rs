@@ -1,13 +1,26 @@
-use crate::usb::{Instance as UsbInstance, STATE};
+//! USB Endpoint, for operations that work with a single endpoint.
+
 use core::{marker::PhantomData, sync::atomic::Ordering, task::Poll};
+
 use embassy_usb_driver::{
     Endpoint as DriverEndpoint, EndpointError, EndpointIn as DriverEndpointIn, EndpointInfo,
     EndpointOut as DriverEndpointOut,
 };
-use ra_metapac::usbfs::vals::{CfifoselCurpipe, PipectrPid};
+
+use crate::{
+    pac::usbfs::vals::{CfifoselCurpipe, PipectrPid},
+    usb::{Instance as UsbInstance, STATE},
+};
 
 /// A USB endpoint for IN transfers that implements `embassy_usb_driver::EndpointIn`.
 pub struct EndpointIn<'a, I: UsbInstance> {
+    pub(crate) _phantom: PhantomData<&'a I>,
+    pub(crate) info: EndpointInfo,
+    pub(crate) pipe: u8,
+}
+
+/// A USB endpoint for OUT transfers that implements `embassy_usb_driver::EndpointOut`.
+pub struct EndpointOut<'a, I: UsbInstance> {
     pub(crate) _phantom: PhantomData<&'a I>,
     pub(crate) info: EndpointInfo,
     pub(crate) pipe: u8,
@@ -92,13 +105,6 @@ impl<'a, I: UsbInstance> DriverEndpointIn for EndpointIn<'a, I> {
     }
 }
 
-/// A USB endpoint for OUT transfers that implements `embassy_usb_driver::EndpointOut`.
-pub struct EndpointOut<'a, I: UsbInstance> {
-    pub(crate) _phantom: PhantomData<&'a I>,
-    pub(crate) info: EndpointInfo,
-    pub(crate) pipe: u8,
-}
-
 impl<'a, I: UsbInstance> DriverEndpoint for EndpointOut<'a, I> {
     fn info(&self) -> &EndpointInfo {
         &self.info
@@ -176,6 +182,7 @@ impl<'a, I: UsbInstance> DriverEndpointOut for EndpointOut<'a, I> {
             self.info.addr.index(),
             data_len
         );
+
         Ok(data_len)
     }
 }

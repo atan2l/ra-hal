@@ -60,7 +60,7 @@ static USB_SN: LazyLock<String<35>> = LazyLock::new(|| {
 async fn main(spawner: Spawner) {
     let p = ra_hal::init(ClockConfig::default());
 
-    let usb_driver = Usbfs::new(p.USBFS, p.P914, p.P915, p.P407, Irqs);
+    let usb_driver = Usbfs::new(p.USBFS, p.P814, p.P815, p.P407, Irqs);
     let mut usb_config = Config::new(0xDEAD, 0xC0DE);
     usb_config.product = Some(USB_PRODUCT.get().as_str());
     usb_config.serial_number = Some(USB_SN.get().as_str());
@@ -90,7 +90,7 @@ async fn echo_task(mut class: CdcAcmClass<'static, Usbfs<'static, USBFS>>) {
         info!("CDC: connected");
         while let Ok(n) = class.read_packet(&mut buf).await {
             let data = &buf[..n];
-            info!("CDC: rx {:x}", data);
+            info!("CDC: rx {:02x}", data);
             if class.write_packet(data).await.is_err() {
                 break;
             }

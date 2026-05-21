@@ -626,12 +626,11 @@ fn generate_peripherals(metadata: &Metadata, package: String) -> anyhow::Result<
                     }
                 }
             }
+            #[cfg(feature = "usb-driver")]
             ("USBFS", _driver) => {
                 for signal in peripheral.signals.iter() {
                     let pins = &metadata.signals.get(signal);
-                    let pins = if pins.is_some() {
-                        pins.unwrap()
-                    } else {
+                    let Some(pins) = pins else {
                         continue;
                     };
                     let pins = pins
@@ -644,7 +643,7 @@ fn generate_peripherals(metadata: &Metadata, package: String) -> anyhow::Result<
                             "{}",
                             pin_config
                                 .pfunc
-                                .unwrap()
+                                .unwrap_or_else(|| "HiZ")
                                 .to_string()
                                 .remove_boundaries(&[Boundary::DigitUpper])
                                 .to_case(Case::Pascal)
@@ -663,6 +662,7 @@ fn generate_peripherals(metadata: &Metadata, package: String) -> anyhow::Result<
                     }
                 }
             }
+
             (_kind, _driver) => {
                 // println!(
                 //     "cargo::warning=Skipping peri={}, class={kind}, driver={driver}",
@@ -955,6 +955,36 @@ fn inner_main() -> anyhow::Result<()> {
 
         let out_dir = &PathBuf::from(env::var_os("OUT_DIR").unwrap());
         fs::write(out_dir.join("constants.rs"), tokens)?;
+    }
+
+    {
+        let mut contents = quote! {};
+
+        let chip_feature = features
+            .iter()
+            .filter_map(|feature| {
+                if RE_CHIP_MATCH.is_match(feature) {
+                    Some(feature.to_owned())
+                } else {
+                    None
+                }
+            })
+            .get_one("MCU model")?
+            .to_lowercase();
+
+        let family_feature = &chip_feature[0..3];
+
+        contents.extend(quote! {
+            /// MCU group e.g. RA4M1 that this firmware was configured/built for.
+            pub const CONFIGURED_MCU : &'static str = #chip_feature;
+
+            /// MCU family e.g. RA4 that this firmware was configured/built for.
+            pub const CONFIGURED_FAMILY : &'static str = #family_feature;
+        });
+
+        let contents = pretty_print(&contents);
+        let out_dir = &PathBuf::from(env::var_os("OUT_DIR").unwrap());
+        fs::write(out_dir.join("misc.rs"), contents)?;
     }
 
     generate_hoco_rs(&metadata)?;

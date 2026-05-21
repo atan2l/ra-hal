@@ -1,7 +1,7 @@
 use core::ops::RangeInclusive;
 
 use cortex_m::asm;
-use fugit::{HertzU32, MegahertzU32, RateExtU32 as _};
+use fugit::{HertzU32, HertzU64, MegahertzU32, RateExtU32 as _};
 use ra_metapac::{
     fcache::vals::Flwt,
     system::{
@@ -16,49 +16,69 @@ use crate::{
         self,
         system::vals::{
             Bck, Fck, Hcstp, Ick, Pcka, Pckb, Pckc, Pckd, Pcke, Plidiv, Pllmul, Pllmulnf, Plodivp,
-            Plodivq, Plodivr, Plsrcsel, SckscrCksel, Sodrv,
+            Plodivq, Plodivr, Plsrcsel, SckscrCksel, Sodrv, Usbckdiv, Usbcksel,
         },
     },
     write_protect::ProtectedPeripheral as _,
 };
 
-/// Input clock range
-const PLL_RAW_INPUT_RANGE: RangeInclusive<HertzU32> = RangeInclusive::new(
-    MegahertzU32::from_raw(8).convert(),
-    MegahertzU32::from_raw(48).convert(),
-);
+struct PllLimits {
+    /// Input clock range
+    raw_input: RangeInclusive<HertzU32>,
+    /// Input clock range after input division
+    input: RangeInclusive<HertzU32>,
+    /// Output range before division
+    vco: RangeInclusive<HertzU32>,
+    /// Output range for "clock P" after division
+    output_p: RangeInclusive<HertzU32>,
+    /// Output range for "clock Q" after division
+    output_q: RangeInclusive<HertzU32>,
+    /// Output range for "clock R" after division
+    output_r: RangeInclusive<HertzU32>,
+}
 
-/// Input clock range after input division
-const PLL_INPUT_RANGE: RangeInclusive<HertzU32> = RangeInclusive::new(
-    MegahertzU32::from_raw(6).convert(),
-    MegahertzU32::from_raw(12).convert(),
-);
-
-/// Output range before division
-const PLL_VCO_RANGE: RangeInclusive<HertzU32> = RangeInclusive::new(
-    MegahertzU32::from_raw(640).convert(),
-    MegahertzU32::from_raw(1440).convert(),
-);
-
-/// Output range for "clock P" after division
-const PLL_OUTPUT_RANGE_P: RangeInclusive<HertzU32> = RangeInclusive::new(
-    MegahertzU32::from_raw(40).convert(),
-    MegahertzU32::from_raw(480).convert(),
-);
-
-/// Output range for "clock Q" after division
-const PLL_OUTPUT_RANGE_Q: RangeInclusive<HertzU32> = RangeInclusive::new(
-    MegahertzU32::from_raw(71).convert(),
-    MegahertzU32::from_raw(480).convert(),
-);
-
-/// Output range for "clock R" after division
-const PLL_OUTPUT_RANGE_R: RangeInclusive<HertzU32> = RangeInclusive::new(
-    MegahertzU32::from_raw(71).convert(),
-    MegahertzU32::from_raw(480).convert(),
-);
+const PLL_LIMITS: PllLimits = PllLimits {
+    raw_input: RangeInclusive::new(
+        MegahertzU32::from_raw(8).convert(),
+        MegahertzU32::from_raw(48).convert(),
+    ),
+    input: RangeInclusive::new(
+        MegahertzU32::from_raw(6).convert(),
+        MegahertzU32::from_raw(12).convert(),
+    ),
+    vco: RangeInclusive::new(
+        MegahertzU32::from_raw(640).convert(),
+        MegahertzU32::from_raw(1440).convert(),
+    ),
+    output_p: RangeInclusive::new(
+        MegahertzU32::from_raw(40).convert(),
+        MegahertzU32::from_raw(480).convert(),
+    ),
+    output_q: RangeInclusive::new(
+        MegahertzU32::from_raw(71).convert(),
+        MegahertzU32::from_raw(480).convert(),
+    ),
+    output_r: RangeInclusive::new(
+        MegahertzU32::from_raw(71).convert(),
+        MegahertzU32::from_raw(480).convert(),
+    ),
+};
 
 const OUTPUT_FACTOR: u32 = 10;
+
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Debug, Clone)]
+pub enum UsbClockSource {
+    Hoco,
+    Moco,
+    Mosc,
+    PllP,
+    PllQ,
+    PllR,
+    Pll2P,
+    Pll2Q,
+    Pll2R,
+}
 
 #[allow(missing_docs)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
@@ -133,6 +153,46 @@ pub enum PllOutMul {
     Mul91_0 = 910,
     Mul179_0 = 1790,
     Mul180_0 = 1800,
+}
+
+impl From<PllPDiv> for Plodivp {
+    fn from(value: PllPDiv) -> Self {
+        match value {
+            PllPDiv::Div2 => Self::Div2,
+            PllPDiv::Div4 => Self::Div4,
+            PllPDiv::Div6 => Self::Div6,
+            PllPDiv::Div8 => Self::Div8,
+            PllPDiv::Div16 => Self::Div16,
+        }
+    }
+}
+
+impl From<PllQDiv> for Plodivq {
+    fn from(value: PllQDiv) -> Self {
+        match value {
+            PllQDiv::Div2 => Self::Div2,
+            PllQDiv::Div3 => Self::Div3,
+            PllQDiv::Div4 => Self::Div4,
+            PllQDiv::Div5 => Self::Div5,
+            PllQDiv::Div6 => Self::Div6,
+            PllQDiv::Div8 => Self::Div8,
+            PllQDiv::Div9 => Self::Div9,
+        }
+    }
+}
+
+impl From<PllRDiv> for Plodivr {
+    fn from(value: PllRDiv) -> Self {
+        match value {
+            PllRDiv::Div2 => Self::Div2,
+            PllRDiv::Div3 => Self::Div3,
+            PllRDiv::Div4 => Self::Div4,
+            PllRDiv::Div5 => Self::Div5,
+            PllRDiv::Div6 => Self::Div6,
+            PllRDiv::Div8 => Self::Div8,
+            PllRDiv::Div9 => Self::Div9,
+        }
+    }
 }
 
 impl From<PllInput> for Plsrcsel {
@@ -283,8 +343,7 @@ fn pll_status(
 fn calc_pll_frequency(
     pll_config: &PllConfig,
     config: &ClockConfig,
-    input_range: [HertzU32; 2],
-    output_range: [HertzU32; 2],
+    limits: &PllLimits,
 ) -> (HertzU32, HertzU32, HertzU32) {
     let output_mul: u32 = pll_config.mul as u32;
 
@@ -299,32 +358,35 @@ fn calc_pll_frequency(
         PllInput::Hoco => config.hoco.into(),
         PllInput::Mosc => config.mosc.unwrap(),
     };
+    let raw_input_frequency: HertzU64 = raw_input_frequency.into();
 
     let pll_input_frequency = raw_input_frequency / input_div;
 
     assert!(
-        pll_input_frequency >= input_range[0],
+        pll_input_frequency >= *limits.input.start(),
         "Invalid PLL configuration, input too slow {pll_input_frequency} < {}",
-        input_range[0]
+        limits.input.start()
     );
     assert!(
-        pll_input_frequency <= input_range[1],
+        pll_input_frequency <= *limits.input.end(),
         "Invalid PLL configuration, input too fast {pll_input_frequency} > {}",
-        input_range[1]
+        limits.input.end()
     );
 
     let pll_output = (pll_input_frequency * output_mul) / OUTPUT_FACTOR;
 
     assert!(
-        pll_output >= output_range[0],
+        pll_output >= *limits.vco.start(),
         "Invalid PLL configuration, output too slow {pll_output} < {}",
-        output_range[0]
+        limits.vco.start()
     );
     assert!(
-        pll_output <= output_range[1],
+        pll_output <= *limits.vco.end(),
         "Invalid PLL configuration, output too fast {pll_output} > {}",
-        output_range[1]
+        limits.vco.end()
     );
+
+    let pll_output: HertzU32 = HertzU32::from_raw(pll_output.to_Hz() as u32);
 
     (
         (pll_output / pll_config.div_p as u32),
@@ -344,6 +406,17 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
     if !config.sosc && config.system == SystemClockSource::Pll1P {
         panic!("SOSC required to use PLL as root clock, but SOSC not enabled.");
     }
+
+    // Sanity check PLL and PLL2 configs
+    let pll_frequency = match config.pll {
+        Some(ref pll_config) => Some(calc_pll_frequency(pll_config, &config, &PLL_LIMITS)),
+        None => None,
+    };
+
+    let pll2_frequency = match config.pll2 {
+        Some(ref pll_config) => Some(calc_pll_frequency(pll_config, &config, &PLL_LIMITS)),
+        None => None,
+    };
 
     system.protected_write(|| {
         // § 10.2.10 high speed mode needed for PLL operation
@@ -385,9 +458,9 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                 r.set_pllmulnf(Pllmulnf::_00);
             });
             system.pllccr2().modify(|r| {
-                r.set_plodivp(Plodivp::Div2);
-                r.set_plodivq(Plodivq::Div2);
-                r.set_plodivr(Plodivr::Div2);
+                r.set_plodivp(pll_config.div_p.into());
+                r.set_plodivq(pll_config.div_q.into());
+                r.set_plodivr(pll_config.div_r.into());
             });
             system.pllcr().write(|r| r.set_pllstp(false));
             while !system.oscsf().read().pllsf() {}
@@ -523,6 +596,34 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                     asm::nop();
                 }
             }
+        }
+
+        match config.usb {
+            Some(UsbClockSource::PllQ) => {
+                let (_, pll_q_frequency, _) = pll_frequency.unwrap();
+                let divider = match (pll_q_frequency / 48).to_MHz() {
+                    1 => Usbckdiv::Div1,
+                    2 => Usbckdiv::Div2,
+                    3 => Usbckdiv::Div3,
+                    4 => Usbckdiv::Div4,
+                    5 => Usbckdiv::Div5,
+                    6 => Usbckdiv::Div6,
+                    8 => Usbckdiv::Div8,
+                    div => unimplemented!(
+                        "USB clock input must be 1x, 2x, 3x, 4x, 5x, 6x, or 8x 48 MHz. It's {}x.",
+                        div
+                    ),
+                };
+                system.usbckcr().modify(|r| r.set_usbcksreq(true));
+                while !system.usbckcr().read().usbcksrdy() {}
+                system.usbckdivcr().modify(|r| r.set_usbckdiv(divider));
+                system.usbckcr().modify(|r| r.set_usbcksel(Usbcksel::Pll1Q));
+                system.usbckcr().modify(|r| r.set_usbcksreq(false));
+                info!("Waiting for clock to switch");
+                while system.usbckcr().read().usbcksrdy() {}
+            }
+            None => {}
+            _ => todo!(),
         }
     });
 
@@ -733,6 +834,8 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
             | Bck::_RESERVED_f => unimplemented!("Invalid sckdivcr.bck"),
         };
 
+        let usb = None;
+
         CLOCK_STATUS
             .init(ClockStatus {
                 master,
@@ -749,6 +852,7 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                 peripheral_d,
                 peripheral_e,
                 bus_clock,
+                usb,
             })
             .or(Err(()))
     }
@@ -767,10 +871,11 @@ impl Default for ClockConfig {
                 div: PllInDiv::Div4,
                 mul: PllOutMul::Mul80_0,
                 div_p: PllPDiv::Div2,
-                div_q: PllQDiv::Div2,
+                div_q: PllQDiv::Div4,
                 div_r: PllRDiv::Div2,
             }),
             pll2: None,
+            usb: Some(UsbClockSource::PllQ),
         }
     }
 }
