@@ -12,6 +12,8 @@ use embassy_sync::once_lock::OnceLock;
 use fugit::{HertzU32, KilohertzU32, MegahertzU32};
 
 use crate::pac;
+#[cfg(usbfs)]
+use _clock::UsbClockSource;
 
 static CLOCK_STATUS: OnceLock<ClockStatus> = OnceLock::new();
 const _1MHZ: HertzU32 = MegahertzU32::from_raw(1).convert();
@@ -72,6 +74,10 @@ pub struct ClockStatus {
     /// Peripheral Clock "E" (`PCLKE`).
     #[cfg(pclke)]
     pub peripheral_e: HertzU32,
+
+    #[cfg(usbfs)]
+    /// USB Clock (`UCLK`)
+    pub usb: Option<HertzU32>,
 }
 
 /// Indicates what clock source the system clock (`ICLK`) should derive from.
@@ -127,6 +133,9 @@ pub struct ClockConfig {
     /// Enable Phase Locked Loop №2?
     #[cfg(pll2)]
     pll2: Option<PllConfig>,
+
+    #[cfg(usbfs)]
+    usb: Option<UsbClockSource>,
 }
 
 cfg_select! {
@@ -222,6 +231,8 @@ impl defmt::Format for ClockStatus {
             bus_clock,
             sosc,
             mosc,
+            #[cfg(usbfs)]
+            usb,
         } = clock_status();
 
         defmt::write!(fmt, "SYSTEM: ");
@@ -306,6 +317,13 @@ impl defmt::Format for ClockStatus {
 
         #[cfg(pclke)]
         print_frequency(fmt, "PCLKE", peripheral_e.convert());
+
+        #[cfg(usbfs)]
+        if let Some(usb) = usb {
+            print_frequency(fmt, "USB", usb.convert());
+        } else {
+            defmt::write!(fmt, ", USB: OFF");
+        }
     }
 }
 

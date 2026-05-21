@@ -9,6 +9,13 @@ use crate::pac::{
 };
 use crate::write_protect::ProtectedPeripheral as _;
 
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Debug, Clone)]
+pub enum UsbClockSource {
+    Pll,
+    Hoco,
+}
+
 /// PLL input source.
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Debug, Clone)]
@@ -67,6 +74,7 @@ impl Default for ClockConfig {
             mosc: None,
             sosc: false,
             pll: None,
+            usb: Some(UsbClockSource::Hoco),
         }
     }
 }
@@ -239,6 +247,11 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
             }),
             _ => unimplemented!(),
         }
+
+        if let Some(UsbClockSource::Hoco) = config.usb {
+            // Also use HOCO as USB clock source.
+            system.usbckcr().write(|w| w.set_usbclksel(true));
+        }
     });
 
     {
@@ -322,6 +335,15 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
             Pckd::_RESERVED_7 => unimplemented!("Invalid sckdivcr.pckd"),
         };
 
+        // TODO: Calculate PLL status
+        let pll = None;
+
+        let usb = match config.usb {
+            Some(UsbClockSource::Hoco) => Some(hoco),
+            Some(UsbClockSource::Pll) => pll,
+            None => None,
+        };
+
         CLOCK_STATUS
             .init(ClockStatus {
                 hoco,
@@ -332,9 +354,10 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                 peripheral_c,
                 peripheral_d,
                 master: hoco,
-                pll: None,
+                pll,
                 mosc: config.mosc,
                 sosc: config.sosc,
+                usb,
             })
             .or(Err(()))
     }

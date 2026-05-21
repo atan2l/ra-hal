@@ -62,6 +62,9 @@ cfg_select! {
 pub mod uart;
 pub mod write_protect;
 
+#[cfg(feature = "usb-driver")]
+pub mod usb;
+
 // Re-exports
 #[cfg(feature = "chrono")]
 pub use chrono;
@@ -212,6 +215,7 @@ macro_rules! bind_interrupts {
     }
 }
 
+include!(concat!(env!("OUT_DIR"), "/misc.rs"));
 include!(concat!(env!("OUT_DIR"), "/interrupts.rs"));
 include!(concat!(env!("OUT_DIR"), "/peripherals.rs"));
 include!(concat!(env!("OUT_DIR"), "/module_stops.rs"));

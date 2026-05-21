@@ -33,7 +33,7 @@ embassy-time-driver = { workspace = true, optional = true }
 embassy-time-queue-utils = { workspace = true, optional = true }
 embassy-usb-driver = { workspace = true, optional = true }
 
-ra-metapac = { version = "0.3.0" }
+ra-metapac = { version = "0.3.1" }
 
 arbitrary-int = "2.1.1"
 bitbybit = "2.0.0"
@@ -50,7 +50,7 @@ indexmap = { version = "2.13.0", features = [ "serde" ] }
 prettyplease = "0.2.37"
 proc-macro2 = "1.0.106"
 quote = "1.0.44"
-ra-metapac = { version = "0.3.0", features = [ "metadata" ] }
+ra-metapac = { version = "0.3.1", features = [ "metadata" ] }
 regex = "1.12.3"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_derive = "1.0.228"
@@ -72,7 +72,7 @@ cache = [ ]
 chrono = [ "dep:chrono" ]
 
 ## Use [`defmt`](https://docs.rs/defmt/latest/defmt/) for logging.
-defmt = [ "dep:defmt", "ra-metapac/defmt", "embassy-time/defmt", "embassy-time/defmt-timestamp-uptime", "fugit/defmt" ]
+defmt = [ "dep:defmt", "ra-metapac/defmt", "embassy-time/defmt", "embassy-time/defmt-timestamp-uptime", "fugit/defmt", "embassy-usb-driver?/defmt" ]
 
 ## Log the reset reason during initialization. Only useful in conjunction with `defmt` feature.
 diag = [ ]
@@ -105,6 +105,11 @@ time-driver-agt = [ "time-driver", "dep:embassy-time", "dep:embassy-time-driver"
 time-driver-ulpt = [ "time-driver", "dep:embassy-time", "dep:embassy-time-driver", "dep:embassy-time-queue-utils", "embassy-time/tick-hz-32_768" ]
 
 time-driver = [ ]
+
+
+#! ### USB features
+
+usb-driver = [ "dep:embassy-usb-driver" ]
 
 #! ### On-Chip Oscillator Configuration
 #! Consult your reference manual for valid frequencies.
@@ -226,8 +231,8 @@ mem_ram896k_flash2016k = [ "ra-metapac/mem_ram896k_flash2016k" ]
 
 _doc_ra2a1 = [ "ra2a1", "hoco_48mhz", "64lqfp", "time-driver-gpt0" ]
 _doc_ra4l1 = [ "ra4l1", "mem_ram64k_flash512k", "100lqfp", "time-driver-gpt0", "secure" ]
-_doc_ra4m1 = [ "ra4m1", "hoco_48mhz", "64lqfp", "time-driver-gpt0" ]
-_doc_ra6m5 = [ "ra6m5", "mem_ram512k_flash2048k", "176lqfp", "time-driver-gpt0", "non_secure" ]
+_doc_ra4m1 = [ "ra4m1", "hoco_48mhz", "64lqfp", "time-driver-gpt0", "usb-driver" ]
+_doc_ra6m5 = [ "ra6m5", "mem_ram512k_flash2048k", "176lqfp", "time-driver-gpt0", "non_secure", "usb-driver" ]
 _doc_ra8m1 = [ "ra8m1", "mem_ram896k_flash2016k", "224bga", "time-driver-gpt1", "secure" ]
 
 secure = [ "ra-metapac/secure" ]

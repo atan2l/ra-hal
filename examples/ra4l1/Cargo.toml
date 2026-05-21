@@ -20,20 +20,24 @@ critical-section = { workspace = true }
 
 ## Embassy dependencies
 embassy-executor = { workspace = true }
+embassy-sync = { workspace = true }
 embassy-time = { workspace = true }
+embassy-usb = { workspace = true }
 embedded-hal-1 = { workspace = true }
 embedded-hal-async = { workspace = true }
 embedded-io = { workspace = true }
 embedded-io-async = { workspace = true }
 
 ## Board stuff
-ra-hal = { workspace = true, features = [ "ra4l1" ] }
+ra-hal = { workspace = true, features = [ "ra4l1", "usb-driver" ] }
 
 ## Third party stuff
 assign-resources = { workspace = true }
+heapless = { workspace = true }
 micromath = { workspace = true }
 # For a signal generator micromath isn't precise enough but libm adds +10K
 libm = { workspace = true }
+static_cell = { workspace = true }
 
 [build-dependencies]
 vergen-gitcl = { version = "9" }

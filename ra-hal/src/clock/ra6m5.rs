@@ -12,7 +12,7 @@ use crate::{
             regs::Pllccr,
             vals::{
                 Bck, Bclkdiv, Cksel, Fck, Hcfrq0, Hcstp, Ick, Opcm, Pcka, Pckb, Pckc, Pckd, Plidiv,
-                Pllmul, Plsrcsel, Sodrv,
+                Pllmul, Plsrcsel, Sodrv, Usbckdiv, Usbcksel,
             },
         },
     },
@@ -38,6 +38,13 @@ const PLL2_OUTPUT_RANGE: RangeInclusive<HertzU32> = RangeInclusive::new(
 );
 
 const OUTPUT_FACTOR: u32 = 10;
+
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[derive(Debug, Clone)]
+pub enum UsbClockSource {
+    Pll,
+    Pll2,
+}
 
 #[allow(missing_docs)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
@@ -291,7 +298,7 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
         )),
         None => None,
     };
-    let _pll2_frequency = match config.pll2 {
+    let pll2_frequency = match config.pll2 {
         Some(ref pll_config) => Some(calc_pll_frequency(
             pll_config,
             &config,
@@ -492,6 +499,40 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                 }
             }
         }
+
+        match config.usb {
+            Some(UsbClockSource::Pll) => {
+                let divider = match (pll_frequency.unwrap() / 48).to_MHz() {
+                    5 => Usbckdiv::Div5,
+                    4 => Usbckdiv::Div4,
+                    3 => Usbckdiv::Div3,
+                    _ => unimplemented!("USB clock input must be 3x, 4x, or 5x 48 MHz"),
+                };
+                system.usbckcr().modify(|r| r.set_usbcksreq(true));
+                while !system.usbckcr().read().usbcksrdy() {}
+                system.usbckdivcr().modify(|r| r.set_usbckdiv(divider));
+                system.usbckcr().modify(|r| r.set_usbcksel(Usbcksel::Pll));
+                system.usbckcr().modify(|r| r.set_usbcksreq(false));
+                info!("Waiting for clock to switch");
+                while system.usbckcr().read().usbcksrdy() {}
+            }
+            Some(UsbClockSource::Pll2) => {
+                let divider = match (pll2_frequency.unwrap() / 48).to_MHz() {
+                    5 => Usbckdiv::Div5,
+                    4 => Usbckdiv::Div4,
+                    3 => Usbckdiv::Div3,
+                    _ => unimplemented!("USB clock input must be 3x, 4x, or 5x 48 MHz"),
+                };
+                system.usbckcr().modify(|r| r.set_usbcksreq(true));
+                while !system.usbckcr().read().usbcksrdy() {}
+                system.usbckdivcr().modify(|r| r.set_usbckdiv(divider));
+                system.usbckcr().modify(|r| r.set_usbcksel(Usbcksel::Pll2));
+                system.usbckcr().modify(|r| r.set_usbcksreq(false));
+                info!("Waiting for clock to switch");
+                while system.usbckcr().read().usbcksrdy() {}
+            }
+            None => {}
+        }
     });
 
     {
@@ -598,6 +639,30 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
             Bck::_RESERVED_7 => unimplemented!("Invalid sckdivcr.bck"),
         };
 
+        let usb = match config.usb {
+            Some(UsbClockSource::Pll) => {
+                let div = match system.usbckdivcr().read().usbckdiv() {
+                    Usbckdiv::Div3 => 3,
+                    Usbckdiv::Div4 => 4,
+                    Usbckdiv::Div5 => 5,
+                    _ => unimplemented!(),
+                };
+
+                pll.map(|pll| pll / div)
+            }
+            Some(UsbClockSource::Pll2) => {
+                let div = match system.usbckdivcr().read().usbckdiv() {
+                    Usbckdiv::Div3 => 3,
+                    Usbckdiv::Div4 => 4,
+                    Usbckdiv::Div5 => 5,
+                    _ => unimplemented!(),
+                };
+
+                pll2.map(|pll2| pll2 / div)
+            }
+            None => None,
+        };
+
         CLOCK_STATUS
             .init(ClockStatus {
                 master,
@@ -613,6 +678,7 @@ pub(crate) fn init(config: ClockConfig) -> Result<(), ()> {
                 peripheral_c,
                 peripheral_d,
                 bus_clock,
+                usb,
             })
             .or(Err(()))
     }
@@ -632,7 +698,13 @@ impl Default for ClockConfig {
                 div: PllInDiv::Div1,
                 mul: PllOutMul::Mul10_0,
             }),
-            pll2: None,
+            // 240 MHz output
+            pll2: Some(PllConfig {
+                input: PllInput::Hoco,
+                div: PllInDiv::Div1,
+                mul: PllOutMul::Mul12_0,
+            }),
+            usb: Some(UsbClockSource::Pll2),
         }
     }
 }
